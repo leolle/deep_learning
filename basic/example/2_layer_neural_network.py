@@ -1,10 +1,12 @@
 # -*- coding: utf-8 -*-
 # https://iamtrask.github.io/2015/07/12/basic-python-network/
+
 import numpy as np
 
 
 # sigmoid function
 def nonlin(x, deriv=False):
+    """used as activation/link function"""
     if deriv is True:
         # the accurate of the prediction, the lower value of the derivative
         return x * (1 - x)
@@ -93,7 +95,7 @@ def three_layer_nn():
         # in what direction is the target l1?
         # were we really sure? if so, don't change too much.
         l1_delta = l1_error * nonlin(l1, deriv=True)
-
+        # w(new) = w(old) − η · (y − t) · y(1 − y) · x
         syn1 += l1.T.dot(l2_delta)
         syn0 += l0.T.dot(l1_delta)
 
@@ -112,5 +114,5 @@ def three_layer_nn():
     return syn0, syn1
 
 
-# two_layer_nn()
-a, b = three_layer_nn()
+a = two_layer_nn()
+# a, b = three_layer_nn()
