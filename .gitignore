@@ -1,1 +1,4 @@
 sklearn-theano
+*.zip
+*.txt
+*.h5
