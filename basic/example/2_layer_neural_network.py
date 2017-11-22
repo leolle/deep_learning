@@ -38,6 +38,7 @@ def two_layer_nn():
         layer_1 = nonlin(np.dot(layer_0, syn0))
 
         # error, how much did we miss?
+        # loss function
         layer_1_error = y - layer_1
 
         # multiply how much we missed by the
@@ -49,6 +50,7 @@ def two_layer_nn():
 
         # update weights
         # print(layer_1_delta[0], syn0[0])
+        # optimization
         syn0 += np.dot(layer_0.T, layer_1_delta)
 
     print("Output After Training:")

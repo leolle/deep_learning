@@ -19,7 +19,7 @@ def tanh_prime(x):
 
 
 class NeuralNetwork:
-    """Building a backward neural network
+    """Building a backward propagation neural network
     """
 
     def __init__(self, layers, activation='tanh'):
