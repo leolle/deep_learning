@@ -2,3 +2,4 @@ sklearn-theano
 *.zip
 *.txt
 *.h5
+./word_embedding/text8
