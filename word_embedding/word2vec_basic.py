@@ -66,7 +66,7 @@ def read_data(filename):
 vocabulary = read_data(filename)
 print('Data size', len(vocabulary))
 
-# Step 2: Build the dictionary and replace rare words with UNK token.
+# Step 2: Build the dictionary and replace rare words with UNK(unknown word) token.
 vocabulary_size = 50000
 
 
