@@ -38,20 +38,20 @@ w2v_txt_name = 'vectors.w2vformat.txt'
 txt_file = os.path.join(path, txt_name)
 w2v_txt_file = os.path.join(path, w2v_txt_name)
 # model = loadGloveModel(txt_name)
-#words = pd.read_table(
+# words = pd.read_table(
 #    w2v_txt_file, sep=" ", index_col=0, header=None, quoting=csv.QUOTE_NONE)
 # words_matrix = words.as_matrix()
-#model = KeyedVectors.load_word2vec_format(
+# model = KeyedVectors.load_word2vec_format(
 #    os.path.join(path, 'vectors.w2vformat.txt'), binary=True)
 # model.most_similar('the')
 '''''' '''''' '''''' '''''' ''
-#sentences = word2vec.Text8Corpus('text8')
-#model = word2vec.Word2Vec(sentences, size=200)
-#model.most_similar(positive=['woman', 'king'], negative=['man'], topn=1)
-#model.most_similar(positive=['woman', 'king'], negative=['man'], topn=2)
-#model.most_similar(['man'])
-#model.save('text8.model')
-#model.wv.save_word2vec_format('text.model.bin', binary=True)
+sentences = word2vec.Text8Corpus('text8')
+model = word2vec.Word2Vec(sentences, size=200)
+model.most_similar(positive=['woman', 'king'], negative=['man'], topn=1)
+# model.most_similar(positive=['woman', 'king'], negative=['man'], topn=2)
+# model.most_similar(['man'])
+# model.save('text8.model')
+# model.wv.save_word2vec_format('text.model.bin', binary=True)
 model1 = KeyedVectors.load_word2vec_format('text.model.bin', binary=True)
 model1.most_similar(['girl', 'father'], ['boy'], topn=3)
 more_examples = ["he is she", "big bigger bad", "going went being"]
@@ -65,3 +65,6 @@ corpus = Corpus()
 corpus.fit(sentences, window=10)
 glove = Glove(no_components=100, learning_rate=0.05)
 glove.fit(corpus.matrix, epochs=30, no_threads=4, verbose=True)
+glove.add_dictionary(corpus.dictionary)
+glove.most_similar('man')
+glove.most_similar('man', number=10)
