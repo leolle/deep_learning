@@ -5,6 +5,10 @@ from gensim.models import KeyedVectors
 import pandas as pd
 import csv
 import os
+import itertools
+from gensim.models.word2vec import Text8Corpus
+from glove import Corpus, Glove
+
 import logging
 logging.basicConfig(
     format='%(asctime)s : %(levelname)s : %(message)s', level=logging.INFO)
@@ -41,17 +45,23 @@ w2v_txt_file = os.path.join(path, w2v_txt_name)
 #    os.path.join(path, 'vectors.w2vformat.txt'), binary=True)
 # model.most_similar('the')
 '''''' '''''' '''''' '''''' ''
-sentences = word2vec.Text8Corpus('text8')
-model = word2vec.Word2Vec(sentences, size=200)
-model.most_similar(positive=['woman', 'king'], negative=['man'], topn=1)
-model.most_similar(positive=['woman', 'king'], negative=['man'], topn=2)
-model.most_similar(['man'])
-model.save('text8.model')
-model.wv.save_word2vec_format('text.model.bin', binary=True)
+#sentences = word2vec.Text8Corpus('text8')
+#model = word2vec.Word2Vec(sentences, size=200)
+#model.most_similar(positive=['woman', 'king'], negative=['man'], topn=1)
+#model.most_similar(positive=['woman', 'king'], negative=['man'], topn=2)
+#model.most_similar(['man'])
+#model.save('text8.model')
+#model.wv.save_word2vec_format('text.model.bin', binary=True)
 model1 = KeyedVectors.load_word2vec_format('text.model.bin', binary=True)
 model1.most_similar(['girl', 'father'], ['boy'], topn=3)
 more_examples = ["he is she", "big bigger bad", "going went being"]
 for example in more_examples:
     a, b, x = example.split()
-    predicted = model.most_similar([x, b], [a])[0][0]
+    predicted = model1.most_similar([x, b], [a])[0][0]
     print("'%s' is to '%s' as '%s' is to '%s'" % (a, b, x, predicted))
+
+sentences = list(itertools.islice(Text8Corpus('text8'), None))
+corpus = Corpus()
+corpus.fit(sentences, window=10)
+glove = Glove(no_components=100, learning_rate=0.05)
+glove.fit(corpus.matrix, epochs=30, no_threads=4, verbose=True)
