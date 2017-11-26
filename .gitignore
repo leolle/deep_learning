@@ -1,5 +1,8 @@
 sklearn-theano
 *.zip
+*.gz
+*.tar
 *.txt
 *.h5
 ./word_embedding/text8
+*.bin
