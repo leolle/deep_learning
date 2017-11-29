@@ -24,14 +24,11 @@ def loadGloveModel(gloveFile):
     return model
 
 
-path = '/home/weiwu/projects/deep_learning/word_embedding/GloVe/GloVe-1.2'
+cur_dir = os.getcwd()
 glove_path = '/home/weiwu/share'
-name = 'vectors.bin'
-file_name = os.path.join(path, name)
-txt_name = 'vectors.txt'
-w2v_txt_name = 'vectors.w2vformat.txt'
-txt_file = os.path.join(path, txt_name)
-w2v_txt_file = os.path.join(path, w2v_txt_name)
+name = 'computer_age_statis.pdf'
+file_name = os.path.join(cur_dir + '/data/docs/', name)
+txt_file = os.path.join(cur_dir, name)
 
 
 def pdf2text(file_path):
@@ -39,7 +36,34 @@ def pdf2text(file_path):
     return text
 
 
-sentences = word2vec.Text8Corpus('text8')
+import sys
+from pdfminer.pdfinterp import PDFResourceManager, PDFPageInterpreter
+from pdfminer.pdfpage import PDFPage
+from pdfminer.converter import XMLConverter, HTMLConverter, TextConverter
+from pdfminer.layout import LAParams
+from cStringIO import StringIO
+
+
+def pdfparser(data):
+
+    fp = file(data, 'rb')
+    rsrcmgr = PDFResourceManager()
+    retstr = StringIO()
+    codec = 'utf-8'
+    laparams = LAParams()
+    device = TextConverter(rsrcmgr, retstr, codec=codec, laparams=laparams)
+    # Create a PDF interpreter object.
+    interpreter = PDFPageInterpreter(rsrcmgr, device)
+    # Process each page contained in the document.
+
+    for page in PDFPage.get_pages(fp):
+        interpreter.process_page(page)
+        data = retstr.getvalue()
+    return data
+
+
+text = pdfparser(file_name)
+# sentences = word2vec.Text8Corpus('text8')
 model = word2vec.Word2Vec(sentences, size=200)
 model.most_similar(positive=['woman', 'king'], negative=['man'], topn=1)
 # model.most_similar(positive=['woman', 'king'], negative=['man'], topn=2)
