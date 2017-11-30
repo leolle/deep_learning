@@ -1,0 +1,23 @@
+#+OPTIONS: ':nil *:t -:t ::t <:t H:3 \n:nil ^:t arch:headline author:t c:nil
+#+OPTIONS: creator:nil d:(not "LOGBOOK") date:t e:t email:nil f:t inline:t
+#+OPTIONS: num:t p:nil pri:nil prop:nil stat:t tags:t tasks:t tex:t timestamp:t
+#+OPTIONS: title:t toc:t todo:t |:t
+#+TITLE: readme
+#+DATE: <2017-11-30 Thu>
+#+AUTHOR: weiwu
+#+EMAIL: victor.wuv@gmail.com
+#+LANGUAGE: en
+#+SELECT_TAGS: export
+#+EXCLUDE_TAGS: noexport
+#+CREATOR: Emacs 24.5.1 (Org mode 8.3.4)
+
+* NLP
+** word embedding
+*** training
+#+INCLUDE:./deep_learning/train_word2vec_txt.py
+1. remove space at the beginning of each line.
+2. regular expression parsing.
+3. join tokenized line.
+4. lower the capital word and check whether the string consists of alphabetic characters only.
+5. train model with gensim word2vec module.
+6. save model to local file.
