@@ -10,6 +10,7 @@ import os
 import re
 import sys
 
+from nltk.corpus import stopwords
 from pattern.en import tokenize
 from time import time
 
@@ -41,7 +42,8 @@ class MySentences(object):
                     tokenized_line = ' '.join(tokenize(rline))
                     is_alpha_word_line = [
                         word for word in tokenized_line.lower().split()
-                        if word.isalpha()
+                        if word.isalpha() and
+                        word not in stopwords.words('english')
                     ]
                     yield is_alpha_word_line
 
