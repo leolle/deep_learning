@@ -64,15 +64,15 @@ def pdfparser(data):
 
 text = pdfparser(file_name)
 # sentences = word2vec.Text8Corpus('text8')
-model = word2vec.Word2Vec(sentences, size=200)
-model.most_similar(positive=['woman', 'king'], negative=['man'], topn=1)
+# model = word2vec.Word2Vec(sentences, size=200)
+# model.most_similar(positive=['woman', 'king'], negative=['man'], topn=1)
 # model.most_similar(positive=['woman', 'king'], negative=['man'], topn=2)
 # model.most_similar(['man'])
 # model.save('text8.model')
 # model.wv.save_word2vec_format('text.model.bin', binary=True)
 
-more_examples = ["he is she", "big bigger bad", "going went being"]
-for example in more_examples:
-    a, b, x = example.split()
-    predicted = model.most_similar([x, b], [a])[0][0]
-    print("'%s' is to '%s' as '%s' is to '%s'" % (a, b, x, predicted))
+# more_examples = ["he is she", "big bigger bad", "going went being"]
+# for example in more_examples:
+#     a, b, x = example.split()
+#     predicted = model.most_similar([x, b], [a])[0][0]
+#     print("'%s' is to '%s' as '%s' is to '%s'" % (a, b, x, predicted))
