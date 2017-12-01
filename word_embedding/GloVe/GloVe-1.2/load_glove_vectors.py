@@ -38,6 +38,7 @@ w2v_txt_name = 'vectors.w2vformat.txt'
 txt_file = os.path.join(path, txt_name)
 w2v_txt_file = os.path.join(path, w2v_txt_name)
 finance_model = '/home/weiwu/share/deep_learning/data/model/word2vec_txt_org'
+wiki_model = '/home/weiwu/share/deep_learning/data/model/word2vec_org'
 # model = loadGloveModel(txt_name)
 # words = pd.read_table(
 #    w2v_txt_file, sep=" ", index_col=0, header=None, quoting=csv.QUOTE_NONE)
@@ -53,7 +54,7 @@ finance_model = '/home/weiwu/share/deep_learning/data/model/word2vec_txt_org'
 # model.most_similar(['man'])
 # model.save('text8.model')
 # model.wv.save_word2vec_format('text.model.bin', binary=True)
-model1 = KeyedVectors.load_word2vec_format(finance_model, binary=False)
+model1 = KeyedVectors.load_word2vec_format(wiki_model, binary=False)
 print(model1.most_similar(['market'], topn=20))
 
 # model1.most_similar(['girl', 'father'], ['boy'], topn=3)
