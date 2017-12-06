@@ -1,14 +1,25 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals
-from __future__ import division
-#
-# =============================================================================
-#  Version: 2.9 (Feb 13, 2016)
-#  Author: Giuseppe Attardi (attardi@di.unipi.it), University of Pisa
 
 # =============================================================================
-#  Copyright (c) 2009. Giuseppe Attardi (attardi@di.unipi.it).
+#  Version: 2.75 (March 4, 2017)
+#  Author: Giuseppe Attardi (attardi@di.unipi.it), University of Pisa
+#
+#  Contributors:
+#   Antonio Fuschetto (fuschett@aol.com)
+#   Leonardo Souza (lsouza@amtera.com.br)
+#   Juan Manuel Caicedo (juan@cavorite.com)
+#   Humberto Pereira (begini@gmail.com)
+#   Siegfried-A. Gevatter (siegfried@gevatter.com)
+#   Pedro Assis (pedroh2306@gmail.com)
+#   Wim Muskee (wimmuskee@gmail.com)
+#   Radics Geza (radicsge@gmail.com)
+#   orangain (orangain@gmail.com)
+#   Seth Cleveland (scleveland@turnitin.com)
+#   Bren Barn
+#
+# =============================================================================
+#  Copyright (c) 2011-2017. Giuseppe Attardi (attardi@di.unipi.it).
 # =============================================================================
 #  This file is part of Tanl.
 #
@@ -19,94 +30,25 @@ from __future__ import division
 #  Tanl is distributed in the hope that it will be useful,
 #  but WITHOUT ANY WARRANTY; without even the implied warranty of
 #  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#  GNU General Public License for more details.
+#  GNU General Public License at <http://www.gnu.org/licenses/> for more details.
 #
-#  You should have received a copy of the GNU General Public License
-#  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 # =============================================================================
-"""Wikipedia Page Extractor:
-Extracts a single page from a Wikipedia dump file.
+"""Wikipedia Extractor:
+Extracts and cleans text from a Wikipedia database dump and stores output in a
+number of files of similar size in a given directory.
+Each file will contain several documents in the format:
+    <doc id="" revid="" url="" title="">
+        ...
+        </doc>
+If the program is invoked with the --json flag, then each file will
+contain several documents formatted as json ojects, one per line, with
+the following structure
+    {"id": "", "revid": "", "url":"", "title": "", "text": "..."}
+Template expansion requires preprocesssng first the whole dump and
+collecting template definitions.
 """
-""" the document format
-<doc id="2" url="http://it.wikipedia.org/wiki/Harmonium">
-Harmonium.
-L'harmonium è uno strumento musicale azionato con una tastiera, detta manuale.
-Sono stati costruiti anche alcuni harmonium con due manuali.
-...
-</doc>
-"""
-import pandas as pd
-import sys, os.path
-import re, random
-import argparse
-from itertools import izip
-import logging, traceback
-import urllib
-import bz2, gzip
-from htmlentitydefs import name2codepoint
-import Queue, threading, multiprocessing
 
-# Program version
-version = '2.9'
-
-# ----------------------------------------------------------------------
-# READER
-
-tagRE = re.compile(r'(.*?)<(/?\w+)[^>]*>(?:([^<]*)(<.*?>)?)?')
-
-#tagRE = re.compile(r'(.*?)<(/?\w+)[^>]*>([^<]*)')
-#                    1     2            3
-
-pages_file_path = '/home/weiwu/share/deep_learning/data/finance_pages_level_5.csv'
-df_pages = pd.read_csv(pages_file_path)
-ls_pages = set(df_pages.title.tolist())
-
-
-def process_data(input_file, ids, templates=False):
-    """
-    :param input_file: name of the wikipedia dump file.
-    :param ids: article ids (single or range first-last).
-    :param templates: collect also templates
-    """
-
-    if input_file.lower().endswith("bz2"):
-        opener = bz2.BZ2File
-    else:
-        opener = open
-
-    input = opener(input_file)
-    print '<mediawiki>'
-
-    rang = ids.split('-')
-    first = int(rang[0])
-    if len(rang) == 1:
-        last = first
-    else:
-        last = int(rang[1])
-    page = []
-    curid = 0
-    for line in input:
-        line = line.decode('utf-8')
-        if '<' not in line:  # faster than doing re.search()
-            if page:
-                page.append(line)
-            continue
-        m = tagRE.search(line)
-        if not m:
-            continue
-        tag = m.group(2)
-        if tag == 'page':
-            page = []
-            page.append(line)
-            inArticle = False
-        elif tag == 'id' and not curid:  # other <id> are present
-            curid = int(m.group(3))
-            if first <= curid <= last:
-                page.append(line)
-                inArticle = True
-            elif curid > last and not templates:
-                break
-
+from __future__ import unicode_literals, division
 
 import sys
 import argparse
@@ -122,6 +64,15 @@ import json
 from io import StringIO
 from multiprocessing import Queue, Process, Value, cpu_count
 from timeit import default_timer
+
+import pandas as pd
+# pages_file_path = '/home/weiwu/share/deep_learning/data/finance_pages_level_5.csv'
+# df_pages = pd.read_csv(pages_file_path)
+# sr_pages = df_pages.title
+# ls_pages = sr_pages.apply(lambda x: x.replace('_', ' '))
+ls_pages = pd.read_csv(
+    '/home/weiwu/share/deep_learning/data/finance_pages_level_5_uni.csv',
+    header=None).iloc[:, 1].values
 
 PY2 = sys.version_info[0] == 2
 # Python 2.7 compatibiity
@@ -2958,8 +2909,13 @@ def process_dump(input_file, template_file, out_file, file_size, file_compress,
     page_num = 0
     for page_data in pages_from(input):
         id, revid, title, ns, page = page_data
+        if title not in ls_pages:
+            # logging.info('page name %s is in the set', title)
+            #        else:
+            continue
         if keepPage(ns, page):
             # slow down
+            # logging.info('page name %s is not in the set', title)
             delay = 0
             if spool_length.value > max_spool_length:
                 # reduce to 10%
@@ -3322,5 +3278,3 @@ def createLogger(quiet, debug):
 
 if __name__ == '__main__':
     main()
-
-input = '/home/weiwu/share/deep_learning/data/enwiki-20170820-pages-articles.xml.bz2'
