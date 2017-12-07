@@ -70,9 +70,8 @@ import pandas as pd
 # df_pages = pd.read_csv(pages_file_path)
 # sr_pages = df_pages.title
 # ls_pages = sr_pages.apply(lambda x: x.replace('_', ' '))
-ls_pages = pd.read_csv(
-    '/home/weiwu/share/deep_learning/data/finance_pages_level_5_uni.csv',
-    header=None).iloc[:, 1].values
+pages_file_path = '/home/weiwu/share/deep_learning/data/zh_finance_pages_level_3.csv'
+ls_pageid = pd.read_csv(pages_file_path).pageid.values
 
 PY2 = sys.version_info[0] == 2
 # Python 2.7 compatibiity
@@ -2909,9 +2908,11 @@ def process_dump(input_file, template_file, out_file, file_size, file_compress,
     page_num = 0
     for page_data in pages_from(input):
         id, revid, title, ns, page = page_data
-        if title not in ls_pages:
+        if int(id) not in ls_pageid:
             # logging.info('page name %s is in the set', title)
             #        else:
+            if int(id) > ls_pageid[-1]:
+                break
             continue
         if keepPage(ns, page):
             # slow down

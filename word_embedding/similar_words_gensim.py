@@ -5,6 +5,18 @@ from gensim.models import KeyedVectors
 import os
 import itertools
 import textract
+from textblob import TextBlob
+
+text = '''
+The titular threat of The Blob has always struck me as the ultimate movie
+monster: an insatiably hungry, amoeba-like mass able to penetrate
+virtually any safeguard, capable of--as a doomed doctor chillingly
+describes it--"assimilating flesh on contact.
+Snide comparisons to gelatin be damned, it's a concept with the most
+devastating of potential consequences, not unlike the grey goo scenario
+proposed by technological theorists fearful of
+artificial intelligence run rampant.
+'''
 
 import logging
 logging.basicConfig(
@@ -62,12 +74,14 @@ def pdfparser(data):
     return data
 
 
-text = pdfparser(file_name)
+# text = pdfparser(file_name)
+blob = TextBlob(text)
 # sentences = word2vec.Text8Corpus('text8')
-# model = word2vec.Word2Vec(sentences, size=200)
+sentences = list(blob.noun_phrases)
+model = word2vec.Word2Vec(sentences, size=200)
 # model.most_similar(positive=['woman', 'king'], negative=['man'], topn=1)
 # model.most_similar(positive=['woman', 'king'], negative=['man'], topn=2)
-# model.most_similar(['man'])
+model.most_similar(['titular'])
 # model.save('text8.model')
 # model.wv.save_word2vec_format('text.model.bin', binary=True)
 
