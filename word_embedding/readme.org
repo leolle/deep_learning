@@ -1,0 +1,23 @@
+* File description3
+| file_name                     | function                                              | log     |
+| similar_words_gensim.py       | word embedding via gensim                             | phrases |
+| train_word2vec_with_gensim.py | en wiki plain files to model                          |         |
+| train_word2vec_txt.py         | train txt files to model                              |         |
+| brown.model.bin               | nltk model                                            |         |
+| convert_to_txt.py             | convert pdf/doc to txt                                |         |
+| embedding_keras.py            | utilizing keras in word embedding training            |         |
+| extract_wiki_page2xml.py      | extract wiki page from xml, print pages               |         |
+| extract_wiki.py               | extract wiki page from xml in specific categories     | finance |
+| jieba_cut.py                  | jieba cut example                                     |         |
+| load_pre_trained_model.py     | load a pretrained model                               |         |
+| parse_pages.py                | read wiki categories information                      |         |
+| process_wiki.py               | process wiki xml with gensim corpus                   |         |
+| text8                         |                                                       |         |
+| text8.zip                     |                                                       |         |
+| training.log                  |                                                       |         |
+| train_nltk_word2vec_model.py  | train DJA Reddit news                                 |         |
+| train_word2vec_model.py       | en wiki text to model and vector                      |         |
+| wiki.en.text                  |                                                       |         |
+| word2vec_basic.py             | using tensorflow to build word embedding from scratch |         |
+| word2vec.py                   | Multi-threaded word2vec mini-batched skip-gram model  |         |
+|                               |                                                       |         |

@@ -2,6 +2,7 @@
 import numpy as np
 from gensim.models import word2vec
 from gensim.models import KeyedVectors
+from gensim.models.phrases import Phrases
 import os
 import itertools
 import textract
@@ -21,20 +22,6 @@ artificial intelligence run rampant.
 import logging
 logging.basicConfig(
     format='%(asctime)s : %(levelname)s : %(message)s', level=logging.INFO)
-
-
-def loadGloveModel(gloveFile):
-    print("Loading Glove Model")
-    f = open(gloveFile, 'r')
-    model = {}
-    for line in f:
-        splitLine = line.split()
-        word = splitLine[0]
-        embedding = np.array([float(val) for val in splitLine[1:]])
-        model[word] = embedding
-    print("Done.", len(model), " words loaded!")
-    return model
-
 
 cur_dir = os.getcwd()
 glove_path = '/home/weiwu/share'
@@ -75,9 +62,9 @@ def pdfparser(data):
 
 
 # text = pdfparser(file_name)
-blob = TextBlob(text)
-# sentences = word2vec.Text8Corpus('text8')
-sentences = list(blob.noun_phrases)
+# blob = TextBlob(text)
+sentences = word2vec.Text8Corpus('text8')
+# sentences = list(blob.noun_phrases)
 model = word2vec.Word2Vec(sentences, size=200)
 # model.most_similar(positive=['woman', 'king'], negative=['man'], topn=1)
 # model.most_similar(positive=['woman', 'king'], negative=['man'], topn=2)

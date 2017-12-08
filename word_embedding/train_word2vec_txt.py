@@ -4,6 +4,7 @@
 # Copyright 2017 @ Yu Zhen
 
 import gensim
+from gensim.models.phrases import Phrases
 import logging
 import multiprocessing
 import os
