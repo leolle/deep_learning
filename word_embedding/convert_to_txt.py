@@ -66,5 +66,31 @@ def document_to_text(filename, file_path):
         return convert_pdf_to_txt(file_path)
 
 
+import sys
+from pdfminer.pdfinterp import PDFResourceManager, PDFPageInterpreter
+from pdfminer.pdfpage import PDFPage
+from pdfminer.converter import XMLConverter, HTMLConverter, TextConverter
+from pdfminer.layout import LAParams
+from cStringIO import StringIO
+
+
+def pdfparser(data):
+
+    fp = file(data, 'rb')
+    rsrcmgr = PDFResourceManager()
+    retstr = StringIO()
+    codec = 'utf-8'
+    laparams = LAParams()
+    device = TextConverter(rsrcmgr, retstr, codec=codec, laparams=laparams)
+    # Create a PDF interpreter object.
+    interpreter = PDFPageInterpreter(rsrcmgr, device)
+    # Process each page contained in the document.
+
+    for page in PDFPage.get_pages(fp):
+        interpreter.process_page(page)
+        data = retstr.getvalue()
+    return data
+
+
 filename, file_path = 'Chapter 1.doc', '/home/weiwu/share/deep_learning/data/test'
 document_to_text('Chapter 1.doc', '/home/weiwu/share/deep_learning/data/test/')
