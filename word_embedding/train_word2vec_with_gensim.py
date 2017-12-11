@@ -39,24 +39,13 @@ class MySentences(object):
                     if sline == "":
                         continue
                     rline = cleanhtml(sline)
-                    ls_sent = n_tokenize.sent_tokenize(rline)
 
-                    logging.info("here is paragraph: %s\n", ls_sent)
-                    #sleep(3)
-                    # words = []
-                    # for sent in ls_sent:
-                    sentence_stream = [doc.split(" ") for doc in ls_sent]
-                    phrases = Phrases(sentence_stream, min_count=1, threshold=2)
-                    bigram = Phraser(phrases)
-                    logging.info(list(bigram[sentence_stream]))
-                    # tokenized_line = ' '.join(p_tokenize(ls_sent))
-                    # logging.info('here is sentences: %s %s',
-                    #              type(tokenized_line), len(tokenized_line))
-                    # is_alpha_word_line = [
-                    #     word for word in tokenized_line.lower().split()
-                    #     if word.isalpha()
-                    # ]
-                    # yield is_alpha_word_line
+                    tokenized_line = ' '.join(p_tokenize(rline))
+                    is_alpha_word_line = [
+                        word for word in tokenized_line.lower().split()
+                        if word.isalpha()
+                    ]
+                    yield is_alpha_word_line
 
 
 if __name__ == '__main__':
