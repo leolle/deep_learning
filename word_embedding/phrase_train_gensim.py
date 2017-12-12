@@ -35,16 +35,23 @@ def parse_sent(sentence):
     sline = sentence.strip()
     # remove % sign
     sline = sline.strip("%")
+    sline = sline.rstrip("'s")
     rline = cleanhtml(sline)
     # tokenize lines
     tokenized_line = ' '.join(p_tokenize(rline))
     # parse digits, remove stop words
     is_alpha_word_line = [
-        word for word in tokenized_line.lower().split()
-        if not word.isdigit() and word not in stopwords.words('english')
+        word for word in tokenized_line.lower().split() if not word.isdigit()
     ]
 
     return is_alpha_word_line
+
+
+def complete_dir_path(dir_path):
+    if not dir_path.endswith('/'):
+        return dir_path + '/'
+    else:
+        return dir_path
 
 
 class MySentences(object):
@@ -54,6 +61,7 @@ class MySentences(object):
 
     def __init__(self, dirname):
         self.dirname = dirname
+        # self.bigram = Phrases(
 
     def __iter__(self):
         for root, dirs, files in os.walk(self.dirname):
@@ -76,10 +84,11 @@ class MySentences(object):
 
 if __name__ == '__main__':
     #
-    if len(sys.argv) != 2:
-        print("Please use python train_with_gensim.py data_path")
+    if len(sys.argv) != 3:
+        print("Please use python train_with_gensim.py data_path output_path")
         exit()
     data_path = sys.argv[1]
+    output_path = sys.argv[2]
     begin = time()
 
     sentences = MySentences(data_path)
@@ -89,11 +98,10 @@ if __name__ == '__main__':
         window=10,
         min_count=10,
         workers=multiprocessing.cpu_count())
-    model.save(
-        "/home/weiwu/share/deep_learning/data/model/phrase/word2vec_gensim")
+    model.save(complete_dir_path(output_path) + "word2vec_gensim")
     model.wv.save_word2vec_format(
-        "/home/weiwu/share/deep_learning/data/model/phrase/word2vec_org",
-        "/home/weiwu/share/deep_learning/data/model/phrase/vocabulary",
+        complete_dir_path(output_path) + "word2vec_org",
+        complete_dir_path(output_path) + "vocabulary",
         binary=False)
 
     end = time()
