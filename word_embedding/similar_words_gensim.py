@@ -123,15 +123,15 @@ with open(file_path, 'rb') as f:
 
 
 def parse(sentence):
+    # remove whitespace at the beginning
     sline = sentence.strip()
-    # if sline == "" or sline == '\n':
-    #     return ' '
-    sline = sline.rstrip()
+    # remove % sign
+    sline = sline.strip("%")
     rline = cleanhtml(sline)
 
     tokenized_line = ' '.join(p_tokenize(rline))
     is_alpha_word_line = [
-        word for word in tokenized_line.lower().split() if word.isalpha()
+        word for word in tokenized_line.lower().split() if not word.isdigit()
     ]
 
     return is_alpha_word_line
@@ -145,7 +145,8 @@ strings_sent = list(bigram[sentence_stream])
 
 # print " ".join(chain.from_iterable(strings))
 sentences_transedback = " ".join(chain.from_iterable(strings_sent))
-model = word2vec.Word2Vec(strings_sent, size=200)
+
+# model = word2vec.Word2Vec(strings_sent, size=200)
 
 
 class MySentences(object):

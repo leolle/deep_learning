@@ -12,6 +12,7 @@ import sys
 
 from pattern.en import tokenize as p_tokenize
 from nltk import tokenize as n_tokenize
+from nltk.corpus import stopwords
 from time import time, sleep
 from gensim.models.phrases import Phrases, Phraser
 
@@ -28,14 +29,20 @@ def cleanhtml(raw_html):
 
 
 def parse_sent(sentence):
+    """parse sentence to list of words
+    """
+    # remove whitespace at the beginning
     sline = sentence.strip()
-    # if sline == "" or sline == '\n':
-    #     return ''
-    sline = sline.rstrip()
+    # remove % sign
+    sline = sline.strip("%")
     rline = cleanhtml(sline)
-
+    # tokenize lines
     tokenized_line = ' '.join(p_tokenize(rline))
-    is_alpha_word_line = [word for word in tokenized_line.lower().split()]
+    # parse digits, remove stop words
+    is_alpha_word_line = [
+        word for word in tokenized_line.lower().split()
+        if not word.isdigit() and word not in stopwords.words('english')
+    ]
 
     return is_alpha_word_line
 
