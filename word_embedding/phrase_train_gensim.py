@@ -34,8 +34,8 @@ def parse_sent(sentence):
     # remove whitespace at the beginning
     sline = sentence.strip()
     # remove % sign
-    sline = sline.strip("%")
-    sline = sline.rstrip("'s")
+    # sline = sline.strip("%")
+    # sline = sline.rstrip("'s")
     rline = cleanhtml(sline)
     # tokenize lines
     tokenized_line = ' '.join(p_tokenize(rline))
@@ -59,9 +59,10 @@ class MySentences(object):
     words list([[[' '],[' ']],[[' '],[' ']],...) ->
     phrase([['a_b','c_d']])"""
 
-    def __init__(self, dirname):
+    def __init__(self, dirname, common_terms):
         self.dirname = dirname
-        # self.bigram = Phrases(
+        self.bigram = Phrases(
+            min_count=2, threshold=5, common_terms=common_terms)
 
     def __iter__(self):
         for root, dirs, files in os.walk(self.dirname):
@@ -72,12 +73,13 @@ class MySentences(object):
                     readlines = f.readlines()
 
                 sentence_stream = [parse_sent(doc) for doc in readlines]
-                bigram = Phrases(
-                    sentence_stream,
-                    min_count=2,
-                    threshold=5,
-                    common_terms=common_terms)
-                sentence_stream = list(bigram[sentence_stream])
+                self.bigram.add_vocab(sentence_stream)
+                # bigram = Phrases(
+                #     sentence_stream,
+                #     min_count=2,
+                #     threshold=5,
+                #     common_terms=common_terms)
+                sentence_stream = list(self.bigram[sentence_stream])
                 for sent in sentence_stream:
                     yield sent
 
@@ -91,7 +93,7 @@ if __name__ == '__main__':
     output_path = sys.argv[2]
     begin = time()
 
-    sentences = MySentences(data_path)
+    sentences = MySentences(data_path, common_terms)
     model = gensim.models.Word2Vec(
         sentences,
         size=200,
