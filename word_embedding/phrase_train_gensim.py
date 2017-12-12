@@ -18,6 +18,8 @@ from gensim.models.phrases import Phrases, Phraser
 logging.basicConfig(
     format='%(asctime)s : %(levelname)s : %(message)s', level=logging.INFO)
 
+common_terms = ["of", "with", "without", "and", "or", "the", "a", "an"]
+
 
 def cleanhtml(raw_html):
     cleanr = re.compile('<.*?>')
@@ -25,7 +27,23 @@ def cleanhtml(raw_html):
     return cleantext
 
 
+def parse_sent(sentence):
+    sline = sentence.strip()
+    # if sline == "" or sline == '\n':
+    #     return ''
+    sline = sline.rstrip()
+    rline = cleanhtml(sline)
+
+    tokenized_line = ' '.join(p_tokenize(rline))
+    is_alpha_word_line = [word for word in tokenized_line.lower().split()]
+
+    return is_alpha_word_line
+
+
 class MySentences(object):
+    """lines -> sentence list(['...', '...',...]) ->
+    words list([[[' '],[' ']],[[' '],[' ']],...) ->
+    phrase([['a_b','c_d']])"""
 
     def __init__(self, dirname):
         self.dirname = dirname
@@ -34,21 +52,23 @@ class MySentences(object):
         for root, dirs, files in os.walk(self.dirname):
             for filename in files:
                 file_path = root + '/' + filename
-                for line in open(file_path):
-                    sline = line.strip()
-                    if sline == "":
-                        continue
-                    rline = cleanhtml(sline)
+                with open(file_path, 'rb') as f:
+                    # read all lines in the file as a list
+                    readlines = f.readlines()
 
-                    tokenized_line = ' '.join(p_tokenize(rline))
-                    is_alpha_word_line = [
-                        word for word in tokenized_line.lower().split()
-                        if word.isalpha()
-                    ]
-                    yield is_alpha_word_line
+                sentence_stream = [parse_sent(doc) for doc in readlines]
+                bigram = Phrases(
+                    sentence_stream,
+                    min_count=2,
+                    threshold=5,
+                    common_terms=common_terms)
+                sentence_stream = list(bigram[sentence_stream])
+                for sent in sentence_stream:
+                    yield sent
 
 
 if __name__ == '__main__':
+    #
     if len(sys.argv) != 2:
         print("Please use python train_with_gensim.py data_path")
         exit()
@@ -62,10 +82,11 @@ if __name__ == '__main__':
         window=10,
         min_count=10,
         workers=multiprocessing.cpu_count())
-    model.save("/home/weiwu/share/deep_learning/data/model/word2vec_gensim")
+    model.save(
+        "/home/weiwu/share/deep_learning/data/model/phrase/word2vec_gensim")
     model.wv.save_word2vec_format(
-        "/home/weiwu/share/deep_learning/data/model/word2vec_org",
-        "/home/weiwu/share/deep_learning/data/model/vocabulary",
+        "/home/weiwu/share/deep_learning/data/model/phrase/word2vec_org",
+        "/home/weiwu/share/deep_learning/data/model/phrase/vocabulary",
         binary=False)
 
     end = time()

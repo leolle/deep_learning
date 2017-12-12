@@ -115,14 +115,56 @@ with open(file_path, 'rb') as f:
 wiki = open(file_path, 'rb')
 documents = wiki.readlines()
 wiki.close()
-sentence_stream = [doc.split(" ") for doc in documents]
+
+with open(file_path, 'rb') as f:
+    whole_string = f.read()
+# print whole_string[:1000]
+# print sentences_transedback[:1000]
+
+
+def parse(sentence):
+    sline = sentence.strip()
+    # if sline == "" or sline == '\n':
+    #     return ' '
+    sline = sline.rstrip()
+    rline = cleanhtml(sline)
+
+    tokenized_line = ' '.join(p_tokenize(rline))
+    is_alpha_word_line = [
+        word for word in tokenized_line.lower().split() if word.isalpha()
+    ]
+
+    return is_alpha_word_line
+
+
+sentence_stream = [parse(doc) for doc in documents]
 bigram = Phrases(
     sentence_stream, min_count=5, threshold=10, common_terms=common_terms)
 from itertools import chain
 strings_sent = list(bigram[sentence_stream])
+
 # print " ".join(chain.from_iterable(strings))
 sentences_transedback = " ".join(chain.from_iterable(strings_sent))
-with open(file_path, 'rb') as f:
-    whole_string = f.read()
-print whole_string[:1000]
-print sentences_transedback[:1000]
+model = word2vec.Word2Vec(strings_sent, size=200)
+
+
+class MySentences(object):
+    """lines -> sentence list(['...', '...',...]) ->
+    words list([[[' '],[' ']],[[' '],[' ']],...) ->
+    phrase([['a_b','c_d']])"""
+
+    def __init__(self, file_name):
+        self.file_name = file_name
+
+    def __iter__(self):
+        with open(self.file_name, 'rb') as f:
+            # read all lines in the file as a list
+            readlines = f.readlines()
+
+            sentence_stream = [parse_sent(doc) for doc in readlines]
+
+            for sent in sentence_stream:
+                yield sent
+
+
+sentences = MySentences(file_path)
