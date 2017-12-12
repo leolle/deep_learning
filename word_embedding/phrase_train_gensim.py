@@ -39,9 +39,9 @@ def parse_sent(sentence):
     rline = cleanhtml(sline)
     # tokenize lines
     tokenized_line = ' '.join(p_tokenize(rline))
-    # parse digits, remove stop words
+    # parse digits, remove signs
     is_alpha_word_line = [
-        word for word in tokenized_line.lower().split() if not word.isdigit()
+        word for word in tokenized_line.lower().split() if word.isalpha()
     ]
 
     return is_alpha_word_line
