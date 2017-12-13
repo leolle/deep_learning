@@ -1,3 +1,6 @@
 [submodule "basic/courses"]
 	path = basic/courses
 	url = https://github.com/fastai/courses.git
+[submodule "basic/example/neural_artistic_style"]
+	path = basic/example/neural_artistic_style
+	url = https://github.com/andersbll/neural_artistic_style.git

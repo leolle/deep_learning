@@ -9,6 +9,8 @@ import re
 from nltk import tokenize as n_tokenize
 from pattern.en import tokenize as p_tokenize
 import pprint
+import multiprocessing
+
 text = u'''the mayor of new york was there. machine learning can be useful sometimes. The titular threat of The Blob has always struck me as the ultimate movie monster. an insatiably hungry, amoeba-like mass able to penetrate virtually any safeguard, capable of--as a doomed doctor chillingly describes it--"assimilating flesh on contact. Snide comparisons to gelatin be damned.
 '''
 
@@ -154,18 +156,34 @@ class MySentences(object):
     words list([[[' '],[' ']],[[' '],[' ']],...) ->
     phrase([['a_b','c_d']])"""
 
-    def __init__(self, file_name):
-        self.file_name = file_name
+    def __init__(self, dirname, common_terms):
+        self.dirname = dirname
+        self.bigram = Phrases(
+            min_count=2, threshold=5, common_terms=common_terms)
 
     def __iter__(self):
-        with open(self.file_name, 'rb') as f:
-            # read all lines in the file as a list
-            readlines = f.readlines()
+        for root, dirs, files in os.walk(self.dirname):
+            for filename in files:
+                file_path = root + '/' + filename
+                with open(file_path, 'rb') as f:
+                    # read all lines in the file as a list
+                    readlines = f.readlines()
 
-            sentence_stream = [parse_sent(doc) for doc in readlines]
+                sentence_stream = [parse_sent(doc) for doc in readlines]
+                self.bigram.add_vocab(sentence_stream)
+                sentence_stream = list(self.bigram[sentence_stream])
+                for sent in sentence_stream:
+                    yield sent
 
-            for sent in sentence_stream:
-                yield sent
 
+sentences = MySentences(file_path, common_terms)
+phrase_filename = '/home/weiwu/share/deep_learning/data/model/phrase/test/word2vec_org'
+model_phrase = KeyedVectors.load_word2vec_format(phrase_filename, binary=False)
+#model_google = KeyedVectors.load_word2vec_format(google_filename, binary=True)
 
-sentences = MySentences(file_path)
+model = model_phrase(
+    sentences,
+    size=200,
+    window=10,
+    min_count=10,
+    workers=multiprocessing.cpu_count())
