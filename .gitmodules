@@ -4,3 +4,6 @@
 [submodule "basic/example/neural_artistic_style"]
 	path = basic/example/neural_artistic_style
 	url = https://github.com/andersbll/neural_artistic_style.git
+[submodule "basic/gensim"]
+	path = basic/gensim
+	url = git@github.com:RaRe-Technologies/gensim.git
