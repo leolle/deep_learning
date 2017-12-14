@@ -176,7 +176,7 @@ class MySentences(object):
                     yield sent
 
 
-sentences = MySentences(file_path, common_terms)
+# sentences = MySentences(file_path, common_terms)
 phrase_filename = '/home/weiwu/share/deep_learning/data/model/phrase/word2vec_org'
 model_phrase = KeyedVectors.load_word2vec_format(phrase_filename, binary=False)
 #model_google = KeyedVectors.load_word2vec_format(google_filename, binary=True)
@@ -187,13 +187,13 @@ model_phrase = KeyedVectors.load_word2vec_format(phrase_filename, binary=False)
 #     window=10,
 #     min_count=10,
 #     workers=multiprocessing.cpu_count())
-X = model_phrase[model_phrase.wv.vocab]
-# visualize food data
-from sklearn.manifold import TSNE
-import matplotlib.pyplot as plt
+# X = model_phrase[model_phrase.wv.vocab]
+# # visualize food data
+# from sklearn.manifold import TSNE
+# import matplotlib.pyplot as plt
 
-tsne = TSNE(n_components=2)
-X_tsne = tsne.fit_transform(X)
-plt.rcParams['figure.figsize'] = [10, 10]
-plt.scatter(X_tsne[:, 0], X_tsne[:, 1])
-plt.show()
+# tsne = TSNE(n_components=2)
+# X_tsne = tsne.fit_transform(X)
+# plt.rcParams['figure.figsize'] = [10, 10]
+# plt.scatter(X_tsne[:, 0], X_tsne[:, 1])
+# plt.show()
