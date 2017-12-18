@@ -25,42 +25,15 @@
 * result:
 ** - intersection of two words:
 #+BEGIN_SRC python
-In [29]: gdp = [x[0] for x in model_wiki.most_similar(['gdp'], topn=10)]
+In [166]: ('intersection of: ', ('gdp', 'gnp'))
+set([u'estimates', u'cbo', u'economies', u'relative', u'surpluses', u'inequality', u'gross', u'expenditures', u'ratio', u'consumption', u'incomes', u'projected', u'forecast', u'nominal', u'deficit', u'gdps', u'economy', u'coefficient', u'exports', u'gini', u'outlays', u'expenditure', u'cpi', u'gni', u'deficits', u'capita', u'growth', u'output', u'revenues'])
+('intersection of: ', ('interest', 'debt'))
+set([u'liabilities', u'bondholders', u'loan', u'balances', u'borrowings', u'mbs', u'creditor', u'mortgage', u'indebtedness', u'debts', u'unsecured', u'collateral', u'repayments', u'repayment', u'bonds', u'borrower', u'loans', u'borrowers', u'refinancing', u'default', u'borrowing', u'mortgages', u'defaults'])
+('intersection of: ', ('finance', 'bank'))
+set([u'banking'])
+('intersection of: ', ('google', 'yahoo'))
+set([u'twitter', u'skype', u'linkedin', u'tumblr', u'geocities', u'aol', u'gmail', u'spotify', u'pinterest', u'adwords', u'myspace', u'airbnb', u'foursquare', u'wordpress', u'doubleclick', u'adsense', u'whatsapp', u'flickr', u'baidu', u'hotmail', u'quora', u'facebook', u'snapchat', u'dropbox', u'netscape', u'bing', u'ebay'])
 
-
-In [30]:
-In [30]: gdp
-Out[30]:
-[u'gnp',
- u'deficit',
- u'trillion',
- u'exports',
- u'ratio',
- u'revenues',
- u'inflation',
- u'gross',
- u'coefficient',
- u'percent']
-
-In [31]: gnp = [x[0] for x in model_wiki.most_similar(['gnp'], topn=10)]
-
-
-In [34]:
-In [34]: gnp
-Out[34]:
-[u'gdp',
- u'gni',
- u'gross',
- u'estimates',
- u'gpi',
- u'projections',
- u'coefficient',
- u'cpi',
- u'output',
- u'productivity']
-
-In [35]: set(gdp).intersection(set(gnp))
-Out[35]: {u'coefficient', u'gross'}
 #+END_SRC
 ** syntactic/semantic NLP word tasks
 - A - B = C - D?
