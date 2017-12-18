@@ -21,3 +21,96 @@
 | word2vec_basic.py             | using tensorflow to build word embedding from scratch |         |
 | word2vec.py                   | Multi-threaded word2vec mini-batched skip-gram model  |         |
 |                               |                                                       |         |
+
+* result:
+** - intersection of two words:
+#+BEGIN_SRC python
+In [29]: gdp = [x[0] for x in model_wiki.most_similar(['gdp'], topn=10)]
+
+
+In [30]:
+In [30]: gdp
+Out[30]:
+[u'gnp',
+ u'deficit',
+ u'trillion',
+ u'exports',
+ u'ratio',
+ u'revenues',
+ u'inflation',
+ u'gross',
+ u'coefficient',
+ u'percent']
+
+In [31]: gnp = [x[0] for x in model_wiki.most_similar(['gnp'], topn=10)]
+
+
+In [34]:
+In [34]: gnp
+Out[34]:
+[u'gdp',
+ u'gni',
+ u'gross',
+ u'estimates',
+ u'gpi',
+ u'projections',
+ u'coefficient',
+ u'cpi',
+ u'output',
+ u'productivity']
+
+In [35]: set(gdp).intersection(set(gnp))
+Out[35]: {u'coefficient', u'gross'}
+#+END_SRC
+** syntactic/semantic NLP word tasks
+- A - B = C - D?
+#+BEGIN_SRC python
+In [39]: model_wiki.most_similar(positive=['woman', 'king'], negative=['man'], topn=1)
+Out[40]: [(u'queen', 0.6665365099906921)]
+
+In [102]: model_wiki.most_similar_cosmul(positive=['woman', 'king'], negative=['man'], topn=10)
+Out[102]:
+[(u'queen', 0.9017336368560791),
+ (u'empress', 0.8621657490730286),
+ (u'princess', 0.8518181443214417),
+ (u'consort', 0.8241053819656372),
+ (u'duchess', 0.8176387548446655),
+ (u'catherine', 0.815154492855072),
+ (u'regent', 0.8117901682853699),
+ (u'dowager', 0.810664713382721),
+ (u'electress', 0.8100847601890564),
+ (u'throne', 0.8039511442184448)]
+#+END_SRC
+
+- A + B = ?
+#+BEGIN_SRC python
+In [96]: model_wiki.most_similar(['interest','cpi'])
+
+Out[99]:
+[(u'inflation', 0.5732479691505432),
+ (u'apr', 0.5531845092773438),
+ (u'rpi', 0.5135754942893982),
+ (u'hicp', 0.5048391819000244),
+ (u'calculation', 0.504572868347168),
+ (u'libor', 0.5034551620483398),
+ (u'percentage', 0.4969024658203125),
+ (u'income', 0.4836910367012024),
+ (u'coupon', 0.4777805507183075),
+ (u'premiums', 0.471430242061615)]
+
+#+END_SRC
+
+- A, B, C, D, which is not qualified?
+#+BEGIN_SRC python
+In [103]: model_wiki.doesnt_match("cpi gdp interest lunch".split())
+Out[107]: 'lunch'
+#+END_SRC
+
+- similarity of two words
+#+BEGIN_SRC python
+In [108]: model_wiki.similarity('cpi', 'gdp')
+Out[112]: 0.50464583932408846
+
+In [113]: model_wiki.similarity('cpi', 'inflation')
+Out[116]: 0.4803993862786744
+#+END_SRC
