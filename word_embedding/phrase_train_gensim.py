@@ -8,7 +8,7 @@ import logging
 import multiprocessing
 import os
 import re
-import sys
+import sys,os
 
 from pattern.en import tokenize as p_tokenize
 from nltk import tokenize as n_tokenize
