@@ -64,6 +64,8 @@ import json
 from io import StringIO
 from multiprocessing import Queue, Process, Value, cpu_count
 from timeit import default_timer
+import pymongo
+from pymongo import MongoClient
 
 import pandas as pd
 # pages_file_path = '/home/weiwu/share/deep_learning/data/finance_pages_level_5.csv'
@@ -2908,12 +2910,12 @@ def process_dump(input_file, template_file, out_file, file_size, file_compress,
     page_num = 0
     for page_data in pages_from(input):
         id, revid, title, ns, page = page_data
-        if int(id) not in ls_pageid:
-            # logging.info('page name %s is in the set', title)
-            #        else:
-            if int(id) > ls_pageid[-1]:
-                break
-            continue
+        # if int(id) not in ls_pageid:
+        # logging.info('page name %s is in the set', title)
+        #        else:
+        # if int(id) > ls_pageid[-1]:
+        #     break
+        # continue
         if keepPage(ns, page):
             # slow down
             # logging.info('page name %s is not in the set', title)
@@ -3264,6 +3266,12 @@ def main():
         except:
             logging.error('Could not create: %s', output_path)
             return
+    client = MongoClient()
+
+    client = MongoClient('mongodb://172.17.0.1:27017/')
+
+    db = client['local']
+    wiki = db.wiki
 
     process_dump(input_file, args.templates, output_path, file_size,
                  args.compress, args.processes)
