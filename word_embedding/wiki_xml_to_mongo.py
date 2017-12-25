@@ -75,7 +75,7 @@ client = MongoClient()
 
 client = MongoClient('mongodb://localhost:27017/')
 
-db = client['local']
+db = client['wiki']
 wiki = db.wiki
 
 PY2 = sys.version_info[0] == 2
@@ -575,6 +575,9 @@ class Extractor(object):
             if out == sys.stdout:  # option -a or -o -
                 header = header.encode('utf-8')
             out.write(header)
+            for sent in text:
+                if not isinstance(sent, text_type):
+                    sent = sent.decode('utf-8')
             joined_text = "\n".join(text)
             page_post = {
                 "page_id": int(self.id),
