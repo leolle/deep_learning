@@ -72,7 +72,7 @@ import pandas as pd
 # df_pages = pd.read_csv(pages_file_path)
 # sr_pages = df_pages.title
 # ls_pages = sr_pages.apply(lambda x: x.replace('_', ' '))
-pages_file_path = '/home/weiwu/share/deep_learning/data/zh_finance_pages_level_3.csv'
+pages_file_path = '/home/weiwu/share/deep_learning/data/zh_finance_level_5.csv'
 ls_pageid = pd.read_csv(pages_file_path).pageid.values
 
 PY2 = sys.version_info[0] == 2
@@ -2910,12 +2910,12 @@ def process_dump(input_file, template_file, out_file, file_size, file_compress,
     page_num = 0
     for page_data in pages_from(input):
         id, revid, title, ns, page = page_data
-        # if int(id) not in ls_pageid:
-        # logging.info('page name %s is in the set', title)
-        #        else:
-        # if int(id) > ls_pageid[-1]:
-        #     break
-        # continue
+        if int(id) not in ls_pageid:
+            # logging.info('page name %s is in the set', title)
+            #        else:
+            if int(id) > ls_pageid[-1]:
+                break
+            continue
         if keepPage(ns, page):
             # slow down
             # logging.info('page name %s is not in the set', title)
@@ -3266,12 +3266,6 @@ def main():
         except:
             logging.error('Could not create: %s', output_path)
             return
-    client = MongoClient()
-
-    client = MongoClient('mongodb://172.17.0.1:27017/')
-
-    db = client['local']
-    wiki = db.wiki
 
     process_dump(input_file, args.templates, output_path, file_size,
                  args.compress, args.processes)

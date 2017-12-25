@@ -50,7 +50,7 @@ the following structure
 
 Template expansion requires preprocesssng first the whole dump and
 collecting template definitions.
-
+line: <M-g g> 584
 """
 
 from __future__ import unicode_literals, division
@@ -73,7 +73,7 @@ from pymongo import MongoClient
 
 client = MongoClient()
 
-client = MongoClient('mongodb://172.17.0.1:27017/')
+client = MongoClient('mongodb://localhost:27017/')
 
 db = client['local']
 wiki = db.wiki
@@ -575,13 +575,27 @@ class Extractor(object):
             if out == sys.stdout:  # option -a or -o -
                 header = header.encode('utf-8')
             out.write(header)
+            joined_text = "\n".join(text)
             page_post = {
-                "page_id": self.id,
+                "page_id": int(self.id),
                 "title": self.title,
-                "text": self.text,
-                "length(words)": len(self.text.split())
+                "text": joined_text,
+                "length(words)": len(joined_text.split())
             }
+            # insert data
             self.wiki.insert_one(page_post)
+
+            # time.sleep(1)
+            for line in text:
+                if out == sys.stdout:  # option -a or -o -
+                    line = line.encode('utf-8')
+                # print line
+                # print type(line)
+                # time.sleep(0.3)
+                # full_text.join(line)
+                #out.write(line)
+                #out.write('\n')
+            # print full_text
             for line in text:
                 if out == sys.stdout:  # option -a or -o -
                     line = line.encode('utf-8')
@@ -646,7 +660,7 @@ class Extractor(object):
 
         if sum(len(line) for line in text) < options.min_text_length:
             return
-
+        # print text
         self.write_output(out, text)
 
         errs = (self.template_title_errs, self.recursion_exceeded_1_errs,
@@ -3004,6 +3018,7 @@ def extract_process(opts, i, jobs_queue, output_queue):
         job = jobs_queue.get()  # job is (id, title, page, page_num)
         if job:
             id, revid, title, page, page_num = job
+            # print page
             try:
                 e = Extractor(*job[:4])  # (id, revid, title, page)
                 page = None  # free memory
