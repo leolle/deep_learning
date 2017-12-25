@@ -31,6 +31,13 @@ def cleanhtml(raw_html):
     return cleantext
 
 
+def complete_dir_path(dir_path):
+    if not dir_path.endswith('/'):
+        return dir_path + '/'
+    else:
+        return dir_path
+
+
 def parse_sent(sentence):
     """parse sentence to list of words
     """
@@ -52,25 +59,26 @@ def parse_sent(sentence):
 
 user = "wiki"
 password = "root"
-host = "192.168.1.73"
+#host = "192.168.1.73"
+host = "localhost"
 uri = "mongodb://%s:%s@%s" % (quote_plus(user), quote_plus(password), host)
 client = MongoClient(uri)
-from sshtunnel import SSHTunnelForwarder
-import pymongo
-import pprint
+# from sshtunnel import SSHTunnelForwarder
+# import pymongo
+# import pprint
 
-MONGO_HOST = "192.168.1.73"
-MONGO_DB = "wiki"
-MONGO_USER = "wiki"
-MONGO_PASS = "root"
+# MONGO_HOST = "192.168.1.73"
+# MONGO_DB = "wiki"
+# MONGO_USER = "wiki"
+# MONGO_PASS = "root"
 
-server = SSHTunnelForwarder(
-    MONGO_HOST,
-    ssh_username=MONGO_USER,
-    ssh_password=MONGO_PASS,
-    remote_bind_address=('127.0.0.1', 27017))
+# server = SSHTunnelForwarder(
+#     MONGO_HOST,
+#     ssh_username=MONGO_USER,
+#     ssh_password=MONGO_PASS,
+#     remote_bind_address=('127.0.0.1', 27017))
 
-server.start()
+# server.start()
 
 # client = pymongo.MongoClient('127.0.0.1', server.local_bind_port) # server.local_bind_port is assigned local port
 # db = client[MONGO_DB]
@@ -131,33 +139,26 @@ class MySentences(object):
             process_count, self.page_num, load_duration, extract_rate)
 
 
-pages = MySentences(common_terms)
-model = gensim.models.Word2Vec(
-    pages,
-    size=200,
-    window=10,
-    min_count=10,
-    workers=multiprocessing.cpu_count())
+if __name__ == '__main__':
+    #
+    if len(sys.argv) != 2:
+        print("Please use python train_with_gensim.py output_path")
+        exit()
+    output_path = sys.argv[1]
+    begin = time()
 
-#for k in pages:
-#    print(k)
+    pages = MySentences(common_terms)
+    model = gensim.models.Word2Vec(
+        pages,
+        size=200,
+        window=10,
+        min_count=10,
+        workers=multiprocessing.cpu_count())
+    model.save(complete_dir_path(output_path) + "word2vec_gensim")
+    model.wv.save_word2vec_format(
+        complete_dir_path(output_path) + "word2vec_org",
+        complete_dir_path(output_path) + "vocabulary",
+        binary=False)
 
-# for root, dirs, files in os.walk(self.dirname):
-#     for filename in files:
-#         file_path = root + '/' + filename
-#         with open(file_path, 'rb') as f:
-#             # read all lines in the file as a list
-#             readlines = f.readlines()
-
-#         sentence_stream = [parse_sent(doc) for doc in readlines]
-#         self.bigram.add_vocab(sentence_stream)
-#         # bigram = Phrases(
-#         #     sentence_stream,
-#         #     min_count=2,
-#         #     threshold=5,
-#         #     common_terms=common_terms)
-#         sentence_stream = list(self.bigram[sentence_stream])
-#         for sent in sentence_stream:
-#             yield sent
-
-# sentences = MySentences(data_path, common_terms)
+    end = time()
+    print("Total procesing time: %d seconds" % (end - begin))
