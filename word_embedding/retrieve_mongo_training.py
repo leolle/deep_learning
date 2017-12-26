@@ -57,12 +57,12 @@ def parse_sent(sentence):
     return is_alpha_word_line
 
 
-user = "wiki"
-password = "root"
-#host = "192.168.1.73"
-host = "localhost"
-uri = "mongodb://%s:%s@%s" % (quote_plus(user), quote_plus(password), host)
-client = MongoClient(uri)
+# user = "wiki"
+# password = "root"
+# #host = "192.168.1.73"
+# host = "localhost"
+# uri = "mongodb://%s:%s@%s" % (quote_plus(user), quote_plus(password), host)
+# client = MongoClient(uri)
 # from sshtunnel import SSHTunnelForwarder
 # import pymongo
 # import pprint
@@ -85,10 +85,18 @@ client = MongoClient(uri)
 # pprint.pprint(db.collection_names())
 
 # server.stop()
-pages_file_path = '/home/weiwu/share/deep_learning/data/corporate_finance_level_2.csv'
-ls_pageid = pd.read_csv(pages_file_path).pageid.values
+# pages_file_path = '/home/weiwu/share/deep_learning/data/corporate_finance_level_2.csv'
+# ls_pageid = pd.read_csv(pages_file_path).pageid.values
+pages_csv = pd.DataFrame()
+for root, dirs, files in os.walk(
+        '/home/weiwu/share/deep_learning/data/enwiki_categories/'):
+    for filename in files:
+        file_path = root + '/' + filename
+        page_read = pd.read_csv(file_path)
+        pages_csv = pd.concat([pages_csv, page_read])
+ls_pageid = pages_csv.pageid.unique()
 
-# client = MongoClient('mongodb://localhost:27017/')
+client = MongoClient('mongodb://localhost:27017/')
 db = client['wiki']
 collection = db.wiki
 

@@ -8,13 +8,14 @@ import logging
 import multiprocessing
 import os
 import re
-import sys,os
+import sys, os
 
 from pattern.en import tokenize as p_tokenize
 from nltk import tokenize as n_tokenize
 from nltk.corpus import stopwords
 from time import time, sleep
 from gensim.models.phrases import Phrases, Phraser
+import pandas as pd
 
 logging.basicConfig(
     format='%(asctime)s : %(levelname)s : %(message)s', level=logging.INFO)
@@ -83,6 +84,14 @@ class MySentences(object):
                 for sent in sentence_stream:
                     yield sent
 
+
+pages_csv = pd.DataFrame()
+for root, dirs, files in os.walk(
+        '/home/weiwu/share/deep_learning/data/enwiki_categories/'):
+    for filename in files:
+        file_path = root + '/' + filename
+        page_read = pd.read_csv(file_path)
+        pages_csv = pd.concat([pages_csv, page_read])
 
 if __name__ == '__main__':
     #
