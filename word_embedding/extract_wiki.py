@@ -2910,12 +2910,12 @@ def process_dump(input_file, template_file, out_file, file_size, file_compress,
     page_num = 0
     for page_data in pages_from(input):
         id, revid, title, ns, page = page_data
-        if int(id) not in ls_pageid:
-            # logging.info('page name %s is in the set', title)
-            #        else:
-            if int(id) > ls_pageid[-1]:
-                break
-            continue
+        # if int(id) not in ls_pageid:
+        #     # logging.info('page name %s is in the set', title)
+        #     #        else:
+        #     if int(id) > ls_pageid[-1]:
+        #         break
+        #     continue
         if keepPage(ns, page):
             # slow down
             # logging.info('page name %s is not in the set', title)

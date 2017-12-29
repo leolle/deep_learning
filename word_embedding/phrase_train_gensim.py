@@ -85,14 +85,6 @@ class MySentences(object):
                     yield sent
 
 
-pages_csv = pd.DataFrame()
-for root, dirs, files in os.walk(
-        '/home/weiwu/share/deep_learning/data/enwiki_categories/'):
-    for filename in files:
-        file_path = root + '/' + filename
-        page_read = pd.read_csv(file_path)
-        pages_csv = pd.concat([pages_csv, page_read])
-
 if __name__ == '__main__':
     #
     if len(sys.argv) != 3:
@@ -101,7 +93,9 @@ if __name__ == '__main__':
     data_path = sys.argv[1]
     output_path = sys.argv[2]
     begin = time()
-
+    output_dir = complete_dir_path(output_path)
+    if not os.path.exists(output_dir):
+        os.mkdir(output_dir)
     sentences = MySentences(data_path, common_terms)
     model = gensim.models.Word2Vec(
         sentences,
