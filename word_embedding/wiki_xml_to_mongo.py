@@ -70,13 +70,14 @@ from io import StringIO
 from multiprocessing import Queue, Process, Value, cpu_count
 from timeit import default_timer
 from pymongo import MongoClient
+from hanziconv import HanziConv
 
 client = MongoClient()
 
 client = MongoClient('mongodb://localhost:27017/')
 
 db = client['wiki']
-wiki = db.wiki
+wiki = db.zhwiki
 
 PY2 = sys.version_info[0] == 2
 # Python 2.7 compatibiity
@@ -581,8 +582,8 @@ class Extractor(object):
             joined_text = "\n".join(text)
             page_post = {
                 "page_id": int(self.id),
-                "title": self.title,
-                "text": joined_text,
+                "title": HanziConv.toSimplified(self.title),
+                "text": HanziConv.toSimplified(joined_text),
                 "length(words)": len(joined_text.split())
             }
             # insert data

@@ -6,7 +6,6 @@ import pandas as pd
 import logging
 import os
 import argparse
-from word2vec2tensor import word2vec2tensor
 from subprocess import call
 
 logger = logging.getLogger()
@@ -19,7 +18,7 @@ if not logger.handlers:
     logger.setLevel(logging.DEBUG)
 
 # load model
-phrase_filename = '/home/weiwu/share/deep_learning/data/model/phrase/enwiki_economy/word2vec_org'
+phrase_filename = '/home/weiwu/share/deep_learning/data/model/phrase/enwiki_economy_pages_only/word2vec_org'
 finance_level5_model_filepath = '/home/weiwu/share/deep_learning/data/model/phrase/word2vec_org_finance_level_5'
 # model_level5 = KeyedVectors.load_word2vec_format(phrase_filename, binary=False)
 logger.debug('loading model completes.')
@@ -97,43 +96,6 @@ def complete_dir_path(dir_path):
         return dir_path
 
 
-def word2vec2tsv(word2vec_model_path, tensor_filename, vocab=[], binary=False):
-    """only visualize input vocab
-    Keyword Arguments:
-    model --
-    vocab --
-    """
-    from gensim.utils import to_utf8
-    model = KeyedVectors.load_word2vec_format(
-        word2vec_model_path, binary=binary)
-    if not os.path.exists(tensor_filename):
-        logger.debug("create dir %s" % tensor_filename)
-        os.makedirs(tensor_filename)
-
-    outfiletsv = complete_dir_path(tensor_filename) + 'tensor.tsv'
-    outfiletsvmeta = complete_dir_path(tensor_filename) + 'metadata.tsv'
-
-    if len(vocab) != 0:
-        abs_vocab = []
-        # remove absent vocabulary
-        for token in vocab:
-            if token not in model:
-                #         logger.debug('pop %s' % vocab)
-                abs_vocab.append(token)
-                vocab.remove(token)
-        logger.debug("absent vocabulary in the model %s" % abs_vocab)
-    else:
-        vocab = model.index2word
-
-    # write tensor value
-    with open(outfiletsv, 'w+') as file_vector:
-        with open(outfiletsvmeta, 'w+') as file_metadata:
-            for word in vocab:
-                file_metadata.write(to_utf8(word) + to_utf8('\n'))
-                vector_row = '\t'.join(str(x) for x in model[word])
-                file_vector.write(vector_row + '\n')
-
-
 def visualize_embedding_tsne(model, vocab):
     """tsne word embedding
     Keyword Arguments:
@@ -175,9 +137,47 @@ def visualize_embedding_tsne(model, vocab):
     plt.show()
 
 
+def word2vec2tsv(word2vec_model, tensor_filename, vocab=[], binary=False):
+    """only visualize input vocab
+    Keyword Arguments:
+    model --
+    vocab --
+    """
+    from gensim.utils import to_utf8
+    model = word2vec_model
+    if not os.path.exists(tensor_filename):
+        logger.info("create dir %s" % tensor_filename)
+        os.makedirs(tensor_filename)
+
+    outfiletsv = complete_dir_path(tensor_filename) + 'tensor.tsv'
+    outfiletsvmeta = complete_dir_path(tensor_filename) + 'metadata.tsv'
+
+    if len(vocab) != 0:
+        absent_vocab = []
+        # remove absent vocabulary
+        for token in vocab:
+            if token not in model:
+                #         logger.debug('pop %s' % vocab)
+                absent_vocab.append(token)
+                vocab.remove(token)
+        logger.debug("absent vocabulary in the model %s" % absent_vocab)
+    else:
+        vocab = model.index2word
+
+    # write tensor value
+    with open(outfiletsv, 'w+') as file_vector:
+        with open(outfiletsvmeta, 'w+') as file_metadata:
+            for word in vocab:
+                file_metadata.write(to_utf8(word) + to_utf8('\n'))
+                vector_row = '\t'.join(str(x) for x in model[word])
+                file_vector.write(vector_row + '\n')
+    return vocab
+
+
 def visualize_embedding_tensorboard_projector(LOG_DIR,
                                               host="localhost",
                                               model_path=phrase_filename,
+                                              vocab=[],
                                               call_tensorboard=False):
     """
     1. setup a 2d tensor that holds embedding(s).
@@ -195,15 +195,16 @@ def visualize_embedding_tensorboard_projector(LOG_DIR,
     else:
         if not os.path.exists(LOG_DIR):
             os.makedirs(LOG_DIR)
-    # Create randomly initialized embedding weights which will be trained.
-    N = 10000  # Number of items (vocab size).
-    D = 200  # Dimensionality of the embedding.
+    model = KeyedVectors.load_word2vec_format(model_path, binary=False)
+    vocab_left = word2vec2tsv(model, LOG_DIR, vocab)
+    shape = model[vocab_left].shape
     with tf.Graph().as_default() as g:
         with tf.Session(graph=g) as session:
             summary_writer = tf.summary.FileWriter(LOG_DIR)
             embedding_var = tf.Variable(
-                tf.random_normal([N, D]), name='word_embedding')
-            init = tf.initialize_all_variables()
+                tf.random_normal(shape), name='word_embedding')
+            embedding_var.assign(model[vocab_left])
+            init = tf.global_variables_initializer()
             init.run()
             saver = tf.train.Saver()
             saver.save(session, os.path.join(LOG_DIR, "model.ckpt"), 0)
@@ -221,7 +222,7 @@ def visualize_embedding_tensorboard_projector(LOG_DIR,
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument(
-        "-i", "--input", required=False, help="Input word2vec model")
+        "-i", "--input", required=True, help="Input word2vec model")
     parser.add_argument(
         "-o", "--output", required=False, help="Output tensor file name prefix")
     parser.add_argument(
@@ -241,8 +242,11 @@ if __name__ == '__main__':
     parser.add_argument("-p", "--port", required=False, help="browser port")
     args = parser.parse_args()
 
-    # word2vec2tsv(finance_level5_model_filepath,"/home/weiwu/share/deep_learning/data/model/phrase/finance_level_5/part_vocab",finance_vocab)
     # word2vec2tensor(args.input, args.output, args.binary)
     visualize_embedding_tensorboard_projector(
-        args.logdir, args.host, model_path=args.input, call_tensorboard=False)
+        args.logdir,
+        args.host,
+        model_path=args.input,
+        vocab=finance_vocab,
+        call_tensorboard=False)
 #    visualize_embedding(model_level5, finance_vocab)
