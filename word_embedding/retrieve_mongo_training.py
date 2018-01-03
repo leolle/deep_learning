@@ -98,7 +98,7 @@ ls_pageid = pages_csv.pageid.unique()
 
 client = MongoClient('mongodb://localhost:27017/')
 db = client['wiki']
-collection = db.wiki
+collection = db.zhwiki
 
 # pprint.pprint(collection.find_one({"page_id": 12}))
 # page_num = 0
