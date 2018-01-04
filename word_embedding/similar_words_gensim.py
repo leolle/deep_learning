@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import numpy as np
 from gensim.models import word2vec
-from gensim.models import KeyedVectors
+from gensim.models import KeyedVectors, Word2Vec
 from gensim.models.phrases import Phrases, Phraser
 import os
 import itertools
@@ -19,6 +19,25 @@ def cleanhtml(raw_html):
     cleanr = re.compile('<.*?>')
     cleantext = re.sub(cleanr, ' ', raw_html)
     return cleantext
+
+
+def parse_sent(sentence):
+    """parse sentence to list of words
+    """
+    # remove whitespace at the beginning
+    sline = sentence.strip()
+    # remove % sign
+    # sline = sline.strip("%")
+    # sline = sline.rstrip("'s")
+    rline = cleanhtml(sline)
+    # tokenize lines
+    tokenized_line = ' '.join(p_tokenize(rline))
+    # parse digits, remove signs
+    is_alpha_word_line = [
+        word for word in tokenized_line.lower().split() if word.isalpha()
+    ]
+
+    return is_alpha_word_line
 
 
 # sentence_stream = [[
@@ -109,17 +128,18 @@ bigram = Phrases(
 sent = [u'the', u'mayor', u'of', u'new', u'york', u'was', u'there']
 print(bigram[sent])
 """------------------------------------------------------------------------"""
-file_path = '/home/weiwu/share/deep_learning/data/enwiki/AA/wiki_00'
-with open(file_path, 'rb') as f:
-    read_data = f.readline()
-    print read_data
+file_path = '/home/weiwu/share/deep_learning/data/enwiki/AA/'
 
-wiki = open(file_path, 'rb')
-documents = wiki.readlines()
-wiki.close()
+# with open(file_path, 'rb') as f:
+#     read_data = f.readline()
+#     print read_data
 
-with open(file_path, 'rb') as f:
-    whole_string = f.read()
+# wiki = open(file_path, 'rb')
+# documents = wiki.readlines()
+# wiki.close()
+
+# with open(file_path, 'rb') as f:
+#     whole_string = f.read()
 # print whole_string[:1000]
 # print sentences_transedback[:1000]
 
@@ -164,6 +184,7 @@ class MySentences(object):
     def __iter__(self):
         for root, dirs, files in os.walk(self.dirname):
             for filename in files:
+                print filename
                 file_path = root + '/' + filename
                 with open(file_path, 'rb') as f:
                     # read all lines in the file as a list
@@ -176,17 +197,17 @@ class MySentences(object):
                     yield sent
 
 
-# sentences = MySentences(file_path, common_terms)
 phrase_filename = '/home/weiwu/share/deep_learning/data/model/phrase/word2vec_org'
-model_phrase = KeyedVectors.load_word2vec_format(phrase_filename, binary=False)
-#model_google = KeyedVectors.load_word2vec_format(google_filename, binary=True)
+# model_phrase = KeyedVectors.load_word2vec_format(phrase_filename, binary=False)
+# model_google = KeyedVectors.load_word2vec_format(google_filename, binary=True)
 
-# model = model_phrase(
-#     sentences,
-#     size=200,
-#     window=10,
-#     min_count=10,
-#     workers=multiprocessing.cpu_count())
+sentences = MySentences(file_path, common_terms)
+model = Word2Vec(
+    sentences,
+    size=200,
+    window=10,
+    min_count=10,
+    workers=multiprocessing.cpu_count())
 # X = model_phrase[model_phrase.wv.vocab]
 # # visualize food data
 # from sklearn.manifold import TSNE
