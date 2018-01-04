@@ -57,7 +57,7 @@ def parse_sent(sentence):
 
 pages_csv = pd.DataFrame()
 for root, dirs, files in os.walk(
-        '/home/weiwu/share/deep_learning/data/zhwiki_categories_test/'):
+        '/home/oem/Downloads/share/deep_learning/data/zhwiki_categories/'):
     for filename in files:
         file_path = root + '/' + filename
         page_read = pd.read_csv(file_path)
@@ -85,7 +85,7 @@ class MySentences(object):
     def __iter__(self):
         for page_id in ls_pageid:
             try:
-                print(collection.find_one({"page_id": page_id})['title'])
+                # print(collection.find_one({"page_id": page_id})['title'])
                 article = collection.find_one({"page_id": page_id})
                 page = article['text']
                 sentences = page.split()
@@ -103,42 +103,30 @@ class MySentences(object):
             process_count, self.page_num, load_duration, extract_rate)
 
 
-page = collection.find_one({"page_id": 2763})['text']
-sent_list = page.split()
+if __name__ == '__main__':
 
-# sentences = "".join(jieba.cut(str_in))
-# text = LineSentence(sentences)
-seg_list = jieba.cut(str_in, cut_all=False)
+    if len(sys.argv) != 2:
+        print("Please use python train_with_gensim.py output_path")
+        exit()
+    output_path = sys.argv[1]
+    begin = time()
 
-# for seg in seg_list:
-#     if seg not in stopwords:
-#         print(seg)
-# sent_list = [filterpunt(x) for x in seg_list]
+    pages = MySentences(stopwords)
+    model = gensim.models.Word2Vec(
+        pages,
+        size=200,
+        window=10,
+        min_count=10,
+        workers=multiprocessing.cpu_count())
+    model.save(complete_dir_path(output_path) + "word2vec_gensim")
+    model.wv.save_word2vec_format(
+        complete_dir_path(output_path) + "word2vec_org",
+        complete_dir_path(output_path) + "vocabulary",
+        binary=False)
 
-# sentences = " ".join(jieba.cut(test)).encode('utf-8')
-# sentences = " ".join(jieba.cut(page))
+    end = time()
+    print("Total procesing time: %d seconds" % (end - begin))
 
-# print(collection.find_one({"page_id": 2829})['title'])
-# model = gensim.models.Word2Vec(
-#     text, size=20, window=10, min_count=10, workers=multiprocessing.cpu_count())
-begin = time()
-
-pages = MySentences(stopwords)
-model = gensim.models.Word2Vec(
-    pages,
-    size=200,
-    window=10,
-    min_count=10,
-    workers=multiprocessing.cpu_count())
-# model.save(complete_dir_path(output_path) + "word2vec_gensim")
-# model.wv.save_word2vec_format(
-#     complete_dir_path(output_path) + "word2vec_org",
-#     complete_dir_path(output_path) + "vocabulary",
-#     binary=False)
-
-end = time()
-print("Total procesing time: %d seconds" % (end - begin))
-
-result = model.most_similar(u"足球")
-for e in result:
-    print e[0], e[1]
+# result = model.most_similar(u"足球")
+# for e in result:
+#     print e[0], e[1]
