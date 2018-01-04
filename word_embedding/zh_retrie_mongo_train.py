@@ -49,7 +49,7 @@ def parse_sent(sentence):
     is_alpha_word_line = [
         word for word in tokenized_line
         if not wordnet.synsets(word) and not word.isdigit()
-        if word not in stopwords
+        if word not in stopwords and len(word.strip()) > 1
     ]
 
     return is_alpha_word_line
@@ -57,7 +57,7 @@ def parse_sent(sentence):
 
 pages_csv = pd.DataFrame()
 for root, dirs, files in os.walk(
-        '/home/oem/Downloads/share/deep_learning/data/zhwiki_categories/'):
+        '/home/weiwu/share/deep_learning/data/zhwiki_categories_test/'):
     for filename in files:
         file_path = root + '/' + filename
         page_read = pd.read_csv(file_path)
@@ -88,10 +88,13 @@ class MySentences(object):
                 # print(collection.find_one({"page_id": page_id})['title'])
                 article = collection.find_one({"page_id": page_id})
                 page = article['text']
-                sentences = page.split()
-                sentence_stream = [parse_sent(doc) for doc in sentences]
+                sentences = page.splitlines()
+                sentence_stream = [
+                    parse_sent(doc) for doc in sentences if len(doc) > 1
+                ]
                 for sent in sentence_stream:
-                    yield sent
+                    if len(sent) > 1:
+                        yield sent
             except TypeError:
                 continue
             else:
@@ -130,3 +133,19 @@ if __name__ == '__main__':
 # result = model.most_similar(u"足球")
 # for e in result:
 #     print e[0], e[1]
+str_in = "小明硕士毕业于中国科学院计算所，后在日本京都大学深造，凭借过人天赋，旁人若在另一方面爱他，他每即躲开。"
+seg_list = jieba.cut(str_in)
+text = " ".join(seg_list)
+print(" / ".join(
+    list(
+        word for word in jieba.cut(str_in, HMM=True)
+        if word not in stopwords and len(word.strip()) > 1)))
+
+seg_list = [parse_sent(word) for word in jieba.cut(str_in, HMM=True)]
+for x in seg_list:
+    if len(x) > 0:
+        print x[0]
+
+for x in seg_list:
+    print('/')
+    print x
