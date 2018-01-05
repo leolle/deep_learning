@@ -130,22 +130,30 @@ if __name__ == '__main__':
     end = time()
     print("Total procesing time: %d seconds" % (end - begin))
 
-# result = model.most_similar(u"足球")
+page = collection.find_one({"page_id": 2763})['text']
+sent_list = page.splitlines()
+sentence_stream = [parse_sent(doc) for doc in sent_list if len(doc) > 1]
+# from gensim.models import KeyedVectors
+# zh_model_path = '/home/weiwu/share/deep_learning/data/model/phrase/zhwiki/word2vec_org'
+# zh_model = KeyedVectors.load_word2vec_format(zh_model_path)
+
+# result = zh_model.most_similar(u"美国",topn=20)
 # for e in result:
 #     print e[0], e[1]
-str_in = "小明硕士毕业于中国科学院计算所，后在日本京都大学深造，凭借过人天赋，旁人若在另一方面爱他，他每即躲开。"
-seg_list = jieba.cut(str_in)
-text = " ".join(seg_list)
-print(" / ".join(
-    list(
-        word for word in jieba.cut(str_in, HMM=True)
-        if word not in stopwords and len(word.strip()) > 1)))
 
-seg_list = [parse_sent(word) for word in jieba.cut(str_in, HMM=True)]
-for x in seg_list:
-    if len(x) > 0:
-        print x[0]
+# str_in = "小明硕士毕业于中国科学院计算所，后在日本京都大学深造，凭借过人天赋，旁人若在另一方面爱他，他每即躲开。"
+# seg_list = jieba.cut(str_in)
+# text = " ".join(seg_list)
+# print(" / ".join(
+#     list(
+#         word for word in jieba.cut(str_in, HMM=True)
+#         if word not in stopwords and len(word.strip()) > 1)))
 
-for x in seg_list:
-    print('/')
-    print x
+# seg_list = [parse_sent(word) for word in jieba.cut(str_in, HMM=True)]
+# for x in seg_list:
+#     if len(x) > 0:
+#         print x[0]
+
+# for x in seg_list:
+#     print('/')
+#     print x

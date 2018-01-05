@@ -1,0 +1,65 @@
+2017-12-01 12:28:42,331 : INFO : PROGRESS: at 100.00% examples, 84578 words/s, in_qsize 2, out_qsize 0
+2017-12-01 12:28:42,345 : INFO : worker thread finished; awaiting finish of 0 more threads
+2017-12-01 12:28:42,346 : INFO : training on 9010499910 raw words (6826926433 effective words) took 80717.4s, 84578 effective words/s
+2017-12-01 12:28:42,346 : INFO : saving Word2Vec object under /home/weiwu/share/deep_learning/data/model/word2vec_gensim, separately None
+2017-12-01 12:28:42,346 : INFO : not storing attribute syn0norm
+2017-12-01 12:28:42,346 : INFO : storing np array 'syn0' to /home/weiwu/share/deep_learning/data/model/word2vec_gensim.wv.syn0.npy
+2017-12-01 12:28:55,516 : INFO : storing np array 'syn1neg' to /home/weiwu/share/deep_learning/data/model/word2vec_gensim.syn1neg.npy
+2017-12-01 12:29:08,452 : INFO : not storing attribute cum_table
+2017-12-01 12:29:23,747 : INFO : saved /home/weiwu/share/deep_learning/data/model/word2vec_gensim
+2017-12-01 12:29:23,747 : INFO : storing vocabulary in /home/weiwu/share/deep_learning/data/model/vocabulary
+2017-12-01 12:29:29,012 : INFO : storing 879845x200 projection weights into /home/weiwu/share/deep_learning/data/model/word2vec_org
+Total procesing time: 90536 seconds
+
+1900seconds. 2100s.
+5646seconds.
+5690seconds.
+
+
+
+- Chinese<2018-01-05>
+training the level_5 finance
+---------------------------------------------------------------------------------------------------------
+2018-01-05 03:05:26,825 : INFO : PROGRESS: at 99.97% examples, 1196 words/s, in_qsize 0, out_qsize 0
+2018-01-05 03:06:14,472 : INFO : Finished 12-process extraction of 165294 articles in 32065.1s (5.2 art/s)
+2018-01-05 03:06:14,478 : INFO : worker thread finished; awaiting finish of 11 more threads
+2018-01-05 03:06:14,483 : INFO : worker thread finished; awaiting finish of 10 more threads
+2018-01-05 03:06:14,487 : INFO : worker thread finished; awaiting finish of 9 more threads
+2018-01-05 03:06:14,487 : INFO : worker thread finished; awaiting finish of 8 more threads
+2018-01-05 03:06:14,487 : INFO : worker thread finished; awaiting finish of 7 more threads
+2018-01-05 03:06:14,487 : INFO : worker thread finished; awaiting finish of 6 more threads
+2018-01-05 03:06:14,488 : INFO : worker thread finished; awaiting finish of 5 more threads
+2018-01-05 03:06:14,488 : INFO : worker thread finished; awaiting finish of 4 more threads
+2018-01-05 03:06:14,488 : INFO : worker thread finished; awaiting finish of 3 more threads
+2018-01-05 03:06:14,488 : INFO : worker thread finished; awaiting finish of 2 more threads
+2018-01-05 03:06:14,488 : INFO : worker thread finished; awaiting finish of 1 more threads
+2018-01-05 03:06:14,494 : INFO : PROGRESS: at 100.00% examples, 1194 words/s, in_qsize 0, out_qsize 1
+2018-01-05 03:06:14,494 : INFO : worker thread finished; awaiting finish of 0 more threads
+2018-01-05 03:06:14,494 : INFO : training on 35493405 raw words (32196630 effective words) took 26970.6s, 1194 effective words/s
+2018-01-05 03:06:14,495 : INFO : saving Word2Vec object under ./data/model/zhwiki/word2vec_gensim, separately None
+2018-01-05 03:06:14,495 : INFO : not storing attribute syn0norm
+2018-01-05 03:06:14,495 : INFO : storing np array 'syn0' to ./data/model/zhwiki/word2vec_gensim.wv.syn0.npy
+2018-01-05 03:06:14,533 : INFO : storing np array 'syn1neg' to ./data/model/zhwiki/word2vec_gensim.syn1neg.npy
+2018-01-05 03:06:14,565 : INFO : not storing attribute cum_table
+2018-01-05 03:06:14,889 : INFO : saved ./data/model/zhwiki/word2vec_gensim
+2018-01-05 03:06:14,889 : INFO : storing vocabulary in ./data/model/zhwiki/vocabulary
+2018-01-05 03:06:15,007 : INFO : storing 53936x200 projection weights into ./data/model/zhwiki/word2vec_org
+Total procesing time: 32069 seconds
+---------------------------------------------------------------------------------------------------------
+training 99 articles cut by paragraph
+2018-01-05 11:32:51,651 : INFO : PROGRESS: at 96.51% examples, 10632 words/s, in_qsize 0, out_qsize 0
+2018-01-05 11:32:52,570 : INFO : Finished 2-process extraction of 288 articles in 34.7s (8.3 art/s)
+2018-01-05 11:32:52,578 : INFO : worker thread finished; awaiting finish of 1 more threads
+2018-01-05 11:32:52,584 : INFO : worker thread finished; awaiting finish of 0 more threads
+2018-01-05 11:32:52,584 : INFO : training on 476925 raw words (272192 effective words) took 25.5s, 10667 effective words/s
+2018-01-05 11:32:52,584 : INFO : saving Word2Vec object under /home/weiwu/share/deep_learning/data/model/phrase/zhwiki/word2vec_gensim, separately None
+2018-01-05 11:32:52,584 : INFO : not storing attribute syn0norm
+2018-01-05 11:32:52,584 : INFO : not storing attribute cum_table
+2018-01-05 11:32:52,650 : INFO : saved /home/weiwu/share/deep_learning/data/model/phrase/zhwiki/word2vec_gensim
+2018-01-05 11:32:52,651 : INFO : storing vocabulary in /home/weiwu/share/deep_learning/data/model/phrase/zhwiki/vocabulary
+2018-01-05 11:32:52,660 : INFO : storing 1726x200 projection weights into /home/weiwu/share/deep_learning/data/model/phrase/zhwiki/word2vec_org
+Total procesing time: 35 seconds
+
+
+
+---------------------------------------------------------------------------------------------------------
