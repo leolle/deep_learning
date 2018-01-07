@@ -59,7 +59,55 @@ training 99 articles cut by paragraph
 2018-01-05 11:32:52,651 : INFO : storing vocabulary in /home/weiwu/share/deep_learning/data/model/phrase/zhwiki/vocabulary
 2018-01-05 11:32:52,660 : INFO : storing 1726x200 projection weights into /home/weiwu/share/deep_learning/data/model/phrase/zhwiki/word2vec_org
 Total procesing time: 35 seconds
+* vocabulary
+中国 588
+毛泽东 531
+维基百科 519
+国家 470
+美国 380
+苏联 374
+德国 339
+台湾 311
+北韩 300
+使用 297
+古巴 290
+包括 250
+联合国 249
+* similar words
+In [708]: 苏联 0.999860048294
+总统 0.999858617783
+独立 0.999848604202
+俄罗斯 0.999847471714
+英国 0.999844431877
+成为 0.999844312668
+支持 0.999843120575
+韩国 0.999842047691
+承认 0.999842047691
+统治 0.999841153622
+关系 0.999838471413
+统一 0.999836325645
+当时 0.999835968018
+宣布 0.999831259251
+政权 0.999830305576
+政策 0.999829649925
+孙中山 0.999829530716
+之间 0.999829232693
+时期 0.999828577042
+拒绝 0.999827861786
 
-
+In [719]: zh_model.similarity(u'美国',u'中国')
+Out[719]: 0.99972581278123263
 
 ---------------------------------------------------------------------------------------------------------
+2018-01-05 11:56:12,974 : INFO : PROGRESS: at 97.50% examples, 11124 words/s, in_qsize 0, out_qsize 0
+2018-01-05 11:56:13,240 : INFO : Finished 2-process extraction of 288 articles in 31.7s (9.1 art/s)
+2018-01-05 11:56:13,243 : INFO : worker thread finished; awaiting finish of 1 more threads
+2018-01-05 11:56:13,250 : INFO : worker thread finished; awaiting finish of 0 more threads
+2018-01-05 11:56:13,250 : INFO : training on 477115 raw words (272352 effective words) took 24.4s, 11145 effective words/s
+2018-01-05 11:56:13,250 : INFO : saving Word2Vec object under /home/weiwu/share/deep_learning/data/model/phrase/zhwiki/word2vec_gensim, separately None
+2018-01-05 11:56:13,250 : INFO : not storing attribute syn0norm
+2018-01-05 11:56:13,250 : INFO : not storing attribute cum_table
+2018-01-05 11:56:13,304 : INFO : saved /home/weiwu/share/deep_learning/data/model/phrase/zhwiki/word2vec_gensim
+2018-01-05 11:56:13,304 : INFO : storing vocabulary in /home/weiwu/share/deep_learning/data/model/phrase/zhwiki/vocabulary
+2018-01-05 11:56:13,312 : INFO : storing 1727x200 projection weights into /home/weiwu/share/deep_learning/data/model/phrase/zhwiki/word2vec_org
+Total procesing time: 32 seconds
