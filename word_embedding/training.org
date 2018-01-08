@@ -74,6 +74,7 @@ Total procesing time: 35 seconds
 包括 250
 联合国 249
 * similar words
+美国
 In [708]: 苏联 0.999860048294
 总统 0.999858617783
 独立 0.999848604202
@@ -95,6 +96,58 @@ In [708]: 苏联 0.999860048294
 时期 0.999828577042
 拒绝 0.999827861786
 
+中国
+In [753]: 大陆 0.999875605106
+台湾 0.999834477901
+承认 0.999817371368
+统治 0.999816477299
+中华民国 0.999814450741
+日本 0.999799907207
+统一 0.999796748161
+中华人民共和国 0.999795079231
+政权 0.999794006348
+中华民国政府 0.999791562557
+
+北京
+In [755]: 上海 0.999950587749
+举行 0.999939858913
+国民党 0.99993956089
+提出 0.999934315681
+运动 0.999933600426
+林彪 0.999931395054
+批判 0.999931037426
+参加 0.999928832054
+同年 0.999928534031
+期间 0.999928534031
+
+微软
+In [754]: 作业系统 0.999871850014
+市场 0.999861299992
+公司 0.999859571457
+产品 0.999833583832
+系统 0.99983227253
+商标 0.999815225601
+服务 0.999814331532
+发布 0.999808311462
+业务 0.999803066254
+Microsoft 0.999802827835
+
+市场
+In [756]: 产品 0.999912559986
+全球 0.999903321266
+达到 0.999888956547
+主要 0.999887526035
+包括 0.99988502264
+公司 0.999882817268
+企业 0.999881327152
+开发 0.999881029129
+已经 0.99988079071
+贸易 0.999878644943
+
+
+In [769]: zh_model.similarity(u'日本',u'微软')
+Out[775]: 0.9992633278043952
+
 In [719]: zh_model.similarity(u'美国',u'中国')
 Out[719]: 0.99972581278123263
 
@@ -111,3 +164,48 @@ Out[719]: 0.99972581278123263
 2018-01-05 11:56:13,304 : INFO : storing vocabulary in /home/weiwu/share/deep_learning/data/model/phrase/zhwiki/vocabulary
 2018-01-05 11:56:13,312 : INFO : storing 1727x200 projection weights into /home/weiwu/share/deep_learning/data/model/phrase/zhwiki/word2vec_org
 Total procesing time: 32 seconds
+* vocabulary
+中国 588
+毛泽东 532
+维基百科 520
+国家 470
+美国 380
+苏联 375
+德国 340
+台湾 311
+北韩 300
+使用 297
+古巴 291
+联合国 250
+包括 250
+一个 246
+日本 241
+周恩来 225
+问题 221
+政府 221
+孙中山 220
+进行 216
+---------------------------------------------------------------------
+2018-01-07 11:28:29,256: INFO: PROGRESS: at 99.97% examples, 826888 words/s, in_qsize 0, out_qsize 0
+2018-01-07 11:28:29,386: INFO: worker thread finished; awaiting finish of 11 more threads
+2018-01-07 11:28:29,387: INFO: worker thread finished; awaiting finish of 10 more threads
+2018-01-07 11:28:29,388: INFO: worker thread finished; awaiting finish of 9 more threads
+2018-01-07 11:28:29,390: INFO: worker thread finished; awaiting finish of 8 more threads
+2018-01-07 11:28:29,390: INFO: worker thread finished; awaiting finish of 7 more threads
+2018-01-07 11:28:29,390: INFO: worker thread finished; awaiting finish of 6 more threads
+2018-01-07 11:28:29,391: INFO: worker thread finished; awaiting finish of 5 more threads
+2018-01-07 11:28:29,391: INFO: worker thread finished; awaiting finish of 4 more threads
+2018-01-07 11:28:29,391: INFO: worker thread finished; awaiting finish of 3 more threads
+2018-01-07 11:28:29,406: INFO: worker thread finished; awaiting finish of 2 more threads
+2018-01-07 11:28:29,411: INFO: worker thread finished; awaiting finish of 1 more threads
+2018-01-07 11:28:29,420: INFO: worker thread finished; awaiting finish of 0 more threads
+2018-01-07 11:28:29,420: INFO: training on 786856790 raw words (724368354 effective words) took 876.0s, 826903 effective words/s
+2018-01-07 11:28:29,420: INFO: saving Word2Vec object under ./data/model/zhwiki/word2vec_gensim, separately None
+2018-01-07 11:28:29,420: INFO: not storing attribute syn0norm
+2018-01-07 11:28:29,421: INFO: storing np array 'syn0' to ./data/model/zhwiki/word2vec_gensim.wv.syn0.npy
+2018-01-07 11:28:29,746: INFO: storing np array 'syn1neg' to ./data/model/zhwiki/word2vec_gensim.syn1neg.npy
+2018-01-07 11:28:29,957: INFO: not storing attribute cum_table
+2018-01-07 11:28:35,354: INFO: saved ./data/model/zhwiki/word2vec_gensim
+2018-01-07 11:28:35,354: INFO: storing vocabulary in ./data/model/zhwiki/vocabulary
+2018-01-07 11:28:37,237: INFO: storing 623830x200 projection weights into ./data/model/zhwiki/word2vec_org
+Total procesing time: 986 seconds
