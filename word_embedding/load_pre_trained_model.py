@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 from __future__ import print_function
 from gensim.models import KeyedVectors
+from gensim.models import Word2Vec
+from gensim.models.word2vec import LineSentence
 import pprint
 import logging
 
@@ -30,17 +32,25 @@ finance_vocab = [
     'cash_flow', 'debt', 'assets', 'dividend_yield', 'llc', 'firm', 'earnings',
     'book_value', 'interest_rate'
 ]
+zh_finance_vocab = [
+    u'销售', u'营业额', u'收入', u'增长率', u'净收入', u'现金流', u'负债', u'资产', u'股息率', u'公司',
+    u'有限公司', u'盈利', u'账面', u'价值', u'利率'
+]
 topn = 20
 
 
-def test_similarity(model=model_phrase, topn=topn):
-    for vocab in finance_vocab:
+def test_similarity(vocabs=finance_vocab, model=model_phrase, topn=topn):
+    for vocab in vocabs:
         try:
-            print("%s's top %s similar vocabulary" % (vocab, topn))
-            pprint.pprint(model.most_similar([vocab], topn=20))
-            print("\n")
+            result = model.most_similar(vocab, topn=topn)
         except KeyError:
-            print('does not exist in vocabulary')
+            print('%s does not exist in vocabulary' % vocab)
+            print("\n")
+        else:
+            print("top %s similar vocabulary of %s" % (topn, vocab))
+            for e in result:
+                print e[0], e[1]
+            print("\n")
 
 
 test_similarity(model=model_google)
@@ -48,4 +58,11 @@ test_similarity(model=model_phrase)
 test_similarity(model=model_level5)
 
 zh_wiki_file = '/home/weiwu/share/deep_learning/data/model/phrase/zhwiki/word2vec_org_whole_wiki_corpus'
-model_wiki = KeyedVectors.load_word2vec_format(zh_wiki_file, binary=False)
+model_zhwiki = KeyedVectors.load_word2vec_format(zh_wiki_file, binary=False)
+test_similarity(vocabs=zh_finance_vocab, model=model_zhwiki)
+result = model_zhwiki.most_similar(u"责任有限公司", topn=10)
+for e in result:
+    print e[0], e[1]
+
+zh_wiki_corpus = '/home/weiwu/share/deep_learning/data/wiki.zh.text.simple.clean.seg'
+sentences = LineSentence(zh_wiki_corpus)

@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 # https://rare-technologies.com/data-streaming-in-python-generators-iterators-iterables/
 import jieba
@@ -79,10 +80,11 @@ class MySentences(object):
     words list([[[' '],[' ']],[[' '],[' ']],...) ->
     phrase([['a_b','c_d']])"""
 
-    def __init__(self, common_terms):
+    def __init__(self, common_terms, max_sentence_length):
         self.page_num = 0
         self.load_start = default_timer()
         self.stopwords = common_terms
+        self.max_sentence_length = max_sentence_length
 
     def __iter__(self):
         for page_id in ls_pageid:
@@ -90,11 +92,13 @@ class MySentences(object):
                 # print(collection.find_one({"page_id": page_id})['title'])
                 article = collection.find_one({"page_id": page_id})
                 page = article['text']
-                sentences = page.splitlines()
-                sentence_stream = [
-                    parse_sent(doc) for doc in sentences if len(doc) > 1
-                ]
-                doc = list(itertools.chain.from_iterable(sentence_stream))
+                # sentences = page.splitlines()
+                # sentence_stream = [
+                #     parse_sent(doc) for doc in sentences if len(doc) > 1
+                # ]
+                # doc = list(itertools.chain.from_iterable(sentence_stream))
+                tokenized_line = jieba.cut(filterpunt(page))
+                doc = [word for word in tokenized_line]
                 yield doc
                 # for sent in sentence_stream:
                 #     if len(sent) > 1:
@@ -152,7 +156,7 @@ seg_list = jieba.cut(str_in)
 text = " ".join(seg_list)
 sentences = list(
     word for word in jieba.cut(str_in, HMM=True)
-    if word not in stopwords and len(word.strip()) >1)
+    if word not in stopwords and len(word.strip()) > 1)
 model_test = gensim.models.Word2Vec(
     sentences, size=100, window=5, min_count=2, workers=2)
 print(" / ".join(
@@ -174,9 +178,22 @@ for v in model_test.wv.vocab:
 # for x in seg_list:
 #     print('/')
 #     print x
-from gensim.models import word2vec
-from gensim.corpora import WikiCorpus
-wiki_corpus = WikiCorpus(
-    '/home/weiwu/share/deep_learning/data/zhwiki-latest-pages-articles.xml.bz2',
-    dictionary={})
-a =
+from gensim.models.word2vec import LineSentence
+zh_wiki_corpus = '/home/weiwu/share/deep_learning/data/wiki.zh.text.simple.clean.seg'
+sentences = LineSentence(zh_wiki_corpus)
+sent_iter = iter(sentences)
+sample = next(sent_iter)
+
+article = collection.find_one({"page_id": 595})
+page = article['text']
+print page
+
+# remove whitespace at the beginning
+tokenized_line = jieba.cut(filterpunt(page))
+doc = [word for word in tokenized_line]
+# parse digits, remove signs
+is_alpha_word_line = [
+    word for word in tokenized_line
+    if not wordnet.synsets(word) and not word.isdigit()
+    if word not in stopwords and len(word.strip()) > 1
+]

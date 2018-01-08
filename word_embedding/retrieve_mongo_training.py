@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+# Gensim only requires that the input must provide sentences sequentially, when iterated over. No need to keep everything in RAM: we can provide one sentence, process it, forget it, load another sentence…
 import pymongo
 import pandas as pd
 from pymongo import MongoClient
@@ -53,7 +54,6 @@ def parse_sent(sentence):
     is_alpha_word_line = [
         word for word in tokenized_line.lower().split() if word.isalpha()
     ]
-
     return is_alpha_word_line
 
 
