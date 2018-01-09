@@ -45,8 +45,6 @@ def parse_sent(sentence):
     # remove whitespace at the beginning
     sline = sentence.strip()
     # remove % sign
-    # sline = sline.strip("%")
-    # sline = sline.rstrip("'s")
     rline = cleanhtml(sline)
     # tokenize lines
     tokenized_line = ' '.join(p_tokenize(rline))
@@ -54,6 +52,7 @@ def parse_sent(sentence):
     is_alpha_word_line = [
         word for word in tokenized_line.lower().split() if word.isalpha()
     ]
+
     return is_alpha_word_line
 
 

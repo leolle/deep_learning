@@ -7,8 +7,6 @@ import pymongo
 import pandas as pd
 from pymongo import MongoClient
 import datetime
-import pprint
-from urllib import quote_plus
 import gensim
 import logging
 import multiprocessing
@@ -60,7 +58,7 @@ def parse_sent(sentence):
 
 pages_csv = pd.DataFrame()
 for root, dirs, files in os.walk(
-        '/home/weiwu/share/deep_learning/data/zhwiki_categories_test/'):
+        '/home/weiwu/share/deep_learning/data/zhwiki_categories/'):
     for filename in files:
         file_path = root + '/' + filename
         page_read = pd.read_csv(file_path)

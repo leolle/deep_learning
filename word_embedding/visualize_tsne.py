@@ -70,6 +70,11 @@ finance_vocab = [
     'portfolio',
     'value',
 ]
+zh_finance_vocab = [
+    u'销售', u'营业额', u'收入', u'增长率', u'净收入', u'现金流', u'负债', u'资产', u'股息率', u'公司',
+    u'有限公司', u'盈利', u'账面', u'价值', u'利率', u'趋势', u'市场', u'股权', u'投资', u'红利',
+    u'政策', u'牛市', u'熊市', u'振荡'
+]
 
 # topn = 20
 
@@ -237,6 +242,7 @@ if __name__ == '__main__':
         help="periodically save model variables in a checkpoint")
     parser.add_argument(
         "--host",
+        default='localhost',
         required=False,
         help="host where holding the tensorboard projector service")
     parser.add_argument("-p", "--port", required=False, help="browser port")
@@ -247,6 +253,6 @@ if __name__ == '__main__':
         args.logdir,
         args.host,
         model_path=args.input,
-        vocab=finance_vocab,
+        vocab=zh_finance_vocab,
         call_tensorboard=False)
 #    visualize_embedding(model_level5, finance_vocab)
