@@ -67,7 +67,7 @@ if __name__ == '__main__':
     output = similar_words(
         input_text, zh_model=zh_model, en_model=en_model, topn=topn)
     for item in output:
-        print(item.encode('utf-8') + ':')
+        print(item.encode('utf-8'))
         for word in output[item]:
             print(word.encode('utf-8'))
         print('\n')

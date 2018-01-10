@@ -195,3 +195,13 @@ is_alpha_word_line = [
     if not wordnet.synsets(word) and not word.isdigit()
     if word not in stopwords and len(word.strip()) > 1
 ]
+
+lines = page.splitlines()
+string = u''.encode('utf-8')
+# ascii code to unicode
+for line in lines:
+    filter_line = filter(lambda x: x not in printable, line).strip()
+    if filter_line != "":
+        # p.agent_info = u' '.join().encode('utf-8').strip()
+        print filter_line.encode('utf-8')
+        string = filter_line.encode('utf-8') + string
