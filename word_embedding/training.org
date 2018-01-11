@@ -185,20 +185,8 @@ Total procesing time: 32 seconds
 政府 221
 孙中山 220
 进行 216
----------------------------------------------------------------------
+* whole zhwiki corpus
 2018-01-07 11:28:29,256: INFO: PROGRESS: at 99.97% examples, 826888 words/s, in_qsize 0, out_qsize 0
-2018-01-07 11:28:29,386: INFO: worker thread finished; awaiting finish of 11 more threads
-2018-01-07 11:28:29,387: INFO: worker thread finished; awaiting finish of 10 more threads
-2018-01-07 11:28:29,388: INFO: worker thread finished; awaiting finish of 9 more threads
-2018-01-07 11:28:29,390: INFO: worker thread finished; awaiting finish of 8 more threads
-2018-01-07 11:28:29,390: INFO: worker thread finished; awaiting finish of 7 more threads
-2018-01-07 11:28:29,390: INFO: worker thread finished; awaiting finish of 6 more threads
-2018-01-07 11:28:29,391: INFO: worker thread finished; awaiting finish of 5 more threads
-2018-01-07 11:28:29,391: INFO: worker thread finished; awaiting finish of 4 more threads
-2018-01-07 11:28:29,391: INFO: worker thread finished; awaiting finish of 3 more threads
-2018-01-07 11:28:29,406: INFO: worker thread finished; awaiting finish of 2 more threads
-2018-01-07 11:28:29,411: INFO: worker thread finished; awaiting finish of 1 more threads
-2018-01-07 11:28:29,420: INFO: worker thread finished; awaiting finish of 0 more threads
 2018-01-07 11:28:29,420: INFO: training on 786856790 raw words (724368354 effective words) took 876.0s, 826903 effective words/s
 2018-01-07 11:28:29,420: INFO: saving Word2Vec object under ./data/model/zhwiki/word2vec_gensim, separately None
 2018-01-07 11:28:29,420: INFO: not storing attribute syn0norm

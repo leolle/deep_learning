@@ -22,7 +22,6 @@
 | word2vec.py                   | Multi-threaded word2vec mini-batched skip-gram model  |         |
 |                               |                                                       |         |
 * statement
-- sudo mount -t cifs -o username="gft" //192.168.1.126/share ~/share
 * Visualize embedding in tensorboard projector:
 - how to visualize embedding at tensorboard:
 open [[https://projector.tensorflow.org][tensorboard]], click load data at the left panel, step 1: load a tsv file of vectors, choose [[file:./enwiki_economy_pages_only/all_vocab/tensor.tsv]], step 2: load a tsv file of metadata, choose [[file:./enwiki_economy_pages_only/all_vocab/metadata.tsv]].
