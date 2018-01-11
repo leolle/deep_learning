@@ -20,13 +20,11 @@ logging.basicConfig(
     format='%(asctime)s : %(levelname)s : %(message)s', level=logging.INFO)
 jieba.analyse.set_stop_words("stopwords")
 
-punctuation = u''':!),.:;?]}¢'"、。〉》」』】〕〗〞︰︱︳﹐､﹒
-﹔﹕﹖﹗﹚﹜﹞！），．：；？｜｝︴︶︸︺︼︾﹀﹂﹄﹏､～￠
-々‖•·ˇˉ―--′’”([{£¥'"‵〈《「『【〔〖（［｛￡￥〝︵︷︹︻
-︽︿﹁﹃﹙﹛﹝（｛“‘-—_…'''
+punctuation = u''':!),.:;?]}¢'"、。〉》」』】〕〗〞︰︱︳﹐､﹒﹔﹕﹖﹗﹚﹜﹞！），．：；？｜｝︴︶︸︺︼︾﹀﹂﹄﹏､～￠々‖•·ˇˉ―--′’”([{£¥'"‵〈《「『【〔〖（［｛￡￥〝︵︷︹︻︽︿﹁﹃﹙﹛﹝（｛“‘-—_…'''
 STOPWORDS = codecs.open('stopwords', 'r', 'utf-8').read().split()
 
-RE_PUNCT = re.compile(r'([%s])+' % re.escape(punctuation), re.UNICODE)
+RE_PUNCT = re.compile(r'([%s])+' % re.escape(punctuation + string.punctuation),
+                      re.UNICODE)
 RE_TAGS = re.compile(r"<([^>]+)>", re.UNICODE)
 RE_NUMERIC = re.compile(r"[0-9]+", re.UNICODE)
 RE_NONALPHA = re.compile(r"\W", re.UNICODE)

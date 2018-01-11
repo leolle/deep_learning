@@ -4,8 +4,6 @@
 fetch all the page from field csv files, pack them to a file.
 python wiki_preprocess.py > zh.wiki.docs
 """
-import jieba
-from jieba import analyse
 import pymongo
 import pandas as pd
 from pymongo import MongoClient
@@ -28,11 +26,15 @@ from sys import stdin
 from gensim.parsing import preprocessing
 from gensim import utils
 import glob
+from tqdm import tqdm
+
+import jieba
+jieba.load_userdict("/home/oem/share/deep_learning/data/dict/jieba.txt")
+from jieba import analyse
+jieba.analyse.set_stop_words("stopwords")
 
 logging.basicConfig(
     format='%(asctime)s : %(levelname)s : %(message)s', level=logging.INFO)
-jieba.analyse.set_stop_words("stopwords")
-
 punct = set(u''':!),.:;?]}¢'"、。〉》」』】〕〗〞︰︱︳﹐､﹒
 ﹔﹕﹖﹗﹚﹜﹞！），．：；？｜｝︴︶︸︺︼︾﹀﹂﹄﹏､～￠
 々‖•·ˇˉ―--′’”([{£¥'"‵〈《「『【〔〖（［｛￡￥〝︵︷︹︻
@@ -77,7 +79,8 @@ def find_page_id(csv_path):
     return ls_pageid
 
 
-RE_PUNCT = re.compile(r'([%s])+' % re.escape(punctuation), re.UNICODE)
+RE_PUNCT = re.compile(r'([%s])+' % re.escape(punctuation + string.punctuation),
+                      re.UNICODE)
 RE_TAGS = re.compile(r"<([^>]+)>", re.UNICODE)
 RE_NUMERIC = re.compile(r"[0-9]+", re.UNICODE)
 RE_NONALPHA = re.compile(r"\W", re.UNICODE)
@@ -184,7 +187,6 @@ stopwords = codecs.open('stopwords', 'r', 'utf-8').read().split()
 process_count = multiprocessing.cpu_count()
 
 article = collection.find_one({"page_id": 595})
-logging.info(article['title'])
 page = article['text']
 
 filterpunt_text = filterpunt(page)
@@ -206,7 +208,7 @@ tokens = [x for x in tokens_generator if not x.isspace()]
 # print cut_article(page)
 # print cut_paragraph(page)
 DEFAULT_FILTERS = [
-    cut_article, strip_punctuation, strip_numeric, remove_stopwords
+    cut_article, strip_numeric, remove_stopwords, strip_punctuation
 ]
 
 
@@ -262,19 +264,25 @@ if __name__ == '__main__':
     load_start = default_timer()
     printable = set(string.printable)
     ls_pageid = find_page_id(sys.argv[1])
-    for page_id in ls_pageid:
+    output_path = sys.argv[2]
+    output = open(output_path, 'w')
+    for page_id in tqdm(ls_pageid):
         try:
             article = collection.find_one({"page_id": page_id})
-            logging.info(article['title'])
+            # logging.info(article['title'])
             page = article['text']
             page_num = page_num + 1
             if page_num % 100 == 0:
                 load_duration = default_timer() - load_start
                 logging.info("extract rate %s articles/second" %
                              (page_num / load_duration))
-            print(preprocess_string(page))
+            # print(preprocess_string(page))
+            #             output.write(preprocess_string(page) + "\n")
+            text = preprocess_string(page)
+            output.write(text.encode('utf-8') + '\n')
         except TypeError:
             continue
+    output.close()
     end = time()
     load_duration = end - begin
     logging.info("Total procesing time: %d seconds" % (end - begin))
