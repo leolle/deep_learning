@@ -136,10 +136,12 @@ if __name__ == '__main__':
     end = time()
     print("Total procesing time: %d seconds" % (end - begin))
 
-# page = collection.find_one({"page_id": 2763})['text']
-# sent_list = page.splitlines()
+page = collection.find_one({"page_id": 2763})
+text = page['text']
+title = page['title']
+sent_list = text.split()
 # sentence_stream = [parse_sent(doc) for doc in sent_list if len(doc) > 1]
-# from gensim.models import KeyedVectors
+from gensim.models import KeyedVectors
 # zh_model_path = '/home/weiwu/share/deep_learning/data/model/phrase/zhwiki/word2vec_org'
 # zh_model = KeyedVectors.load_word2vec_format(zh_model_path)
 
@@ -161,7 +163,7 @@ print(" / ".join(
     list(
         word for word in jieba.cut(str_in, HMM=True)
         if word not in stopwords and len(word.strip()) > 1)))
-result = model_test.most_similar(u"女", topn=10)
+result = model_test.most_similar(u"参", topn=10)
 for e in result:
     print e[0], e[1]
 
@@ -176,32 +178,32 @@ for v in model_test.wv.vocab:
 # for x in seg_list:
 #     print('/')
 #     print x
-from gensim.models.word2vec import LineSentence
-zh_wiki_corpus = '/home/weiwu/share/deep_learning/data/wiki.zh.text.simple.clean.seg'
-sentences = LineSentence(zh_wiki_corpus)
-sent_iter = iter(sentences)
-sample = next(sent_iter)
+# from gensim.models.word2vec import LineSentence
+# zh_wiki_corpus = '/home/weiwu/share/deep_learning/data/wiki.zh.text.simple.clean.seg'
+# sentences = LineSentence(zh_wiki_corpus)
+# sent_iter = iter(sentences)
+# sample = next(sent_iter)
 
-article = collection.find_one({"page_id": 595})
-page = article['text']
-print page
+# article = collection.find_one({"page_id": 595})
+# page = article['text']
+# print page
 
-# remove whitespace at the beginning
-tokenized_line = jieba.cut(filterpunt(page))
-doc = [word for word in tokenized_line]
-# parse digits, remove signs
-is_alpha_word_line = [
-    word for word in tokenized_line
-    if not wordnet.synsets(word) and not word.isdigit()
-    if word not in stopwords and len(word.strip()) > 1
-]
+# # remove whitespace at the beginning
+# tokenized_line = jieba.cut(filterpunt(page))
+# doc = [word for word in tokenized_line]
+# # parse digits, remove signs
+# is_alpha_word_line = [
+#     word for word in tokenized_line
+#     if not wordnet.synsets(word) and not word.isdigit()
+#     if word not in stopwords and len(word.strip()) > 1
+# ]
 
-lines = page.splitlines()
-string = u''.encode('utf-8')
-# ascii code to unicode
-for line in lines:
-    filter_line = filter(lambda x: x not in printable, line).strip()
-    if filter_line != "":
-        # p.agent_info = u' '.join().encode('utf-8').strip()
-        string = string + filter_line.encode('utf-8')
-print string
+# lines = page.splitlines()
+# string = u''.encode('utf-8')
+# # ascii code to unicode
+# for line in lines:
+#     filter_line = filter(lambda x: x not in printable, line).strip()
+#     if filter_line != "":
+#         # p.agent_info = u' '.join().encode('utf-8').strip()
+#         string = string + filter_line.encode('utf-8')
+# print string

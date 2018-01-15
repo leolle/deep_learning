@@ -35,10 +35,9 @@ jieba.analyse.set_stop_words("stopwords")
 
 logging.basicConfig(
     format='%(asctime)s : %(levelname)s : %(message)s', level=logging.INFO)
-punct = set(u''':!),.:;?]}¢'"、。〉》」』】〕〗〞︰︱︳﹐､﹒
-﹔﹕﹖﹗﹚﹜﹞！），．：；？｜｝︴︶︸︺︼︾﹀﹂﹄﹏､～￠
-々‖•·ˇˉ―--′’”([{£¥'"‵〈《「『【〔〖（［｛￡￥〝︵︷︹︻
-︽︿﹁﹃﹙﹛﹝（｛“‘-—_…''')
+punct = set(
+    u''':!),.:;?]}¢'"、。〉》」』】〕〗〞︰︱︳﹐､﹒﹔﹕﹖﹗﹚﹜﹞！），．：；？｜｝︴︶︸︺︼︾﹀﹂﹄﹏､～￠々‖•·ˇˉ―--′’”([{£¥'"‵〈《「『【〔〖（［｛￡￥〝︵︷︹︻︽︿﹁﹃﹙﹛﹝（｛“‘-—_…'''
+)
 punctuation = u''':!),.:;?]}¢'"、。〉》」』】〕〗〞︰︱︳﹐､﹒﹔﹕﹖﹗﹚﹜﹞！），．：；？｜｝︴︶︸︺︼︾﹀﹂﹄﹏､～￠々‖•·ˇˉ―--′’”([{£¥'"‵〈《「『【〔〖（［｛￡￥〝︵︷︹︻︽︿﹁﹃﹙﹛﹝（｛“‘-—_…'''
 filterpunt = lambda s: ''.join(filter(lambda x: x not in punct, s))
 filterpuntl = lambda l: list(filter(lambda x: x not in punct, l))
@@ -179,6 +178,30 @@ def cut_article(s):
     return ''.join(s.split())
 
 
+def tokenize(s):
+    """Remove :tokenize from `s`.
+
+    Parameters
+    ----------
+    s : str
+
+    Returns
+    -------
+    str
+        Unicode string with phrase.
+
+    EXAMPLES
+    --------
+    >>> from gensim.parsing.preprocessing import remove_stopwords
+    >>> remove_stopwords(u"u'使用单位平方公里人数每平方米居住人口数。'")
+    u"使用 单位 平方公里 人数 每平方米 居住 人口数。"
+
+    """
+    s = utils.to_unicode(s)
+    tokens_generator = jieba.cut(s)
+    return " ".join(w for w in tokens_generator)
+
+
 client = MongoClient('mongodb://localhost:27017/')
 db = client['wiki']
 collection = db.zhwiki
@@ -208,7 +231,7 @@ tokens = [x for x in tokens_generator if not x.isspace()]
 # print cut_article(page)
 # print cut_paragraph(page)
 DEFAULT_FILTERS = [
-    cut_article, strip_numeric, remove_stopwords, strip_punctuation
+    cut_article, strip_numeric, remove_stopwords, strip_punctuation, tokenize
 ]
 
 
