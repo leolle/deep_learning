@@ -105,6 +105,30 @@ def strip_numeric(s):
     return RE_NUMERIC.sub("", s)
 
 
+def tokenize(s):
+    """Remove :tokenize from `s`.
+
+    Parameters
+    ----------
+    s : str
+
+    Returns
+    -------
+    str
+        Unicode string with phrase.
+
+    EXAMPLES
+    --------
+    >>> from gensim.parsing.preprocessing import remove_stopwords
+    >>> remove_stopwords(u"u'使用单位平方公里人数每平方米居住人口数。'")
+    u"使用 单位 平方公里 人数 每平方米 居住 人口数。"
+
+    """
+    s = utils.to_unicode(s)
+    tokens_generator = jieba.cut(s)
+    return " ".join(w for w in tokens_generator)
+
+
 def cut_paragraph(s):
     """cut pages to paragraph.
     Keyword Arguments:

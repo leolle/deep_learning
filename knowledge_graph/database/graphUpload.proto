@@ -1,0 +1,85 @@
+package com.gftchina.common.persistence.graphUpload;
+import "common.proto";
+
+message Names {
+	optional string chinese = 1;
+	optional string english = 2;
+}
+
+// these fields are used to generate business hash
+message BusinessID {
+	required string domain = 1;
+	required string primaryKeyInDomain = 2;
+}
+
+message PropertyContainerInfo {
+	required string type = 1;
+	optional common.Meta props = 2;
+}
+
+message NodeInfo {
+	required PropertyContainerInfo props = 1;
+	required BusinessID businessID = 2;
+	required Names names = 3;
+
+	optional string subType = 4;
+	optional bytes binaryContent = 5;
+}
+
+enum EdgeSubType {
+	PASS_REF = 0;
+	PASS_VALUE = 1;
+}
+
+message EdgeInfo {
+	required PropertyContainerInfo props = 1;
+	required BusinessID startNodeID = 2;
+	required BusinessID endNodeID = 3;
+
+	optional string source = 4 [default = ""];
+	optional string target = 5 [default = ""];
+
+	optional EdgeSubType subType = 6;
+}
+
+message Graph {
+	repeated NodeInfo nodes = 1;
+	repeated EdgeInfo edges = 2;
+}
+
+enum Action4Duplication {
+	SKIP = 0;
+	UPDATE = 1;
+}
+
+message GraphUploadRequest {
+	required Graph graph = 1;
+	required string uploadTag = 2;
+	required Action4Duplication nodeAction4Duplication = 3;
+	required Action4Duplication edgeAction4Duplication = 4;
+}
+
+message UpdateResultStatistics {
+	required int32 numOfCreations = 1;
+	required int32 numOfUpdates = 2;
+	required int32 numOfSkips = 3;
+}
+
+message FailedNode {
+	required NodeInfo node = 1;
+	required common.Error error = 2;
+}
+
+message FailedEdge {
+	required EdgeInfo edge = 1;
+	required common.Error error = 2;
+}
+
+message GraphUploadResponse {
+	required string uploadTag = 1;
+	required UpdateResultStatistics nodeUpdateResultStatistics = 2;
+	required UpdateResultStatistics edgeUpdateResultStatistics = 3;
+
+	repeated FailedNode failedNodes = 4;
+	repeated FailedEdge failedEdges = 5;
+}
