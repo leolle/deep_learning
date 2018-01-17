@@ -8,8 +8,8 @@ message Names {
 
 // these fields are used to generate business hash
 message BusinessID {
-	required string domain = 1;
-	required string primaryKeyInDomain = 2;
+	required string domain = 1; // this value is saved to property _s_business_domain of uploaded node
+	required string primaryKeyInDomain = 2; // this value is saved to property _s_business_pk_in_domain of uploaded node
 }
 
 message PropertyContainerInfo {
@@ -75,11 +75,17 @@ message FailedEdge {
 	required common.Error error = 2;
 }
 
+message NodeUploadResult {
+	required BusinessID businessID = 1;
+	required string gid = 2;
+}
+
 message GraphUploadResponse {
 	required string uploadTag = 1;
-	required UpdateResultStatistics nodeUpdateResultStatistics = 2;
-	required UpdateResultStatistics edgeUpdateResultStatistics = 3;
+	repeated NodeUploadResult uploadedNodes = 2;
+	required UpdateResultStatistics nodeUpdateResultStatistics = 3;
+	required UpdateResultStatistics edgeUpdateResultStatistics = 4;
 
-	repeated FailedNode failedNodes = 4;
-	repeated FailedEdge failedEdges = 5;
+	repeated FailedNode failedNodes = 5;
+	repeated FailedEdge failedEdges = 6;
 }
