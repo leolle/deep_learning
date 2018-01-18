@@ -22,6 +22,10 @@ finance_level5_filename = '/home/weiwu/share/deep_learning/data/model/phrase/wor
 model_level5 = KeyedVectors.load_word2vec_format(
     finance_level5_filename, binary=False)
 model_phrase = KeyedVectors.load_word2vec_format(phrase_filename, binary=False)
+# model_wiki.most_similar(positive=['commodity', 'pound'], negative=['gold'], topn=10)
+
+# model_wiki.most_similar(positive=['gold', 'commodity'], negative=['dollar'], topn=10)
+# model_wiki.doesnt_match("cpi gdp interest lunch".split())
 #model_google = KeyedVectors.load_word2vec_format(google_filename, binary=True)
 # result = model_wiki.most_similar(
 #     positive=['woman', 'king'], negative=['man'], topn=1)
