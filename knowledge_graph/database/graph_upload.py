@@ -10,10 +10,10 @@ import os
 from ylib import ylog
 import logging
 
-ylog.set_level(logging.DEBUG)
-ylog.console_on()
-ylog.filelog_on("wiki_upload")
-ylog.debug("test")
+# ylog.set_level(logging.DEBUG)
+# ylog.console_on()
+# ylog.filelog_on("wiki_upload")
+# ylog.debug("test")
 
 batch_size = 100
 # test fetch graph
@@ -171,3 +171,56 @@ def batch_upload(re, source, source_len, batch_size, func):
         func(re_batch)
         uploaded_number = uploaded_number + batch_size
     return uploaded_number
+
+
+class FileIterator(object):
+
+    def __init__(self, path, rex):
+        self._fw = open(path, 'r')
+        self.string = self._fw.read()
+        self.rex = rex
+        self.last_span = self.search(self._fw).span()[0]
+
+    def read(self):
+        #        matched = self.rex.search(self.string,self.last_span)
+        matched = re.finditer(self.rex, self.string)
+        # self.last_span = matched.span()[1]
+        yield matched
+
+    def readlines(self):
+        """ Line iterator """
+
+        for line in self._fw:
+            yield line
+
+    def readblocks(self, block_size):
+        """ Block iterator """
+
+        while True:
+            block = self._fw.read(block_size)
+            if block == '':
+                break
+            yield block
+
+    def display(self):
+        """
+        Keyword Arguments:
+        self --
+        """
+        print(self)
+
+    # def __iter__(self):
+    #     with open(self.path, 'r') as f:
+    #         for line in f:
+    #             yield line
+    def __iter__(self):
+        return self
+
+    def __next__(self):
+        """
+        Keyword Arguments:
+        self --
+        """
+        with open(self.path, 'r') as f:
+            for line in f:
+                return line

@@ -19,7 +19,7 @@ from ylib import ylog
 ylog.set_level(logging.DEBUG)
 ylog.console_on()
 ylog.filelog_on("wiki_upload")
-ylog.debug("test")
+# ylog.debug("test")
 batch_size = 2
 # test fetch graph
 test_url = 'http://192.168.1.166:9080'
@@ -36,8 +36,10 @@ except:
     pass
 
 # read sql file
+ylog.debug('reading sql files')
 category_path = "./zhwiki-latest-category.zhs.sql"
-category_link_path = './zhwiki-latest-categorylinks.zhs.sql'
+# category_link_path = './zhwiki-latest-categorylinks.zhs.sql'
+category_link_path = '/home/weiwu/share/deep_learning/data/zhwiki_cat_pg_lk/zhwiki-latest-categorylinks.zhs.sql'
 page_path = "./zhwiki-latest-page.zhs.sql"
 category_sql = open(category_path, 'r')
 category = category_sql.read()
@@ -97,7 +99,58 @@ print_mdf5(wiki_category, 1, category=True)
 print_mdf5(wiki_page, 2, category=False)
 
 category_link_size = len(wiki_category_link)
+del wiki_category_link
+last_span = wiki_category_link_re.search(category_link).span()[0]
+item = wiki_category_link_re.search(category_link, last_span)
+last_span = wiki_category_link_re.search(category_link, last_span).span()[1]
+graph_upload_request = graphUpload_pb2.GraphUploadRequest()
+edge = graph_upload_request.graph.edges.add()
+# edge from the first node to the second node
+if item.group(7)[1:-1] == 'page':
+    page_id = int(item.group(1))
+    page_title = item.group(3)[1:-1]
+    cat_title = item.group(2)[1:-1]
+    if '\\n' in cat_title:
+        end = cat_title.split("\\n")
+        cat_title = end[-1]
+    if '\\n' in page_title:
+        end = page_title.split("\\n")
+        page_title = end[-1]
+    edge.props.type = "HasElement"
 
+    edge.startNodeID.domain = "https://zh.wikipedia.org/wiki/Category:"
+    edge.startNodeID.primaryKeyInDomain = cat_title
+    edge.endNodeID.domain = "https://zh.wikipedia.org/wiki/"
+    edge.endNodeID.primaryKeyInDomain = page_title
+if item.group(7)[1:-1] == 'subcat':
+    cat_id = int(item.group(1))
+    subcat_title = item.group(3)[1:-1]
+    cat_title = item.group(2)[1:-1]
+    edge.props.type = "HasSubset"
+
+    edge.startNodeID.domain = "https://zh.wikipedia.org/wiki/Category:"
+    edge.startNodeID.primaryKeyInDomain = cat_title
+    edge.endNodeID.domain = "https://zh.wikipedia.org/wiki/Category:"
+    edge.endNodeID.primaryKeyInDomain = subcat_title
+
+# edge.subType = graphUpload_pb2.EdgeSubType.Value('PASS_REF')
+graph_upload_request.uploadTag = "testUpload"
+graph_upload_request.nodeAction4Duplication = graphUpload_pb2.Action4Duplication.Value(
+    'UPDATE')
+graph_upload_request.edgeAction4Duplication = graphUpload_pb2.Action4Duplication.Value(
+    'UPDATE')
+response = gftIO.upload_graph(graph_upload_request, test_url, test_user_name,
+                              test_pwd)
+# print(item.group())
+try:
+    if response.failedEdges[0].error:
+        print(response.failedEdges[0])
+    if response.edgeUpdateResultStatistics:
+        print(response.edgeUpdateResultStatistics)
+except:
+    pass
+
+ylog.debug('start uploading edges')
 last_span = wiki_category_link_re.search(category_link).span()[0]
 for i in range(category_link_size):
     item = wiki_category_link_re.search(category_link, last_span)
@@ -111,6 +164,12 @@ for i in range(category_link_size):
         page_title = item.group(3)[1:-1]
         cat_title = item.group(2)[1:-1]
         edge.props.type = "HasElement"
+        if '\\n' in cat_title:
+            end = cat_title.split("\\n")
+            cat_title = end[-1]
+        if '\\n' in page_title:
+            end = page_title.split("\\n")
+            page_title = end[-1]
 
         edge.startNodeID.domain = "https://zh.wikipedia.org/wiki/Category:"
         edge.startNodeID.primaryKeyInDomain = cat_title
@@ -120,6 +179,12 @@ for i in range(category_link_size):
         cat_id = int(item.group(1))
         subcat_title = item.group(3)[1:-1]
         cat_title = item.group(2)[1:-1]
+        if '\\n' in cat_title:
+            end = cat_title.split("\\n")
+            cat_title = end[-1]
+        if '\\n' in subcat_title:
+            end = subcat_title.split("\\n")
+            subcat_title = end[-1]
         edge.props.type = "HasSubset"
 
         edge.startNodeID.domain = "https://zh.wikipedia.org/wiki/Category:"
@@ -137,9 +202,15 @@ for i in range(category_link_size):
                                   test_user_name, test_pwd)
     # print(item.group())
     try:
-        if response.failedEdges[0].error:
-            print(response.failedEdges[0])
         if response.edgeUpdateResultStatistics:
-            print(response.edgeUpdateResultStatistics)
+            ylog.debug(response.edgeUpdateResultStatistics)
+        if response.failedEdges[0].error:
+            ylog.debug(response.failedEdges[0])
+            ylog.debug(edge.startNodeID.primaryKeyInDomain)
+            ylog.debug(edge.endNodeID.primaryKeyInDomain)
     except:
         pass
+
+# pk_str = "https://zh.wikipedia.org/wiki/" + '/' + 'MOUNTAIN'
+# pk_md5 = hashlib.md5(pk_str.encode('utf-8')).hexdigest().upper()
+# print(pk_md5)
