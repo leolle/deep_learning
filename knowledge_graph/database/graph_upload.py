@@ -88,11 +88,15 @@ def upload_page_node(dict_re_match_object):
             p4 = node.props.props.entries.add()
             p4.key = "url"
             p4.value = "https://zh.wikipedia.org/wiki/" + title
-
+            p5 = node.props.props.entries.add()
+            p5.key = "s_bin_type"
+            p5.value = 'txt'
             node.businessID.domain = "https://zh.wikipedia.org/wiki/"
             node.businessID.primaryKeyInDomain = title
 
             node.names.chinese = title
+            node.binaryContent = bytes("Binary Content", "utf-8")
+
     # other information of the upload request
     graph_upload_request.uploadTag = "testUpload"
     graph_upload_request.nodeAction4Duplication = graphUpload_pb2.Action4Duplication.Value(

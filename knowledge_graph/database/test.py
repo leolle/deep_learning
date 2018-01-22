@@ -149,7 +149,7 @@ try:
         print(response.edgeUpdateResultStatistics)
 except:
     pass
-
+# TODO: add counter of successful uploaded edges.
 ylog.debug('start uploading edges')
 last_span = wiki_category_link_re.search(category_link).span()[0]
 for i in range(category_link_size):
@@ -170,6 +170,7 @@ for i in range(category_link_size):
         if '\\n' in page_title:
             end = page_title.split("\\n")
             page_title = end[-1]
+            page_title = page_title.replace(" ", "_")
 
         edge.startNodeID.domain = "https://zh.wikipedia.org/wiki/Category:"
         edge.startNodeID.primaryKeyInDomain = cat_title
@@ -185,6 +186,7 @@ for i in range(category_link_size):
         if '\\n' in subcat_title:
             end = subcat_title.split("\\n")
             subcat_title = end[-1]
+            subcat_title = subcat_title.replace(" ", "_")
         edge.props.type = "HasSubset"
 
         edge.startNodeID.domain = "https://zh.wikipedia.org/wiki/Category:"
@@ -204,10 +206,12 @@ for i in range(category_link_size):
     try:
         if response.edgeUpdateResultStatistics:
             ylog.debug(response.edgeUpdateResultStatistics)
+            uploaded_number = response.edgeUpdateResultStatistics.numOfCreations + response.edgeUpdateResultStatistics.numOfUpdates + response.edgeUpdateResultStatistics.numOfSkips
+            ylog.debug(uploaded_number)
         if response.failedEdges[0].error:
             ylog.debug(response.failedEdges[0])
-            ylog.debug(edge.startNodeID.primaryKeyInDomain)
-            ylog.debug(edge.endNodeID.primaryKeyInDomain)
+            ylog.debug("start node: %s" % edge.startNodeID.primaryKeyInDomain)
+            ylog.debug("end node: %s" % edge.endNodeID.primaryKeyInDomain)
     except:
         pass
 

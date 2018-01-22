@@ -9,11 +9,16 @@ from tqdm import tqdm
 import os
 from ylib import ylog
 import logging
+import os, sys
 
 ylog.set_level(logging.DEBUG)
 # ylog.console_on()
 ylog.filelog_on("wiki_upload")
-batch_size = 10
+batch_size = 20
+# Maximum number of times to retry before giving up.
+MAX_RETRIES = 10
+# Always retry when these exceptions are raised.
+RETRIABLE_EXCEPTIONS = (google.protobuf.message.EncodeError)
 # test fetch graph
 test_url = 'http://192.168.1.166:9080'
 prod_url = 'http://q.gftchina.com:13567/vqservice/vq/'
@@ -35,19 +40,19 @@ def upload_edge(dict_re_match_object):
     Keyword Arguments:
     re_match_object -- re object
     """
-    # response = None
-    # error = None
-    # retry = 0
-    # while response is None:
-
+    res = None
+    error = None
+    retry = 0
+    #     while res is None:
+    uploaded_number = 0
     graph_upload_request = graphUpload_pb2.GraphUploadRequest()
     # iterate nodes batch
     for index, value in dict_re_match_object.items():
         if value is not None:
-            edge = graph_upload_request.graph.edges.add()
             item = dict_re_match_object.get(index)
             edge_type = item.group(7)[1:-1]
             if edge_type == 'page':
+                edge = graph_upload_request.graph.edges.add()
                 page_title = item.group(3)[1:-1]
                 cat_title = item.group(2)[1:-1]
                 edge.props.type = "HasElement"
@@ -57,12 +62,14 @@ def upload_edge(dict_re_match_object):
                 if '\\n' in page_title:
                     end = page_title.split("\\n")
                     page_title = end[-1]
+                page_title = page_title.replace(" ", "_")
 
                 edge.startNodeID.domain = "https://zh.wikipedia.org/wiki/Category:"
                 edge.startNodeID.primaryKeyInDomain = cat_title
                 edge.endNodeID.domain = "https://zh.wikipedia.org/wiki/"
                 edge.endNodeID.primaryKeyInDomain = page_title
             if edge_type == 'subcat':
+                edge = graph_upload_request.graph.edges.add()
                 subcat_title = item.group(3)[1:-1]
                 cat_title = item.group(2)[1:-1]
                 if '\\n' in cat_title:
@@ -71,6 +78,7 @@ def upload_edge(dict_re_match_object):
                 if '\\n' in subcat_title:
                     end = subcat_title.split("\\n")
                     subcat_title = end[-1]
+                subcat_title = subcat_title.replace(" ", "_")
                 edge.props.type = "HasSubset"
 
                 edge.startNodeID.domain = "https://zh.wikipedia.org/wiki/Category:"
@@ -85,18 +93,20 @@ def upload_edge(dict_re_match_object):
                 'UPDATE')
             response = gftIO.upload_graph(graph_upload_request, test_url,
                                           test_user_name, test_pwd)
-            # print(item.group())
             try:
                 if response.edgeUpdateResultStatistics:
                     ylog.debug(response.edgeUpdateResultStatistics)
+                    uploaded_number = response.edgeUpdateResultStatistics.numOfCreations + response.edgeUpdateResultStatistics.numOfUpdates + response.edgeUpdateResultStatistics.numOfSkips
                 if response.failedEdges[0].error:
                     ylog.debug(response.failedEdges[0])
-                    ylog.debug(edge.startNodeID.primaryKeyInDomain)
-                    ylog.debug(edge.endNodeID.primaryKeyInDomain)
+                    ylog.debug(
+                        "start node %s: " % edge.startNodeID.primaryKeyInDomain)
+                    ylog.debug(
+                        "end node %s:" % edge.endNodeID.primaryKeyInDomain)
             except:
                 pass
 
-    return response
+    return uploaded_number
 
 
 def upload_page_node(dict_re_match_object):
@@ -154,12 +164,10 @@ def upload_cat_node(dict_re_match_object):
     re_match_object -- re object
     """
     graph_upload_request = graphUpload_pb2.GraphUploadRequest()
-
     # iterate nodes batch
     for index, value in dict_re_match_object.items():
         if value is not None:
             node = graph_upload_request.graph.nodes.add()
-
             node.props.type = "OSet"
             title = dict_re_match_object.get(index).group(2)[1:-1]
             p0 = node.props.props.entries.add()
@@ -209,63 +217,73 @@ def batch_upload(re, source, source_len, batch_size, func):
             re_batch[j] = re.search(source, last_span)
             if re_batch[j] is not None:
                 last_span = re_batch[j].span()[1]
-        func(re_batch)
-        uploaded_number = uploaded_number + batch_size
+        uploaded_counter = func(re_batch)
+        uploaded_number = uploaded_number + uploaded_counter
     return uploaded_number
 
 
 if __name__ == '__main__':
-    user_path = os.path.expanduser("~")
-    # category_path = user_path + "/share/deep_learning/data/zhwiki_cat_pg_lk/zhwiki-latest-category.zhs.sql"
-    # page_path = user_path + "/share/deep_learning/data/zhwiki_cat_pg_lk/zhwiki-latest-page.zhs.sql"
-    # # open category sql file
-    # category_sql = open(category_path, 'r')
-    # category = category_sql.read()
-    # category_sql.close()
-    # wiki_category_re = re.compile(
-    #     "\(([0-9]+),('[^,]+'),([0-9]+),([0-9]+),([0-9]+)\)")
-    # wiki_category = wiki_category_re.findall(category)
-    # print("uploading wiki categories")
-    # uploaded_number = batch_upload(wiki_category_re, category,
-    #                                len(wiki_category), batch_size,
-    #                                upload_cat_node)
-    # print("uploaded number: %s, actual number in wiki: %s" %
-    #       (uploaded_number, len(wiki_category)))
-    # del category
-    # del wiki_category
+    try:
+        user_path = os.path.expanduser("~")
+        # category_path = user_path + "/share/deep_learning/data/zhwiki_cat_pg_lk/zhwiki-latest-category.zhs.sql"
+        # page_path = user_path + "/share/deep_learning/data/zhwiki_cat_pg_lk/zhwiki-latest-page.zhs.sql"
+        # # open category sql file
+        # category_sql = open(category_path, 'r')
+        # category = category_sql.read()
+        # category_sql.close()
+        # wiki_category_re = re.compile(
+        #     "\(([0-9]+),('[^,]+'),([0-9]+),([0-9]+),([0-9]+)\)")
+        # wiki_category = wiki_category_re.findall(category)
+        # print("uploading wiki categories")
+        # uploaded_number = batch_upload(wiki_category_re, category,
+        #                                len(wiki_category), batch_size,
+        #                                upload_cat_node)
+        # print("uploaded number: %s, actual number in wiki: %s" %
+        #       (uploaded_number, len(wiki_category)))
+        # del category
+        # del wiki_category
 
-    # # open page sql file
-    # page_sql = open(page_path, 'r')
-    # page = page_sql.read()
-    # page_sql.close()
-    # wiki_page_re = re.compile(
-    #     "\(([0-9]+),([0-9]+),('[^,]+'),('[^,]+|'),([0-9]+),([0-9]+),([0-9]+),0.([0-9]+),('[^,]+'),('[^,]+'|NULL),([0-9]+),([0-9]+),('[^,]+'),([^,]+)\)"
-    # )
-    # wiki_page = wiki_page_re.findall(page)
-    # print("uploading wiki page")
-    # uploaded_number = batch_upload(wiki_page_re, page,
-    #                                len(wiki_page), batch_size, upload_page_node)
-    # print("uploaded number: %s, actual number in wiki: %s" % (uploaded_number,
-    #                                                           len(wiki_page)))
-    # del wiki_page
-    # del page
+        # # open page sql file
+        # page_sql = open(page_path, 'r')
+        # page = page_sql.read()
+        # page_sql.close()
+        # wiki_page_re = re.compile(
+        #     "\(([0-9]+),([0-9]+),('[^,]+'),('[^,]+|'),([0-9]+),([0-9]+),([0-9]+),0.([0-9]+),('[^,]+'),('[^,]+'|NULL),([0-9]+),([0-9]+),('[^,]+'),([^,]+)\)"
+        # )
+        # wiki_page = wiki_page_re.findall(page)
+        # print("uploading wiki page")
+        # uploaded_number = batch_upload(wiki_page_re, page,
+        #                                len(wiki_page), batch_size, upload_page_node)
+        # print("uploaded number: %s, actual number in wiki: %s" % (uploaded_number,
+        #                                                           len(wiki_page)))
+        # del wiki_page
+        # del page
 
-    # upload edge
-    category_link_path = user_path + '/share/deep_learning/data/zhwiki_cat_pg_lk/zhwiki-latest-categorylinks.zhs.sql'
-    wiki_category_link_re = re.compile(
-        "\(([0-9]+),('[^,]+'),('[^']+'),('\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}'),('[^']*'),('[^,]+'),('[^,]+')\)"
-    )
+        # upload edge
 
-    ylog.debug('reading link sql file')
-    category_link_sql = open(category_link_path, 'r')
-    category_link = category_link_sql.read()
-    wiki_category_link = wiki_category_link_re.findall(category_link)
-    ylog.debug('close link sql file')
-    category_link_sql.close()
-    category_link_size = len(wiki_category_link)
-    del wiki_category_link
-    ylog.debug("uploading wiki categorie page link")
-    uploaded_number = batch_upload(wiki_category_link_re, category_link,
-                                   category_link_size, batch_size, upload_edge)
-    print("uploaded number: %s, actual number in wiki: %s" %
-          (uploaded_number, category_link_size))
+        category_link_path = user_path + '/share/deep_learning/data/zhwiki_cat_pg_lk/zhwiki-latest-categorylinks.zhs.sql'
+        wiki_category_link_re = re.compile(
+            "\(([0-9]+),('[^,]+'),('[^']+'),('\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}'),('[^']*'),('[^,]+'),('[^,]+')\)"
+        )
+
+        ylog.debug('reading link sql file')
+        category_link_sql = open(category_link_path, 'r')
+        category_link = category_link_sql.read()
+        wiki_category_link = wiki_category_link_re.findall(category_link)
+        ylog.debug('close link sql file')
+        category_link_sql.close()
+        category_link_size = len(wiki_category_link)
+        del wiki_category_link
+        ylog.debug("uploading wiki categorie page link")
+        uploaded_number = batch_upload(wiki_category_link_re, category_link,
+                                       category_link_size, batch_size,
+                                       upload_edge)
+        print("uploaded number: %s, actual number in wiki: %s" %
+              (uploaded_number, category_link_size))
+    except KeyboardInterrupt:
+        print("uploaded number: %s, actual number in wiki: %s" %
+              (uploaded_number, category_link_size))
+        try:
+            sys.exit(0)
+        except SystemExit:
+            os._exit(0)
