@@ -10,7 +10,7 @@ import os
 from ylib import ylog
 import logging
 import os, sys
-
+from google.protobuf.message import EncodeError
 ylog.set_level(logging.DEBUG)
 # ylog.console_on()
 ylog.filelog_on("wiki_upload")
@@ -18,7 +18,7 @@ batch_size = 20
 # Maximum number of times to retry before giving up.
 MAX_RETRIES = 10
 # Always retry when these exceptions are raised.
-RETRIABLE_EXCEPTIONS = (google.protobuf.message.EncodeError)
+RETRIABLE_EXCEPTIONS = (EncodeError)
 # test fetch graph
 test_url = 'http://192.168.1.166:9080'
 prod_url = 'http://q.gftchina.com:13567/vqservice/vq/'
@@ -43,7 +43,7 @@ def upload_edge(dict_re_match_object):
     res = None
     error = None
     retry = 0
-    #     while res is None:
+    #while res is None:
     uploaded_number = 0
     graph_upload_request = graphUpload_pb2.GraphUploadRequest()
     # iterate nodes batch
@@ -86,25 +86,23 @@ def upload_edge(dict_re_match_object):
                 edge.endNodeID.domain = "https://zh.wikipedia.org/wiki/Category:"
                 edge.endNodeID.primaryKeyInDomain = subcat_title
 
-            graph_upload_request.uploadTag = "ploadWikiEdge"
-            graph_upload_request.nodeAction4Duplication = graphUpload_pb2.Action4Duplication.Value(
-                'UPDATE')
-            graph_upload_request.edgeAction4Duplication = graphUpload_pb2.Action4Duplication.Value(
-                'UPDATE')
-            response = gftIO.upload_graph(graph_upload_request, test_url,
-                                          test_user_name, test_pwd)
-            try:
-                if response.edgeUpdateResultStatistics:
-                    ylog.debug(response.edgeUpdateResultStatistics)
-                    uploaded_number = response.edgeUpdateResultStatistics.numOfCreations + response.edgeUpdateResultStatistics.numOfUpdates + response.edgeUpdateResultStatistics.numOfSkips
-                if response.failedEdges[0].error:
-                    ylog.debug(response.failedEdges[0])
-                    ylog.debug(
-                        "start node %s: " % edge.startNodeID.primaryKeyInDomain)
-                    ylog.debug(
-                        "end node %s:" % edge.endNodeID.primaryKeyInDomain)
-            except:
-                pass
+    graph_upload_request.uploadTag = "uploadWikiEdge"
+    graph_upload_request.nodeAction4Duplication = graphUpload_pb2.Action4Duplication.Value(
+        'UPDATE')
+    graph_upload_request.edgeAction4Duplication = graphUpload_pb2.Action4Duplication.Value(
+        'UPDATE')
+    response = gftIO.upload_graph(graph_upload_request, test_url,
+                                  test_user_name, test_pwd)
+    try:
+        if response.edgeUpdateResultStatistics:
+            ylog.debug(response.edgeUpdateResultStatistics)
+            uploaded_number = response.edgeUpdateResultStatistics.numOfCreations + response.edgeUpdateResultStatistics.numOfUpdates + response.edgeUpdateResultStatistics.numOfSkips
+        if response.failedEdges[0].error:
+            ylog.debug(response.failedEdges[0])
+            ylog.debug("start node: %s" % edge.startNodeID.primaryKeyInDomain)
+            ylog.debug("end node: %s" % edge.endNodeID.primaryKeyInDomain)
+    except:
+        pass
 
     return uploaded_number
 
@@ -145,7 +143,7 @@ def upload_page_node(dict_re_match_object):
 
             node.names.chinese = title
     # other information of the upload request
-    graph_upload_request.uploadTag = "testUpload"
+    graph_upload_request.uploadTag = "UploadWikiPageNodes"
     graph_upload_request.nodeAction4Duplication = graphUpload_pb2.Action4Duplication.Value(
         'UPDATE')
     graph_upload_request.edgeAction4Duplication = graphUpload_pb2.Action4Duplication.Value(
@@ -188,7 +186,7 @@ def upload_cat_node(dict_re_match_object):
 
             node.names.chinese = title
     # other information of the upload request
-    graph_upload_request.uploadTag = "testUpload"
+    graph_upload_request.uploadTag = "UploadWikiCategoryNodes"
     graph_upload_request.nodeAction4Duplication = graphUpload_pb2.Action4Duplication.Value(
         'UPDATE')
     graph_upload_request.edgeAction4Duplication = graphUpload_pb2.Action4Duplication.Value(
