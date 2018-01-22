@@ -123,11 +123,13 @@ def upload_edge(dict_re_match_object):
             if res.edgeUpdateResultStatistics:
                 ylog.debug(res.edgeUpdateResultStatistics)
                 uploaded_number = res.edgeUpdateResultStatistics.numOfCreations + res.edgeUpdateResultStatistics.numOfUpdates + res.edgeUpdateResultStatistics.numOfSkips
-            if res.failedEdges[0].error:
-                ylog.debug(res.failedEdges[0])
-                ylog.debug(
-                    "start node: %s" % edge.startNodeID.primaryKeyInDomain)
-                ylog.debug("end node: %s" % edge.endNodeID.primaryKeyInDomain)
+            if res.failedEdges:
+                for err in res.failedEdges:
+                    ylog.debug(err)
+                    ylog.debug("start node: %s" %
+                               err.edge.startNodeID.primaryKeyInDomain)
+                    ylog.debug(
+                        "end node: %s" % err.edge.endNodeID.primaryKeyInDomain)
         except:
             pass
 
@@ -235,80 +237,81 @@ def batch_upload(re, source, source_len, batch_size, func):
     func       -- upload function
     """
     uploaded_number = 0
-    last_span = re.search(source).span()[0]
-    for i in tqdm(range(0, source_len, batch_size)):
-        re_batch = {}
-        for j in range(batch_size):
-            re_batch[j] = re.search(source, last_span)
-            if re_batch[j] is not None:
-                last_span = re_batch[j].span()[1]
-        uploaded_counter = func(re_batch)
-        uploaded_number = uploaded_number + uploaded_counter
-    return uploaded_number
-
-
-if __name__ == '__main__':
     try:
-        user_path = os.path.expanduser("~")
-        # category_path = user_path + "/share/deep_learning/data/zhwiki_cat_pg_lk/zhwiki-latest-category.zhs.sql"
-        # page_path = user_path + "/share/deep_learning/data/zhwiki_cat_pg_lk/zhwiki-latest-page.zhs.sql"
-        # # open category sql file
-        # category_sql = open(category_path, 'r')
-        # category = category_sql.read()
-        # category_sql.close()
-        # wiki_category_re = re.compile(
-        #     "\(([0-9]+),('[^,]+'),([0-9]+),([0-9]+),([0-9]+)\)")
-        # wiki_category = wiki_category_re.findall(category)
-        # print("uploading wiki categories")
-        # uploaded_number = batch_upload(wiki_category_re, category,
-        #                                len(wiki_category), batch_size,
-        #                                upload_cat_node)
-        # print("uploaded number: %s, actual number in wiki: %s" %
-        #       (uploaded_number, len(wiki_category)))
-        # del category
-        # del wiki_category
-
-        # # open page sql file
-        # page_sql = open(page_path, 'r')
-        # page = page_sql.read()
-        # page_sql.close()
-        # wiki_page_re = re.compile(
-        #     "\(([0-9]+),([0-9]+),('[^,]+'),('[^,]+|'),([0-9]+),([0-9]+),([0-9]+),0.([0-9]+),('[^,]+'),('[^,]+'|NULL),([0-9]+),([0-9]+),('[^,]+'),([^,]+)\)"
-        # )
-        # wiki_page = wiki_page_re.findall(page)
-        # print("uploading wiki page")
-        # uploaded_number = batch_upload(wiki_page_re, page,
-        #                                len(wiki_page), batch_size, upload_page_node)
-        # print("uploaded number: %s, actual number in wiki: %s" % (uploaded_number,
-        #                                                           len(wiki_page)))
-        # del wiki_page
-        # del page
-
-        # upload edge
-
-        category_link_path = './data/zhwiki-latest-categorylinks.zhs.sql'
-        wiki_category_link_re = re.compile(
-            "\(([0-9]+),('[^,]+'),('[^']+'),('\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}'),('[^']*'),('[^,]+'),('[^,]+')\)"
-        )
-
-        ylog.debug('reading link sql file')
-        category_link_sql = open(category_link_path, 'r')
-        category_link = category_link_sql.read()
-        wiki_category_link = wiki_category_link_re.findall(category_link)
-        ylog.debug('close link sql file')
-        category_link_sql.close()
-        category_link_size = len(wiki_category_link)
-        del wiki_category_link
-        ylog.debug("uploading wiki categorie page link")
-        uploaded_number = batch_upload(wiki_category_link_re, category_link,
-                                       category_link_size, batch_size,
-                                       upload_edge)
-        print("uploaded number: %s, actual number in wiki: %s" %
-              (uploaded_number, category_link_size))
+        last_span = re.search(source).span()[0]
+        for i in tqdm(range(0, source_len, batch_size)):
+            while os.path.isfile('pause'):
+                time.sleep(1)
+                print("pause for 1 second")
+            re_batch = {}
+            for j in range(batch_size):
+                re_batch[j] = re.search(source, last_span)
+                if re_batch[j] is not None:
+                    last_span = re_batch[j].span()[1]
+            uploaded_counter = func(re_batch)
+            uploaded_number += uploaded_counter
     except KeyboardInterrupt:
-        print("uploaded number: %s, actual number in wiki: %s" %
-              (uploaded_number, category_link_size))
+        print("uploaded number: %s" % uploaded_number)
         try:
             sys.exit(0)
         except SystemExit:
             os._exit(0)
+    return uploaded_number
+
+
+if __name__ == '__main__':
+    user_path = os.path.expanduser("~")
+    # category_path = user_path + "/share/deep_learning/data/zhwiki_cat_pg_lk/zhwiki-latest-category.zhs.sql"
+    # page_path = user_path + "/share/deep_learning/data/zhwiki_cat_pg_lk/zhwiki-latest-page.zhs.sql"
+    # # open category sql file
+    # category_sql = open(category_path, 'r')
+    # category = category_sql.read()
+    # category_sql.close()
+    # wiki_category_re = re.compile(
+    #     "\(([0-9]+),('[^,]+'),([0-9]+),([0-9]+),([0-9]+)\)")
+    # wiki_category = wiki_category_re.findall(category)
+    # print("uploading wiki categories")
+    # uploaded_number = batch_upload(wiki_category_re, category,
+    #                                len(wiki_category), batch_size,
+    #                                upload_cat_node)
+    # print("uploaded number: %s, actual number in wiki: %s" %
+    #       (uploaded_number, len(wiki_category)))
+    # del category
+    # del wiki_category
+
+    # # open page sql file
+    # page_sql = open(page_path, 'r')
+    # page = page_sql.read()
+    # page_sql.close()
+    # wiki_page_re = re.compile(
+    #     "\(([0-9]+),([0-9]+),('[^,]+'),('[^,]+|'),([0-9]+),([0-9]+),([0-9]+),0.([0-9]+),('[^,]+'),('[^,]+'|NULL),([0-9]+),([0-9]+),('[^,]+'),([^,]+)\)"
+    # )
+    # wiki_page = wiki_page_re.findall(page)
+    # print("uploading wiki page")
+    # uploaded_number = batch_upload(wiki_page_re, page,
+    #                                len(wiki_page), batch_size, upload_page_node)
+    # print("uploaded number: %s, actual number in wiki: %s" % (uploaded_number,
+    #                                                           len(wiki_page)))
+    # del wiki_page
+    # del page
+
+    # upload edge
+
+    category_link_path = './data/zhwiki-latest-categorylinks.zhs.sql'
+    wiki_category_link_re = re.compile(
+        "\(([0-9]+),('[^,]+'),('[^']+'),('\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}'),('[^']*'),('[^,]+'),('[^,]+')\)"
+    )
+
+    ylog.debug('reading link sql file')
+    category_link_sql = open(category_link_path, 'r')
+    category_link = category_link_sql.read()
+    wiki_category_link = wiki_category_link_re.findall(category_link)
+    ylog.debug('close link sql file')
+    category_link_sql.close()
+    category_link_size = len(wiki_category_link)
+    del wiki_category_link
+    ylog.debug("uploading wiki categorie page link")
+    uploaded_number = batch_upload(wiki_category_link_re, category_link,
+                                   category_link_size, batch_size, upload_edge)
+    print("uploaded number: %s, actual number in wiki: %s" %
+          (uploaded_number, category_link_size))

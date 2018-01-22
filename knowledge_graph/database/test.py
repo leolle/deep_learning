@@ -215,18 +215,13 @@ for i in range(category_link_size):
     except:
         pass
 
-# pk_str = "https://zh.wikipedia.org/wiki/" + '/' + 'MOUNTAIN'
-# pk_md5 = hashlib.md5(pk_str.encode('utf-8')).hexdigest().upper()
-# print(pk_md5)
+pk_str = "https://zh.wikipedia.org/wiki/Category:" + '/' + '营养学'
+pk_md5 = hashlib.md5(pk_str.encode('utf-8')).hexdigest().upper()
+print(pk_md5)
 
-
-# TODO convert skill result in skill_pb2.RespRunNodeAction format to graphUpload_pb2.Graph so that in python we have only one graph format.
-def skill_result_2_graph(resp_run_node_action):
-    pass
-
-    # testing code also serve as sample code for calling uploadGraph
-    graph_upload_request = graphUpload_pb2.GraphUploadRequest()
-
+pk_str = "https://zh.wikipedia.org/wiki/" + '/' + '葡萄糖'
+pk_md5 = hashlib.md5(pk_str.encode('utf-8')).hexdigest().upper()
+print(pk_md5)
 
 # The first node
 node = graph_upload_request.graph.nodes.add()
@@ -297,4 +292,5 @@ graph_upload_request.nodeAction4Duplication = graphUpload_pb2.Action4Duplication
 graph_upload_request.edgeAction4Duplication = graphUpload_pb2.Action4Duplication.Value(
     'UPDATE')
 
-gftIO.upload_graph(graph_upload_request, test_url, test_user_name, test_pwd)
+response1 = gftIO.upload_graph(graph_upload_request, test_url, test_user_name,
+                               test_pwd)
