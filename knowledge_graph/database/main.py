@@ -2,23 +2,28 @@
 import pandas as pd
 import numpy as np
 from datetime import datetime
+import time
 import re
 from lib.gftTools import gftIO
 import graphUpload_pb2
 from tqdm import tqdm
-import os
+import random
 from ylib import ylog
 import logging
 import os, sys
 from google.protobuf.message import EncodeError
+from urllib.error import HTTPError
 ylog.set_level(logging.DEBUG)
 # ylog.console_on()
 ylog.filelog_on("wiki_upload")
-batch_size = 20
+batch_size = 300
 # Maximum number of times to retry before giving up.
 MAX_RETRIES = 10
 # Always retry when these exceptions are raised.
 RETRIABLE_EXCEPTIONS = (EncodeError)
+# Always retry when an apiclient.errors.HttpError with one of these status
+# codes is raised.
+RETRIABLE_STATUS_CODES = [500, 502, 503, 504]
 # test fetch graph
 test_url = 'http://192.168.1.166:9080'
 prod_url = 'http://q.gftchina.com:13567/vqservice/vq/'
@@ -43,66 +48,88 @@ def upload_edge(dict_re_match_object):
     res = None
     error = None
     retry = 0
-    #while res is None:
     uploaded_number = 0
-    graph_upload_request = graphUpload_pb2.GraphUploadRequest()
-    # iterate nodes batch
-    for index, value in dict_re_match_object.items():
-        if value is not None:
-            item = dict_re_match_object.get(index)
-            edge_type = item.group(7)[1:-1]
-            if edge_type == 'page':
-                edge = graph_upload_request.graph.edges.add()
-                page_title = item.group(3)[1:-1]
-                cat_title = item.group(2)[1:-1]
-                edge.props.type = "HasElement"
-                if '\\n' in cat_title:
-                    end = cat_title.split("\\n")
-                    cat_title = end[-1]
-                if '\\n' in page_title:
-                    end = page_title.split("\\n")
-                    page_title = end[-1]
-                page_title = page_title.replace(" ", "_")
+    while res is None:
+        try:
+            graph_upload_request = graphUpload_pb2.GraphUploadRequest()
+            # iterate nodes batch
+            for index, value in dict_re_match_object.items():
+                if value is not None:
+                    item = dict_re_match_object.get(index)
+                    edge_type = item.group(7)[1:-1]
+                    if edge_type == 'page':
+                        edge = graph_upload_request.graph.edges.add()
+                        page_title = item.group(3)[1:-1]
+                        cat_title = item.group(2)[1:-1]
+                        edge.props.type = "HasElement"
+                        if '\\n' in cat_title:
+                            end = cat_title.split("\\n")
+                            cat_title = end[-1]
+                        if '\\n' in page_title:
+                            end = page_title.split("\\n")
+                            page_title = end[-1]
+                        page_title = page_title.replace(" ", "_")
 
-                edge.startNodeID.domain = "https://zh.wikipedia.org/wiki/Category:"
-                edge.startNodeID.primaryKeyInDomain = cat_title
-                edge.endNodeID.domain = "https://zh.wikipedia.org/wiki/"
-                edge.endNodeID.primaryKeyInDomain = page_title
-            if edge_type == 'subcat':
-                edge = graph_upload_request.graph.edges.add()
-                subcat_title = item.group(3)[1:-1]
-                cat_title = item.group(2)[1:-1]
-                if '\\n' in cat_title:
-                    end = cat_title.split("\\n")
-                    cat_title = end[-1]
-                if '\\n' in subcat_title:
-                    end = subcat_title.split("\\n")
-                    subcat_title = end[-1]
-                subcat_title = subcat_title.replace(" ", "_")
-                edge.props.type = "HasSubset"
+                        edge.startNodeID.domain = "https://zh.wikipedia.org/wiki/Category:"
+                        edge.startNodeID.primaryKeyInDomain = cat_title
+                        edge.endNodeID.domain = "https://zh.wikipedia.org/wiki/"
+                        edge.endNodeID.primaryKeyInDomain = page_title
+                    if edge_type == 'subcat':
+                        edge = graph_upload_request.graph.edges.add()
+                        subcat_title = item.group(3)[1:-1]
+                        cat_title = item.group(2)[1:-1]
+                        if '\\n' in cat_title:
+                            end = cat_title.split("\\n")
+                            cat_title = end[-1]
+                        if '\\n' in subcat_title:
+                            end = subcat_title.split("\\n")
+                            subcat_title = end[-1]
+                        subcat_title = subcat_title.replace(" ", "_")
+                        edge.props.type = "HasSubset"
 
-                edge.startNodeID.domain = "https://zh.wikipedia.org/wiki/Category:"
-                edge.startNodeID.primaryKeyInDomain = cat_title
-                edge.endNodeID.domain = "https://zh.wikipedia.org/wiki/Category:"
-                edge.endNodeID.primaryKeyInDomain = subcat_title
+                        edge.startNodeID.domain = "https://zh.wikipedia.org/wiki/Category:"
+                        edge.startNodeID.primaryKeyInDomain = cat_title
+                        edge.endNodeID.domain = "https://zh.wikipedia.org/wiki/Category:"
+                        edge.endNodeID.primaryKeyInDomain = subcat_title
 
-    graph_upload_request.uploadTag = "uploadWikiEdge"
-    graph_upload_request.nodeAction4Duplication = graphUpload_pb2.Action4Duplication.Value(
-        'UPDATE')
-    graph_upload_request.edgeAction4Duplication = graphUpload_pb2.Action4Duplication.Value(
-        'UPDATE')
-    response = gftIO.upload_graph(graph_upload_request, test_url,
-                                  test_user_name, test_pwd)
-    try:
-        if response.edgeUpdateResultStatistics:
-            ylog.debug(response.edgeUpdateResultStatistics)
-            uploaded_number = response.edgeUpdateResultStatistics.numOfCreations + response.edgeUpdateResultStatistics.numOfUpdates + response.edgeUpdateResultStatistics.numOfSkips
-        if response.failedEdges[0].error:
-            ylog.debug(response.failedEdges[0])
-            ylog.debug("start node: %s" % edge.startNodeID.primaryKeyInDomain)
-            ylog.debug("end node: %s" % edge.endNodeID.primaryKeyInDomain)
-    except:
-        pass
+            graph_upload_request.uploadTag = "uploadWikiEdge"
+            graph_upload_request.nodeAction4Duplication = graphUpload_pb2.Action4Duplication.Value(
+                'UPDATE')
+            graph_upload_request.edgeAction4Duplication = graphUpload_pb2.Action4Duplication.Value(
+                'UPDATE')
+            res = gftIO.upload_graph(graph_upload_request, test_url,
+                                     test_user_name, test_pwd)
+            # if response is not None:
+            #     print("successfully uploaded")
+        except HTTPError as e:
+            if e.code in RETRIABLE_STATUS_CODES:
+                error = 'A retriable HTTP error %d occurred:\n%s' % (e.code,
+                                                                     e.reason)
+            else:
+                raise
+        except RETRIABLE_EXCEPTIONS as e:
+            error = 'A retriable error occurred: %s' % e
+        if error is not None:
+            print(error)
+            retry += 1
+            if retry > MAX_RETRIES:
+                ylog.debug(res)
+                exit("no loger attempting to retry.")
+            max_sleep = 2**retry
+            sleep_seconds = random.random() * max_sleep
+            print('Sleeping %f seconds and then retrying...' % sleep_seconds)
+            time.sleep(sleep_seconds)
+        try:
+            if res.edgeUpdateResultStatistics:
+                ylog.debug(res.edgeUpdateResultStatistics)
+                uploaded_number = res.edgeUpdateResultStatistics.numOfCreations + res.edgeUpdateResultStatistics.numOfUpdates + res.edgeUpdateResultStatistics.numOfSkips
+            if res.failedEdges[0].error:
+                ylog.debug(res.failedEdges[0])
+                ylog.debug(
+                    "start node: %s" % edge.startNodeID.primaryKeyInDomain)
+                ylog.debug("end node: %s" % edge.endNodeID.primaryKeyInDomain)
+        except:
+            pass
 
     return uploaded_number
 
@@ -259,7 +286,7 @@ if __name__ == '__main__':
 
         # upload edge
 
-        category_link_path = user_path + '/share/deep_learning/data/zhwiki_cat_pg_lk/zhwiki-latest-categorylinks.zhs.sql'
+        category_link_path = './data/zhwiki-latest-categorylinks.zhs.sql'
         wiki_category_link_re = re.compile(
             "\(([0-9]+),('[^,]+'),('[^']+'),('\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}'),('[^']*'),('[^,]+'),('[^,]+')\)"
         )

@@ -218,3 +218,83 @@ for i in range(category_link_size):
 # pk_str = "https://zh.wikipedia.org/wiki/" + '/' + 'MOUNTAIN'
 # pk_md5 = hashlib.md5(pk_str.encode('utf-8')).hexdigest().upper()
 # print(pk_md5)
+
+
+# TODO convert skill result in skill_pb2.RespRunNodeAction format to graphUpload_pb2.Graph so that in python we have only one graph format.
+def skill_result_2_graph(resp_run_node_action):
+    pass
+
+    # testing code also serve as sample code for calling uploadGraph
+    graph_upload_request = graphUpload_pb2.GraphUploadRequest()
+
+
+# The first node
+node = graph_upload_request.graph.nodes.add()
+
+node.props.type = "i"
+
+p1 = node.props.props.entries.add()
+p1.key = "_body"
+p1.value = "body of the first node"
+p2 = node.props.props.entries.add()
+p2.key = "_url"
+p2.value = "http://dummy/"
+
+node.businessID.domain = "domain1"
+node.businessID.primaryKeyInDomain = "word1"
+
+node.names.chinese = "中文名称"
+node.names.english = "English Name"
+
+# The second node
+node = graph_upload_request.graph.nodes.add()
+
+node.props.type = "i"
+
+p1 = node.props.props.entries.add()
+p1.key = "_body"
+p1.value = "body of the second node"
+p2 = node.props.props.entries.add()
+p2.key = "_url"
+p2.value = "http://dummy2/"
+
+node.businessID.domain = "domain1"
+node.businessID.primaryKeyInDomain = "word2"
+
+node.names.chinese = "中文名称2"
+node.names.english = "English Name2"
+
+node.binaryContent = bytes("Binary Content", "utf-8")
+
+# edge from the first node to the second node
+edge = graph_upload_request.graph.edges.add()
+
+edge.props.type = "DATAFLOW"
+
+edge.startNodeID.domain = "domain1"
+edge.startNodeID.primaryKeyInDomain = "word1"
+edge.endNodeID.domain = "domain1"
+edge.endNodeID.primaryKeyInDomain = "word2"
+
+edge.subType = graphUpload_pb2.EdgeSubType.Value('PASS_REF')
+
+# The second edge is incorrect.
+edge = graph_upload_request.graph.edges.add()
+
+edge.props.type = "DATAFLOW"
+
+edge.startNodeID.domain = "domain1"
+edge.startNodeID.primaryKeyInDomain = "word1"
+edge.endNodeID.domain = "domain1"
+edge.endNodeID.primaryKeyInDomain = "word3"
+
+edge.subType = graphUpload_pb2.EdgeSubType.Value('PASS_REF')
+
+# other information of the upload request
+graph_upload_request.uploadTag = "testUpload"
+graph_upload_request.nodeAction4Duplication = graphUpload_pb2.Action4Duplication.Value(
+    'UPDATE')
+graph_upload_request.edgeAction4Duplication = graphUpload_pb2.Action4Duplication.Value(
+    'UPDATE')
+
+gftIO.upload_graph(graph_upload_request, test_url, test_user_name, test_pwd)
