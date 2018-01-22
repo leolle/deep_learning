@@ -13,7 +13,7 @@ import logging
 ylog.set_level(logging.DEBUG)
 # ylog.console_on()
 ylog.filelog_on("wiki_upload")
-batch_size = 100
+batch_size = 10
 # test fetch graph
 test_url = 'http://192.168.1.166:9080'
 prod_url = 'http://q.gftchina.com:13567/vqservice/vq/'
@@ -251,18 +251,21 @@ if __name__ == '__main__':
     # del page
 
     # upload edge
-    ylog.debug('reading link sql file')
     category_link_path = user_path + '/share/deep_learning/data/zhwiki_cat_pg_lk/zhwiki-latest-categorylinks.zhs.sql'
     wiki_category_link_re = re.compile(
         "\(([0-9]+),('[^,]+'),('[^']+'),('\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}'),('[^']*'),('[^,]+'),('[^,]+')\)"
     )
 
+    ylog.debug('reading link sql file')
     category_link_sql = open(category_link_path, 'r')
     category_link = category_link_sql.read()
     wiki_category_link = wiki_category_link_re.findall(category_link)
+    ylog.debug('close link sql file')
     category_link_sql.close()
     category_link_size = len(wiki_category_link)
     del wiki_category_link
     ylog.debug("uploading wiki categorie page link")
     uploaded_number = batch_upload(wiki_category_link_re, category_link,
                                    category_link_size, batch_size, upload_edge)
+    print("uploaded number: %s, actual number in wiki: %s" %
+          (uploaded_number, category_link_size))

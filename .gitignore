@@ -6,5 +6,6 @@ sklearn-theano
 *.h5
 word_embedding/text8
 *.bin
+*.log
 ./basic/computer_vision_cs231n/assignment1/cs231n/datasets
 word_embedding/data/raw_data/
