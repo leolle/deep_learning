@@ -223,6 +223,18 @@ pk_str = "https://zh.wikipedia.org/wiki/" + '/' + '条码'
 pk_md5 = hashlib.md5(pk_str.encode('utf-8')).hexdigest().upper()
 print(pk_md5)
 
+# delete edge
+# s"${businessHashOfStartNode}|${businessHashOfEndNode}|${edgeType}|${edgeSubType.getOrElse("")}|${edgeInfo.getSource}|${edgeInfo.getTarget}"
+start_node_hash = "A688728DC925BF4CA5F63EC37E208DB4"
+end_node_hash = "6B75452A2D7376F338312670599EFCB5"
+edge_type = "HasElement"
+get_or_else = ""
+get_source = ""
+get_target = ""
+pk_str = "|".join([
+    start_node_hash, end_node_hash, edge_type, get_or_else, get_source,
+    get_target
+])
 # The first node
 node = graph_upload_request.graph.nodes.add()
 
