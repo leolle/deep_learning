@@ -219,7 +219,7 @@ pk_str = "https://zh.wikipedia.org/wiki/Category:" + '/' + '营养学'
 pk_md5 = hashlib.md5(pk_str.encode('utf-8')).hexdigest().upper()
 print(pk_md5)
 
-pk_str = "https://zh.wikipedia.org/wiki/" + '/' + '葡萄糖'
+pk_str = "https://zh.wikipedia.org/wiki/" + '/' + '条码'
 pk_md5 = hashlib.md5(pk_str.encode('utf-8')).hexdigest().upper()
 print(pk_md5)
 
