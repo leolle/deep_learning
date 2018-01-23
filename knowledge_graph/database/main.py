@@ -18,7 +18,7 @@ ylog.console_on()
 ylog.filelog_on("wiki_upload")
 batch_size = 20
 # Maximum number of times to retry before giving up.
-MAX_RETRIES = 10
+MAX_RETRIES = 5
 # Always retry when these exceptions are raised.
 RETRIABLE_EXCEPTIONS = (EncodeError)
 # Always retry when an apiclient.errors.HttpError with one of these status
@@ -50,98 +50,100 @@ def delete_edge(dict_re_match_object):
     Keyword Arguments:
     re_match_object -- re object
     """
-    res = None
-    error = None
-    retry = 0
     uploaded_number = 0
-    while res is None:
-        try:
-            # iterate nodes batch
-            for index, value in dict_re_match_object.items():
-                if value is not None:
-                    item = dict_re_match_object.get(index)
-                    edge_type = item.group(7)[1:-1]
-                    if edge_type == 'page':
-                        page_title = item.group(3)[1:-1]
-                        cat_title = item.group(2)[1:-1]
-                        if '\\n' in cat_title:
-                            end = cat_title.split("\\n")
-                            cat_title = end[-1]
-                        if '\\n' in page_title:
-                            end = page_title.split("\\n")
-                            page_title = end[-1]
-                        page_title = page_title.replace(" ", "_")
+    for index, value in dict_re_match_object.items():
+        if value is not None:
+            item = dict_re_match_object.get(index)
+            edge_type = item.group(7)[1:-1]
+            if edge_type == 'page':
+                page_title = item.group(3)[1:-1]
+                cat_title = item.group(2)[1:-1]
+                if '\\n' in cat_title:
+                    end = cat_title.split("\\n")
+                    cat_title = end[-1]
+                if '\\n' in page_title:
+                    end = page_title.split("\\n")
+                    page_title = end[-1]
+                page_title = page_title.replace(" ", "_")
 
-                        startNodeID_domain = "https://zh.wikipedia.org/wiki/Category:"
-                        startNodeID_primaryKeyInDomain = cat_title
+                startNodeID_domain = "https://zh.wikipedia.org/wiki/Category:"
+                startNodeID_primaryKeyInDomain = cat_title
 
-                        endNodeID_domain = "https://zh.wikipedia.org/wiki/"
-                        endNodeID_primaryKeyInDomain = page_title
+                endNodeID_domain = "https://zh.wikipedia.org/wiki/"
+                endNodeID_primaryKeyInDomain = page_title
 
-                        del_edge_type = "HasElement"
+                del_edge_type = "HasElement"
 
-                    if edge_type == 'subcat':
-                        subcat_title = item.group(3)[1:-1]
-                        cat_title = item.group(2)[1:-1]
-                        if '\\n' in cat_title:
-                            end = cat_title.split("\\n")
-                            cat_title = end[-1]
-                        if '\\n' in subcat_title:
-                            end = subcat_title.split("\\n")
-                            subcat_title = end[-1]
-                        subcat_title = subcat_title.replace(" ", "_")
+            if edge_type == 'subcat':
+                subcat_title = item.group(3)[1:-1]
+                cat_title = item.group(2)[1:-1]
+                if '\\n' in cat_title:
+                    end = cat_title.split("\\n")
+                    cat_title = end[-1]
+                if '\\n' in subcat_title:
+                    end = subcat_title.split("\\n")
+                    subcat_title = end[-1]
+                subcat_title = subcat_title.replace(" ", "_")
 
-                        startNodeID_domain = "https://zh.wikipedia.org/wiki/Category:"
-                        startNodeID_primaryKeyInDomain = cat_title
-                        endNodeID_domain = "https://zh.wikipedia.org/wiki/Category:"
-                        endNodeID_primaryKeyInDomain = subcat_title
-                        del_edge_type = "HasSubset"
-                    if del_edge_type is not None:
-                        start_node_pk = startNodeID_domain + "/" + startNodeID_primaryKeyInDomain
-                        end_node_pk = endNodeID_domain + "/" + endNodeID_primaryKeyInDomain
-                        start_node_hash = hashlib.md5(
-                            start_node_pk.encode('utf-8')).hexdigest().upper()
-                        end_node_hash = hashlib.md5(
-                            end_node_pk.encode('utf-8')).hexdigest().upper()
-                        get_or_else = ""
-                        get_source = ""
-                        get_target = ""
-                        edge_str = "|".join([
-                            start_node_hash, end_node_hash, del_edge_type,
-                            get_or_else, get_source, get_target
-                        ])
-                        edge_md5 = hashlib.md5(
-                            edge_str.encode('utf-8')).hexdigest().upper()
-                        del_edge_type = None
-                        try:
-                            res = gs_call.delete_edge(edge_md5, False)
-                        except GSError as e:
-                            ylog.debug('failed deleting %s from %s to %s' %
-                                       (edge_md5, start_node_hash,
-                                        end_node_hash))
+                startNodeID_domain = "https://zh.wikipedia.org/wiki/Category:"
+                startNodeID_primaryKeyInDomain = cat_title
+                endNodeID_domain = "https://zh.wikipedia.org/wiki/Category:"
+                endNodeID_primaryKeyInDomain = subcat_title
+                del_edge_type = "HasSubset"
+            if del_edge_type is not None:
+                start_node_pk = startNodeID_domain + "/" + startNodeID_primaryKeyInDomain
+                end_node_pk = endNodeID_domain + "/" + endNodeID_primaryKeyInDomain
+                start_node_hash = hashlib.md5(
+                    start_node_pk.encode('utf-8')).hexdigest().upper()
+                end_node_hash = hashlib.md5(
+                    end_node_pk.encode('utf-8')).hexdigest().upper()
+                get_or_else = ""
+                get_source = ""
+                get_target = ""
+                edge_str = "|".join([
+                    start_node_hash, end_node_hash, del_edge_type, get_or_else,
+                    get_source, get_target
+                ])
+                edge_md5 = hashlib.md5(
+                    edge_str.encode('utf-8')).hexdigest().upper()
+                del_edge_type = None
+                res = None
+                error = None
+                retry = 0
+                while res is None:
+                    try:
+                        res = gs_call.delete_edge(edge_md5, False)
+                    except GSError as e:
+                        # error = 'edge not existed'
+                        ylog.debug('failed  %s from %s to %s' %
+                                   (edge_md5, start_node_hash, end_node_hash))
+                    except HTTPError as e:
+                        if e.code in RETRIABLE_STATUS_CODES:
+                            error = 'A retriable HTTP error %d occurred:\n%s' % (
+                                e.code, e.reason)
                         else:
-                            res = 'True'
-                            uploaded_number += 1
-                            ylog.debug('delete %s from %s to %s' %
-                                       (edge_md5, start_node_hash,
-                                        end_node_hash))
-        except HTTPError as e:
-            if e.code in RETRIABLE_STATUS_CODES:
-                error = 'A retriable HTTP error %d occurred:\n%s' % (e.code,
-                                                                     e.reason)
-            else:
-                raise
-        if error is not None:
-            print(error)
-            retry += 1
-            res = None
-            if retry > MAX_RETRIES:
-                ylog.debug(res)
-                exit("no loger attempting to retry.")
-            max_sleep = 2**retry
-            sleep_seconds = random.random() * max_sleep
-            print('Sleeping %f seconds and then retrying...' % sleep_seconds)
-            time.sleep(sleep_seconds)
+                            raise
+                    finally:
+                        res = 'success'
+                        ylog.debug('deleted %s from %s to %s' %
+                                   (edge_md5, start_node_hash, end_node_hash))
+
+                    if error is not None:
+                        print(error)
+                        retry += 1
+                        # res = None
+                        if retry > MAX_RETRIES:
+                            ylog.debug(res)
+                            exit("no loger attempting to retry.")
+                        max_sleep = 2**retry
+                        sleep_seconds = random.random() * max_sleep
+                        print('Sleeping %f seconds and then retrying...' %
+                              sleep_seconds)
+                        time.sleep(0.1)
+                    else:
+                        uploaded_number += 1
+                        ylog.debug('deleted %s from %s to %s' %
+                                   (edge_md5, start_node_hash, end_node_hash))
 
     return uploaded_number
 
@@ -389,8 +391,8 @@ def batch_upload(re, source, source_len, batch_size, func):
         last_span = re.search(source).span()[0]
         for i in tqdm(range(0, source_len, batch_size)):
             while os.path.isfile('pause'):
-                time.sleep(1)
-                print("pause for 1 second")
+                time.sleep(100)
+                print("pause for 100 second")
             re_batch = {}
             for j in range(batch_size):
                 re_batch[j] = re.search(source, last_span)
@@ -445,7 +447,7 @@ if __name__ == '__main__':
 
     # # upload edge
 
-    category_link_path = './zhwiki-latest-categorylinks.zhs.sql'
+    category_link_path = './data/zhwiki-latest-categorylinks.zhs.sql'
     wiki_category_link_re = re.compile(
         "\(([0-9]+),('[^,]+'),('[^']+'),('\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}'),('[^']*'),('[^,]+'),('[^,]+')\)"
     )
