@@ -1,45 +1,46 @@
 # -*- coding: utf-8 -*-
+import logging
+from ylib import ylog
+ylog.set_level(logging.DEBUG)
+# ylog.console_on()
+ylog.filelog_on("wiki_upload")
 import time
 import re
 from lib.gftTools import gftIO
 import graphUpload_pb2
 from tqdm import tqdm
 import random
-from ylib import ylog
-import logging
 import os, sys
 import hashlib
 from google.protobuf.message import EncodeError
 from urllib.error import HTTPError
+from urllib.error import URLError
 from lib.gftTools.gftIO import GSError
 
-ylog.set_level(logging.DEBUG)
-# ylog.console_on()
-ylog.filelog_on("wiki_upload")
 batch_size = 20
+# links number
+wiki_category_link_size = 11942698
+n = 4
+chunks = wiki_category_link_size / n
 # Maximum number of times to retry before giving up.
 MAX_RETRIES = 10
 # Always retry when these exceptions are raised.
-RETRIABLE_EXCEPTIONS = (EncodeError)
+RETRIABLE_EXCEPTIONS = (EncodeError, HTTPError)
 # Always retry when an apiclient.errors.HttpError with one of these status
 # codes is raised.
-RETRIABLE_STATUS_CODES = [500, 502, 503, 504]
+RETRIABLE_STATUS_CODES = [500, 502, 503, 504, 111]
 IGNORE_CATEGORIES = [
     '使用Catnav的页面', '缺少Wikidata链接的维基共享资源分类', '隐藏分类', '追踪分类', '维基百科特殊页面',
     '维基百科分类', '维基百科维护', '无需细分的分类', '不要删除的分类', '母分类', '全部重定向分类', '特殊条目'
 ]
 # test fetch graph
 test_url = 'http://192.168.1.166:9080'
-prod_url = 'http://q.gftchina.com:13567/vqservice/vq/'
+# prod_url = 'http://q.gftchina.com:13567/vqservice/vq/'
 test_user_name = 'wuwei'
 test_pwd = 'gft'
 gs_call = gftIO.GSCall(test_url, test_user_name, test_pwd)
 try:
-    graph = gftIO.get_graph_from_neo4j(
-        '392482970E904D11190D208B7C22874A',
-        server_url=prod_url,
-        user_name=test_user_name,
-        pwd=test_pwd)
+    graph = gs_call.get_graph_from_neo4j('392482970E904D11190D208B7C22874A')
 except:
     pass
 
@@ -448,6 +449,9 @@ if __name__ == '__main__':
 
     # # upload edge
 
+    chunk_num = sys.argv[1]
+    start = chunk_num * chunks
+    end = (chunk_num + 1) * chunks
     category_link_path = './data/zhwiki-latest-categorylinks.zhs.sql'
     wiki_category_link_re = re.compile(
         "\(([0-9]+),('[^,]+'),('[^']+'),('\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}'),('[^']*'),('[^,]+'),('[^,]+')\)"

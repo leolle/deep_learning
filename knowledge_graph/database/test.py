@@ -15,7 +15,6 @@ from graph_upload import upload_page_node
 from graph_upload import upload_edge
 import logging
 from ylib import ylog
-
 ylog.set_level(logging.DEBUG)
 ylog.console_on()
 ylog.filelog_on("wiki_upload")
@@ -63,6 +62,8 @@ wiki_page_re = re.compile(
 wiki_page = wiki_page_re.findall(page)
 
 wiki_category_link = wiki_category_link_re.findall(category_link)
+# In [294]: len(wiki_category_link)
+# Out[296]: 11942698
 
 print("uploading wiki categories")
 uploaded_number = batch_upload(wiki_category_re, category,
@@ -215,7 +216,7 @@ for i in range(category_link_size):
     except:
         pass
 
-pk_str = "https://zh.wikipedia.org/wiki/Category:" + '/' + '营养学'
+pk_str = "https://zh.wikipedia.org/wiki/Category:" + '/' + '隐藏分类'
 pk_md5 = hashlib.md5(pk_str.encode('utf-8')).hexdigest().upper()
 print(pk_md5)
 
@@ -227,7 +228,7 @@ print(pk_md5)
 # s"${businessHashOfStartNode}|${businessHashOfEndNode}|${edgeType}|${edgeSubType.getOrElse("")}|${edgeInfo.getSource}|${edgeInfo.getTarget}"
 start_node_hash = "A688728DC925BF4CA5F63EC37E208DB4"
 end_node_hash = "6B75452A2D7376F338312670599EFCB5"
-edge_type = "HasElement"
+edge_type = "dataflow"
 get_or_else = ""
 get_source = ""
 get_target = ""
@@ -235,6 +236,8 @@ pk_str = "|".join([
     start_node_hash, end_node_hash, edge_type, get_or_else, get_source,
     get_target
 ])
+pk_md5 = hashlib.md5(pk_str.encode('utf-8')).hexdigest().upper()
+print(pk_md5)
 # The first node
 node = graph_upload_request.graph.nodes.add()
 

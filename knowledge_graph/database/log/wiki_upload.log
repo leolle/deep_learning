@@ -1,21 +1,13 @@
-21:32:40.185 10 reading link sql file
-21:32:40.186 10 close link sql file
-21:32:40.186 10 uploading wiki categorie page link
-21:32:40.210 10 failed  C7575925D3586B1E7005426B6418D76D from 063BCA63515234CED3EE69841C79D34E to 75673EACBAAD05460A457F928C356ADE
-21:32:40.330 10 failed  C7575925D3586B1E7005426B6418D76D from 063BCA63515234CED3EE69841C79D34E to 75673EACBAAD05460A457F928C356ADE
-21:32:40.446 10 failed  C7575925D3586B1E7005426B6418D76D from 063BCA63515234CED3EE69841C79D34E to 75673EACBAAD05460A457F928C356ADE
-21:32:40.575 10 failed  C7575925D3586B1E7005426B6418D76D from 063BCA63515234CED3EE69841C79D34E to 75673EACBAAD05460A457F928C356ADE
-21:32:40.695 10 failed  C7575925D3586B1E7005426B6418D76D from 063BCA63515234CED3EE69841C79D34E to 75673EACBAAD05460A457F928C356ADE
-21:32:40.827 10 failed  C7575925D3586B1E7005426B6418D76D from 063BCA63515234CED3EE69841C79D34E to 75673EACBAAD05460A457F928C356ADE
-21:32:40.829 10 False
-21:37:16.973 10 reading link sql file
-21:37:16.974 10 close link sql file
-21:37:16.974 10 uploading wiki categorie page link
-21:37:17.003 10 numOfCreations: 0
+10:44:40.257 10 reading sql files
+10:44:40.290 10 numOfCreations: 0
 numOfUpdates: 0
 numOfSkips: 0
 
-21:37:17.003 10 edge {
+10:44:40.290 10 numOfCreations: 0
+numOfUpdates: 0
+numOfSkips: 0
+
+10:44:40.290 10 edge {
   props {
     type: "HasSubset"
   }
@@ -33,9 +25,29 @@ error {
   errorCode: 206004
 }
 
-21:37:17.003 10 start node: 主类别1
-21:37:17.004 10 end node: 子类别11
-21:37:17.004 10 edge {
+10:44:40.290 10 edge {
+  props {
+    type: "HasSubset"
+  }
+  startNodeID {
+    domain: "https://zh.wikipedia.org/wiki/Category:"
+    primaryKeyInDomain: "\344\270\273\347\261\273\345\210\2531"
+  }
+  endNodeID {
+    domain: "https://zh.wikipedia.org/wiki/Category:"
+    primaryKeyInDomain: "\345\255\220\347\261\273\345\210\25311"
+  }
+}
+error {
+  reason: "Can\'t create new edge duplicated with edge 40718441 !"
+  errorCode: 206004
+}
+
+10:44:40.291 10 start node: 主类别1
+10:44:40.291 10 start node: 主类别1
+10:44:40.291 10 end node: 子类别11
+10:44:40.291 10 end node: 子类别11
+10:44:40.291 10 edge {
   props {
     type: "HasSubset"
   }
@@ -53,13 +65,37 @@ error {
   errorCode: 206004
 }
 
-21:37:17.004 10 start node: 主类别2
-21:37:17.005 10 end node: 子类别21
-21:37:17.037 10 numOfCreations: 0
+10:44:40.291 10 edge {
+  props {
+    type: "HasSubset"
+  }
+  startNodeID {
+    domain: "https://zh.wikipedia.org/wiki/Category:"
+    primaryKeyInDomain: "\344\270\273\347\261\273\345\210\2532"
+  }
+  endNodeID {
+    domain: "https://zh.wikipedia.org/wiki/Category:"
+    primaryKeyInDomain: "\345\255\220\347\261\273\345\210\25321"
+  }
+}
+error {
+  reason: "Can\'t create new edge duplicated with edge 40718442 !"
+  errorCode: 206004
+}
+
+10:44:40.291 10 start node: 主类别2
+10:44:40.291 10 start node: 主类别2
+10:44:40.291 10 end node: 子类别21
+10:44:40.291 10 end node: 子类别21
+10:44:40.311 10 numOfCreations: 0
 numOfUpdates: 0
 numOfSkips: 0
 
-21:37:17.037 10 edge {
+10:44:40.311 10 numOfCreations: 0
+numOfUpdates: 0
+numOfSkips: 0
+
+10:44:40.311 10 edge {
   props {
     type: "HasSubset"
   }
@@ -77,9 +113,29 @@ error {
   errorCode: 206004
 }
 
-21:37:17.038 10 start node: 主类别2
-21:37:17.038 10 end node: 子类别22
-21:37:17.038 10 edge {
+10:44:40.311 10 edge {
+  props {
+    type: "HasSubset"
+  }
+  startNodeID {
+    domain: "https://zh.wikipedia.org/wiki/Category:"
+    primaryKeyInDomain: "\344\270\273\347\261\273\345\210\2532"
+  }
+  endNodeID {
+    domain: "https://zh.wikipedia.org/wiki/Category:"
+    primaryKeyInDomain: "\345\255\220\347\261\273\345\210\25322"
+  }
+}
+error {
+  reason: "Can\'t create new edge duplicated with edge 40718443 !"
+  errorCode: 206004
+}
+
+10:44:40.312 10 start node: 主类别2
+10:44:40.312 10 start node: 主类别2
+10:44:40.312 10 end node: 子类别22
+10:44:40.312 10 end node: 子类别22
+10:44:40.312 10 edge {
   props {
     type: "HasSubset"
   }
@@ -97,21 +153,53 @@ error {
   errorCode: 206004
 }
 
-21:37:17.039 10 start node: 主类别2
-21:37:17.039 10 end node: 子类别23
-21:37:17.059 10 numOfCreations: 0
+10:44:40.312 10 edge {
+  props {
+    type: "HasSubset"
+  }
+  startNodeID {
+    domain: "https://zh.wikipedia.org/wiki/Category:"
+    primaryKeyInDomain: "\344\270\273\347\261\273\345\210\2532"
+  }
+  endNodeID {
+    domain: "https://zh.wikipedia.org/wiki/Category:"
+    primaryKeyInDomain: "\345\255\220\347\261\273\345\210\25323"
+  }
+}
+error {
+  reason: "Can\'t create new edge duplicated with edge 40718444 !"
+  errorCode: 206004
+}
+
+10:44:40.312 10 start node: 主类别2
+10:44:40.312 10 start node: 主类别2
+10:44:40.313 10 end node: 子类别23
+10:44:40.313 10 end node: 子类别23
+10:44:40.348 10 numOfCreations: 0
 numOfUpdates: 2
 numOfSkips: 0
 
-21:37:17.075 10 numOfCreations: 0
+10:44:40.348 10 numOfCreations: 0
 numOfUpdates: 2
 numOfSkips: 0
 
-21:37:17.095 10 numOfCreations: 0
+10:44:40.365 10 numOfCreations: 0
+numOfUpdates: 2
+numOfSkips: 0
+
+10:44:40.365 10 numOfCreations: 0
+numOfUpdates: 2
+numOfSkips: 0
+
+10:44:40.383 10 numOfCreations: 0
 numOfUpdates: 1
 numOfSkips: 0
 
-21:37:17.095 10 edge {
+10:44:40.383 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+10:44:40.384 10 edge {
   props {
     type: "HasElement"
   }
@@ -128,13 +216,36 @@ error {
   reason: "end node doesn\'t exist"
 }
 
-21:37:17.095 10 start node: 子类别21
-21:37:17.096 10 end node: 子页面21
-21:37:17.115 10 numOfCreations: 0
+10:44:40.384 10 edge {
+  props {
+    type: "HasElement"
+  }
+  startNodeID {
+    domain: "https://zh.wikipedia.org/wiki/Category:"
+    primaryKeyInDomain: "\345\255\220\347\261\273\345\210\25321"
+  }
+  endNodeID {
+    domain: "https://zh.wikipedia.org/wiki/"
+    primaryKeyInDomain: "\345\255\220\351\241\265\351\235\24221"
+  }
+}
+error {
+  reason: "end node doesn\'t exist"
+}
+
+10:44:40.385 10 start node: 子类别21
+10:44:40.385 10 start node: 子类别21
+10:44:40.385 10 end node: 子页面21
+10:44:40.385 10 end node: 子页面21
+10:44:41.072 10 numOfCreations: 0
 numOfUpdates: 1
 numOfSkips: 0
 
-21:37:17.116 10 edge {
+10:44:41.072 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+10:44:41.077 10 edge {
   props {
     type: "HasElement"
   }
@@ -151,15 +262,623 @@ error {
   reason: "start node doesn\'t exist"
 }
 
-21:37:17.116 10 start node: 子类别2
-21:37:17.116 10 end node: 子页面2
-21:38:10.246 10 reading link sql file
-21:38:10.246 10 close link sql file
-21:38:10.247 10 uploading wiki categorie page link
-21:38:10.271 10 failed  C7575925D3586B1E7005426B6418D76D from 063BCA63515234CED3EE69841C79D34E to 75673EACBAAD05460A457F928C356ADE
-21:38:10.399 10 failed  C7575925D3586B1E7005426B6418D76D from 063BCA63515234CED3EE69841C79D34E to 75673EACBAAD05460A457F928C356ADE
-21:38:10.533 10 failed  C7575925D3586B1E7005426B6418D76D from 063BCA63515234CED3EE69841C79D34E to 75673EACBAAD05460A457F928C356ADE
-21:38:10.657 10 failed  C7575925D3586B1E7005426B6418D76D from 063BCA63515234CED3EE69841C79D34E to 75673EACBAAD05460A457F928C356ADE
-21:38:10.783 10 failed  C7575925D3586B1E7005426B6418D76D from 063BCA63515234CED3EE69841C79D34E to 75673EACBAAD05460A457F928C356ADE
-21:38:10.910 10 failed  C7575925D3586B1E7005426B6418D76D from 063BCA63515234CED3EE69841C79D34E to 75673EACBAAD05460A457F928C356ADE
-21:38:10.912 10 False
+10:44:41.077 10 edge {
+  props {
+    type: "HasElement"
+  }
+  startNodeID {
+    domain: "https://zh.wikipedia.org/wiki/Category:"
+    primaryKeyInDomain: "\345\255\220\347\261\273\345\210\2532"
+  }
+  endNodeID {
+    domain: "https://zh.wikipedia.org/wiki/"
+    primaryKeyInDomain: "\345\255\220\351\241\265\351\235\2422"
+  }
+}
+error {
+  reason: "start node doesn\'t exist"
+}
+
+10:44:41.080 10 start node: 子类别2
+10:44:41.080 10 start node: 子类别2
+10:44:41.082 10 end node: 子页面2
+10:44:41.082 10 end node: 子页面2
+10:46:53.441 10 reading sql files
+10:46:53.441 10 reading sql files
+10:46:53.441 10 reading sql files
+10:47:04.511 10 reading sql files
+10:47:04.511 10 reading sql files
+10:47:04.511 10 reading sql files
+10:47:04.511 10 reading sql files
+10:47:31.721 10 reading sql files
+10:47:31.721 10 reading sql files
+10:47:31.721 10 reading sql files
+10:47:31.721 10 reading sql files
+10:47:31.721 10 reading sql files
+10:48:32.015 10 reading sql files
+10:57:34.153 10 reading sql files
+10:57:34.153 10 reading sql files
+10:59:33.477 10 reading sql files
+10:59:33.477 10 reading sql files
+10:59:33.477 10 reading sql files
+11:00:00.378 10 reading sql files
+11:00:00.378 10 reading sql files
+11:00:00.378 10 reading sql files
+11:00:00.378 10 reading sql files
+11:04:13.677 10 reading sql files
+11:05:09.127 10 reading link sql file
+11:05:09.128 10 close link sql file
+11:05:09.128 10 uploading wiki categorie page link
+11:05:10.144 10 deleted C7575925D3586B1E7005426B6418D76D from 063BCA63515234CED3EE69841C79D34E to 75673EACBAAD05460A457F928C356ADE
+11:13:26.568 10 reading sql files
+11:13:26.568 10 reading sql files
+11:19:47.693 10 reading sql files
+11:19:47.693 10 reading sql files
+11:19:47.693 10 reading sql files
+11:32:23.182 10 reading sql files
+11:32:23.182 10 reading sql files
+11:32:23.182 10 reading sql files
+11:32:23.182 10 reading sql files
+11:32:23.366 10 numOfCreations: 0
+numOfUpdates: 0
+numOfSkips: 0
+
+11:32:23.366 10 numOfCreations: 0
+numOfUpdates: 0
+numOfSkips: 0
+
+11:32:23.366 10 numOfCreations: 0
+numOfUpdates: 0
+numOfSkips: 0
+
+11:32:23.366 10 numOfCreations: 0
+numOfUpdates: 0
+numOfSkips: 0
+
+11:32:23.371 10 edge {
+  props {
+    type: "HasSubset"
+  }
+  startNodeID {
+    domain: "https://zh.wikipedia.org/wiki/Category:"
+    primaryKeyInDomain: "\344\270\273\347\261\273\345\210\2531"
+  }
+  endNodeID {
+    domain: "https://zh.wikipedia.org/wiki/Category:"
+    primaryKeyInDomain: "\345\255\220\347\261\273\345\210\25311"
+  }
+}
+error {
+  reason: "Can\'t create new edge duplicated with edge 40718441 !"
+  errorCode: 206004
+}
+
+11:32:23.371 10 edge {
+  props {
+    type: "HasSubset"
+  }
+  startNodeID {
+    domain: "https://zh.wikipedia.org/wiki/Category:"
+    primaryKeyInDomain: "\344\270\273\347\261\273\345\210\2531"
+  }
+  endNodeID {
+    domain: "https://zh.wikipedia.org/wiki/Category:"
+    primaryKeyInDomain: "\345\255\220\347\261\273\345\210\25311"
+  }
+}
+error {
+  reason: "Can\'t create new edge duplicated with edge 40718441 !"
+  errorCode: 206004
+}
+
+11:32:23.371 10 edge {
+  props {
+    type: "HasSubset"
+  }
+  startNodeID {
+    domain: "https://zh.wikipedia.org/wiki/Category:"
+    primaryKeyInDomain: "\344\270\273\347\261\273\345\210\2531"
+  }
+  endNodeID {
+    domain: "https://zh.wikipedia.org/wiki/Category:"
+    primaryKeyInDomain: "\345\255\220\347\261\273\345\210\25311"
+  }
+}
+error {
+  reason: "Can\'t create new edge duplicated with edge 40718441 !"
+  errorCode: 206004
+}
+
+11:32:23.371 10 edge {
+  props {
+    type: "HasSubset"
+  }
+  startNodeID {
+    domain: "https://zh.wikipedia.org/wiki/Category:"
+    primaryKeyInDomain: "\344\270\273\347\261\273\345\210\2531"
+  }
+  endNodeID {
+    domain: "https://zh.wikipedia.org/wiki/Category:"
+    primaryKeyInDomain: "\345\255\220\347\261\273\345\210\25311"
+  }
+}
+error {
+  reason: "Can\'t create new edge duplicated with edge 40718441 !"
+  errorCode: 206004
+}
+
+11:32:23.376 10 start node: 主类别1
+11:32:23.376 10 start node: 主类别1
+11:32:23.376 10 start node: 主类别1
+11:32:23.376 10 start node: 主类别1
+11:32:23.380 10 end node: 子类别11
+11:32:23.380 10 end node: 子类别11
+11:32:23.380 10 end node: 子类别11
+11:32:23.380 10 end node: 子类别11
+11:35:14.449 10 reading sql files
+11:35:15.479 10 deleted C7575925D3586B1E7005426B6418D76D from 063BCA63515234CED3EE69841C79D34E to 75673EACBAAD05460A457F928C356ADE
+11:35:22.993 10 reading sql files
+11:35:22.993 10 reading sql files
+11:36:58.133 10 reading sql files
+11:36:58.133 10 reading sql files
+11:36:58.133 10 reading sql files
+11:39:59.191 10 reading sql files
+11:39:59.191 10 reading sql files
+11:39:59.191 10 reading sql files
+11:39:59.191 10 reading sql files
+11:40:04.936 10 reading sql files
+11:40:04.936 10 reading sql files
+11:40:04.936 10 reading sql files
+11:40:04.936 10 reading sql files
+11:40:04.936 10 reading sql files
+11:43:10.583 10 reading sql files
+11:43:10.583 10 reading sql files
+11:43:10.583 10 reading sql files
+11:43:10.583 10 reading sql files
+11:43:10.583 10 reading sql files
+11:43:10.583 10 reading sql files
+11:44:24.127 10 reading link sql file
+11:46:00.201 10 reading sql files
+11:46:00.201 10 reading sql files
+11:46:00.201 10 reading sql files
+11:46:00.201 10 reading sql files
+11:46:00.201 10 reading sql files
+11:46:00.201 10 reading sql files
+11:46:00.201 10 reading sql files
+11:46:12.021 10 reading sql files
+11:46:12.021 10 reading sql files
+11:46:12.021 10 reading sql files
+11:46:12.021 10 reading sql files
+11:46:12.021 10 reading sql files
+11:46:12.021 10 reading sql files
+11:46:12.021 10 reading sql files
+11:46:12.021 10 reading sql files
+11:54:42.360 10 reading sql files
+11:54:42.360 10 reading sql files
+11:54:42.360 10 reading sql files
+11:54:42.360 10 reading sql files
+11:54:42.360 10 reading sql files
+11:54:42.360 10 reading sql files
+11:54:42.360 10 reading sql files
+11:54:42.360 10 reading sql files
+11:54:42.360 10 reading sql files
+11:55:50.665 10 reading sql files
+11:55:50.665 10 reading sql files
+11:55:50.665 10 reading sql files
+11:55:50.665 10 reading sql files
+11:55:50.665 10 reading sql files
+11:55:50.665 10 reading sql files
+11:55:50.665 10 reading sql files
+11:55:50.665 10 reading sql files
+11:55:50.665 10 reading sql files
+11:55:50.665 10 reading sql files
+11:56:54.735 10 reading sql files
+11:56:54.735 10 reading sql files
+11:56:54.735 10 reading sql files
+11:56:54.735 10 reading sql files
+11:56:54.735 10 reading sql files
+11:56:54.735 10 reading sql files
+11:56:54.735 10 reading sql files
+11:56:54.735 10 reading sql files
+11:56:54.735 10 reading sql files
+11:56:54.735 10 reading sql files
+11:56:54.735 10 reading sql files
+11:57:17.722 10 reading sql files
+11:57:17.722 10 reading sql files
+11:57:17.722 10 reading sql files
+11:57:17.722 10 reading sql files
+11:57:17.722 10 reading sql files
+11:57:17.722 10 reading sql files
+11:57:17.722 10 reading sql files
+11:57:17.722 10 reading sql files
+11:57:17.722 10 reading sql files
+11:57:17.722 10 reading sql files
+11:57:17.722 10 reading sql files
+11:57:17.722 10 reading sql files
+11:58:27.481 10 reading sql files
+11:58:27.481 10 reading sql files
+11:58:27.481 10 reading sql files
+11:58:27.481 10 reading sql files
+11:58:27.481 10 reading sql files
+11:58:27.481 10 reading sql files
+11:58:27.481 10 reading sql files
+11:58:27.481 10 reading sql files
+11:58:27.481 10 reading sql files
+11:58:27.481 10 reading sql files
+11:58:27.481 10 reading sql files
+11:58:27.481 10 reading sql files
+11:58:27.481 10 reading sql files
+11:59:12.596 10 reading sql files
+11:59:12.596 10 reading sql files
+11:59:12.596 10 reading sql files
+11:59:12.596 10 reading sql files
+11:59:12.596 10 reading sql files
+11:59:12.596 10 reading sql files
+11:59:12.596 10 reading sql files
+11:59:12.596 10 reading sql files
+11:59:12.596 10 reading sql files
+11:59:12.596 10 reading sql files
+11:59:12.596 10 reading sql files
+11:59:12.596 10 reading sql files
+11:59:12.596 10 reading sql files
+11:59:12.596 10 reading sql files
+11:59:19.517 10 reading sql files
+11:59:19.517 10 reading sql files
+11:59:19.517 10 reading sql files
+11:59:19.517 10 reading sql files
+11:59:19.517 10 reading sql files
+11:59:19.517 10 reading sql files
+11:59:19.517 10 reading sql files
+11:59:19.517 10 reading sql files
+11:59:19.517 10 reading sql files
+11:59:19.517 10 reading sql files
+11:59:19.517 10 reading sql files
+11:59:19.517 10 reading sql files
+11:59:19.517 10 reading sql files
+11:59:19.517 10 reading sql files
+11:59:19.517 10 reading sql files
+12:03:59.828 10 reading sql files
+12:03:59.828 10 reading sql files
+12:03:59.828 10 reading sql files
+12:03:59.828 10 reading sql files
+12:03:59.828 10 reading sql files
+12:03:59.828 10 reading sql files
+12:03:59.828 10 reading sql files
+12:03:59.828 10 reading sql files
+12:03:59.828 10 reading sql files
+12:03:59.828 10 reading sql files
+12:03:59.828 10 reading sql files
+12:03:59.828 10 reading sql files
+12:03:59.828 10 reading sql files
+12:03:59.828 10 reading sql files
+12:03:59.828 10 reading sql files
+12:03:59.828 10 reading sql files
+12:04:58.548 10 reading sql files
+12:04:58.548 10 reading sql files
+12:04:58.548 10 reading sql files
+12:04:58.548 10 reading sql files
+12:04:58.548 10 reading sql files
+12:04:58.548 10 reading sql files
+12:04:58.548 10 reading sql files
+12:04:58.548 10 reading sql files
+12:04:58.548 10 reading sql files
+12:04:58.548 10 reading sql files
+12:04:58.548 10 reading sql files
+12:04:58.548 10 reading sql files
+12:04:58.548 10 reading sql files
+12:04:58.548 10 reading sql files
+12:04:58.548 10 reading sql files
+12:04:58.548 10 reading sql files
+12:04:58.548 10 reading sql files
+12:06:11.334 10 reading sql files
+12:06:11.334 10 reading sql files
+12:06:11.334 10 reading sql files
+12:06:11.334 10 reading sql files
+12:06:11.334 10 reading sql files
+12:06:11.334 10 reading sql files
+12:06:11.334 10 reading sql files
+12:06:11.334 10 reading sql files
+12:06:11.334 10 reading sql files
+12:06:11.334 10 reading sql files
+12:06:11.334 10 reading sql files
+12:06:11.334 10 reading sql files
+12:06:11.334 10 reading sql files
+12:06:11.334 10 reading sql files
+12:06:11.334 10 reading sql files
+12:06:11.334 10 reading sql files
+12:06:11.334 10 reading sql files
+12:06:11.334 10 reading sql files
+12:06:47.261 10 reading sql files
+12:06:47.261 10 reading sql files
+12:06:47.261 10 reading sql files
+12:06:47.261 10 reading sql files
+12:06:47.261 10 reading sql files
+12:06:47.261 10 reading sql files
+12:06:47.261 10 reading sql files
+12:06:47.261 10 reading sql files
+12:06:47.261 10 reading sql files
+12:06:47.261 10 reading sql files
+12:06:47.261 10 reading sql files
+12:06:47.261 10 reading sql files
+12:06:47.261 10 reading sql files
+12:06:47.261 10 reading sql files
+12:06:47.261 10 reading sql files
+12:06:47.261 10 reading sql files
+12:06:47.261 10 reading sql files
+12:06:47.261 10 reading sql files
+12:06:47.261 10 reading sql files
+13:36:38.219 10 reading sql files
+13:36:38.219 10 reading sql files
+13:36:38.219 10 reading sql files
+13:36:38.219 10 reading sql files
+13:36:38.219 10 reading sql files
+13:36:38.219 10 reading sql files
+13:36:38.219 10 reading sql files
+13:36:38.219 10 reading sql files
+13:36:38.219 10 reading sql files
+13:36:38.219 10 reading sql files
+13:36:38.219 10 reading sql files
+13:36:38.219 10 reading sql files
+13:36:38.219 10 reading sql files
+13:36:38.219 10 reading sql files
+13:36:38.219 10 reading sql files
+13:36:38.219 10 reading sql files
+13:36:38.219 10 reading sql files
+13:36:38.219 10 reading sql files
+13:36:38.219 10 reading sql files
+13:36:38.219 10 reading sql files
+13:37:23.253 10 reading sql files
+13:37:23.253 10 reading sql files
+13:37:23.253 10 reading sql files
+13:37:23.253 10 reading sql files
+13:37:23.253 10 reading sql files
+13:37:23.253 10 reading sql files
+13:37:23.253 10 reading sql files
+13:37:23.253 10 reading sql files
+13:37:23.253 10 reading sql files
+13:37:23.253 10 reading sql files
+13:37:23.253 10 reading sql files
+13:37:23.253 10 reading sql files
+13:37:23.253 10 reading sql files
+13:37:23.253 10 reading sql files
+13:37:23.253 10 reading sql files
+13:37:23.253 10 reading sql files
+13:37:23.253 10 reading sql files
+13:37:23.253 10 reading sql files
+13:37:23.253 10 reading sql files
+13:37:23.253 10 reading sql files
+13:37:23.253 10 reading sql files
+13:41:01.499 10 reading sql files
+13:41:01.499 10 reading sql files
+13:41:01.499 10 reading sql files
+13:41:01.499 10 reading sql files
+13:41:01.499 10 reading sql files
+13:41:01.499 10 reading sql files
+13:41:01.499 10 reading sql files
+13:41:01.499 10 reading sql files
+13:41:01.499 10 reading sql files
+13:41:01.499 10 reading sql files
+13:41:01.499 10 reading sql files
+13:41:01.499 10 reading sql files
+13:41:01.499 10 reading sql files
+13:41:01.499 10 reading sql files
+13:41:01.499 10 reading sql files
+13:41:01.499 10 reading sql files
+13:41:01.499 10 reading sql files
+13:41:01.499 10 reading sql files
+13:41:01.499 10 reading sql files
+13:41:01.499 10 reading sql files
+13:41:01.499 10 reading sql files
+13:41:01.499 10 reading sql files
+13:45:48.072 10 reading sql files
+13:45:48.072 10 reading sql files
+13:45:48.072 10 reading sql files
+13:45:48.072 10 reading sql files
+13:45:48.072 10 reading sql files
+13:45:48.072 10 reading sql files
+13:45:48.072 10 reading sql files
+13:45:48.072 10 reading sql files
+13:45:48.072 10 reading sql files
+13:45:48.072 10 reading sql files
+13:45:48.072 10 reading sql files
+13:45:48.072 10 reading sql files
+13:45:48.072 10 reading sql files
+13:45:48.072 10 reading sql files
+13:45:48.072 10 reading sql files
+13:45:48.072 10 reading sql files
+13:45:48.072 10 reading sql files
+13:45:48.072 10 reading sql files
+13:45:48.072 10 reading sql files
+13:45:48.072 10 reading sql files
+13:45:48.072 10 reading sql files
+13:45:48.072 10 reading sql files
+13:45:48.072 10 reading sql files
+13:46:52.927 10 reading sql files
+13:46:52.927 10 reading sql files
+13:46:52.927 10 reading sql files
+13:46:52.927 10 reading sql files
+13:46:52.927 10 reading sql files
+13:46:52.927 10 reading sql files
+13:46:52.927 10 reading sql files
+13:46:52.927 10 reading sql files
+13:46:52.927 10 reading sql files
+13:46:52.927 10 reading sql files
+13:46:52.927 10 reading sql files
+13:46:52.927 10 reading sql files
+13:46:52.927 10 reading sql files
+13:46:52.927 10 reading sql files
+13:46:52.927 10 reading sql files
+13:46:52.927 10 reading sql files
+13:46:52.927 10 reading sql files
+13:46:52.927 10 reading sql files
+13:46:52.927 10 reading sql files
+13:46:52.927 10 reading sql files
+13:46:52.927 10 reading sql files
+13:46:52.927 10 reading sql files
+13:46:52.927 10 reading sql files
+13:46:52.927 10 reading sql files
+13:47:22.198 10 reading sql files
+13:47:22.198 10 reading sql files
+13:47:22.198 10 reading sql files
+13:47:22.198 10 reading sql files
+13:47:22.198 10 reading sql files
+13:47:22.198 10 reading sql files
+13:47:22.198 10 reading sql files
+13:47:22.198 10 reading sql files
+13:47:22.198 10 reading sql files
+13:47:22.198 10 reading sql files
+13:47:22.198 10 reading sql files
+13:47:22.198 10 reading sql files
+13:47:22.198 10 reading sql files
+13:47:22.198 10 reading sql files
+13:47:22.198 10 reading sql files
+13:47:22.198 10 reading sql files
+13:47:22.198 10 reading sql files
+13:47:22.198 10 reading sql files
+13:47:22.198 10 reading sql files
+13:47:22.198 10 reading sql files
+13:47:22.198 10 reading sql files
+13:47:22.198 10 reading sql files
+13:47:22.198 10 reading sql files
+13:47:22.198 10 reading sql files
+13:47:22.198 10 reading sql files
+13:47:35.618 10 reading sql files
+13:47:35.618 10 reading sql files
+13:47:35.618 10 reading sql files
+13:47:35.618 10 reading sql files
+13:47:35.618 10 reading sql files
+13:47:35.618 10 reading sql files
+13:47:35.618 10 reading sql files
+13:47:35.618 10 reading sql files
+13:47:35.618 10 reading sql files
+13:47:35.618 10 reading sql files
+13:47:35.618 10 reading sql files
+13:47:35.618 10 reading sql files
+13:47:35.618 10 reading sql files
+13:47:35.618 10 reading sql files
+13:47:35.618 10 reading sql files
+13:47:35.618 10 reading sql files
+13:47:35.618 10 reading sql files
+13:47:35.618 10 reading sql files
+13:47:35.618 10 reading sql files
+13:47:35.618 10 reading sql files
+13:47:35.618 10 reading sql files
+13:47:35.618 10 reading sql files
+13:47:35.618 10 reading sql files
+13:47:35.618 10 reading sql files
+13:47:35.618 10 reading sql files
+13:47:35.618 10 reading sql files
+13:47:42.100 10 reading sql files
+13:47:42.100 10 reading sql files
+13:47:42.100 10 reading sql files
+13:47:42.100 10 reading sql files
+13:47:42.100 10 reading sql files
+13:47:42.100 10 reading sql files
+13:47:42.100 10 reading sql files
+13:47:42.100 10 reading sql files
+13:47:42.100 10 reading sql files
+13:47:42.100 10 reading sql files
+13:47:42.100 10 reading sql files
+13:47:42.100 10 reading sql files
+13:47:42.100 10 reading sql files
+13:47:42.100 10 reading sql files
+13:47:42.100 10 reading sql files
+13:47:42.100 10 reading sql files
+13:47:42.100 10 reading sql files
+13:47:42.100 10 reading sql files
+13:47:42.100 10 reading sql files
+13:47:42.100 10 reading sql files
+13:47:42.100 10 reading sql files
+13:47:42.100 10 reading sql files
+13:47:42.100 10 reading sql files
+13:47:42.100 10 reading sql files
+13:47:42.100 10 reading sql files
+13:47:42.100 10 reading sql files
+13:47:42.100 10 reading sql files
+13:47:45.885 10 reading sql files
+13:47:45.885 10 reading sql files
+13:47:45.885 10 reading sql files
+13:47:45.885 10 reading sql files
+13:47:45.885 10 reading sql files
+13:47:45.885 10 reading sql files
+13:47:45.885 10 reading sql files
+13:47:45.885 10 reading sql files
+13:47:45.885 10 reading sql files
+13:47:45.885 10 reading sql files
+13:47:45.885 10 reading sql files
+13:47:45.885 10 reading sql files
+13:47:45.885 10 reading sql files
+13:47:45.885 10 reading sql files
+13:47:45.885 10 reading sql files
+13:47:45.885 10 reading sql files
+13:47:45.885 10 reading sql files
+13:47:45.885 10 reading sql files
+13:47:45.885 10 reading sql files
+13:47:45.885 10 reading sql files
+13:47:45.885 10 reading sql files
+13:47:45.885 10 reading sql files
+13:47:45.885 10 reading sql files
+13:47:45.885 10 reading sql files
+13:47:45.885 10 reading sql files
+13:47:45.885 10 reading sql files
+13:47:45.885 10 reading sql files
+13:47:45.885 10 reading sql files
+13:47:49.234 10 reading sql files
+13:47:49.234 10 reading sql files
+13:47:49.234 10 reading sql files
+13:47:49.234 10 reading sql files
+13:47:49.234 10 reading sql files
+13:47:49.234 10 reading sql files
+13:47:49.234 10 reading sql files
+13:47:49.234 10 reading sql files
+13:47:49.234 10 reading sql files
+13:47:49.234 10 reading sql files
+13:47:49.234 10 reading sql files
+13:47:49.234 10 reading sql files
+13:47:49.234 10 reading sql files
+13:47:49.234 10 reading sql files
+13:47:49.234 10 reading sql files
+13:47:49.234 10 reading sql files
+13:47:49.234 10 reading sql files
+13:47:49.234 10 reading sql files
+13:47:49.234 10 reading sql files
+13:47:49.234 10 reading sql files
+13:47:49.234 10 reading sql files
+13:47:49.234 10 reading sql files
+13:47:49.234 10 reading sql files
+13:47:49.234 10 reading sql files
+13:47:49.234 10 reading sql files
+13:47:49.234 10 reading sql files
+13:47:49.234 10 reading sql files
+13:47:49.234 10 reading sql files
+13:47:49.234 10 reading sql files
+13:47:54.354 10 reading sql files
+13:47:54.354 10 reading sql files
+13:47:54.354 10 reading sql files
+13:47:54.354 10 reading sql files
+13:47:54.354 10 reading sql files
+13:47:54.354 10 reading sql files
+13:47:54.354 10 reading sql files
+13:47:54.354 10 reading sql files
+13:47:54.354 10 reading sql files
+13:47:54.354 10 reading sql files
+13:47:54.354 10 reading sql files
+13:47:54.354 10 reading sql files
+13:47:54.354 10 reading sql files
+13:47:54.354 10 reading sql files
+13:47:54.354 10 reading sql files
+13:47:54.354 10 reading sql files
+13:47:54.354 10 reading sql files
+13:47:54.354 10 reading sql files
+13:47:54.354 10 reading sql files
+13:47:54.354 10 reading sql files
+13:47:54.354 10 reading sql files
+13:47:54.354 10 reading sql files
+13:47:54.354 10 reading sql files
+13:47:54.354 10 reading sql files
+13:47:54.354 10 reading sql files
+13:47:54.354 10 reading sql files
+13:47:54.354 10 reading sql files
+13:47:54.354 10 reading sql files
+13:47:54.354 10 reading sql files
+13:47:54.354 10 reading sql files
