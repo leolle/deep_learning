@@ -459,6 +459,6 @@ graph_upload_request.edgeAction4Duplication = graphUpload_pb2.Action4Duplication
 
 response = gftIO.upload_graph(graph_upload_request, test_url, test_user_name,
                               test_pwd)
-pk_str = "https://zh.wikipedia.org/wiki/" + '/' + '兴农牛队教练'
+pk_str = "https://zh.wikipedia.org/wiki/Category:" + '/' + '社会哲学'
 pk_md5 = hashlib.md5(pk_str.encode('utf-8')).hexdigest().upper()
 print(pk_md5)

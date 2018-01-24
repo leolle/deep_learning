@@ -13,19 +13,22 @@ import random
 import os, sys
 import hashlib
 from google.protobuf.message import EncodeError
+from google.protobuf.message import DecodeError
 from urllib.error import HTTPError
 from urllib.error import URLError
 from lib.gftTools.gftIO import GSError
 
-batch_size = 20
+batch_size = 100
 # links number
-wiki_category_link_size = 11942698
+# wiki_category_link line size = 1503
+wiki_category_link_size = 8
 n = 4
-chunks = wiki_category_link_size / n
+chunks = int(wiki_category_link_size / n)
 # Maximum number of times to retry before giving up.
 MAX_RETRIES = 10
+NODES_FAIL_MAX_RETRIES = 3
 # Always retry when these exceptions are raised.
-RETRIABLE_EXCEPTIONS = (EncodeError, HTTPError)
+RETRIABLE_EXCEPTIONS = (EncodeError, DecodeError, HTTPError)
 # Always retry when an apiclient.errors.HttpError with one of these status
 # codes is raised.
 RETRIABLE_STATUS_CODES = [500, 502, 503, 504, 111]
@@ -117,6 +120,7 @@ def delete_edge(dict_re_match_object):
                         res = gs_call.delete_edge(edge_md5, False)
                     except GSError as e:
                         # error = 'edge not existed'
+                        res = 'failed'
                         ylog.debug('failed  %s from %s to %s' %
                                    (edge_md5, start_node_hash, end_node_hash))
                     except HTTPError as e:
@@ -125,7 +129,7 @@ def delete_edge(dict_re_match_object):
                                 e.code, e.reason)
                         else:
                             raise
-                    finally:
+                    else:
                         res = 'success'
                         ylog.debug('deleted %s from %s to %s' %
                                    (edge_md5, start_node_hash, end_node_hash))
@@ -142,7 +146,7 @@ def delete_edge(dict_re_match_object):
                         print('Sleeping %f seconds and then retrying...' %
                               sleep_seconds)
                         time.sleep(sleep_seconds)
-                    else:
+                    if res == 'success':
                         uploaded_number += 1
                         ylog.debug('deleted %s from %s to %s' %
                                    (edge_md5, start_node_hash, end_node_hash))
@@ -258,7 +262,9 @@ def upload_page_node(dict_re_match_object):
     """
     res = None
     error = None
+    re_upload_error = None
     retry = 0
+    nodes_fail_retry = 0
     uploaded_number = 0
     while res is None:
         try:
@@ -308,6 +314,13 @@ def upload_page_node(dict_re_match_object):
                 raise
         except RETRIABLE_EXCEPTIONS as e:
             error = 'A retriable error occurred: %s' % e
+        if re_upload_error is not None:
+            print(re_upload_error)
+            nodes_fail_retry += 1
+            res = None
+            if nodes_fail_retry > NODES_FAIL_MAX_RETRIES:
+                ylog.debug(res)
+                res = "continue"
         if error is not None:
             print(error)
             retry += 1
@@ -320,20 +333,19 @@ def upload_page_node(dict_re_match_object):
             print('Sleeping %f seconds and then retrying...' % sleep_seconds)
             time.sleep(sleep_seconds)
     # jump out while response is None:
+    # jump out while response is None:
     try:
         if res.nodeUpdateResultStatistics:
             ylog.debug(res.nodeUpdateResultStatistics)
             uploaded_number = res.nodeUpdateResultStatistics.numOfCreations + res.nodeUpdateResultStatistics.numOfUpdates + res.nodeUpdateResultStatistics.numOfSkips
+        if res.uploadedNodes:
+            for updated in res.uploadedNodes:
+                ylog.debug("uploaded node GID: %s" % updated.gid)
         if res.failedNode:
             for err in res.failedNode:
                 ylog.debug(err)
-                # ylog.debug(
-                #     "start node: %s" % err.edge.startNodeID.primaryKeyInDomain)
-                # ylog.debug(
-                #     "end node: %s" % err.edge.endNodeID.primaryKeyInDomain)
     except:
         pass
-
     return uploaded_number
 
 
@@ -343,65 +355,137 @@ def upload_cat_node(dict_re_match_object):
     Keyword Arguments:
     re_match_object -- re object
     """
-    graph_upload_request = graphUpload_pb2.GraphUploadRequest()
-    # iterate nodes batch
-    for index, value in dict_re_match_object.items():
-        if value is not None:
-            node = graph_upload_request.graph.nodes.add()
-            node.props.type = "OSet"
-            title = dict_re_match_object.get(index).group(2)[1:-1]
-            p0 = node.props.props.entries.add()
-            p0.key = "_name"
-            p0.value = title
-            p1 = node.props.props.entries.add()
-            p1.key = "url"
-            p1.value = "https://zh.wikipedia.org/wiki/Category:" + title
-            p2 = node.props.props.entries.add()
-            p2.key = "_s_import_source"
-            p2.value = "wiki"
-            p3 = node.props.props.entries.add()
-            p3.key = "_ownerid"
-            p3.value = "GFT"
+    res = None
+    error = None
+    re_upload_error = None
+    retry = 0
+    nodes_fail_retry = 0
+    uploaded_number = 0
+    while res is None:
+        try:
+            graph_upload_request = graphUpload_pb2.GraphUploadRequest()
+            # iterate nodes batch
+            for index, value in dict_re_match_object.items():
+                if value is not None:
+                    item = dict_re_match_object.get(index)
+                    node = graph_upload_request.graph.nodes.add()
+                    title = item.group(2)[1:-1]
+                    node.props.type = "Oset"
+                    p0 = node.props.props.entries.add()
+                    p0.key = "_name"
+                    p0.value = title
+                    p1 = node.props.props.entries.add()
+                    p1.key = "url"
+                    p1.value = "https://zh.wikipedia.org/wiki/Category:" + title
+                    p2 = node.props.props.entries.add()
+                    p2.key = "_s_import_source"
+                    p2.value = "wiki"
+                    p3 = node.props.props.entries.add()
+                    p3.key = "_ownerid"
+                    p3.value = "GFT"
 
-            node.businessID.domain = "https://zh.wikipedia.org/wiki/Category:"
-            node.businessID.primaryKeyInDomain = title
+                    node.businessID.domain = "https://zh.wikipedia.org/wiki/Category:"
+                    node.businessID.primaryKeyInDomain = title
 
-            node.names.chinese = title
-    # other information of the upload request
-    graph_upload_request.uploadTag = "UploadWikiCategoryNodes"
-    graph_upload_request.nodeAction4Duplication = graphUpload_pb2.Action4Duplication.Value(
-        'UPDATE')
-    graph_upload_request.edgeAction4Duplication = graphUpload_pb2.Action4Duplication.Value(
-        'UPDATE')
+                    node.names.chinese = title
+            # other information of the upload request
+            graph_upload_request.uploadTag = "UploadWikiCatNodes"
+            graph_upload_request.nodeAction4Duplication = graphUpload_pb2.Action4Duplication.Value(
+                'UPDATE')
+            graph_upload_request.edgeAction4Duplication = graphUpload_pb2.Action4Duplication.Value(
+                'UPDATE')
 
-    response = gs_call.upload_graph(graph_upload_request)
+            res = gs_call.upload_graph(graph_upload_request)
+            # if response is not None:
+            #     print("successfully uploaded")
+        except HTTPError as e:
+            if e.code in RETRIABLE_STATUS_CODES:
+                error = 'A retriable HTTP error %d occurred:\n%s' % (e.code,
+                                                                     e.reason)
+            else:
+                raise
+        except RETRIABLE_EXCEPTIONS as e:
+            error = 'A retriable error occurred: %s' % e
+        try:
+            if res.failedNodes:
+                re_upload_error = "some nodes failed to upload %s" % res.failedNodeds
+        except:
+            pass
+        if re_upload_error is not None:
+            print(re_upload_error)
+            nodes_fail_retry += 1
+            res = None
+            if nodes_fail_retry > NODES_FAIL_MAX_RETRIES:
+                ylog.debug(res)
+                res = "continue"
 
-    return response
+        if error is not None:
+            print(error)
+            retry += 1
+            res = None
+            if retry > MAX_RETRIES:
+                ylog.debug(res)
+                exit("no loger attempting to retry.")
+            max_sleep = 2**retry
+            sleep_seconds = random.random() * max_sleep
+            print('Sleeping %f seconds and then retrying...' % sleep_seconds)
+            time.sleep(sleep_seconds)
+    # ylog.debug(res)
+    # jump out while response is None:
+    try:
+        if res.nodeUpdateResultStatistics:
+            ylog.debug(res.nodeUpdateResultStatistics)
+            uploaded_number = res.nodeUpdateResultStatistics.numOfCreations + res.nodeUpdateResultStatistics.numOfUpdates + res.nodeUpdateResultStatistics.numOfSkips
+        if res.uploadedNodes:
+            for updated in res.uploadedNodes:
+                ylog.debug("uploaded node GID: %s" % updated.gid)
+        if res.failedNode:
+            for err in res.failedNode:
+                ylog.debug(err)
+    except:
+        pass
+
+    return uploaded_number
 
 
-def batch_upload(re, source, source_len, batch_size, func):
+def batch_upload(re, file_path, batch_size, func, start, end):
     """batch upload categories or page
     Keyword Arguments:
     re         -- regular expression
-    source     -- str read from file
-    source_len -- the size of items
+    source     -- file path
     batch_size --
     func       -- upload function
+    start      -- start position
+    end        -- end position
+
     """
     uploaded_number = 0
     try:
-        last_span = re.search(source).span()[0]
-        for i in tqdm(range(0, source_len, batch_size)):
-            while os.path.isfile('pause'):
-                time.sleep(100)
-                print("pause for 100 second")
-            re_batch = {}
-            for j in range(batch_size):
-                re_batch[j] = re.search(source, last_span)
-                if re_batch[j] is not None:
-                    last_span = re_batch[j].span()[1]
-            uploaded_counter = func(re_batch)
-            uploaded_number += uploaded_counter
+        with open(file_path, 'r') as f:
+            for i, line in enumerate(tqdm(f)):
+                if i >= start and i <= end:
+                    print("line #: %s" % i)
+                    try:
+                        last_span = re.search(line).span()[0]
+                    except AttributeError:
+                        continue
+                    line_size = len(re.findall(line))
+                    for i in tqdm(range(0, line_size, batch_size)):
+                        # pause if find a file naed pause at the currend dir
+                        while os.path.isfile('pause'):
+                            time.sleep(100)
+                            print("pause for 100 second")
+                        re_batch = {}
+                        for j in range(batch_size):
+                            re_batch[j] = re.search(line, last_span)
+                            if re_batch[j] is not None:
+                                last_span = re_batch[j].span()[1]
+                        uploaded_counter = func(re_batch)
+                        uploaded_number += uploaded_counter
+
+                elif i > end:
+                    break
+
     except KeyboardInterrupt:
         print("uploaded number: %s" % uploaded_number)
         try:
@@ -413,60 +497,54 @@ def batch_upload(re, source, source_len, batch_size, func):
 
 if __name__ == '__main__':
     user_path = os.path.expanduser("~")
-    # category_path = user_path + "/share/deep_learning/data/zhwiki_cat_pg_lk/zhwiki-latest-category.zhs.sql"
-    # # open category sql file
-    # category_sql = open(category_path, 'r')
-    # category = category_sql.read()
-    # category_sql.close()
-    # wiki_category_re = re.compile(
-    #     "\(([0-9]+),('[^,]+'),([0-9]+),([0-9]+),([0-9]+)\)")
-    # wiki_category = wiki_category_re.findall(category)
-    # print("uploading wiki categories")
-    # uploaded_number = batch_upload(wiki_category_re, category,
-    #                                len(wiki_category), batch_size,
-    #                                upload_cat_node)
-    # print("uploaded number: %s, actual number in wiki: %s" %
-    #       (uploaded_number, len(wiki_category)))
-    # del category
-    # del wiki_category
+    category_path = "./data/zhwiki-latest-category.zhs.sql"
+    # category_path = "./zhwiki-latest-category.zhs.sql"
+    # open category sql file
+    wiki_category_re = re.compile(
+        "\(([0-9]+),('[^,]+'),([0-9]+),([0-9]+),([0-9]+)\)")
+    print("uploading wiki categories")
+    uploaded_number = batch_upload(
+        wiki_category_re,
+        category_path,
+        batch_size,
+        upload_cat_node,
+        start=0,
+        end=1000000000)
+    print("uploaded number: %s" % (uploaded_number))
 
-    # # open page sql file
-    # page_path = user_path + "/share/deep_learning/data/zhwiki_cat_pg_lk/zhwiki-latest-page.zhs.sql"
-    # page_sql = open(page_path, 'r')
-    # page = page_sql.read()
-    # page_sql.close()
-    # wiki_page_re = re.compile(
-    #     "\(([0-9]+),([0-9]+),('[^,]+'),('[^,]+|'),([0-9]+),([0-9]+),([0-9]+),0.([0-9]+),('[^,]+'),('[^,]+'|NULL),([0-9]+),([0-9]+),('[^,]+'),([^,]+)\)"
-    # )
-    # wiki_page = wiki_page_re.findall(page)
-    # print("uploading wiki page")
-    # uploaded_number = batch_upload(wiki_page_re, page,
-    #                                len(wiki_page), batch_size, upload_page_node)
-    # print("uploaded number: %s, actual number in wiki: %s" % (uploaded_number,
-    #                                                           len(wiki_page)))
-    # del wiki_page
-    # del page
+    # open page sql file
+    page_path = "./data/zhwiki-latest-page.zhs.sql"
+    # page_path = "./zhwiki-latest-page.zhs.sql"
+    wiki_page_re = re.compile(
+        "\(([0-9]+),([0-9]+),('[^,]+'),('[^,]+|'),([0-9]+),([0-9]+),([0-9]+),0.([0-9]+),('[^,]+'),('[^,]+'|NULL),([0-9]+),([0-9]+),('[^,]+'),([^,]+)\)"
+    )
+    print("uploading wiki page")
+    uploaded_number = batch_upload(
+        wiki_page_re,
+        page_path,
+        batch_size,
+        upload_page_node,
+        start=0,
+        end=100000)
+    print("uploaded number: %s" % (uploaded_number))
 
     # # upload edge
 
-    chunk_num = sys.argv[1]
-    start = chunk_num * chunks
-    end = (chunk_num + 1) * chunks
+    # chunk_num = int(sys.argv[1])
+    # start = chunk_num * chunks
+    # end = (chunk_num + 1) * chunks
     category_link_path = './data/zhwiki-latest-categorylinks.zhs.sql'
     wiki_category_link_re = re.compile(
         "\(([0-9]+),('[^,]+'),('[^']+'),('\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}'),('[^']*'),('[^,]+'),('[^,]+')\)"
     )
 
     ylog.debug('reading link sql file')
-    category_link_sql = open(category_link_path, 'r')
-    category_link = category_link_sql.read()
-    wiki_category_link = wiki_category_link_re.findall(category_link)
-    ylog.debug('close link sql file')
-    category_link_sql.close()
-    category_link_size = len(wiki_category_link)
-    del wiki_category_link
     ylog.debug("uploading wiki categorie page link")
-    uploaded_number = batch_upload(wiki_category_link_re, category_link,
-                                   category_link_size, batch_size, delete_edge)
-    print("uploaded number: %s, actual number in wiki: %s" %
-          (uploaded_number, category_link_size))
+    uploaded_number = batch_upload(
+        wiki_category_link_re,
+        category_link_path,
+        batch_size,
+        upload_edge,
+        start=0,
+        end=1000000000)
+    print("uploaded number: %s" % (uploaded_number))

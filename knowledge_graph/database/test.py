@@ -25,6 +25,7 @@ test_url = 'http://192.168.1.166:9080'
 prod_url = 'http://q.gftchina.com:13567/vqservice/vq/'
 test_user_name = 'wuwei'
 test_pwd = 'gft'
+gs_call = gftIO.GSCall(test_url, test_user_name, test_pwd)
 try:
     graph = gftIO.get_graph_from_neo4j(
         '392482970E904D11190D208B7C22874A',
@@ -36,7 +37,7 @@ except:
 
 # read sql file
 ylog.debug('reading sql files')
-category_path = "./zhwiki-latest-category.zhs.sql"
+category_path = "/home/weiwu/share/deep_learning/data/zhwiki_cat_pg_lk/zhwiki-latest-category.zhs.sql"
 # category_link_path = './zhwiki-latest-categorylinks.zhs.sql'
 category_link_path = '/home/weiwu/share/deep_learning/data/zhwiki_cat_pg_lk/zhwiki-latest-categorylinks.zhs.sql'
 page_path = "./zhwiki-latest-page.zhs.sql"
@@ -62,9 +63,12 @@ wiki_page_re = re.compile(
 wiki_page = wiki_page_re.findall(page)
 
 wiki_category_link = wiki_category_link_re.findall(category_link)
+# In [344]: len(wiki_category)
+# Out[348]: 381500
+# lines 68
 # In [294]: len(wiki_category_link)
 # Out[296]: 11942698
-
+# page lines 7
 print("uploading wiki categories")
 uploaded_number = batch_upload(wiki_category_re, category,
                                len(wiki_category), batch_size, upload_cat_node)
@@ -238,6 +242,7 @@ pk_str = "|".join([
 ])
 pk_md5 = hashlib.md5(pk_str.encode('utf-8')).hexdigest().upper()
 print(pk_md5)
+
 # The first node
 node = graph_upload_request.graph.nodes.add()
 
@@ -307,5 +312,4 @@ graph_upload_request.nodeAction4Duplication = graphUpload_pb2.Action4Duplication
 graph_upload_request.edgeAction4Duplication = graphUpload_pb2.Action4Duplication.Value(
     'UPDATE')
 
-response1 = gftIO.upload_graph(graph_upload_request, test_url, test_user_name,
-                               test_pwd)
+response2 = gs_call.upload_graph(graph_upload_request)
