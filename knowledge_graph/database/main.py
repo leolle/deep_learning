@@ -14,11 +14,11 @@ from urllib.error import HTTPError
 from lib.gftTools.gftIO import GSError
 
 ylog.set_level(logging.DEBUG)
-ylog.console_on()
+# ylog.console_on()
 ylog.filelog_on("wiki_upload")
 batch_size = 20
 # Maximum number of times to retry before giving up.
-MAX_RETRIES = 5
+MAX_RETRIES = 10
 # Always retry when these exceptions are raised.
 RETRIABLE_EXCEPTIONS = (EncodeError)
 # Always retry when an apiclient.errors.HttpError with one of these status
@@ -55,6 +55,7 @@ def delete_edge(dict_re_match_object):
         if value is not None:
             item = dict_re_match_object.get(index)
             edge_type = item.group(7)[1:-1]
+            del_edge_type = None
             if edge_type == 'page':
                 page_title = item.group(3)[1:-1]
                 cat_title = item.group(2)[1:-1]
@@ -139,7 +140,7 @@ def delete_edge(dict_re_match_object):
                         sleep_seconds = random.random() * max_sleep
                         print('Sleeping %f seconds and then retrying...' %
                               sleep_seconds)
-                        time.sleep(0.1)
+                        time.sleep(sleep_seconds)
                     else:
                         uploaded_number += 1
                         ylog.debug('deleted %s from %s to %s' %
