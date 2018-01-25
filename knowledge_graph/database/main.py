@@ -23,7 +23,7 @@ from pymongo import MongoClient
 client = MongoClient('mongodb://localhost:27017/')
 db = client['wiki']
 collection = db.zhwiki
-batch_size = 100
+batch_size = 20
 # links number
 # wiki_category_link line size = 1503
 wiki_category_link_size = 8
@@ -328,6 +328,11 @@ def upload_page_node(dict_re_match_object):
                 raise
         except RETRIABLE_EXCEPTIONS as e:
             error = 'A retriable error occurred: %s' % e
+        try:
+            if res.failedNodes:
+                re_upload_error = "some nodes failed to upload %s" % res.failedNodeds
+        except:
+            pass
         if re_upload_error is not None:
             print(re_upload_error)
             nodes_fail_retry += 1
@@ -357,9 +362,10 @@ def upload_page_node(dict_re_match_object):
         if res.uploadedNodes:
             for updated in res.uploadedNodes:
                 ylog.debug("uploaded node GID: %s" % updated.gid)
-        if res.failedNode:
-            for err in res.failedNode:
-                ylog.debug(err)
+        if res.failedNodes:
+            for err in res.failedNodes:
+                if err.error.errorCode != 202001:
+                    ylog.debug(err.error)
     except:
         pass
     return uploaded_number
@@ -412,8 +418,10 @@ def upload_cat_node(dict_re_match_object):
                 'UPDATE')
 
             res = gs_call.upload_graph(graph_upload_request)
+            # ylog.debug(res)
             # if response is not None:
             #     print("successfully uploaded")
+
         except HTTPError as e:
             if e.code in RETRIABLE_STATUS_CODES:
                 error = 'A retriable HTTP error %d occurred:\n%s' % (e.code,
@@ -457,9 +465,11 @@ def upload_cat_node(dict_re_match_object):
         if res.uploadedNodes:
             for updated in res.uploadedNodes:
                 ylog.debug("uploaded node GID: %s" % updated.gid)
-        if res.failedNode:
-            for err in res.failedNode:
-                ylog.debug(err)
+        if res.failedNodes:
+            for err in res.failedNodes:
+                if err.error.errorCode != 202001:
+                    ylog.info(err.error)
+                    ylog.debug(err.error)
     except:
         pass
 
@@ -480,9 +490,11 @@ def batch_upload(re, file_path, batch_size, func, start, end):
     uploaded_number = 0
     try:
         with open(file_path, 'r') as f:
+            total_line_size = len(f.readlines())
+        with open(file_path, 'r') as f:
             for i, line in enumerate(tqdm(f)):
                 if i >= start and i <= end:
-                    print("line #: %s" % i)
+                    print("line #: %s/%s" % (i, total_line_size))
                     try:
                         last_span = re.search(line).span()[0]
                     except AttributeError:
@@ -514,6 +526,14 @@ def batch_upload(re, file_path, batch_size, func, start, end):
 
 
 if __name__ == '__main__':
+    try:
+        start_cat = int(sys.argv[1])
+        start_page = int(sys.argv[2])
+        start_edge = int(sys.argv[3])
+    except:
+        start_cat = 0
+        start_page = 0
+        start_edge = 0
     user_path = os.path.expanduser("~")
     category_path = "./data/zhwiki-latest-category.zhs.sql"
     # open category sql file
@@ -525,8 +545,8 @@ if __name__ == '__main__':
         category_path,
         batch_size,
         upload_cat_node,
-        start=0,
-        end=1000000000)
+        start=start_cat,
+        end=68)
     print("uploaded number: %s" % (uploaded_number))
 
     # open page sql file
@@ -541,8 +561,8 @@ if __name__ == '__main__':
         page_path,
         batch_size,
         upload_page_node,
-        start=0,
-        end=100000)
+        start=start_page,
+        end=660)
     print("uploaded number: %s" % (uploaded_number))
 
     # # upload edge
@@ -562,6 +582,6 @@ if __name__ == '__main__':
         category_link_path,
         batch_size,
         upload_edge,
-        start=0,
+        start=start_edge,
         end=1000000000)
     print("uploaded number: %s" % (uploaded_number))
