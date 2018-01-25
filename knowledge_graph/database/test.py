@@ -4,7 +4,6 @@ import numpy as np
 from datetime import datetime
 import re
 from lib.gftTools import gftIO
-import skill_pb2
 import graphUpload_pb2
 from tqdm import tqdm
 import time
@@ -47,7 +46,7 @@ wiki_category_re = re.compile(
 wiki_category = wiki_category_re.findall(category)
 
 # page
-page_path = "./zhwiki-latest-page.zhs.sql"
+page_path = "/home/weiwu/share/deep_learning/data/zhwiki_cat_pg_lk/zhwiki-latest-page.zhs.sql"
 page_sql = open(page_path, 'r')
 page = page_sql.read()
 page_sql.close()
@@ -232,6 +231,7 @@ for i in range(category_link_size):
 # pk_md5 = hashlib.md5(pk_str.encode('utf-8')).hexdigest().upper()
 # print(pk_md5)
 
+
 # # delete edge
 # # s"${businessHashOfStartNode}|${businessHashOfEndNode}|${edgeType}|${edgeSubType.getOrElse("")}|${edgeInfo.getSource}|${edgeInfo.getTarget}"
 # start_node_hash = "A688728DC925BF4CA5F63EC37E208DB4"
@@ -246,3 +246,8 @@ for i in range(category_link_size):
 # ])
 # pk_md5 = hashlib.md5(pk_str.encode('utf-8')).hexdigest().upper()
 # print(pk_md5)
+def print_line(file_path):
+    with open(file_path, 'r') as f:
+        for i, line in enumerate(f):
+            if len(line) > 100:
+                print('line %s, size %s' % (i, len(line)))

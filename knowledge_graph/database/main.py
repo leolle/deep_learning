@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-import logging
 from ylib import ylog
 import re
 from lib.gftTools import gftIO
@@ -11,9 +10,6 @@ from urllib.error import HTTPError
 from urllib.error import URLError
 from pymongo import MongoClient
 from graph_upload import batch_upload, upload_edge, upload_cat_node, upload_page_node, delete_edge
-ylog.set_level(logging.DEBUG)
-# ylog.console_on()
-ylog.filelog_on("wiki_upload")
 client = MongoClient('mongodb://localhost:27017/')
 db = client['wiki']
 collection = db.zhwiki
@@ -48,6 +44,10 @@ except:
     pass
 
 if __name__ == '__main__':
+    import logging
+    ylog.set_level(logging.DEBUG)
+    # ylog.console_on()
+    ylog.filelog_on("wiki_upload")
     try:
         start_cat = int(sys.argv[1])
         start_page = int(sys.argv[2])
