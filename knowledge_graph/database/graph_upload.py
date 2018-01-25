@@ -12,29 +12,42 @@ import hashlib
 from google.protobuf.message import EncodeError
 from urllib.error import HTTPError
 from lib.gftTools.gftIO import GSError
+from pymongo import MongoClient
+from google.protobuf.message import DecodeError
 
 # ylog.set_level(logging.DEBUG)
 # ylog.console_on()
 # ylog.filelog_on("wiki_upload")
 # ylog.debug("test")
 
+client = MongoClient('mongodb://localhost:27017/')
+db = client['wiki']
+collection = db.zhwiki
 batch_size = 20
+# links number
+# wiki_category_link line size = 1503
+wiki_category_link_size = 8
+n = 4
+chunks = int(wiki_category_link_size / n)
 # Maximum number of times to retry before giving up.
 MAX_RETRIES = 10
+NODES_FAIL_MAX_RETRIES = 3
 # Always retry when these exceptions are raised.
-RETRIABLE_EXCEPTIONS = (EncodeError)
+RETRIABLE_EXCEPTIONS = (EncodeError, DecodeError, HTTPError)
 # Always retry when an apiclient.errors.HttpError with one of these status
 # codes is raised.
-RETRIABLE_STATUS_CODES = [500, 502, 503, 504]
+RETRIABLE_STATUS_CODES = [500, 502, 503, 504, 111]
 IGNORE_CATEGORIES = [
     '使用Catnav的页面', '缺少Wikidata链接的维基共享资源分类', '隐藏分类', '追踪分类', '维基百科特殊页面',
     '维基百科分类', '维基百科维护', '无需细分的分类', '不要删除的分类', '母分类', '全部重定向分类', '特殊条目'
 ]
+
 # test fetch graph
 test_url = 'http://192.168.1.166:9080'
-prod_url = 'http://q.gftchina.com:13567/vqservice/vq/'
+# prod_url = 'http://q.gftchina.com:13567/vqservice/vq/'
 test_user_name = 'wuwei'
 test_pwd = 'gft'
+gs_call = gftIO.GSCall(test_url, test_user_name, test_pwd)
 gs_call = gftIO.GSCall(test_url, test_user_name, test_pwd)
 
 
@@ -42,11 +55,64 @@ def test_get_skill_graph(args):
     try:
         graph = gftIO.get_graph_from_neo4j(
             '392482970E904D11190D208B7C22874A',
-            server_url=prod_url,
+            server_url=test_url,
             user_name=test_user_name,
             pwd=test_pwd)
     except:
         pass
+
+
+class FileIterator(object):
+
+    def __init__(self, path, rex):
+        self._fw = open(path, 'r')
+        self.string = self._fw.read()
+        self.rex = rex
+        self.last_span = self.search(self._fw).span()[0]
+
+    def read(self):
+        #        matched = self.rex.search(self.string,self.last_span)
+        matched = re.finditer(self.rex, self.string)
+        # self.last_span = matched.span()[1]
+        yield matched
+
+    def readlines(self):
+        """ Line iterator """
+
+        for line in self._fw:
+            yield line
+
+    def readblocks(self, block_size):
+        """ Block iterator """
+
+        while True:
+            block = self._fw.read(block_size)
+            if block == '':
+                break
+            yield block
+
+    def display(self):
+        """
+        Keyword Arguments:
+        self --
+        """
+        print(self)
+
+    # def __iter__(self):
+    #     with open(self.path, 'r') as f:
+    #         for line in f:
+    #             yield line
+    def __iter__(self):
+        return self
+
+    def __next__(self):
+        """
+        Keyword Arguments:
+        self --
+        """
+        with open(self.path, 'r') as f:
+            for line in f:
+                return line
 
 
 def delete_edge(dict_re_match_object):
@@ -121,6 +187,7 @@ def delete_edge(dict_re_match_object):
                         res = gs_call.delete_edge(edge_md5, False)
                     except GSError as e:
                         # error = 'edge not existed'
+                        res = 'failed'
                         ylog.debug('failed  %s from %s to %s' %
                                    (edge_md5, start_node_hash, end_node_hash))
                     except HTTPError as e:
@@ -129,7 +196,7 @@ def delete_edge(dict_re_match_object):
                                 e.code, e.reason)
                         else:
                             raise
-                    finally:
+                    else:
                         res = 'success'
                         ylog.debug('deleted %s from %s to %s' %
                                    (edge_md5, start_node_hash, end_node_hash))
@@ -146,7 +213,7 @@ def delete_edge(dict_re_match_object):
                         print('Sleeping %f seconds and then retrying...' %
                               sleep_seconds)
                         time.sleep(sleep_seconds)
-                    else:
+                    if res == 'success':
                         uploaded_number += 1
                         ylog.debug('deleted %s from %s to %s' %
                                    (edge_md5, start_node_hash, end_node_hash))
@@ -239,7 +306,9 @@ def upload_edge(dict_re_match_object):
     try:
         if res.edgeUpdateResultStatistics:
             ylog.debug(res.edgeUpdateResultStatistics)
-            uploaded_number = res.edgeUpdateResultStatistics.numOfCreations + res.edgeUpdateResultStatistics.numOfUpdates + res.edgeUpdateResultStatistics.numOfSkips
+            uploaded_number = res.edgeUpdateResultStatistics.numOfCreations + \
+                res.edgeUpdateResultStatistics.numOfUpdates + \
+                res.edgeUpdateResultStatistics.numOfSkips
         if res.failedEdges:
             for err in res.failedEdges:
                 ylog.debug(err)
@@ -262,7 +331,9 @@ def upload_page_node(dict_re_match_object):
     """
     res = None
     error = None
+    re_upload_error = None
     retry = 0
+    nodes_fail_retry = 0
     uploaded_number = 0
     while res is None:
         try:
@@ -273,6 +344,12 @@ def upload_page_node(dict_re_match_object):
                     item = dict_re_match_object.get(index)
                     node = graph_upload_request.graph.nodes.add()
                     title = item.group(3)[1:-1]
+                    try:
+                        article = collection.find_one({"title": title})
+                        page_content = article['text']
+                        node.binaryContent = bytes(page_content, "utf-8")
+                    except:
+                        pass
                     node.props.type = "readonlyDoc"
                     p0 = node.props.props.entries.add()
                     p0.key = "_sys_subtype"
@@ -292,8 +369,8 @@ def upload_page_node(dict_re_match_object):
 
                     node.businessID.domain = "https://zh.wikipedia.org/wiki/"
                     node.businessID.primaryKeyInDomain = title
-
                     node.names.chinese = title
+
             # other information of the upload request
             graph_upload_request.uploadTag = "UploadWikiPageNodes"
             graph_upload_request.nodeAction4Duplication = graphUpload_pb2.Action4Duplication.Value(
@@ -312,6 +389,18 @@ def upload_page_node(dict_re_match_object):
                 raise
         except RETRIABLE_EXCEPTIONS as e:
             error = 'A retriable error occurred: %s' % e
+        try:
+            if res.failedNodes:
+                re_upload_error = "some nodes failed to upload %s" % res.failedNodeds
+        except:
+            pass
+        if re_upload_error is not None:
+            print(re_upload_error)
+            nodes_fail_retry += 1
+            res = None
+            if nodes_fail_retry > NODES_FAIL_MAX_RETRIES:
+                ylog.debug(res)
+                res = "continue"
         if error is not None:
             print(error)
             retry += 1
@@ -324,20 +413,22 @@ def upload_page_node(dict_re_match_object):
             print('Sleeping %f seconds and then retrying...' % sleep_seconds)
             time.sleep(sleep_seconds)
     # jump out while response is None:
+    # jump out while response is None:
     try:
         if res.nodeUpdateResultStatistics:
             ylog.debug(res.nodeUpdateResultStatistics)
-            uploaded_number = res.nodeUpdateResultStatistics.numOfCreations + res.nodeUpdateResultStatistics.numOfUpdates + res.nodeUpdateResultStatistics.numOfSkips
-        if res.failedNode:
-            for err in res.failedNode:
-                ylog.debug(err)
-                # ylog.debug(
-                #     "start node: %s" % err.edge.startNodeID.primaryKeyInDomain)
-                # ylog.debug(
-                #     "end node: %s" % err.edge.endNodeID.primaryKeyInDomain)
+            uploaded_number = res.nodeUpdateResultStatistics.numOfCreations + \
+                res.nodeUpdateResultStatistics.numOfUpdates + \
+                res.nodeUpdateResultStatistics.numOfSkips
+        if res.uploadedNodes:
+            for updated in res.uploadedNodes:
+                ylog.debug("uploaded node GID: %s" % updated.gid)
+        if res.failedNodes:
+            for err in res.failedNodes:
+                if err.error.errorCode != 202001:
+                    ylog.debug(err.error)
     except:
         pass
-
     return uploaded_number
 
 
@@ -347,65 +438,145 @@ def upload_cat_node(dict_re_match_object):
     Keyword Arguments:
     re_match_object -- re object
     """
-    graph_upload_request = graphUpload_pb2.GraphUploadRequest()
-    # iterate nodes batch
-    for index, value in dict_re_match_object.items():
-        if value is not None:
-            node = graph_upload_request.graph.nodes.add()
-            node.props.type = "OSet"
-            title = dict_re_match_object.get(index).group(2)[1:-1]
-            p0 = node.props.props.entries.add()
-            p0.key = "_name"
-            p0.value = title
-            p1 = node.props.props.entries.add()
-            p1.key = "url"
-            p1.value = "https://zh.wikipedia.org/wiki/Category:" + title
-            p2 = node.props.props.entries.add()
-            p2.key = "_s_import_source"
-            p2.value = "wiki"
-            p3 = node.props.props.entries.add()
-            p3.key = "_ownerid"
-            p3.value = "GFT"
+    res = None
+    error = None
+    re_upload_error = None
+    retry = 0
+    nodes_fail_retry = 0
+    uploaded_number = 0
+    while res is None:
+        try:
+            graph_upload_request = graphUpload_pb2.GraphUploadRequest()
+            # iterate nodes batch
+            for index, value in dict_re_match_object.items():
+                if value is not None:
+                    item = dict_re_match_object.get(index)
+                    node = graph_upload_request.graph.nodes.add()
+                    title = item.group(2)[1:-1]
+                    node.props.type = "Oset"
+                    p0 = node.props.props.entries.add()
+                    p0.key = "_name"
+                    p0.value = title
+                    p1 = node.props.props.entries.add()
+                    p1.key = "url"
+                    p1.value = "https://zh.wikipedia.org/wiki/Category:" + title
+                    p2 = node.props.props.entries.add()
+                    p2.key = "_s_import_source"
+                    p2.value = "wiki"
+                    p3 = node.props.props.entries.add()
+                    p3.key = "_ownerid"
+                    p3.value = "GFT"
 
-            node.businessID.domain = "https://zh.wikipedia.org/wiki/Category:"
-            node.businessID.primaryKeyInDomain = title
+                    node.businessID.domain = "https://zh.wikipedia.org/wiki/Category:"
+                    node.businessID.primaryKeyInDomain = title
 
-            node.names.chinese = title
-    # other information of the upload request
-    graph_upload_request.uploadTag = "UploadWikiCategoryNodes"
-    graph_upload_request.nodeAction4Duplication = graphUpload_pb2.Action4Duplication.Value(
-        'UPDATE')
-    graph_upload_request.edgeAction4Duplication = graphUpload_pb2.Action4Duplication.Value(
-        'UPDATE')
+                    node.names.chinese = title
+            # other information of the upload request
+            graph_upload_request.uploadTag = "UploadWikiCatNodes"
+            graph_upload_request.nodeAction4Duplication = graphUpload_pb2.Action4Duplication.Value(
+                'UPDATE')
+            graph_upload_request.edgeAction4Duplication = graphUpload_pb2.Action4Duplication.Value(
+                'UPDATE')
 
-    response = gs_call.upload_graph(graph_upload_request)
+            res = gs_call.upload_graph(graph_upload_request)
+            # ylog.debug(res)
+            # if response is not None:
+            #     print("successfully uploaded")
 
-    return response
+        except HTTPError as e:
+            if e.code in RETRIABLE_STATUS_CODES:
+                error = 'A retriable HTTP error %d occurred:\n%s' % (e.code,
+                                                                     e.reason)
+            else:
+                raise
+        except RETRIABLE_EXCEPTIONS as e:
+            error = 'A retriable error occurred: %s' % e
+        try:
+            if res.failedNodes:
+                re_upload_error = "some nodes failed to upload %s" % res.failedNodeds
+        except:
+            pass
+        if re_upload_error is not None:
+            print(re_upload_error)
+            nodes_fail_retry += 1
+            res = None
+            if nodes_fail_retry > NODES_FAIL_MAX_RETRIES:
+                ylog.debug(res)
+                res = "continue"
+
+        if error is not None:
+            print(error)
+            retry += 1
+            res = None
+            if retry > MAX_RETRIES:
+                ylog.debug(res)
+                exit("no loger attempting to retry.")
+            max_sleep = 2**retry
+            sleep_seconds = random.random() * max_sleep
+            print('Sleeping %f seconds and then retrying...' % sleep_seconds)
+            time.sleep(sleep_seconds)
+    # ylog.debug(res)
+    # jump out while response is None:
+    try:
+        if res.nodeUpdateResultStatistics:
+            ylog.debug(res.nodeUpdateResultStatistics)
+            uploaded_number = res.nodeUpdateResultStatistics.numOfCreations + \
+                res.nodeUpdateResultStatistics.numOfUpdates + \
+                res.nodeUpdateResultStatistics.numOfSkips
+        if res.uploadedNodes:
+            for updated in res.uploadedNodes:
+                ylog.debug("uploaded node GID: %s" % updated.gid)
+        if res.failedNodes:
+            for err in res.failedNodes:
+                if err.error.errorCode != 202001:
+                    ylog.info(err.error)
+                    ylog.debug(err.error)
+    except:
+        pass
+
+    return uploaded_number
 
 
-def batch_upload(re, source, source_len, batch_size, func):
+def batch_upload(re, file_path, batch_size, func, start, end):
     """batch upload categories or page
     Keyword Arguments:
     re         -- regular expression
-    source     -- str read from file
-    source_len -- the size of items
+    source     -- file path
     batch_size --
     func       -- upload function
+    start      -- start position
+    end        -- end position
+
     """
     uploaded_number = 0
     try:
-        last_span = re.search(source).span()[0]
-        for i in tqdm(range(0, source_len, batch_size)):
-            while os.path.isfile('pause'):
-                time.sleep(100)
-                print("pause for 100 second")
-            re_batch = {}
-            for j in range(batch_size):
-                re_batch[j] = re.search(source, last_span)
-                if re_batch[j] is not None:
-                    last_span = re_batch[j].span()[1]
-            uploaded_counter = func(re_batch)
-            uploaded_number += uploaded_counter
+        with open(file_path, 'r') as f:
+            total_line_size = len(f.readlines())
+        with open(file_path, 'r') as f:
+            for i, line in enumerate(tqdm(f)):
+                if i >= start and i <= end:
+                    print("line #: %s/%s" % (i, total_line_size))
+                    try:
+                        last_span = re.search(line).span()[0]
+                    except AttributeError:
+                        continue
+                    line_size = len(re.findall(line))
+                    for i in tqdm(range(0, line_size, batch_size)):
+                        # pause if find a file naed pause at the currend dir
+                        while os.path.isfile('pause'):
+                            time.sleep(100)
+                            print("pause for 100 second")
+                        re_batch = {}
+                        for j in range(batch_size):
+                            re_batch[j] = re.search(line, last_span)
+                            if re_batch[j] is not None:
+                                last_span = re_batch[j].span()[1]
+                        uploaded_counter = func(re_batch)
+                        uploaded_number += uploaded_counter
+
+                elif i > end:
+                    break
+
     except KeyboardInterrupt:
         print("uploaded number: %s" % uploaded_number)
         try:
@@ -413,56 +584,3 @@ def batch_upload(re, source, source_len, batch_size, func):
         except SystemExit:
             os._exit(0)
     return uploaded_number
-
-
-class FileIterator(object):
-
-    def __init__(self, path, rex):
-        self._fw = open(path, 'r')
-        self.string = self._fw.read()
-        self.rex = rex
-        self.last_span = self.search(self._fw).span()[0]
-
-    def read(self):
-        #        matched = self.rex.search(self.string,self.last_span)
-        matched = re.finditer(self.rex, self.string)
-        # self.last_span = matched.span()[1]
-        yield matched
-
-    def readlines(self):
-        """ Line iterator """
-
-        for line in self._fw:
-            yield line
-
-    def readblocks(self, block_size):
-        """ Block iterator """
-
-        while True:
-            block = self._fw.read(block_size)
-            if block == '':
-                break
-            yield block
-
-    def display(self):
-        """
-        Keyword Arguments:
-        self --
-        """
-        print(self)
-
-    # def __iter__(self):
-    #     with open(self.path, 'r') as f:
-    #         for line in f:
-    #             yield line
-    def __iter__(self):
-        return self
-
-    def __next__(self):
-        """
-        Keyword Arguments:
-        self --
-        """
-        with open(self.path, 'r') as f:
-            for line in f:
-                return line
