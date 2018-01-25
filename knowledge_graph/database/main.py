@@ -10,14 +10,19 @@ from lib.gftTools import gftIO
 import graphUpload_pb2
 from tqdm import tqdm
 import random
-import os, sys
+import os
+import sys
 import hashlib
 from google.protobuf.message import EncodeError
 from google.protobuf.message import DecodeError
 from urllib.error import HTTPError
 from urllib.error import URLError
 from lib.gftTools.gftIO import GSError
+from pymongo import MongoClient
 
+client = MongoClient('mongodb://localhost:27017/')
+db = client['wiki']
+collection = db.zhwiki
 batch_size = 100
 # links number
 # wiki_category_link line size = 1503
@@ -36,6 +41,7 @@ IGNORE_CATEGORIES = [
     '使用Catnav的页面', '缺少Wikidata链接的维基共享资源分类', '隐藏分类', '追踪分类', '维基百科特殊页面',
     '维基百科分类', '维基百科维护', '无需细分的分类', '不要删除的分类', '母分类', '全部重定向分类', '特殊条目'
 ]
+
 # test fetch graph
 test_url = 'http://192.168.1.166:9080'
 # prod_url = 'http://q.gftchina.com:13567/vqservice/vq/'
@@ -239,7 +245,9 @@ def upload_edge(dict_re_match_object):
     try:
         if res.edgeUpdateResultStatistics:
             ylog.debug(res.edgeUpdateResultStatistics)
-            uploaded_number = res.edgeUpdateResultStatistics.numOfCreations + res.edgeUpdateResultStatistics.numOfUpdates + res.edgeUpdateResultStatistics.numOfSkips
+            uploaded_number = res.edgeUpdateResultStatistics.numOfCreations + \
+                res.edgeUpdateResultStatistics.numOfUpdates + \
+                res.edgeUpdateResultStatistics.numOfSkips
         if res.failedEdges:
             for err in res.failedEdges:
                 ylog.debug(err)
@@ -275,6 +283,12 @@ def upload_page_node(dict_re_match_object):
                     item = dict_re_match_object.get(index)
                     node = graph_upload_request.graph.nodes.add()
                     title = item.group(3)[1:-1]
+                    try:
+                        article = collection.find_one({"title": title})
+                        page_content = article['text']
+                        node.binaryContent = bytes(page_content, "utf-8")
+                    except:
+                        pass
                     node.props.type = "readonlyDoc"
                     p0 = node.props.props.entries.add()
                     p0.key = "_sys_subtype"
@@ -294,8 +308,8 @@ def upload_page_node(dict_re_match_object):
 
                     node.businessID.domain = "https://zh.wikipedia.org/wiki/"
                     node.businessID.primaryKeyInDomain = title
-
                     node.names.chinese = title
+
             # other information of the upload request
             graph_upload_request.uploadTag = "UploadWikiPageNodes"
             graph_upload_request.nodeAction4Duplication = graphUpload_pb2.Action4Duplication.Value(
@@ -337,7 +351,9 @@ def upload_page_node(dict_re_match_object):
     try:
         if res.nodeUpdateResultStatistics:
             ylog.debug(res.nodeUpdateResultStatistics)
-            uploaded_number = res.nodeUpdateResultStatistics.numOfCreations + res.nodeUpdateResultStatistics.numOfUpdates + res.nodeUpdateResultStatistics.numOfSkips
+            uploaded_number = res.nodeUpdateResultStatistics.numOfCreations + \
+                res.nodeUpdateResultStatistics.numOfUpdates + \
+                res.nodeUpdateResultStatistics.numOfSkips
         if res.uploadedNodes:
             for updated in res.uploadedNodes:
                 ylog.debug("uploaded node GID: %s" % updated.gid)
@@ -435,7 +451,9 @@ def upload_cat_node(dict_re_match_object):
     try:
         if res.nodeUpdateResultStatistics:
             ylog.debug(res.nodeUpdateResultStatistics)
-            uploaded_number = res.nodeUpdateResultStatistics.numOfCreations + res.nodeUpdateResultStatistics.numOfUpdates + res.nodeUpdateResultStatistics.numOfSkips
+            uploaded_number = res.nodeUpdateResultStatistics.numOfCreations + \
+                res.nodeUpdateResultStatistics.numOfUpdates + \
+                res.nodeUpdateResultStatistics.numOfSkips
         if res.uploadedNodes:
             for updated in res.uploadedNodes:
                 ylog.debug("uploaded node GID: %s" % updated.gid)
@@ -498,7 +516,6 @@ def batch_upload(re, file_path, batch_size, func, start, end):
 if __name__ == '__main__':
     user_path = os.path.expanduser("~")
     category_path = "./data/zhwiki-latest-category.zhs.sql"
-    # category_path = "./zhwiki-latest-category.zhs.sql"
     # open category sql file
     wiki_category_re = re.compile(
         "\(([0-9]+),('[^,]+'),([0-9]+),([0-9]+),([0-9]+)\)")

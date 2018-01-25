@@ -21,3 +21,9 @@
 4. lower the capital word and check whether the string consists of alphabetic characters only.
 5. train model with gensim word2vec module.
 6. save model to local file.
+* Debug
+** Check log on 192.168.1.166
+docker ps
+docker exec -it kjasdf bash
+cd /opt/apps/vqservice/logs
+tail -n -f 1000 filename.log
