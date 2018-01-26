@@ -248,6 +248,13 @@ for i in range(category_link_size):
 # print(pk_md5)
 def print_line(file_path):
     with open(file_path, 'r') as f:
-        for i, line in enumerate(f):
+        for i, line in enumerate(tqdm(f)):
             if len(line) > 100:
-                print('line %s, size %s' % (i, len(line)))
+                pass
+                # print('line %s, size %s' % (i, len(line)))
+
+
+def open_file(path):
+    with open(path) as f:
+        for i, line in enumerate(f):
+            print(len(line.readline()))
