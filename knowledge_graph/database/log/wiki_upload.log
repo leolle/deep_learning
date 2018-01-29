@@ -1,3 +1,1649 @@
-18:13:09.860 10 reading sql files
-19:31:11.437 10 reading sql files
-19:31:11.437 10 reading sql files
+16:55:50.500 20 13	数学
+16:55:50.787 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:55:50.789 10 uploaded node GID: 8A19C6EB9F1A7677A95553B3EA42E336
+16:55:50.807 20 18	哲学
+16:55:50.935 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:55:50.935 10 uploaded node GID: E52AE8096A664A624F93A0267EA3791A
+16:55:50.936 20 21	文學
+16:55:50.990 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:55:50.991 10 uploaded node GID: F485586DAC820729869CA70C94232E45
+16:55:50.991 20 22	历史
+16:55:51.037 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:55:51.037 10 uploaded node GID: 0B0365F69F847ADD0450323D72F7556D
+16:55:51.038 20 25	计算机科学
+16:55:51.114 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:55:51.114 10 uploaded node GID: 72619D007496D14C8CE07A071993299E
+16:55:51.116 20 39	民族
+16:55:51.190 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:55:51.191 10 uploaded node GID: CB8F5DD16F74C5792DE37D7FFB4B754D
+16:55:51.191 20 45	戏剧
+16:55:51.252 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:55:51.253 10 uploaded node GID: 3519840643D14472C73A054FCB0C7E98
+16:55:51.256 20 48	电影
+16:55:51.304 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:55:51.304 10 uploaded node GID: 1444D74FCDBE74CE32545182D602B759
+16:55:51.305 20 51	音乐
+16:55:51.348 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:55:51.348 10 uploaded node GID: 0D8A729343EC4C624A13BF1DE0785110
+16:55:51.349 20 53	经济学
+16:55:51.531 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:55:51.532 10 uploaded node GID: 3893A0DE65BE67FEA4E5F1DCE3A01356
+16:55:51.534 20 56	政治学
+16:55:51.609 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:55:51.609 10 uploaded node GID: 13A1244A815885365BC5BA42A5DF3BBB
+16:55:51.610 20 57	法学
+16:55:51.664 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:55:51.664 10 uploaded node GID: A4EFECC8004946019A01C778E6A43319
+16:55:51.665 20 59	社会学
+16:55:51.760 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:55:51.760 10 uploaded node GID: 618C2460373AF48ECFC96402E8273DD3
+16:55:51.766 20 62	军事学
+16:55:51.794 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:55:51.794 10 uploaded node GID: 6F51E17A48BF9729C4967BBF2FF222DB
+16:55:51.797 20 66	信息学
+16:55:51.823 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:55:51.824 10 uploaded node GID: 4BD4F462057FD24AD175D87F1B15E404
+16:55:51.826 20 67	物理学
+16:55:51.927 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:55:51.930 10 uploaded node GID: 92E4DC233A5924DC8464C27795401FB0
+16:55:51.935 20 70	天文學
+16:55:52.026 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:55:52.028 10 uploaded node GID: B655243DA85381EF8A7F8E460C859711
+16:57:45.916 20 13	数学
+16:57:45.996 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:57:45.997 10 uploaded node GID: 8A19C6EB9F1A7677A95553B3EA42E336
+16:57:46.000 20 18	哲学
+16:57:46.121 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:57:46.122 10 uploaded node GID: E52AE8096A664A624F93A0267EA3791A
+16:57:46.124 20 21	文學
+16:57:46.175 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:57:46.176 10 uploaded node GID: F485586DAC820729869CA70C94232E45
+16:57:46.177 20 22	历史
+16:57:46.241 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:57:46.241 10 uploaded node GID: 0B0365F69F847ADD0450323D72F7556D
+16:57:46.244 20 25	计算机科学
+16:57:46.322 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:57:46.325 10 uploaded node GID: 72619D007496D14C8CE07A071993299E
+16:57:46.334 20 39	民族
+16:57:46.416 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:57:46.417 10 uploaded node GID: CB8F5DD16F74C5792DE37D7FFB4B754D
+16:57:46.418 20 45	戏剧
+16:57:46.472 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:57:46.472 10 uploaded node GID: 3519840643D14472C73A054FCB0C7E98
+16:57:46.477 20 48	电影
+16:57:46.522 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:57:46.523 10 uploaded node GID: 1444D74FCDBE74CE32545182D602B759
+16:57:46.524 20 51	音乐
+16:57:46.574 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:57:46.575 10 uploaded node GID: 0D8A729343EC4C624A13BF1DE0785110
+16:57:46.577 20 53	经济学
+16:57:46.738 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:57:46.742 10 uploaded node GID: 3893A0DE65BE67FEA4E5F1DCE3A01356
+16:57:46.745 20 56	政治学
+16:57:46.826 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:57:46.829 10 uploaded node GID: 13A1244A815885365BC5BA42A5DF3BBB
+16:57:46.845 20 57	法学
+16:57:46.915 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:57:46.916 10 uploaded node GID: A4EFECC8004946019A01C778E6A43319
+16:57:46.916 20 59	社会学
+16:57:47.017 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:57:47.018 10 uploaded node GID: 618C2460373AF48ECFC96402E8273DD3
+16:57:47.019 20 62	军事学
+16:57:47.081 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:57:47.082 10 uploaded node GID: 6F51E17A48BF9729C4967BBF2FF222DB
+16:57:47.084 20 66	信息学
+16:57:47.124 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:57:47.125 10 uploaded node GID: 4BD4F462057FD24AD175D87F1B15E404
+16:57:47.127 20 67	物理学
+16:57:47.220 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:57:47.222 10 uploaded node GID: 92E4DC233A5924DC8464C27795401FB0
+16:57:47.225 20 70	天文學
+16:57:47.306 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:57:47.310 10 uploaded node GID: B655243DA85381EF8A7F8E460C859711
+16:57:47.317 20 72	力学
+16:57:47.385 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:57:47.386 10 uploaded node GID: 60AF0BB409041866181DD1E00B4FDDB5
+16:57:47.388 20 74	化學
+16:57:47.468 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:57:47.468 10 uploaded node GID: 7B8A036FBAB72FB87781B60BF49AB3E4
+16:57:47.469 20 76	地理学
+16:57:47.511 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:57:47.511 10 uploaded node GID: 35C923FCAED27565EF46A496EBF5E404
+16:57:47.513 20 78	地质学
+16:57:47.541 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:57:47.542 10 uploaded node GID: 6EE0B524F5AD2299CAAF701DC7F55AB2
+16:57:47.544 20 79	气象学
+16:57:47.572 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:57:47.572 10 uploaded node GID: EB03BC771BB63258F7E1A2D16657F2ED
+16:57:47.576 20 81	生物学
+16:57:47.634 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:57:47.634 10 uploaded node GID: 0B8696DEBBE88D3ABC3C4B0CAC08255D
+16:57:47.636 20 83	心理学
+16:57:47.738 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:57:47.739 10 uploaded node GID: E9775553497A0A8CB2335944BC0B6450
+16:57:47.741 20 86	中医学
+16:57:47.834 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:57:47.834 10 uploaded node GID: 433C086C32E52E6CA193A6E1E8ACA0DA
+16:57:47.835 20 87	海洋学
+16:57:47.887 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:57:47.887 10 uploaded node GID: A012DB92C0ABB4D8E9180C806678837A
+16:57:47.892 20 89	水文学
+16:57:47.943 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:57:47.943 10 uploaded node GID: 5E65B0724C4FB29BD0641A8F148F7288
+16:57:47.946 20 94	测绘学
+16:57:48.000 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:57:48.002 10 uploaded node GID: D1914E69469F3FB08185B4D5A4549E66
+16:57:48.009 20 100	农业
+16:57:48.070 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:57:48.070 10 uploaded node GID: F054F412376ED85BCD49E5C289BA506A
+16:57:48.072 20 106	统一资源定位符
+16:57:48.103 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:57:48.104 10 uploaded node GID: D2AA1D3CB35F95751DE6A7F58A5E7C36
+16:57:48.106 20 112	计算
+16:57:48.147 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:57:48.148 10 uploaded node GID: A69D694004E16F087C113A7E6D359973
+16:57:48.152 20 114	数据结构
+16:57:48.200 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:57:48.203 10 uploaded node GID: F26FF7DDF58C8AC6EE2A7B1096727ABB
+16:57:48.223 20 115	设计模式 (消歧义)
+16:57:48.277 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:57:48.277 10 uploaded node GID: 6D77CD606DB828CB85C674AC9D128177
+16:57:48.280 20 118	中华人民共和国
+16:57:48.368 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:57:48.368 10 uploaded node GID: B17F220DE47206A73F7711C5A431A98B
+16:57:48.372 20 122	中国计算机科学大事年表
+16:57:48.410 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:57:48.412 10 uploaded node GID: 9D74DE40DC96F0E76D6EC7CBE66AC9D4
+16:57:48.416 20 125	克利斯登·奈加特
+16:57:48.479 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:57:48.480 10 uploaded node GID: C06B919817A0A6015A050FD3C5653D87
+16:57:48.482 20 126	Self
+16:57:48.521 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:57:48.522 10 uploaded node GID: E66A3E3DC9AABAC6CB998F9906023AED
+16:57:48.524 20 130	Linux内核
+16:57:48.603 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:57:48.606 10 uploaded node GID: 63958C4DA35CEB8ADCB3D45B9B912B1E
+16:57:48.609 20 133	林纳斯·托瓦兹
+16:57:48.674 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:57:48.674 10 uploaded node GID: 2C72F6ADD208B06836AFCCD18021754C
+16:57:48.676 20 135	理查德·斯托曼
+16:57:48.719 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:57:48.719 10 uploaded node GID: 3A0B6530642B501AFFEFB413517FACA8
+16:57:48.722 20 136	自由软件基金会
+16:57:48.766 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:57:48.767 10 uploaded node GID: 390D09E918311697E1BC31658D747D86
+16:57:48.768 20 137	2003年7月
+16:57:48.819 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:57:48.820 10 uploaded node GID: 5434D4F22D3DD1D8D8F7063D3D79F183
+16:57:48.822 20 139	孫中山
+16:57:48.985 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:57:48.986 10 uploaded node GID: B86D802C4E492CAD6D9958FF8ADBDFF3
+16:57:48.988 20 140	操作系统
+16:57:49.084 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:57:49.085 10 uploaded node GID: 02557CA6AE41E5EBDDFE1CD9A6AAA6D1
+16:57:49.088 20 141	操作系统列表
+16:57:49.129 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:57:49.129 10 uploaded node GID: 7EA536F39382B1B767F5810473B94C61
+16:57:49.132 20 142	Linux
+16:57:49.206 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:57:49.207 10 uploaded node GID: 2248E7092A1233812FDE79676D46B9C1
+16:57:49.208 20 149	GNU計劃
+16:57:49.253 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:57:49.255 10 uploaded node GID: 3505BF578FF528F9775F17B7A3AA574D
+16:57:49.256 20 153	自由软件运动
+16:57:49.316 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:57:49.317 10 uploaded node GID: 806C34D39BB01753252C0D8F43745260
+16:57:49.323 20 157	材料科学
+16:57:49.364 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:57:49.365 10 uploaded node GID: AECCC3ADC698300A55A96874E39C0EDE
+16:57:49.365 20 158	诺贝尔奖
+16:57:49.419 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:57:49.420 10 uploaded node GID: AA14E1CED7F29B233F570165820FAF29
+16:57:49.420 20 159	植物学
+16:57:49.475 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:57:49.475 10 uploaded node GID: 45F5045D4CE452998C8A0B330BFCFBFB
+16:57:49.476 20 161	生命
+16:57:49.532 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:57:49.533 10 uploaded node GID: 0294A0BDF4A07DC676E4D2B36DA170E3
+16:57:49.536 20 165	Wiki
+16:57:49.588 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:57:49.588 10 uploaded node GID: BCD8A957587534F945884D632940CF8E
+16:57:49.589 20 168	程序设计
+16:57:49.631 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:57:49.632 10 uploaded node GID: AC1F1FF9E6DDE2DAD2669C33265DCB3D
+16:57:49.632 20 170	计算机程序
+16:57:49.673 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:57:49.673 10 uploaded node GID: 9E5900A82A0C8CD3274079EF0022850A
+16:57:49.675 20 182	中国历史
+16:57:49.836 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:57:49.838 10 uploaded node GID: C3AEEC04DA9E7D339253B78ED512F0BB
+16:57:49.843 20 192	亳州市
+16:57:49.897 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:57:49.897 10 uploaded node GID: 38F6387E9779173397F4DC5F164797D9
+16:57:49.898 20 210	计算机网络
+16:57:49.928 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:57:49.929 10 uploaded node GID: 63C08589FEBFE90296731698D063AA53
+16:57:49.932 20 211	语言列表
+16:57:49.963 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:57:49.963 10 uploaded node GID: 059C34DF5D49722EDD93FFADAF6112E5
+16:57:49.969 20 235	上海市
+16:57:50.138 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:57:50.140 10 uploaded node GID: 4B2F64ECBD8197438BB22559AC8D29BB
+16:57:50.142 20 244	史家
+16:57:50.192 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:57:50.193 10 uploaded node GID: 7F2EFC692FD99477B7F410A538B6124B
+16:57:50.207 20 256	开放源代码
+16:57:50.257 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:57:50.258 10 uploaded node GID: 3339DB26F20AE280C522D88225E54D68
+16:57:50.258 20 257	计算数学
+16:57:50.305 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:57:50.308 10 uploaded node GID: B2BFC54225AB080FFE1A88D3975E62A4
+16:57:50.313 20 258	高德纳
+16:57:50.380 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:57:50.380 10 uploaded node GID: 9D44A184CB74C1ECC80F09DD8666BE67
+16:57:50.382 20 263	中國
+16:57:50.563 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:57:50.564 10 uploaded node GID: 6733C14BC410F4DB238A05B6501232F7
+16:57:50.566 20 270	中华人民共和国历史
+16:57:50.698 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:57:50.698 10 uploaded node GID: 84268D5AAA1008D5E5A86BFB63C55E1F
+16:57:50.701 20 271	中華民國
+16:57:50.949 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:57:50.953 10 uploaded node GID: 7B5E80DCC1B481801E92D914DBC5A2AC
+16:57:50.960 20 275	宗教
+16:57:51.043 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:57:51.043 10 uploaded node GID: BC213EDF5099390FA88DA632EFC3F81F
+16:57:51.048 20 278	图书馆学
+16:57:51.082 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:57:51.082 10 uploaded node GID: 2B264A8A655D0208AAF845BFF4505F58
+16:57:51.088 20 280	年表列表
+16:57:51.130 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:57:51.130 10 uploaded node GID: 3DB7FF7803406B7A2B90613E5EB4E20C
+16:57:51.131 20 284	义勇军进行曲
+16:57:51.186 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:57:51.187 10 uploaded node GID: 14C74E35FD3C3BD4A401D3B70A4DEF07
+16:57:51.187 20 287	夏商周年表
+16:57:51.212 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:57:51.212 10 uploaded node GID: CD3D3B7B6CDF5BDFB405FA12704A3F38
+16:57:51.213 20 290	秦汉三国历史年表
+16:57:51.254 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:57:51.254 10 uploaded node GID: 8D35F794A692B7F46D0430F6C7205101
+16:57:51.254 20 291	人物
+16:57:51.287 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:57:51.287 10 uploaded node GID: 9A8132F7398F9A5E76E2E0523026B343
+16:57:51.288 20 297	教育
+16:57:51.345 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:57:51.345 10 uploaded node GID: 400506AD71EE377B9DAF8725F93DEB03
+16:57:51.346 20 299	计算语言学
+16:57:51.380 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:57:51.381 10 uploaded node GID: E58CE5B4E8D9D7C7899BD866BA872629
+16:57:51.381 20 300	语音合成
+16:57:51.417 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:57:51.417 10 uploaded node GID: CE3AEAE54375719A6646D799AA0EB08C
+16:57:51.419 20 305	第二次世界大战
+16:57:51.665 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:57:51.668 10 uploaded node GID: E5A59F270EF634EDA9855B0BDCD0D250
+16:57:51.672 20 306	辽宁省
+16:57:51.747 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:57:51.747 10 uploaded node GID: DE8AF359A8C517155A5CE8FED790125A
+16:57:51.751 20 309	海外華人
+16:57:51.808 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:57:51.809 10 uploaded node GID: 9453AEC2192903CF294130B21C3A859D
+16:57:51.814 20 317	人工智能
+16:57:51.890 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:57:51.890 10 uploaded node GID: 3D1B59D1852FAA34E5D80336D791163D
+16:57:51.891 20 327	中华人民共和国国旗
+16:57:51.974 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:57:51.974 10 uploaded node GID: B1CE50627A659D2AA4FDBA32F0943F26
+16:57:51.975 20 330	海上田园
+16:57:52.005 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:57:52.006 10 uploaded node GID: 2E6A4B4E2305FA53994A7B86FD8E157E
+16:57:52.006 20 331	旅游
+16:57:52.037 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:57:52.038 10 uploaded node GID: B545D07C198492B5604E8826971E9028
+16:57:52.039 20 333	鄧麗君
+16:57:52.061 20 335	游戏
+16:58:16.419 20 13	数学
+16:58:16.508 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:58:16.508 10 uploaded node GID: 8A19C6EB9F1A7677A95553B3EA42E336
+16:58:16.511 20 18	哲学
+16:58:16.621 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:58:16.621 10 uploaded node GID: E52AE8096A664A624F93A0267EA3791A
+16:58:16.622 20 21	文學
+16:58:16.662 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:58:16.663 10 uploaded node GID: F485586DAC820729869CA70C94232E45
+16:58:16.663 20 22	历史
+16:58:16.703 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:58:16.704 10 uploaded node GID: 0B0365F69F847ADD0450323D72F7556D
+16:58:16.706 20 25	计算机科学
+16:58:16.760 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:58:16.760 10 uploaded node GID: 72619D007496D14C8CE07A071993299E
+16:58:16.763 20 39	民族
+16:58:16.823 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:58:16.823 10 uploaded node GID: CB8F5DD16F74C5792DE37D7FFB4B754D
+16:58:16.824 20 45	戏剧
+16:58:16.863 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:58:16.863 10 uploaded node GID: 3519840643D14472C73A054FCB0C7E98
+16:58:16.867 20 48	电影
+16:58:16.904 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:58:16.904 10 uploaded node GID: 1444D74FCDBE74CE32545182D602B759
+16:58:16.907 20 51	音乐
+16:58:16.954 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:58:16.954 10 uploaded node GID: 0D8A729343EC4C624A13BF1DE0785110
+16:58:16.955 20 53	经济学
+16:58:17.101 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:58:17.102 10 uploaded node GID: 3893A0DE65BE67FEA4E5F1DCE3A01356
+16:58:17.104 20 56	政治学
+16:58:17.160 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:58:17.160 10 uploaded node GID: 13A1244A815885365BC5BA42A5DF3BBB
+16:58:17.165 20 57	法学
+16:58:17.213 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:58:17.214 10 uploaded node GID: A4EFECC8004946019A01C778E6A43319
+16:58:17.216 20 59	社会学
+16:58:17.316 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:58:17.321 10 uploaded node GID: 618C2460373AF48ECFC96402E8273DD3
+16:58:17.324 20 62	军事学
+16:58:17.371 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:58:17.372 10 uploaded node GID: 6F51E17A48BF9729C4967BBF2FF222DB
+16:58:17.374 20 66	信息学
+16:58:17.415 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:58:17.415 10 uploaded node GID: 4BD4F462057FD24AD175D87F1B15E404
+16:58:17.420 20 67	物理学
+16:58:17.539 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:58:17.542 10 uploaded node GID: 92E4DC233A5924DC8464C27795401FB0
+16:58:17.550 20 70	天文學
+16:58:17.634 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:58:17.635 10 uploaded node GID: B655243DA85381EF8A7F8E460C859711
+16:58:17.638 20 72	力学
+16:58:17.677 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:58:17.678 10 uploaded node GID: 60AF0BB409041866181DD1E00B4FDDB5
+16:58:17.680 20 74	化學
+16:58:17.745 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:58:17.746 10 uploaded node GID: 7B8A036FBAB72FB87781B60BF49AB3E4
+16:58:17.749 20 76	地理学
+16:58:17.822 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:58:17.823 10 uploaded node GID: 35C923FCAED27565EF46A496EBF5E404
+16:58:17.824 20 78	地质学
+16:58:17.861 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:58:17.861 10 uploaded node GID: 6EE0B524F5AD2299CAAF701DC7F55AB2
+16:58:17.862 20 79	气象学
+16:58:17.902 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:58:17.903 10 uploaded node GID: EB03BC771BB63258F7E1A2D16657F2ED
+16:58:17.904 20 81	生物学
+16:58:17.956 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:58:17.957 10 uploaded node GID: 0B8696DEBBE88D3ABC3C4B0CAC08255D
+16:58:17.958 20 83	心理学
+16:58:18.045 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:58:18.045 10 uploaded node GID: E9775553497A0A8CB2335944BC0B6450
+16:58:18.052 20 86	中医学
+16:58:18.165 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:58:18.166 10 uploaded node GID: 433C086C32E52E6CA193A6E1E8ACA0DA
+16:58:18.167 20 87	海洋学
+16:58:18.205 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:58:18.205 10 uploaded node GID: A012DB92C0ABB4D8E9180C806678837A
+16:58:18.205 20 89	水文学
+16:58:18.246 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:58:18.246 10 uploaded node GID: 5E65B0724C4FB29BD0641A8F148F7288
+16:58:18.246 20 94	测绘学
+16:58:18.284 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:58:18.285 10 uploaded node GID: D1914E69469F3FB08185B4D5A4549E66
+16:58:18.285 20 100	农业
+16:58:18.359 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:58:18.360 10 uploaded node GID: F054F412376ED85BCD49E5C289BA506A
+16:58:18.362 20 106	统一资源定位符
+16:58:18.417 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:58:18.417 10 uploaded node GID: D2AA1D3CB35F95751DE6A7F58A5E7C36
+16:58:18.418 20 112	计算
+16:58:18.455 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:58:18.456 10 uploaded node GID: A69D694004E16F087C113A7E6D359973
+16:58:18.457 20 114	数据结构
+16:58:18.507 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:58:18.508 10 uploaded node GID: F26FF7DDF58C8AC6EE2A7B1096727ABB
+16:58:18.508 20 115	设计模式 (消歧义)
+16:58:18.546 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:58:18.546 10 uploaded node GID: 6D77CD606DB828CB85C674AC9D128177
+16:58:18.549 20 118	中华人民共和国
+16:58:18.638 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:58:18.638 10 uploaded node GID: B17F220DE47206A73F7711C5A431A98B
+16:58:18.639 20 122	中国计算机科学大事年表
+16:58:18.673 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:58:18.673 10 uploaded node GID: 9D74DE40DC96F0E76D6EC7CBE66AC9D4
+16:58:18.674 20 125	克利斯登·奈加特
+16:58:18.761 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:58:18.764 10 uploaded node GID: C06B919817A0A6015A050FD3C5653D87
+16:58:18.766 20 126	Self
+16:58:18.799 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:58:18.800 10 uploaded node GID: E66A3E3DC9AABAC6CB998F9906023AED
+16:58:18.801 20 130	Linux内核
+16:58:18.867 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:58:18.868 10 uploaded node GID: 63958C4DA35CEB8ADCB3D45B9B912B1E
+16:58:18.868 20 133	林纳斯·托瓦兹
+16:58:18.915 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:58:18.915 10 uploaded node GID: 2C72F6ADD208B06836AFCCD18021754C
+16:58:18.915 20 135	理查德·斯托曼
+16:58:18.964 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:58:18.964 10 uploaded node GID: 3A0B6530642B501AFFEFB413517FACA8
+16:58:18.965 20 136	自由软件基金会
+16:58:19.038 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:58:19.038 10 uploaded node GID: 390D09E918311697E1BC31658D747D86
+16:58:19.040 20 137	2003年7月
+16:58:19.104 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:58:19.104 10 uploaded node GID: 5434D4F22D3DD1D8D8F7063D3D79F183
+16:58:19.106 20 139	孫中山
+16:58:19.261 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:58:19.261 10 uploaded node GID: B86D802C4E492CAD6D9958FF8ADBDFF3
+16:58:19.262 20 140	操作系统
+16:58:19.356 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:58:19.356 10 uploaded node GID: 02557CA6AE41E5EBDDFE1CD9A6AAA6D1
+16:58:19.357 20 141	操作系统列表
+16:58:19.401 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:58:19.401 10 uploaded node GID: 7EA536F39382B1B767F5810473B94C61
+16:58:19.402 20 142	Linux
+16:58:19.470 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:58:19.471 10 uploaded node GID: 2248E7092A1233812FDE79676D46B9C1
+16:58:19.471 20 149	GNU計劃
+16:58:19.502 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:58:19.503 10 uploaded node GID: 3505BF578FF528F9775F17B7A3AA574D
+16:58:19.503 20 153	自由软件运动
+16:58:19.535 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:58:19.536 10 uploaded node GID: 806C34D39BB01753252C0D8F43745260
+16:58:19.536 20 157	材料科学
+16:58:19.566 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:58:19.567 10 uploaded node GID: AECCC3ADC698300A55A96874E39C0EDE
+16:58:19.568 20 158	诺贝尔奖
+16:58:19.616 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:58:19.617 10 uploaded node GID: AA14E1CED7F29B233F570165820FAF29
+16:58:19.617 20 159	植物学
+16:58:19.669 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:58:19.670 10 uploaded node GID: 45F5045D4CE452998C8A0B330BFCFBFB
+16:58:19.672 20 161	生命
+16:58:19.742 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:58:19.743 10 uploaded node GID: 0294A0BDF4A07DC676E4D2B36DA170E3
+16:58:19.743 20 165	Wiki
+16:58:19.794 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:58:19.795 10 uploaded node GID: BCD8A957587534F945884D632940CF8E
+16:58:19.795 20 168	程序设计
+16:58:19.838 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:58:19.838 10 uploaded node GID: AC1F1FF9E6DDE2DAD2669C33265DCB3D
+16:58:19.839 20 170	计算机程序
+16:58:19.875 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:58:19.875 10 uploaded node GID: 9E5900A82A0C8CD3274079EF0022850A
+16:58:19.877 20 182	中国历史
+16:58:20.079 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:58:20.082 10 uploaded node GID: C3AEEC04DA9E7D339253B78ED512F0BB
+16:58:20.085 20 192	亳州市
+16:58:20.136 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:58:20.136 10 uploaded node GID: 38F6387E9779173397F4DC5F164797D9
+16:58:20.137 20 210	计算机网络
+16:58:20.170 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:58:20.170 10 uploaded node GID: 63C08589FEBFE90296731698D063AA53
+16:58:20.174 20 211	语言列表
+16:58:20.204 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:58:20.204 10 uploaded node GID: 059C34DF5D49722EDD93FFADAF6112E5
+16:58:20.207 20 235	上海市
+16:58:20.369 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:58:20.370 10 uploaded node GID: 4B2F64ECBD8197438BB22559AC8D29BB
+16:58:20.374 20 244	史家
+16:58:20.418 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:58:20.419 10 uploaded node GID: 7F2EFC692FD99477B7F410A538B6124B
+16:58:20.423 20 256	开放源代码
+16:58:20.473 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:58:20.474 10 uploaded node GID: 3339DB26F20AE280C522D88225E54D68
+16:58:20.475 20 257	计算数学
+16:58:20.522 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:58:20.523 10 uploaded node GID: B2BFC54225AB080FFE1A88D3975E62A4
+16:58:20.524 20 258	高德纳
+16:58:20.572 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:58:20.573 10 uploaded node GID: 9D44A184CB74C1ECC80F09DD8666BE67
+16:58:20.575 20 263	中國
+16:58:20.749 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:58:20.749 10 uploaded node GID: 6733C14BC410F4DB238A05B6501232F7
+16:58:20.753 20 270	中华人民共和国历史
+16:58:20.860 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:58:20.863 10 uploaded node GID: 84268D5AAA1008D5E5A86BFB63C55E1F
+16:58:20.870 20 271	中華民國
+16:58:21.124 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:58:21.125 10 uploaded node GID: 7B5E80DCC1B481801E92D914DBC5A2AC
+16:58:21.134 20 275	宗教
+16:58:21.210 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:58:21.211 10 uploaded node GID: BC213EDF5099390FA88DA632EFC3F81F
+16:58:21.212 20 278	图书馆学
+16:58:21.242 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:58:21.242 10 uploaded node GID: 2B264A8A655D0208AAF845BFF4505F58
+16:58:21.243 20 280	年表列表
+16:58:21.281 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:58:21.282 10 uploaded node GID: 3DB7FF7803406B7A2B90613E5EB4E20C
+16:58:21.283 20 284	义勇军进行曲
+16:58:21.343 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:58:21.344 10 uploaded node GID: 14C74E35FD3C3BD4A401D3B70A4DEF07
+16:58:21.344 20 287	夏商周年表
+16:58:21.377 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:58:21.378 10 uploaded node GID: CD3D3B7B6CDF5BDFB405FA12704A3F38
+16:58:21.378 20 290	秦汉三国历史年表
+16:58:21.423 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:58:21.424 10 uploaded node GID: 8D35F794A692B7F46D0430F6C7205101
+16:58:21.424 20 291	人物
+16:58:21.461 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:58:21.461 10 uploaded node GID: 9A8132F7398F9A5E76E2E0523026B343
+16:58:21.462 20 297	教育
+16:58:21.538 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:58:21.542 10 uploaded node GID: 400506AD71EE377B9DAF8725F93DEB03
+16:58:21.545 20 299	计算语言学
+16:58:21.596 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:58:21.597 10 uploaded node GID: E58CE5B4E8D9D7C7899BD866BA872629
+16:58:21.597 20 300	语音合成
+16:58:21.635 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:58:21.635 10 uploaded node GID: CE3AEAE54375719A6646D799AA0EB08C
+16:58:21.637 20 305	第二次世界大战
+16:58:21.875 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:58:21.876 10 uploaded node GID: E5A59F270EF634EDA9855B0BDCD0D250
+16:58:21.879 20 306	辽宁省
+16:58:21.956 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:58:21.956 10 uploaded node GID: DE8AF359A8C517155A5CE8FED790125A
+16:58:21.957 20 309	海外華人
+16:58:22.013 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:58:22.014 10 uploaded node GID: 9453AEC2192903CF294130B21C3A859D
+16:58:22.020 20 317	人工智能
+16:58:22.105 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:58:22.108 10 uploaded node GID: 3D1B59D1852FAA34E5D80336D791163D
+16:58:22.114 20 327	中华人民共和国国旗
+16:58:22.198 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:58:22.198 10 uploaded node GID: B1CE50627A659D2AA4FDBA32F0943F26
+16:58:22.199 20 330	海上田园
+16:58:22.223 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:58:22.224 10 uploaded node GID: 2E6A4B4E2305FA53994A7B86FD8E157E
+16:58:22.224 20 331	旅游
+16:58:22.251 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:58:22.252 10 uploaded node GID: B545D07C198492B5604E8826971E9028
+16:58:22.253 20 333	鄧麗君
+16:58:22.323 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:58:22.324 10 uploaded node GID: 66EA4277AC7CB2A2565CE7D34C538412
+16:58:22.324 20 335	游戏
+16:58:22.377 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:58:22.379 10 uploaded node GID: 60A2CF6891F63439D1E2B8744CEE2793
+16:58:22.387 20 342	自然数
+16:58:22.434 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:58:22.435 10 uploaded node GID: 954D94C1AFFB1177E6AF02C15BD202F7
+16:58:22.436 20 343	代数数域
+16:58:22.478 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:58:22.478 10 uploaded node GID: 7F633E4A7F58006F7888DBECA2310395
+16:58:22.479 20 344	数域
+16:58:22.514 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:58:22.515 10 uploaded node GID: 22B2E2BCF834C4D075A798FF0FD8219D
+16:58:22.516 20 345	数论
+16:58:22.554 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:58:22.555 10 uploaded node GID: 28C58F2DB75C4FF4327F3F9D219CC788
+16:58:22.555 20 349	GNU自由文档许可证
+16:58:22.598 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:58:22.599 10 uploaded node GID: 3D43F596A5EF0E3701F427B805D3B475
+16:58:22.600 20 356	陈相屯镇
+16:58:22.632 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:58:22.633 10 uploaded node GID: 27EFC5F28AFE705C0891DC81B05E8202
+16:58:22.634 20 359	中国共产党
+16:58:22.784 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:58:22.786 10 uploaded node GID: 0A1ED63A3D29350F027E3C3CAFFCB7F4
+16:58:22.787 20 373	晋十六国南北朝历史年表
+16:58:22.846 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:58:22.846 10 uploaded node GID: A84D5B8401CBE42F8F7C722FF378A826
+16:58:22.847 20 374	亚洲历史
+16:58:22.890 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:58:22.890 10 uploaded node GID: 1BC8B21A07FE7C30257CBF313586237C
+16:58:22.891 20 378	千纪
+16:58:22.924 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:58:22.924 10 uploaded node GID: 60D9465FC973E672C94938DBB80DDD51
+16:58:22.925 20 380	隋唐五代十国历史年表
+16:58:22.970 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:58:22.971 10 uploaded node GID: F3E14C1B9D48BAC953E6EEEB1F89D7C8
+16:58:22.973 20 384	開放內容
+16:58:23.033 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:58:23.034 10 uploaded node GID: 98C62274094DAF48642A03BA6F7744C1
+16:58:23.034 20 387	TeX
+16:58:23.093 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:58:23.095 10 uploaded node GID: C085DE67CAEAA7439D1B5DFE55556B7F
+16:58:23.098 20 397	世界政區索引
+16:58:23.161 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:58:23.161 10 uploaded node GID: AC64A7F552C1412E034C497747CACCC8
+16:58:23.162 20 399	非洲歷史
+16:58:23.206 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:58:23.207 10 uploaded node GID: B802B22B818BC66EE7393CE9CB1793E6
+16:58:23.208 20 401	阿尔巴尼亚
+16:58:23.290 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:58:23.290 10 uploaded node GID: BF4C9FD461F3E463ED014C58599ECA3D
+16:58:23.291 20 403	黑客
+16:58:23.337 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:58:23.338 10 uploaded node GID: 9EFB024EC6ED89145991F019CC001A42
+16:58:23.339 20 406	福建省
+16:58:23.391 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:58:23.391 10 uploaded node GID: 7EF5109B9F8060E6A257246042FE276B
+16:58:23.393 20 407	安徽省
+16:58:23.489 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:58:23.490 10 uploaded node GID: F26E9C3A828BD8FB679EC144520D1BA3
+16:58:23.493 20 410	甘肃省
+16:58:23.561 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:58:23.561 10 uploaded node GID: 39FC9481DA000F5EA015A44E18F66CDB
+16:58:23.562 20 412	广东省
+16:58:23.642 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:58:23.642 10 uploaded node GID: 10A0E1A17688AD32DE3D8F750F864A16
+16:58:23.643 20 414	贵州省
+16:58:23.710 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:58:23.711 10 uploaded node GID: 1E189F5CC73D0A55E144634617999E3B
+16:58:23.711 20 415	中国省级行政区面积列表
+16:58:23.743 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:58:23.743 10 uploaded node GID: 0AB0ECB1E6D179B967DDD214BF2951FF
+16:58:23.744 20 416	中华人民共和国各省级行政区人口列表
+16:58:23.780 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:58:23.784 10 uploaded node GID: 0B484AFDE539870DD432550463009BAF
+16:58:23.785 20 417	中华人民共和国各省级行政区人口密度列表
+16:58:23.832 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:58:23.832 10 uploaded node GID: 8DB42F88EB4B9959234B82E7BF54483A
+16:58:23.833 20 421	海南省
+16:58:23.905 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:58:23.906 10 uploaded node GID: 92EEDD683EAF62595506347164AB4063
+16:58:23.908 20 423	河北省
+16:58:23.975 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:58:23.975 10 uploaded node GID: B0B7C3BBCF1DF6ECF158E089A8139B99
+16:58:23.980 20 425	黑龙江省
+16:58:24.050 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:58:24.051 10 uploaded node GID: 7C95A952A96053913BF7C2CF5F737771
+16:58:24.059 20 427	河南省
+16:58:24.192 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:58:24.192 10 uploaded node GID: 4D0CBBE2634F496ADA5B82BFA86EECCC
+16:58:24.196 20 429	湖北省
+16:58:24.266 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:58:24.267 10 uploaded node GID: 64B4EAFEB54EB0C9B445A2F0B03953F1
+16:58:24.269 20 433	江苏省
+16:58:24.356 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:58:24.357 10 uploaded node GID: 0AF11330808494F814B3ABEA1BBCF354
+16:58:24.363 20 435	江西省
+16:58:24.465 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:58:24.466 10 uploaded node GID: 2387B7C28A4A8E82254B3F17245CAB2B
+16:58:24.471 20 437	吉林省
+16:58:24.573 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:58:24.574 10 uploaded node GID: C6398FE9CFFA7C02089E269D4CE8CE2F
+16:58:24.575 20 439	青海省
+16:58:24.617 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:58:24.617 10 uploaded node GID: A44C5E2C9DEF001F74EC20190C23A527
+16:58:24.618 20 441	陕西省
+16:58:24.665 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:58:24.665 10 uploaded node GID: 4DB9E8AB3469C8FFAD52C8861602D56A
+16:58:24.667 20 443	山东省
+16:58:24.797 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:58:24.798 10 uploaded node GID: DE9B13787225F81B051F8A0046F96577
+16:58:24.801 20 445	山西省
+16:58:24.860 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:58:24.860 10 uploaded node GID: D625F80CC8829BC8AB08359C9D20C381
+16:58:24.862 20 447	四川省
+16:58:24.961 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:58:24.961 10 uploaded node GID: 9498FF8FC05F8D6BCEDC19A616FEF41A
+16:58:24.964 20 449	云南省
+16:58:25.046 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:58:25.047 10 uploaded node GID: 1CCC2A39CFFE386525F9140945D5182C
+16:58:25.052 20 451	浙江省
+16:58:25.183 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:58:25.184 10 uploaded node GID: 22BF6426D0B4AD24CCEFA3DF2EC991E7
+16:58:25.190 20 453	广西壮族自治区
+16:58:25.260 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:58:25.261 10 uploaded node GID: 1E599589B6553F9FAF495399ADAF1A95
+16:58:25.264 20 455	内蒙古自治区
+16:58:25.325 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:58:25.325 10 uploaded node GID: 39184ABF700D5971322869C18B34EEF0
+16:58:25.328 20 457	宁夏回族自治区
+16:58:25.371 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:58:25.372 10 uploaded node GID: 1E17ABA97A8E73EFC51E9DF9E49741BC
+16:58:25.376 20 459	新疆维吾尔自治区
+16:58:25.446 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:58:25.447 10 uploaded node GID: 6C2BADAA6E57A9AFF9FB37225F5AC32F
+16:58:25.450 20 463	北京市
+16:58:25.558 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:58:25.561 10 uploaded node GID: 075CD90A01D0D649851EB8F7B7CA69AF
+16:58:25.569 20 465	重庆市
+16:58:25.707 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:58:25.709 10 uploaded node GID: 5BEF5E6BAA12B51F6E1CEA1740791C91
+16:58:25.721 20 467	天津市
+16:58:25.857 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:58:25.859 10 uploaded node GID: 52E3E6A14D00942366623DB184CDEF2F
+16:58:25.877 20 470	中国行政区划
+16:58:25.931 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:58:25.932 10 uploaded node GID: B9707DA8319990FA7715167EA5727E81
+16:58:25.936 20 471	亚洲
+16:58:26.029 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:58:26.030 10 uploaded node GID: 0BB453AF04C80CA5237A680B8BF7708F
+16:58:26.032 20 481	美国
+16:58:26.211 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:58:26.212 10 uploaded node GID: 3D1379D049F7FBFC623383129C660B7E
+16:58:26.215 20 483	人民币
+16:58:26.268 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:58:26.269 10 uploaded node GID: 3D156F072C366BCCA522F8C38150CAAF
+16:58:26.272 20 484	孔子
+16:58:26.348 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:58:26.349 10 uploaded node GID: 77B68F1D3D5B75024AC4B2E92E4930F6
+16:58:26.351 20 486	深圳市
+16:58:26.473 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:58:26.473 10 uploaded node GID: 4687663F7471F78473466283C1DEAC1E
+16:58:26.474 20 487	Wiki軟體
+16:58:26.536 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:58:26.537 10 uploaded node GID: 69EC2F3D80FBE875BE06854C7DE2883E
+16:58:26.539 20 492	王菲
+16:58:26.636 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:58:26.636 10 uploaded node GID: 7ED73F2AD35DE117CAB423DF223AFCED
+16:58:26.638 20 493	体育运动
+16:58:26.682 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:58:26.682 10 uploaded node GID: F85D3587BF13A4D95D19C870ED5DA650
+16:58:26.683 20 494	埃里克·雷蒙
+16:58:26.724 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:58:26.725 10 uploaded node GID: 87E887C518A78EE91392854A6DF10B67
+16:58:26.727 20 498	阿诺·施瓦辛格
+16:58:26.800 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:58:26.801 10 uploaded node GID: A0E5524C69E486C6D6C174B5C555F27D
+16:58:26.802 20 500	离散数学
+16:58:26.863 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:58:26.864 10 uploaded node GID: A4D75526F3F147424ADF7A6547BF72FE
+16:58:26.865 20 501	抚顺市
+16:58:26.971 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:58:26.971 10 uploaded node GID: 339233954901D5151C1FD76C2D6FF40E
+16:58:26.972 20 506	数理逻辑
+16:58:27.006 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:58:27.006 10 uploaded node GID: 4FEFA4E67BF8D6060D85597665C5826A
+16:58:27.007 20 507	逻辑
+16:58:27.061 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:58:27.062 10 uploaded node GID: 83A27EE37E7DD81989FA918A48E1C716
+16:58:27.062 20 509	中国东北地区
+16:58:27.121 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:58:27.122 10 uploaded node GID: D38D9C13798A9612846808F544120B64
+16:58:27.122 20 510	中华人民共和国元帅
+16:58:27.160 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:58:27.160 10 uploaded node GID: 7014E46B77F5B50D48E405B4785F607A
+16:58:27.161 20 518	俄罗斯
+16:58:27.232 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:58:27.233 10 uploaded node GID: 5CC423A191DD290F3F6870DDFB7740A6
+16:58:27.234 20 519	朱德
+16:58:27.301 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:58:27.301 10 uploaded node GID: 14725F517C347AE258DFB9A033956D31
+16:58:27.302 20 520	倉頡輸入法
+16:58:27.356 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:58:27.356 10 uploaded node GID: FB588188CE8B76DA45F854C479EFA0D5
+16:58:27.357 20 521	编程语言
+16:58:27.404 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:58:27.404 10 uploaded node GID: 6E353E04864905AC638A2561523C3D76
+16:58:27.406 20 527	八王之乱
+16:58:27.492 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:58:27.493 10 uploaded node GID: 78D733B7C6DC94312F36E6426DEF70B6
+16:58:27.493 20 532	新西兰
+16:58:27.548 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:58:27.548 10 uploaded node GID: FA14EB2D1C61CFA7FC02A05DCB3C21D0
+16:58:27.550 20 541	维基百科
+16:58:27.722 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:58:27.723 10 uploaded node GID: 7367A4475DE05D0D493837AEABC3AD96
+16:58:27.736 20 543	法国
+16:58:27.960 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:58:27.961 10 uploaded node GID: 8262B18CE19FCAF90E096CD195CB2878
+16:58:27.963 20 550	JavaScript
+16:58:28.015 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:58:28.016 10 uploaded node GID: 0219DEF16CDA66C0509893D9780364DB
+16:58:28.016 20 551	平方千米
+16:58:28.046 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:58:28.047 10 uploaded node GID: A59739923AE7A6C519309E5881EF06B4
+16:58:28.048 20 552	面积
+16:58:28.088 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:58:28.089 10 uploaded node GID: ABFAEBFBCF636CAFCC52D3CF7690A54D
+16:58:28.090 20 555	Tux
+16:58:28.122 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:58:28.122 10 uploaded node GID: 459D0F282BF6C0501BEA7A0053D96780
+16:58:28.124 20 583	中華民國國旗
+16:58:28.202 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:58:28.202 10 uploaded node GID: 23568D24548095DC48889E610FE17CD4
+16:58:28.204 20 587	加拿大國旗
+16:58:28.255 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:58:28.256 10 uploaded node GID: F33FF235F9EC6B3E941D09A8DC6E9A04
+16:58:28.257 20 592	泰勒斯
+16:58:28.289 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:58:28.290 10 uploaded node GID: F2F931BC50BED0F42D79C12085FE46FC
+16:58:28.290 20 593	阿那克西曼德
+16:58:28.318 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:58:28.318 10 uploaded node GID: 4FED36569DD1B1E23EB3621EC8F10DDD
+16:58:28.319 20 594	阿那克西美尼
+16:58:28.345 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:58:28.346 10 uploaded node GID: 5D600F76DD62CE22CF8F0BE686491F01
+16:58:28.347 20 595	人口密度
+16:58:28.381 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:58:28.382 10 uploaded node GID: 1F3A6A53B379F1490316D64861EE5F99
+16:58:28.382 20 598	非典型肺炎
+16:58:28.418 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:58:28.419 10 uploaded node GID: 1ED358D3A434BF6A43C9F658BE876528
+16:58:28.419 20 602	臺灣國旗
+16:58:28.466 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+16:58:28.469 10 uploaded node GID: 4EC1D9828BFE89F13E50A270EADB1BAF
+16:58:28.485 20 607	法國歷史
+16:58:28.510 20 608	嚴重急性呼吸系統綜合症
+17:15:47.398 20 13	数学
+17:15:47.644 10 numOfCreations: 1
+numOfUpdates: 0
+numOfSkips: 0
+
+17:15:47.645 10 uploaded node GID: 8A19C6EB9F1A7677A95553B3EA42E336
+17:15:47.653 20 18	哲学
+17:15:47.845 10 numOfCreations: 1
+numOfUpdates: 0
+numOfSkips: 0
+
+17:15:47.846 10 uploaded node GID: E52AE8096A664A624F93A0267EA3791A
+17:15:47.851 20 21	文學
+17:15:48.006 10 numOfCreations: 1
+numOfUpdates: 0
+numOfSkips: 0
+
+17:15:48.007 10 uploaded node GID: F485586DAC820729869CA70C94232E45
+17:15:48.008 20 22	历史

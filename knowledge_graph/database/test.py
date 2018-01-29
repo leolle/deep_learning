@@ -258,3 +258,22 @@ def open_file(path):
     with open(path) as f:
         for i, line in enumerate(f):
             print(len(line.readline()))
+
+
+original = u'%E6%96%87%E5%AD%B8'
+a = u'硝酸铵'
+original_ch = u'文学'
+import sys
+if sys.version_info[0] > 2:
+    from urllib.parse import quote_plus, urlparse, parse_qs
+else:
+    from urllib import quote_plus
+    from urlparse import urlparse, parse_qs
+
+result = quote_plus(a)
+
+pk_str = "https://zh.wikipedia.org/wiki/" + result
+pk_str = "https://zh.wikipedia.org/wiki/" + "%E8%AF%BA%E8%B4%9D%E5%B0%94%E5%A5%96"
+pk_str = "https://zh.wikipedia.org/wiki/" + "诺贝尔奖"
+pk_md5 = hashlib.md5(pk_str.encode('utf-8')).hexdigest().upper()
+print(hashlib.md5(pk_md5.encode("utf-8")).hexdigest())

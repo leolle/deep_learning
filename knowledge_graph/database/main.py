@@ -16,9 +16,9 @@ collection = db.zhwiki
 batch_size = 20
 # links number
 # wiki_category_link line size = 1503
-wiki_category_link_size = 8
+# wiki_category_link_size = 8
 n = 4
-chunks = int(wiki_category_link_size / n)
+# chunks = int(wiki_category_link_size / n)
 # Maximum number of times to retry before giving up.
 MAX_RETRIES = 10
 NODES_FAIL_MAX_RETRIES = 3
@@ -38,10 +38,6 @@ test_url = 'http://192.168.1.166:9080'
 test_user_name = 'wuwei'
 test_pwd = 'gft'
 gs_call = gftIO.GSCall(test_url, test_user_name, test_pwd)
-try:
-    graph = gs_call.get_graph_from_neo4j('392482970E904D11190D208B7C22874A')
-except:
-    pass
 
 if __name__ == '__main__':
     import logging
@@ -53,6 +49,8 @@ if __name__ == '__main__':
         start_page = int(sys.argv[2])
         start_edge = int(sys.argv[3])
     except:
+        print(
+            'try python main.py cat_start_line page_start_line link_start_line')
         start_cat = 0
         start_page = 0
         start_edge = 0
@@ -73,7 +71,6 @@ if __name__ == '__main__':
 
     # open page sql file
     page_path = "./data/zhwiki-latest-page.zhs.sql"
-    # page_path = "./zhwiki-latest-page.zhs.sql"
     wiki_page_re = re.compile(
         "\(([0-9]+),([0-9]+),('[^,]+'),('[^,]+|'),([0-9]+),([0-9]+),([0-9]+),0.([0-9]+),('[^,]+'),('[^,]+'|NULL),([0-9]+),([0-9]+),('[^,]+'),([^,]+)\)"
     )
@@ -89,7 +86,7 @@ if __name__ == '__main__':
 
     # # upload edge
 
-    # chunk_num = int(sys.argv[1])
+    # chunk_num
     # start = chunk_num * chunks
     # end = (chunk_num + 1) * chunks
     category_link_path = './data/zhwiki-latest-categorylinks.zhs.sql'

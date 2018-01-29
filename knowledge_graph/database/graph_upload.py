@@ -26,9 +26,6 @@ collection = db.zhwiki
 batch_size = 20
 # links number
 # wiki_category_link line size = 1503
-wiki_category_link_size = 8
-n = 4
-chunks = int(wiki_category_link_size / n)
 # Maximum number of times to retry before giving up.
 MAX_RETRIES = 10
 NODES_FAIL_MAX_RETRIES = 3
@@ -48,7 +45,6 @@ test_url = 'http://192.168.1.166:9080'
 test_user_name = 'wuwei'
 test_pwd = 'gft'
 gs_call = gftIO.GSCall(test_url, test_user_name, test_pwd)
-gs_call = gftIO.GSCall(test_url, test_user_name, test_pwd)
 
 
 def test_get_skill_graph(args):
@@ -60,59 +56,6 @@ def test_get_skill_graph(args):
             pwd=test_pwd)
     except:
         pass
-
-
-class FileIterator(object):
-
-    def __init__(self, path, rex):
-        self._fw = open(path, 'r')
-        self.string = self._fw.read()
-        self.rex = rex
-        self.last_span = self.search(self._fw).span()[0]
-
-    def read(self):
-        #        matched = self.rex.search(self.string,self.last_span)
-        matched = re.finditer(self.rex, self.string)
-        # self.last_span = matched.span()[1]
-        yield matched
-
-    def readlines(self):
-        """ Line iterator """
-
-        for line in self._fw:
-            yield line
-
-    def readblocks(self, block_size):
-        """ Block iterator """
-
-        while True:
-            block = self._fw.read(block_size)
-            if block == '':
-                break
-            yield block
-
-    def display(self):
-        """
-        Keyword Arguments:
-        self --
-        """
-        print(self)
-
-    # def __iter__(self):
-    #     with open(self.path, 'r') as f:
-    #         for line in f:
-    #             yield line
-    def __iter__(self):
-        return self
-
-    def __next__(self):
-        """
-        Keyword Arguments:
-        self --
-        """
-        with open(self.path, 'r') as f:
-            for line in f:
-                return line
 
 
 def delete_edge(dict_re_match_object):
@@ -282,8 +225,6 @@ def upload_edge(dict_re_match_object):
             graph_upload_request.edgeAction4Duplication = graphUpload_pb2.Action4Duplication.Value(
                 'UPDATE')
             res = gs_call.upload_graph(graph_upload_request)
-            # if response is not None:
-            #     print("successfully uploaded")
         except HTTPError as e:
             if e.code in RETRIABLE_STATUS_CODES:
                 error = 'A retriable HTTP error %d occurred:\n%s' % (e.code,
@@ -351,9 +292,10 @@ def upload_page_node(dict_re_match_object):
                     except:
                         pass
                     node.props.type = "readonlyDoc"
-                    p0 = node.props.props.entries.add()
-                    p0.key = "_sys_subtype"
-                    p0.value = "HTML"
+                    node.subType = "HTML"
+                    # p0 = node.props.props.entries.add()
+                    # p0.key = "_sys_subtype"
+                    # p0.value = "HTML"
                     p1 = node.props.props.entries.add()
                     p1.key = "_s_import_source"
                     p1.value = "wiki"
@@ -379,8 +321,6 @@ def upload_page_node(dict_re_match_object):
                 'UPDATE')
 
             res = gs_call.upload_graph(graph_upload_request)
-            # if response is not None:
-            #     print("successfully uploaded")
         except HTTPError as e:
             if e.code in RETRIABLE_STATUS_CODES:
                 error = 'A retriable HTTP error %d occurred:\n%s' % (e.code,
@@ -412,7 +352,6 @@ def upload_page_node(dict_re_match_object):
             sleep_seconds = random.random() * max_sleep
             print('Sleeping %f seconds and then retrying...' % sleep_seconds)
             time.sleep(sleep_seconds)
-    # jump out while response is None:
     # jump out while response is None:
     try:
         if res.nodeUpdateResultStatistics:
@@ -479,9 +418,6 @@ def upload_cat_node(dict_re_match_object):
                 'UPDATE')
 
             res = gs_call.upload_graph(graph_upload_request)
-            # ylog.debug(res)
-            # if response is not None:
-            #     print("successfully uploaded")
 
         except HTTPError as e:
             if e.code in RETRIABLE_STATUS_CODES:
