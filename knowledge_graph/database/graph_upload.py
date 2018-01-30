@@ -14,6 +14,39 @@ from urllib.error import HTTPError
 from lib.gftTools.gftIO import GSError
 from pymongo import MongoClient
 from google.protobuf.message import DecodeError
+from hanziconv import HanziConv
+
+PY2 = sys.version_info[0] == 2
+# Python 2.7 compatibiity
+if PY2:
+    from urllib import quote
+    from urllib import quote_plus
+    from urlparse import urlparse, parse_qs
+    from htmlentitydefs import name2codepoint
+    from itertools import izip as zip, izip_longest as zip_longest
+    range = xrange  # Use Python 3 equivalent
+    chr = unichr  # Use Python 3 equivalent
+    text_type = unicode
+
+    class SimpleNamespace(object):
+
+        def __init__(self, **kwargs):
+            self.__dict__.update(kwargs)
+
+        def __repr__(self):
+            keys = sorted(self.__dict__)
+            items = ("{}={!r}".format(k, self.__dict__[k]) for k in keys)
+            return "{}({})".format(type(self).__name__, ", ".join(items))
+
+        def __eq__(self, other):
+            return self.__dict__ == other.__dict__
+else:
+    from urllib.parse import quote_plus, urlparse, parse_qs
+    from urllib.parse import quote
+    from html.entities import name2codepoint
+    from itertools import zip_longest
+    from types import SimpleNamespace
+    text_type = str
 
 # ylog.set_level(logging.DEBUG)
 # ylog.console_on()
@@ -293,9 +326,6 @@ def upload_page_node(dict_re_match_object):
                         pass
                     node.props.type = "readonlyDoc"
                     node.subType = "HTML"
-                    # p0 = node.props.props.entries.add()
-                    # p0.key = "_sys_subtype"
-                    # p0.value = "HTML"
                     p1 = node.props.props.entries.add()
                     p1.key = "_s_import_source"
                     p1.value = "wiki"
@@ -390,26 +420,27 @@ def upload_cat_node(dict_re_match_object):
             for index, value in dict_re_match_object.items():
                 if value is not None:
                     item = dict_re_match_object.get(index)
-                    node = graph_upload_request.graph.nodes.add()
                     title = item.group(2)[1:-1]
+                    zh_title = HanziConv.toSimplified(title)
+                    if zh_title in IGNORE_CATEGORIES:
+                        break
+                    node = graph_upload_request.graph.nodes.add()
                     node.props.type = "Oset"
                     p0 = node.props.props.entries.add()
                     p0.key = "_name"
-                    p0.value = title
+                    p0.value = HanziConv.toSimplified(title)
                     p1 = node.props.props.entries.add()
                     p1.key = "url"
-                    p1.value = "https://zh.wikipedia.org/wiki/Category:" + title
+                    p1.value = "https://zh.wikipedia.org/wiki/Category:" + quote_plus(
+                        title)
                     p2 = node.props.props.entries.add()
                     p2.key = "_s_import_source"
                     p2.value = "wiki"
-                    p3 = node.props.props.entries.add()
-                    p3.key = "_ownerid"
-                    p3.value = "GFT"
 
                     node.businessID.domain = "https://zh.wikipedia.org/wiki/Category:"
-                    node.businessID.primaryKeyInDomain = title
+                    node.businessID.primaryKeyInDomain = quote_plus(title)
 
-                    node.names.chinese = title
+                    node.names.chinese = zh_title
             # other information of the upload request
             graph_upload_request.uploadTag = "UploadWikiCatNodes"
             graph_upload_request.nodeAction4Duplication = graphUpload_pb2.Action4Duplication.Value(
