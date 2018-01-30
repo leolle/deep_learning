@@ -42,7 +42,7 @@ gs_call = gftIO.GSCall(test_url, test_user_name, test_pwd)
 if __name__ == '__main__':
     import logging
     ylog.set_level(logging.DEBUG)
-    # ylog.console_on()
+    ylog.console_on()
     ylog.filelog_on("wiki_upload")
     try:
         start_cat = int(sys.argv[1])
@@ -89,7 +89,8 @@ if __name__ == '__main__':
     # chunk_num
     # start = chunk_num * chunks
     # end = (chunk_num + 1) * chunks
-    category_link_path = user_path + '/share/deep_learning/data/zhwiki_cat_pg_lk/zhwiki-latest-categorylinks.zhs.sql'
+    #    category_link_path = user_path + '/share/deep_learning/data/zhwiki_cat_pg_lk/zhwiki-latest-categorylinks.sql'
+    category_link_path = './data/zhwiki-latest-categorylinks.zhs.sql'
     wiki_category_link_re = re.compile(
         "\(([0-9]+),('[^,]+'),('[^']+'),('\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}'),('[^']*'),('[^,]+'),('[^,]+')\)"
     )

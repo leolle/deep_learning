@@ -122,6 +122,20 @@ def upload_edge(dict_re_match_object):
         if value is not None:
             item = dict_re_match_object.get(index)
             edge_type = item.group(7)[1:-1]
+            if edge_type == 'page':
+                page_title = item.group(3)[1:-1]
+                cat_title = item.group(2)[1:-1]
+                if '\\n' in cat_title:
+                    end = cat_title.split("\\n")
+                    cat_title = end[-1]
+                if '\\n' in page_title:
+                    end = page_title.split("\\n")
+                    page_title = end[-1]
+                page_title = page_title.replace(" ", "_")
+                # ylog.debug(cat_title)
+                # ylog.debug(subcat_title)
+                if cat_title in EXAMPLE_CATEGORIES:
+                    g.addEdge(cat_title, page_title)
             if edge_type == 'subcat':
                 subcat_title = item.group(3)[1:-1]
                 cat_title = item.group(2)[1:-1]
@@ -139,20 +153,6 @@ def upload_edge(dict_re_match_object):
 
                 if cat_title in EXAMPLE_CATEGORIES:
                     g.addEdge(cat_title, subcat_title)
-            if edge_type == 'page':
-                page_title = item.group(3)[1:-1]
-                cat_title = item.group(2)[1:-1]
-                if '\\n' in cat_title:
-                    end = cat_title.split("\\n")
-                    cat_title = end[-1]
-                if '\\n' in page_title:
-                    end = page_title.split("\\n")
-                    page_title = end[-1]
-                page_title = page_title.replace(" ", "_")
-                # ylog.debug(cat_title)
-                # ylog.debug(subcat_title)
-                if cat_title in EXAMPLE_CATEGORIES:
-                    g.addEdge(cat_title, page_title)
 
 
 def batch_upload(re, file_path, batch_size, func, start, end):
@@ -209,3 +209,7 @@ g.direct_loop()
 #     print("Graph has a cycle")
 # else:
 #     print("Graph has no cycle")
+for node in g.graph.keys():
+    for i in g.graph[node]:
+        print("(2,'%s','%s','2017-11-23 07:54:28','','uppercase','page')," %
+              (node, i))

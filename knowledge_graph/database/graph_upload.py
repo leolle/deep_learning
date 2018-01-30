@@ -203,12 +203,15 @@ def delete_edge(dict_re_match_object):
 def upload_edge(dict_re_match_object):
     """ upload edge created from regular expression matched object.
     (9,'En-3_使用者','MOUNTAIN','2015-09-02 13:44:06','','uppercase','page')
+    (id, from, to,...)
     Keyword Arguments:
     re_match_object -- re object
     """
     res = None
     error = None
+    re_upload_error = None
     retry = 0
+    nodes_fail_retry = 0
     uploaded_number = 0
     while res is None:
         try:
@@ -221,8 +224,6 @@ def upload_edge(dict_re_match_object):
                     if edge_type == 'page':
                         page_title = item.group(3)[1:-1]
                         cat_title = item.group(2)[1:-1]
-                        edge = graph_upload_request.graph.edges.add()
-                        edge.props.type = "HasElement"
                         if '\\n' in cat_title:
                             end = cat_title.split("\\n")
                             cat_title = end[-1]
@@ -232,13 +233,16 @@ def upload_edge(dict_re_match_object):
                         page_title = page_title.replace(" ", "_")
                         page_title_zh = HanziConv.toSimplified(page_title)
                         cat_title_zh = HanziConv.toSimplified(cat_title)
+                        # if not cat_title_zh in EXAMPLE_CATEGORIES_PAGE_DICT:
+                        #     continue
 
-                        edge.startNodeID.businessID.url = "https://zh.wikipedia.org/wiki/Category:" + quote_plus(
+                        edge = graph_upload_request.graph.edges.add()
+                        edge.props.type = "HasElement"
+                        edge.startNodeID.url = "https://zh.wikipedia.org/wiki/Category:" + quote_plus(
                             cat_title)
-                        # edge.startNodeID.domain = "https://zh.wikipedia.org/wiki/Category:"
-                        # edge.startNodeID.primaryKeyInDomain = cat_title
-                        # edge.endNodeID.domain = "https://zh.wikipedia.org/wiki/"
-                        # edge.endNodeID.primaryKeyInDomain = page_title
+                        edge.endNodeID.url = "https://zh.wikipedia.org/wiki/" + quote_plus(
+                            page_title)
+
                     if edge_type == 'subcat':
                         subcat_title = item.group(3)[1:-1]
                         cat_title = item.group(2)[1:-1]
@@ -249,17 +253,19 @@ def upload_edge(dict_re_match_object):
                             end = subcat_title.split("\\n")
                             subcat_title = end[-1]
                         subcat_title = subcat_title.replace(" ", "_")
-                        if subcat_title in IGNORE_CATEGORIES or cat_title in IGNORE_CATEGORIES:
-                            continue
-                        if subcat_title == cat_title:
+                        subcat_title_zh = HanziConv.toSimplified(subcat_title)
+                        cat_title_zh = HanziConv.toSimplified(cat_title)
+
+                        # if not cat_title_zh in EXAMPLE_CATEGORIES_PAGE_DICT:
+                        #     continue
+                        if subcat_title_zh == cat_title_zh:
                             continue
                         edge = graph_upload_request.graph.edges.add()
+                        edge.startNodeID.url = "https://zh.wikipedia.org/wiki/Category:" + quote_plus(
+                            cat_title)
+                        edge.endNodeID.url = "https://zh.wikipedia.org/wiki/Category:" + quote_plus(
+                            subcat_title)
                         edge.props.type = "HasSubset"
-
-                        # edge.startNodeID.domain = "https://zh.wikipedia.org/wiki/Category:"
-                        # edge.startNodeID.primaryKeyInDomain = cat_title
-                        # edge.endNodeID.domain = "https://zh.wikipedia.org/wiki/Category:"
-                        # edge.endNodeID.primaryKeyInDomain = subcat_title
 
             graph_upload_request.uploadTag = "uploadWikiEdge"
             graph_upload_request.nodeAction4Duplication = graphUpload_pb2.Action4Duplication.Value(
@@ -267,6 +273,7 @@ def upload_edge(dict_re_match_object):
             graph_upload_request.edgeAction4Duplication = graphUpload_pb2.Action4Duplication.Value(
                 'UPDATE')
             res = gs_call.upload_graph(graph_upload_request)
+            # ylog.debug(res)
         except HTTPError as e:
             if e.code in RETRIABLE_STATUS_CODES:
                 error = 'A retriable HTTP error %d occurred:\n%s' % (e.code,
@@ -275,6 +282,18 @@ def upload_edge(dict_re_match_object):
                 raise
         except RETRIABLE_EXCEPTIONS as e:
             error = 'A retriable error occurred: %s' % e
+        # try:
+        #     if res.failedEdges:
+        #         re_upload_error = "some nodes failed to upload %s" % res.failedEdges
+        # except:
+        #     pass
+        # if re_upload_error is not None:
+        #     print(re_upload_error)
+        #     nodes_fail_retry += 1
+        #     res = None
+        #     if nodes_fail_retry > NODES_FAIL_MAX_RETRIES:
+        #         ylog.debug(res)
+        #         res = "continue"
         if error is not None:
             print(error)
             retry += 1
@@ -524,6 +543,11 @@ def batch_upload(re, file_path, batch_size, func, start, end):
     """
     uploaded_number = 0
     try:
+        # TODO:     total_line_size = len(f.readlines())
+        #   File "/home/weiwu/.virtualenvs/graph/lib/python3.6/codecs.py", line 321, in decode
+        #     (result, consumed) = self._buffer_decode(data, self.errors, final)
+        # UnicodeDecodeError: 'utf-8' codec can't decode byte 0xe5 in position 7629: invalid continuation byte
+
         with open(file_path, 'r') as f:
             total_line_size = len(f.readlines())
         with open(file_path, 'r') as f:

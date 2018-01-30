@@ -1,55 +1,2508 @@
-15:51:29.517 10 numOfCreations: 1
+17:24:19.588 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+17:24:19.588 10 uploaded node GID: 0EEC464485C5A4B2CA62E8EACF20E3C3
+17:24:19.614 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+17:24:19.615 10 uploaded node GID: 72F3D1450F99D1EA63B9F95761861CC9
+17:24:19.636 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+17:24:19.636 10 uploaded node GID: 1A6966A82E510769A6D0FD38B3E9633C
+17:24:19.659 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+17:24:19.659 10 uploaded node GID: FBAE13C4D0284F1F48BEF54F7A2E908B
+17:24:19.682 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+17:24:19.683 10 uploaded node GID: DD1256C61CE5CC04DFE281D206AD35BE
+17:24:19.703 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+17:24:19.704 10 uploaded node GID: 557AACC3D97F30AF3037B758D7DCA2A0
+17:24:19.723 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+17:24:19.724 10 uploaded node GID: A6EDCF1D9801FB10ACC5A3F8472DC4C8
+17:24:19.741 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+17:24:19.742 10 uploaded node GID: E353C15FF7580723B7BD80307B7E04C4
+17:24:19.763 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+17:24:19.763 10 uploaded node GID: 62ACC9BA6C17540A308E0FD99D8BCF6D
+17:24:19.784 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+17:24:19.784 10 uploaded node GID: 25A46683494531CC898D408C54D001D8
+17:24:19.805 10 numOfCreations: 0
+numOfUpdates: 1
+numOfSkips: 0
+
+17:24:19.806 10 uploaded node GID: A94C95EA8AB42DEA4A24372AEBC160BD
+17:24:19.807 10 reading link sql file
+17:24:19.807 10 uploading wiki categorie page link
+17:24:19.832 10 numOfCreations: 0
 numOfUpdates: 0
 numOfSkips: 0
 
-15:51:29.519 10 uploaded node GID: 0EEC464485C5A4B2CA62E8EACF20E3C3
-15:51:29.606 10 numOfCreations: 1
+17:24:19.832 10 edge {
+  props {
+    type: "HasSubset"
+  }
+  startNodeID {
+    url: "https://zh.wikipedia.org/wiki/Category:%E8%AF%81%E5%88%B8"
+  }
+  endNodeID {
+    url: "https://zh.wikipedia.org/wiki/Category:%E8%AF%81%E5%88%B8%E4%BA%A4%E6%98%93%E6%89%80"
+  }
+}
+error {
+  reason: "start node doesn\'t exist"
+}
+
+17:24:19.856 10 numOfCreations: 0
 numOfUpdates: 0
 numOfSkips: 0
 
-15:51:29.607 10 uploaded node GID: 72F3D1450F99D1EA63B9F95761861CC9
-15:51:29.731 10 numOfCreations: 1
+17:24:19.856 10 edge {
+  props {
+    type: "HasSubset"
+  }
+  startNodeID {
+    url: "https://zh.wikipedia.org/wiki/Category:%E8%AF%81%E5%88%B8%E4%BA%A4%E6%98%93%E6%89%80"
+  }
+  endNodeID {
+    url: "https://zh.wikipedia.org/wiki/Category:%E5%90%84%E8%AF%81%E5%88%B8%E4%BA%A4%E6%98%93%E6%89%80%E4%B8%8A%E5%B8%82%E5%85%AC%E5%8F%B8"
+  }
+}
+error {
+  reason: "start node doesn\'t exist"
+}
+
+17:24:19.876 10 numOfCreations: 0
 numOfUpdates: 0
 numOfSkips: 0
 
-15:51:29.731 10 uploaded node GID: 1A6966A82E510769A6D0FD38B3E9633C
-15:51:29.833 10 numOfCreations: 1
+17:24:19.877 10 edge {
+  props {
+    type: "HasSubset"
+  }
+  startNodeID {
+    url: "https://zh.wikipedia.org/wiki/Category:%E5%90%84%E8%AF%81%E5%88%B8%E4%BA%A4%E6%98%93%E6%89%80%E4%B8%8A%E5%B8%82%E5%85%AC%E5%8F%B8"
+  }
+  endNodeID {
+    url: "https://zh.wikipedia.org/wiki/Category:%E4%B8%8A%E6%B5%B7%E8%AF%81%E5%88%B8%E4%BA%A4%E6%98%93%E6%89%80%E4%B8%8A%E5%B8%82%E5%85%AC%E5%8F%B8"
+  }
+}
+error {
+  reason: "start node doesn\'t exist"
+}
+
+17:24:19.897 10 numOfCreations: 0
 numOfUpdates: 0
 numOfSkips: 0
 
-15:51:29.835 10 uploaded node GID: FBAE13C4D0284F1F48BEF54F7A2E908B
-15:51:29.927 10 numOfCreations: 1
+17:24:19.898 10 edge {
+  props {
+    type: "HasSubset"
+  }
+  startNodeID {
+    url: "https://zh.wikipedia.org/wiki/Category:%E5%90%84%E8%AF%81%E5%88%B8%E4%BA%A4%E6%98%93%E6%89%80%E4%B8%8A%E5%B8%82%E5%85%AC%E5%8F%B8"
+  }
+  endNodeID {
+    url: "https://zh.wikipedia.org/wiki/Category:%E6%B7%B1%E5%9C%B3%E8%AF%81%E5%88%B8%E4%BA%A4%E6%98%93%E6%89%80%E4%B8%8A%E5%B8%82%E5%85%AC%E5%8F%B8"
+  }
+}
+error {
+  reason: "start node doesn\'t exist"
+}
+
+17:24:19.918 10 numOfCreations: 0
 numOfUpdates: 0
 numOfSkips: 0
 
-15:51:29.930 10 uploaded node GID: DD1256C61CE5CC04DFE281D206AD35BE
-15:51:30.013 10 numOfCreations: 1
+17:24:19.919 10 edge {
+  props {
+    type: "HasElement"
+  }
+  startNodeID {
+    url: "https://zh.wikipedia.org/wiki/Category:%E8%AF%81%E5%88%B8%E4%BA%A4%E6%98%93%E6%89%80"
+  }
+  endNodeID {
+    url: "https://zh.wikipedia.org/wiki/%E8%AF%81%E5%88%B8%E4%BA%A4%E6%98%93%E6%89%80"
+  }
+}
+error {
+  reason: "start node doesn\'t exist"
+}
+
+17:24:19.940 10 numOfCreations: 0
 numOfUpdates: 0
 numOfSkips: 0
 
-15:51:30.013 10 uploaded node GID: 557AACC3D97F30AF3037B758D7DCA2A0
-15:51:30.069 10 numOfCreations: 1
+17:24:19.940 10 edge {
+  props {
+    type: "HasElement"
+  }
+  startNodeID {
+    url: "https://zh.wikipedia.org/wiki/Category:%E8%AF%81%E5%88%B8%E4%BA%A4%E6%98%93%E6%89%80"
+  }
+  endNodeID {
+    url: "https://zh.wikipedia.org/wiki/%E4%B8%96%E7%95%8C%E8%AF%81%E5%88%B8%E4%BA%A4%E6%98%93%E6%89%80%E5%88%97%E8%A1%A8"
+  }
+}
+error {
+  reason: "start node doesn\'t exist"
+}
+
+17:24:19.959 10 numOfCreations: 0
 numOfUpdates: 0
 numOfSkips: 0
 
-15:51:30.069 10 uploaded node GID: A6EDCF1D9801FB10ACC5A3F8472DC4C8
-15:51:30.152 10 numOfCreations: 1
+17:24:19.959 10 edge {
+  props {
+    type: "HasElement"
+  }
+  startNodeID {
+    url: "https://zh.wikipedia.org/wiki/Category:%E8%AF%81%E5%88%B8%E4%BA%A4%E6%98%93%E6%89%80"
+  }
+  endNodeID {
+    url: "https://zh.wikipedia.org/wiki/%E5%90%84%E8%AF%81%E5%88%B8%E4%BA%A4%E6%98%93%E6%89%80%E4%B8%8A%E5%B8%82%E5%85%AC%E5%8F%B8"
+  }
+}
+error {
+  reason: "start node doesn\'t exist"
+}
+
+17:24:19.977 10 numOfCreations: 0
 numOfUpdates: 0
 numOfSkips: 0
 
-15:51:30.152 10 uploaded node GID: E353C15FF7580723B7BD80307B7E04C4
-15:51:30.217 10 numOfCreations: 1
+17:24:19.977 10 edge {
+  props {
+    type: "HasElement"
+  }
+  startNodeID {
+    url: "https://zh.wikipedia.org/wiki/Category:%E8%AF%81%E5%88%B8%E4%BA%A4%E6%98%93%E6%89%80"
+  }
+  endNodeID {
+    url: "https://zh.wikipedia.org/wiki/%E4%B8%96%E7%95%8C%E4%BA%A4%E6%98%93%E6%89%80%E8%81%94%E5%90%88%E4%BC%9A"
+  }
+}
+error {
+  reason: "start node doesn\'t exist"
+}
+
+17:24:19.997 10 numOfCreations: 0
 numOfUpdates: 0
 numOfSkips: 0
 
-15:51:30.217 10 uploaded node GID: 62ACC9BA6C17540A308E0FD99D8BCF6D
-15:51:30.388 10 numOfCreations: 1
+17:24:19.998 10 edge {
+  props {
+    type: "HasElement"
+  }
+  startNodeID {
+    url: "https://zh.wikipedia.org/wiki/Category:%E8%AF%81%E5%88%B8%E4%BA%A4%E6%98%93%E6%89%80"
+  }
+  endNodeID {
+    url: "https://zh.wikipedia.org/wiki/%E4%B8%96%E7%95%8C%E4%BA%A4%E6%98%93%E6%89%80%E8%81%94%E7%9B%9F%E6%88%90%E5%91%98"
+  }
+}
+error {
+  reason: "start node doesn\'t exist"
+}
+
+17:24:20.019 10 numOfCreations: 0
 numOfUpdates: 0
 numOfSkips: 0
 
-15:51:30.390 10 uploaded node GID: 25A46683494531CC898D408C54D001D8
-15:51:30.457 10 numOfCreations: 1
+17:24:20.020 10 edge {
+  props {
+    type: "HasElement"
+  }
+  startNodeID {
+    url: "https://zh.wikipedia.org/wiki/Category:%E8%AF%81%E5%88%B8%E4%BA%A4%E6%98%93%E6%89%80"
+  }
+  endNodeID {
+    url: "https://zh.wikipedia.org/wiki/%E4%BE%9D%E5%A4%A7%E6%B4%B2%E5%88%92%E5%88%86%E7%9A%84%E8%AF%81%E5%88%B8%E4%BA%A4%E6%98%93%E6%89%80"
+  }
+}
+error {
+  reason: "start node doesn\'t exist"
+}
+
+17:24:20.041 10 numOfCreations: 0
 numOfUpdates: 0
 numOfSkips: 0
 
-15:51:30.458 10 uploaded node GID: A94C95EA8AB42DEA4A24372AEBC160BD
+17:24:20.042 10 edge {
+  props {
+    type: "HasElement"
+  }
+  startNodeID {
+    url: "https://zh.wikipedia.org/wiki/Category:%E8%AF%81%E5%88%B8%E4%BA%A4%E6%98%93%E6%89%80"
+  }
+  endNodeID {
+    url: "https://zh.wikipedia.org/wiki/%E6%96%B0%E8%A5%BF%E5%85%B0%E8%AF%81%E5%88%B8%E4%BA%A4%E6%98%93%E6%89%80"
+  }
+}
+error {
+  reason: "start node doesn\'t exist"
+}
+
+17:24:20.063 10 numOfCreations: 0
+numOfUpdates: 0
+numOfSkips: 0
+
+17:24:20.064 10 edge {
+  props {
+    type: "HasElement"
+  }
+  startNodeID {
+    url: "https://zh.wikipedia.org/wiki/Category:%E8%AF%81%E5%88%B8%E4%BA%A4%E6%98%93%E6%89%80"
+  }
+  endNodeID {
+    url: "https://zh.wikipedia.org/wiki/%E6%B1%89%E5%A0%A1%E8%AF%81%E5%88%B8%E4%BA%A4%E6%98%93%E6%89%80"
+  }
+}
+error {
+  reason: "start node doesn\'t exist"
+}
+
+17:24:20.084 10 numOfCreations: 0
+numOfUpdates: 0
+numOfSkips: 0
+
+17:24:20.085 10 edge {
+  props {
+    type: "HasElement"
+  }
+  startNodeID {
+    url: "https://zh.wikipedia.org/wiki/Category:%E6%B7%B1%E5%9C%B3%E8%AF%81%E5%88%B8%E4%BA%A4%E6%98%93%E6%89%80%E4%B8%8A%E5%B8%82%E5%85%AC%E5%8F%B8"
+  }
+  endNodeID {
+    url: "https://zh.wikipedia.org/wiki/%E8%85%BE%E8%AE%AF"
+  }
+}
+error {
+  reason: "start node doesn\'t exist"
+}
+
+17:24:20.105 10 numOfCreations: 0
+numOfUpdates: 0
+numOfSkips: 0
+
+17:24:20.106 10 edge {
+  props {
+    type: "HasElement"
+  }
+  startNodeID {
+    url: "https://zh.wikipedia.org/wiki/Category:%E6%B7%B1%E5%9C%B3%E8%AF%81%E5%88%B8%E4%BA%A4%E6%98%93%E6%89%80%E4%B8%8A%E5%B8%82%E5%85%AC%E5%8F%B8"
+  }
+  endNodeID {
+    url: "https://zh.wikipedia.org/wiki/%E6%B9%96%E5%8D%97%E7%94%B5%E5%B9%BF%E4%BC%A0%E5%AA%92"
+  }
+}
+error {
+  reason: "start node doesn\'t exist"
+}
+
+17:24:20.125 10 numOfCreations: 0
+numOfUpdates: 0
+numOfSkips: 0
+
+17:24:20.125 10 edge {
+  props {
+    type: "HasElement"
+  }
+  startNodeID {
+    url: "https://zh.wikipedia.org/wiki/Category:%E6%B7%B1%E5%9C%B3%E8%AF%81%E5%88%B8%E4%BA%A4%E6%98%93%E6%89%80%E4%B8%8A%E5%B8%82%E5%85%AC%E5%8F%B8"
+  }
+  endNodeID {
+    url: "https://zh.wikipedia.org/wiki/%E8%8B%8F%E5%AE%81%E4%BA%91%E5%95%86"
+  }
+}
+error {
+  reason: "start node doesn\'t exist"
+}
+
+17:24:20.145 10 numOfCreations: 0
+numOfUpdates: 0
+numOfSkips: 0
+
+17:24:20.146 10 edge {
+  props {
+    type: "HasElement"
+  }
+  startNodeID {
+    url: "https://zh.wikipedia.org/wiki/Category:%E6%B7%B1%E5%9C%B3%E8%AF%81%E5%88%B8%E4%BA%A4%E6%98%93%E6%89%80%E4%B8%8A%E5%B8%82%E5%85%AC%E5%8F%B8"
+  }
+  endNodeID {
+    url: "https://zh.wikipedia.org/wiki/%E4%B8%83%E5%96%9C%E7%94%B5%E8%84%91"
+  }
+}
+error {
+  reason: "start node doesn\'t exist"
+}
+
+17:24:20.165 10 numOfCreations: 0
+numOfUpdates: 0
+numOfSkips: 0
+
+17:24:20.166 10 edge {
+  props {
+    type: "HasElement"
+  }
+  startNodeID {
+    url: "https://zh.wikipedia.org/wiki/Category:%E6%B7%B1%E5%9C%B3%E8%AF%81%E5%88%B8%E4%BA%A4%E6%98%93%E6%89%80%E4%B8%8A%E5%B8%82%E5%85%AC%E5%8F%B8"
+  }
+  endNodeID {
+    url: "https://zh.wikipedia.org/wiki/SZSE"
+  }
+}
+error {
+  reason: "start node doesn\'t exist"
+}
+
+17:24:20.190 10 numOfCreations: 0
+numOfUpdates: 0
+numOfSkips: 0
+
+17:24:20.190 10 edge {
+  props {
+    type: "HasElement"
+  }
+  startNodeID {
+    url: "https://zh.wikipedia.org/wiki/Category:%E6%B7%B1%E5%9C%B3%E8%AF%81%E5%88%B8%E4%BA%A4%E6%98%93%E6%89%80%E4%B8%8A%E5%B8%82%E5%85%AC%E5%8F%B8"
+  }
+  endNodeID {
+    url: "https://zh.wikipedia.org/wiki/%E5%A4%A9%E6%B4%A5%E4%B8%80%E6%B1%BD%E5%A4%8F%E5%88%A9%E6%B1%BD%E8%BD%A6"
+  }
+}
+error {
+  reason: "start node doesn\'t exist"
+}
+
+17:24:20.212 10 numOfCreations: 0
+numOfUpdates: 0
+numOfSkips: 0
+
+17:24:20.212 10 edge {
+  props {
+    type: "HasElement"
+  }
+  startNodeID {
+    url: "https://zh.wikipedia.org/wiki/Category:%E6%B7%B1%E5%9C%B3%E8%AF%81%E5%88%B8%E4%BA%A4%E6%98%93%E6%89%80%E4%B8%8A%E5%B8%82%E5%85%AC%E5%8F%B8"
+  }
+  endNodeID {
+    url: "https://zh.wikipedia.org/wiki/%E9%98%BF%E9%87%8C%E5%B7%B4%E5%B7%B4%E9%9B%86%E5%9B%A2"
+  }
+}
+error {
+  reason: "start node doesn\'t exist"
+}
+
+17:24:20.235 10 numOfCreations: 0
+numOfUpdates: 0
+numOfSkips: 0
+
+17:24:20.236 10 edge {
+  props {
+    type: "HasElement"
+  }
+  startNodeID {
+    url: "https://zh.wikipedia.org/wiki/Category:%E6%B7%B1%E5%9C%B3%E8%AF%81%E5%88%B8%E4%BA%A4%E6%98%93%E6%89%80%E4%B8%8A%E5%B8%82%E5%85%AC%E5%8F%B8"
+  }
+  endNodeID {
+    url: "https://zh.wikipedia.org/wiki/%E6%B7%B1%E5%9C%B3%E5%AE%9D%E5%AE%89%E5%9B%BD%E9%99%85%E6%9C%BA%E5%9C%BA"
+  }
+}
+error {
+  reason: "start node doesn\'t exist"
+}
+
+17:24:20.256 10 numOfCreations: 0
+numOfUpdates: 0
+numOfSkips: 0
+
+17:24:20.257 10 edge {
+  props {
+    type: "HasElement"
+  }
+  startNodeID {
+    url: "https://zh.wikipedia.org/wiki/Category:%E6%B7%B1%E5%9C%B3%E8%AF%81%E5%88%B8%E4%BA%A4%E6%98%93%E6%89%80%E4%B8%8A%E5%B8%82%E5%85%AC%E5%8F%B8"
+  }
+  endNodeID {
+    url: "https://zh.wikipedia.org/wiki/%E4%B9%9D%E8%8A%9D%E5%A0%82"
+  }
+}
+error {
+  reason: "start node doesn\'t exist"
+}
+
+17:24:20.278 10 numOfCreations: 0
+numOfUpdates: 0
+numOfSkips: 0
+
+17:24:20.279 10 edge {
+  props {
+    type: "HasElement"
+  }
+  startNodeID {
+    url: "https://zh.wikipedia.org/wiki/Category:%E6%B7%B1%E5%9C%B3%E8%AF%81%E5%88%B8%E4%BA%A4%E6%98%93%E6%89%80%E4%B8%8A%E5%B8%82%E5%85%AC%E5%8F%B8"
+  }
+  endNodeID {
+    url: "https://zh.wikipedia.org/wiki/TCL%E9%9B%86%E5%9B%A2"
+  }
+}
+error {
+  reason: "start node doesn\'t exist"
+}
+
+17:24:20.301 10 numOfCreations: 0
+numOfUpdates: 0
+numOfSkips: 0
+
+17:24:20.301 10 edge {
+  props {
+    type: "HasElement"
+  }
+  startNodeID {
+    url: "https://zh.wikipedia.org/wiki/Category:%E6%B7%B1%E5%9C%B3%E8%AF%81%E5%88%B8%E4%BA%A4%E6%98%93%E6%89%80%E4%B8%8A%E5%B8%82%E5%85%AC%E5%8F%B8"
+  }
+  endNodeID {
+    url: "https://zh.wikipedia.org/wiki/%E5%B9%BF%E5%B7%9E%E6%97%A5%E6%8A%A5"
+  }
+}
+error {
+  reason: "start node doesn\'t exist"
+}
+
+17:24:20.321 10 numOfCreations: 0
+numOfUpdates: 0
+numOfSkips: 0
+
+17:24:20.322 10 edge {
+  props {
+    type: "HasElement"
+  }
+  startNodeID {
+    url: "https://zh.wikipedia.org/wiki/Category:%E6%B7%B1%E5%9C%B3%E8%AF%81%E5%88%B8%E4%BA%A4%E6%98%93%E6%89%80%E4%B8%8A%E5%B8%82%E5%85%AC%E5%8F%B8"
+  }
+  endNodeID {
+    url: "https://zh.wikipedia.org/wiki/%E5%85%A8%E8%81%9A%E5%BE%B7"
+  }
+}
+error {
+  reason: "start node doesn\'t exist"
+}
+
+17:24:20.339 10 numOfCreations: 0
+numOfUpdates: 0
+numOfSkips: 0
+
+17:24:20.340 10 edge {
+  props {
+    type: "HasElement"
+  }
+  startNodeID {
+    url: "https://zh.wikipedia.org/wiki/Category:%E6%B7%B1%E5%9C%B3%E8%AF%81%E5%88%B8%E4%BA%A4%E6%98%93%E6%89%80%E4%B8%8A%E5%B8%82%E5%85%AC%E5%8F%B8"
+  }
+  endNodeID {
+    url: "https://zh.wikipedia.org/wiki/%E9%95%BF%E5%AE%89%E6%B1%BD%E8%BD%A6"
+  }
+}
+error {
+  reason: "start node doesn\'t exist"
+}
+
+17:24:20.358 10 numOfCreations: 0
+numOfUpdates: 0
+numOfSkips: 0
+
+17:24:20.359 10 edge {
+  props {
+    type: "HasElement"
+  }
+  startNodeID {
+    url: "https://zh.wikipedia.org/wiki/Category:%E6%B7%B1%E5%9C%B3%E8%AF%81%E5%88%B8%E4%BA%A4%E6%98%93%E6%89%80%E4%B8%8A%E5%B8%82%E5%85%AC%E5%8F%B8"
+  }
+  endNodeID {
+    url: "https://zh.wikipedia.org/wiki/%E4%BA%91%E5%8D%97%E7%99%BD%E8%8D%AF"
+  }
+}
+error {
+  reason: "start node doesn\'t exist"
+}
+
+17:24:20.377 10 numOfCreations: 0
+numOfUpdates: 0
+numOfSkips: 0
+
+17:24:20.378 10 edge {
+  props {
+    type: "HasElement"
+  }
+  startNodeID {
+    url: "https://zh.wikipedia.org/wiki/Category:%E6%B7%B1%E5%9C%B3%E8%AF%81%E5%88%B8%E4%BA%A4%E6%98%93%E6%89%80%E4%B8%8A%E5%B8%82%E5%85%AC%E5%8F%B8"
+  }
+  endNodeID {
+    url: "https://zh.wikipedia.org/wiki/%E4%B8%AD%E5%85%B4%E9%80%9A%E8%AE%AF"
+  }
+}
+error {
+  reason: "start node doesn\'t exist"
+}
+
+17:24:20.397 10 numOfCreations: 0
+numOfUpdates: 0
+numOfSkips: 0
+
+17:24:20.399 10 edge {
+  props {
+    type: "HasElement"
+  }
+  startNodeID {
+    url: "https://zh.wikipedia.org/wiki/Category:%E6%B7%B1%E5%9C%B3%E8%AF%81%E5%88%B8%E4%BA%A4%E6%98%93%E6%89%80%E4%B8%8A%E5%B8%82%E5%85%AC%E5%8F%B8"
+  }
+  endNodeID {
+    url: "https://zh.wikipedia.org/wiki/%E6%B9%96%E5%8D%97%E5%8F%8B%E8%B0%8A%E9%98%BF%E6%B3%A2%E7%BD%97"
+  }
+}
+error {
+  reason: "start node doesn\'t exist"
+}
+
+17:24:20.419 10 numOfCreations: 0
+numOfUpdates: 0
+numOfSkips: 0
+
+17:24:20.420 10 edge {
+  props {
+    type: "HasElement"
+  }
+  startNodeID {
+    url: "https://zh.wikipedia.org/wiki/Category:%E6%B7%B1%E5%9C%B3%E8%AF%81%E5%88%B8%E4%BA%A4%E6%98%93%E6%89%80%E4%B8%8A%E5%B8%82%E5%85%AC%E5%8F%B8"
+  }
+  endNodeID {
+    url: "https://zh.wikipedia.org/wiki/%E6%B5%AA%E6%BD%AE%E9%9B%86%E5%9B%A2"
+  }
+}
+error {
+  reason: "start node doesn\'t exist"
+}
+
+17:24:20.441 10 numOfCreations: 0
+numOfUpdates: 0
+numOfSkips: 0
+
+17:24:20.442 10 edge {
+  props {
+    type: "HasElement"
+  }
+  startNodeID {
+    url: "https://zh.wikipedia.org/wiki/Category:%E6%B7%B1%E5%9C%B3%E8%AF%81%E5%88%B8%E4%BA%A4%E6%98%93%E6%89%80%E4%B8%8A%E5%B8%82%E5%85%AC%E5%8F%B8"
+  }
+  endNodeID {
+    url: "https://zh.wikipedia.org/wiki/%E6%B3%B8%E5%B7%9E%E8%80%81%E7%AA%96"
+  }
+}
+error {
+  reason: "start node doesn\'t exist"
+}
+
+17:24:20.464 10 numOfCreations: 0
+numOfUpdates: 0
+numOfSkips: 0
+
+17:24:20.464 10 edge {
+  props {
+    type: "HasElement"
+  }
+  startNodeID {
+    url: "https://zh.wikipedia.org/wiki/Category:%E6%B7%B1%E5%9C%B3%E8%AF%81%E5%88%B8%E4%BA%A4%E6%98%93%E6%89%80%E4%B8%8A%E5%B8%82%E5%85%AC%E5%8F%B8"
+  }
+  endNodeID {
+    url: "https://zh.wikipedia.org/wiki/%E4%B8%9C%E6%96%B9%E5%AE%BE%E9%A6%86_%28%E5%B9%BF%E5%B7%9E%29"
+  }
+}
+error {
+  reason: "start node doesn\'t exist"
+}
+
+17:24:20.489 10 numOfCreations: 0
+numOfUpdates: 0
+numOfSkips: 0
+
+17:24:20.489 10 edge {
+  props {
+    type: "HasElement"
+  }
+  startNodeID {
+    url: "https://zh.wikipedia.org/wiki/Category:%E6%B7%B1%E5%9C%B3%E8%AF%81%E5%88%B8%E4%BA%A4%E6%98%93%E6%89%80%E4%B8%8A%E5%B8%82%E5%85%AC%E5%8F%B8"
+  }
+  endNodeID {
+    url: "https://zh.wikipedia.org/wiki/%E9%93%B6%E5%B9%BF%E5%A4%8F"
+  }
+}
+error {
+  reason: "start node doesn\'t exist"
+}
+
+17:24:20.510 10 numOfCreations: 0
+numOfUpdates: 0
+numOfSkips: 0
+
+17:24:20.511 10 edge {
+  props {
+    type: "HasElement"
+  }
+  startNodeID {
+    url: "https://zh.wikipedia.org/wiki/Category:%E6%B7%B1%E5%9C%B3%E8%AF%81%E5%88%B8%E4%BA%A4%E6%98%93%E6%89%80%E4%B8%8A%E5%B8%82%E5%85%AC%E5%8F%B8"
+  }
+  endNodeID {
+    url: "https://zh.wikipedia.org/wiki/%E4%B8%87%E7%A7%91"
+  }
+}
+error {
+  reason: "start node doesn\'t exist"
+}
+
+17:24:20.534 10 numOfCreations: 0
+numOfUpdates: 0
+numOfSkips: 0
+
+17:24:20.535 10 edge {
+  props {
+    type: "HasElement"
+  }
+  startNodeID {
+    url: "https://zh.wikipedia.org/wiki/Category:%E6%B7%B1%E5%9C%B3%E8%AF%81%E5%88%B8%E4%BA%A4%E6%98%93%E6%89%80%E4%B8%8A%E5%B8%82%E5%85%AC%E5%8F%B8"
+  }
+  endNodeID {
+    url: "https://zh.wikipedia.org/wiki/%E6%B7%B1%E5%9C%B3%E4%B8%AD%E5%9B%BD%E5%86%9C%E5%A4%A7%E7%A7%91%E6%8A%80%E8%82%A1"
+  }
+}
+error {
+  reason: "start node doesn\'t exist"
+}
+
+17:24:20.557 10 numOfCreations: 0
+numOfUpdates: 0
+numOfSkips: 0
+
+17:24:20.558 10 edge {
+  props {
+    type: "HasElement"
+  }
+  startNodeID {
+    url: "https://zh.wikipedia.org/wiki/Category:%E6%B7%B1%E5%9C%B3%E8%AF%81%E5%88%B8%E4%BA%A4%E6%98%93%E6%89%80%E4%B8%8A%E5%B8%82%E5%85%AC%E5%8F%B8"
+  }
+  endNodeID {
+    url: "https://zh.wikipedia.org/wiki/%E6%B7%B1%E5%9C%B3%E4%B8%96%E7%BA%AA%E6%98%9F%E6%BA%90%E8%82%A1%E4%BB%BD"
+  }
+}
+error {
+  reason: "start node doesn\'t exist"
+}
+
+17:24:20.579 10 numOfCreations: 0
+numOfUpdates: 0
+numOfSkips: 0
+
+17:24:20.580 10 edge {
+  props {
+    type: "HasElement"
+  }
+  startNodeID {
+    url: "https://zh.wikipedia.org/wiki/Category:%E6%B7%B1%E5%9C%B3%E8%AF%81%E5%88%B8%E4%BA%A4%E6%98%93%E6%89%80%E4%B8%8A%E5%B8%82%E5%85%AC%E5%8F%B8"
+  }
+  endNodeID {
+    url: "https://zh.wikipedia.org/wiki/%E6%B7%B1%E5%9C%B3%E5%B8%82%E6%8C%AF%E4%B8%9A%E9%9B%86%E5%9B%A2"
+  }
+}
+error {
+  reason: "start node doesn\'t exist"
+}
+
+17:24:20.600 10 numOfCreations: 0
+numOfUpdates: 0
+numOfSkips: 0
+
+17:24:20.600 10 edge {
+  props {
+    type: "HasElement"
+  }
+  startNodeID {
+    url: "https://zh.wikipedia.org/wiki/Category:%E6%B7%B1%E5%9C%B3%E8%AF%81%E5%88%B8%E4%BA%A4%E6%98%93%E6%89%80%E4%B8%8A%E5%B8%82%E5%85%AC%E5%8F%B8"
+  }
+  endNodeID {
+    url: "https://zh.wikipedia.org/wiki/%E8%B5%9B%E6%A0%BC%E8%BE%BE%E5%A3%B0"
+  }
+}
+error {
+  reason: "start node doesn\'t exist"
+}
+
+17:24:20.621 10 numOfCreations: 0
+numOfUpdates: 0
+numOfSkips: 0
+
+17:24:20.622 10 edge {
+  props {
+    type: "HasElement"
+  }
+  startNodeID {
+    url: "https://zh.wikipedia.org/wiki/Category:%E6%B7%B1%E5%9C%B3%E8%AF%81%E5%88%B8%E4%BA%A4%E6%98%93%E6%89%80%E4%B8%8A%E5%B8%82%E5%85%AC%E5%8F%B8"
+  }
+  endNodeID {
+    url: "https://zh.wikipedia.org/wiki/%E5%B9%BF%E4%B8%9C%E5%AE%9D%E5%88%A9%E6%9D%A5%E6%8A%95%E8%B5%84%E8%82%A1%E4%BB%BD"
+  }
+}
+error {
+  reason: "start node doesn\'t exist"
+}
+
+17:24:20.643 10 numOfCreations: 0
+numOfUpdates: 0
+numOfSkips: 0
+
+17:24:20.643 10 edge {
+  props {
+    type: "HasElement"
+  }
+  startNodeID {
+    url: "https://zh.wikipedia.org/wiki/Category:%E6%B7%B1%E5%9C%B3%E8%AF%81%E5%88%B8%E4%BA%A4%E6%98%93%E6%89%80%E4%B8%8A%E5%B8%82%E5%85%AC%E5%8F%B8"
+  }
+  endNodeID {
+    url: "https://zh.wikipedia.org/wiki/%E4%B8%AD%E5%9B%BD%E5%AE%9D%E5%AE%89%E9%9B%86%E5%9B%A2"
+  }
+}
+error {
+  reason: "start node doesn\'t exist"
+}
+
+17:24:20.664 10 numOfCreations: 0
+numOfUpdates: 0
+numOfSkips: 0
+
+17:24:20.664 10 edge {
+  props {
+    type: "HasElement"
+  }
+  startNodeID {
+    url: "https://zh.wikipedia.org/wiki/Category:%E6%B7%B1%E5%9C%B3%E8%AF%81%E5%88%B8%E4%BA%A4%E6%98%93%E6%89%80%E4%B8%8A%E5%B8%82%E5%85%AC%E5%8F%B8"
+  }
+  endNodeID {
+    url: "https://zh.wikipedia.org/wiki/%E5%8D%8E%E6%96%B0%E8%82%A1%E4%BB%BD"
+  }
+}
+error {
+  reason: "start node doesn\'t exist"
+}
+
+17:24:20.685 10 numOfCreations: 0
+numOfUpdates: 0
+numOfSkips: 0
+
+17:24:20.685 10 edge {
+  props {
+    type: "HasElement"
+  }
+  startNodeID {
+    url: "https://zh.wikipedia.org/wiki/Category:%E6%B7%B1%E5%9C%B3%E8%AF%81%E5%88%B8%E4%BA%A4%E6%98%93%E6%89%80%E4%B8%8A%E5%B8%82%E5%85%AC%E5%8F%B8"
+  }
+  endNodeID {
+    url: "https://zh.wikipedia.org/wiki/%E6%B7%B1%E7%89%A9%E4%B8%9A%E9%9B%86%E5%9B%A2"
+  }
+}
+error {
+  reason: "start node doesn\'t exist"
+}
+
+17:24:20.706 10 numOfCreations: 0
+numOfUpdates: 0
+numOfSkips: 0
+
+17:24:20.706 10 edge {
+  props {
+    type: "HasElement"
+  }
+  startNodeID {
+    url: "https://zh.wikipedia.org/wiki/Category:%E6%B7%B1%E5%9C%B3%E8%AF%81%E5%88%B8%E4%BA%A4%E6%98%93%E6%89%80%E4%B8%8A%E5%B8%82%E5%85%AC%E5%8F%B8"
+  }
+  endNodeID {
+    url: "https://zh.wikipedia.org/wiki/%E4%B8%AD%E5%9B%BD%E5%8D%97%E7%8E%BB%E9%9B%86%E5%9B%A2"
+  }
+}
+error {
+  reason: "start node doesn\'t exist"
+}
+
+17:24:20.727 10 numOfCreations: 0
+numOfUpdates: 0
+numOfSkips: 0
+
+17:24:20.728 10 edge {
+  props {
+    type: "HasElement"
+  }
+  startNodeID {
+    url: "https://zh.wikipedia.org/wiki/Category:%E6%B7%B1%E5%9C%B3%E8%AF%81%E5%88%B8%E4%BA%A4%E6%98%93%E6%89%80%E4%B8%8A%E5%B8%82%E5%85%AC%E5%8F%B8"
+  }
+  endNodeID {
+    url: "https://zh.wikipedia.org/wiki/%E6%96%B0%E7%96%86%E4%B8%AD%E5%9F%BA%E5%AE%9E%E4%B8%9A"
+  }
+}
+error {
+  reason: "start node doesn\'t exist"
+}
+
+17:24:20.748 10 numOfCreations: 0
+numOfUpdates: 0
+numOfSkips: 0
+
+17:24:20.749 10 edge {
+  props {
+    type: "HasElement"
+  }
+  startNodeID {
+    url: "https://zh.wikipedia.org/wiki/Category:%E6%B7%B1%E5%9C%B3%E8%AF%81%E5%88%B8%E4%BA%A4%E6%98%93%E6%89%80%E4%B8%8A%E5%B8%82%E5%85%AC%E5%8F%B8"
+  }
+  endNodeID {
+    url: "https://zh.wikipedia.org/wiki/%E4%B8%AD%E5%8D%8E%E6%98%A0%E7%AE%A1"
+  }
+}
+error {
+  reason: "start node doesn\'t exist"
+}
+
+17:24:20.769 10 numOfCreations: 0
+numOfUpdates: 0
+numOfSkips: 0
+
+17:24:20.770 10 edge {
+  props {
+    type: "HasElement"
+  }
+  startNodeID {
+    url: "https://zh.wikipedia.org/wiki/Category:%E6%B7%B1%E5%9C%B3%E8%AF%81%E5%88%B8%E4%BA%A4%E6%98%93%E6%89%80%E4%B8%8A%E5%B8%82%E5%85%AC%E5%8F%B8"
+  }
+  endNodeID {
+    url: "https://zh.wikipedia.org/wiki/%E5%B1%B1%E4%B8%9C%E8%88%AA%E7%A9%BA"
+  }
+}
+error {
+  reason: "start node doesn\'t exist"
+}
+
+17:24:20.785 10 numOfCreations: 0
+numOfUpdates: 0
+numOfSkips: 0
+
+17:24:20.787 10 edge {
+  props {
+    type: "HasElement"
+  }
+  startNodeID {
+    url: "https://zh.wikipedia.org/wiki/Category:%E6%B7%B1%E5%9C%B3%E8%AF%81%E5%88%B8%E4%BA%A4%E6%98%93%E6%89%80%E4%B8%8A%E5%B8%82%E5%85%AC%E5%8F%B8"
+  }
+  endNodeID {
+    url: "https://zh.wikipedia.org/wiki/%E6%B4%BD%E6%B4%BD%E9%A3%9F%E5%93%81"
+  }
+}
+error {
+  reason: "start node doesn\'t exist"
+}
+
+17:24:20.806 10 numOfCreations: 0
+numOfUpdates: 0
+numOfSkips: 0
+
+17:24:20.807 10 edge {
+  props {
+    type: "HasElement"
+  }
+  startNodeID {
+    url: "https://zh.wikipedia.org/wiki/Category:%E6%B7%B1%E5%9C%B3%E8%AF%81%E5%88%B8%E4%BA%A4%E6%98%93%E6%89%80%E4%B8%8A%E5%B8%82%E5%85%AC%E5%8F%B8"
+  }
+  endNodeID {
+    url: "https://zh.wikipedia.org/wiki/%E9%9E%8D%E9%92%A2%E8%82%A1%E4%BB%BD"
+  }
+}
+error {
+  reason: "start node doesn\'t exist"
+}
+
+17:24:20.825 10 numOfCreations: 0
+numOfUpdates: 0
+numOfSkips: 0
+
+17:24:20.826 10 edge {
+  props {
+    type: "HasElement"
+  }
+  startNodeID {
+    url: "https://zh.wikipedia.org/wiki/Category:%E6%B7%B1%E5%9C%B3%E8%AF%81%E5%88%B8%E4%BA%A4%E6%98%93%E6%89%80%E4%B8%8A%E5%B8%82%E5%85%AC%E5%8F%B8"
+  }
+  endNodeID {
+    url: "https://zh.wikipedia.org/wiki/%E7%87%95%E4%BA%AC%E5%95%A4%E9%85%92"
+  }
+}
+error {
+  reason: "start node doesn\'t exist"
+}
+
+17:24:20.841 10 numOfCreations: 0
+numOfUpdates: 0
+numOfSkips: 0
+
+17:24:20.842 10 edge {
+  props {
+    type: "HasElement"
+  }
+  startNodeID {
+    url: "https://zh.wikipedia.org/wiki/Category:%E6%B7%B1%E5%9C%B3%E8%AF%81%E5%88%B8%E4%BA%A4%E6%98%93%E6%89%80%E4%B8%8A%E5%B8%82%E5%85%AC%E5%8F%B8"
+  }
+  endNodeID {
+    url: "https://zh.wikipedia.org/wiki/%E7%8F%A0%E6%B1%9F%E5%95%A4%E9%85%92"
+  }
+}
+error {
+  reason: "start node doesn\'t exist"
+}
+
+17:24:20.862 10 numOfCreations: 0
+numOfUpdates: 0
+numOfSkips: 0
+
+17:24:20.862 10 edge {
+  props {
+    type: "HasElement"
+  }
+  startNodeID {
+    url: "https://zh.wikipedia.org/wiki/Category:%E6%B7%B1%E5%9C%B3%E8%AF%81%E5%88%B8%E4%BA%A4%E6%98%93%E6%89%80%E4%B8%8A%E5%B8%82%E5%85%AC%E5%8F%B8"
+  }
+  endNodeID {
+    url: "https://zh.wikipedia.org/wiki/%E6%9D%AD%E5%B7%9E%E5%A4%A7%E8%87%AA%E7%84%B6%E5%85%89%E7%94%B5%E7%A7%91%E6%8A%80"
+  }
+}
+error {
+  reason: "start node doesn\'t exist"
+}
+
+17:24:20.883 10 numOfCreations: 0
+numOfUpdates: 0
+numOfSkips: 0
+
+17:24:20.883 10 edge {
+  props {
+    type: "HasElement"
+  }
+  startNodeID {
+    url: "https://zh.wikipedia.org/wiki/Category:%E6%B7%B1%E5%9C%B3%E8%AF%81%E5%88%B8%E4%BA%A4%E6%98%93%E6%89%80%E4%B8%8A%E5%B8%82%E5%85%AC%E5%8F%B8"
+  }
+  endNodeID {
+    url: "https://zh.wikipedia.org/wiki/%E8%8B%8F%E5%AE%81%E7%8E%AF%E7%90%83"
+  }
+}
+error {
+  reason: "start node doesn\'t exist"
+}
+
+17:24:20.900 10 numOfCreations: 0
+numOfUpdates: 0
+numOfSkips: 0
+
+17:24:20.900 10 edge {
+  props {
+    type: "HasElement"
+  }
+  startNodeID {
+    url: "https://zh.wikipedia.org/wiki/Category:%E6%B7%B1%E5%9C%B3%E8%AF%81%E5%88%B8%E4%BA%A4%E6%98%93%E6%89%80%E4%B8%8A%E5%B8%82%E5%85%AC%E5%8F%B8"
+  }
+  endNodeID {
+    url: "https://zh.wikipedia.org/wiki/%E6%AF%94%E4%BA%9A%E8%BF%AA"
+  }
+}
+error {
+  reason: "start node doesn\'t exist"
+}
+
+17:24:20.916 10 numOfCreations: 0
+numOfUpdates: 0
+numOfSkips: 0
+
+17:24:20.917 10 edge {
+  props {
+    type: "HasElement"
+  }
+  startNodeID {
+    url: "https://zh.wikipedia.org/wiki/Category:%E6%B7%B1%E5%9C%B3%E8%AF%81%E5%88%B8%E4%BA%A4%E6%98%93%E6%89%80%E4%B8%8A%E5%B8%82%E5%85%AC%E5%8F%B8"
+  }
+  endNodeID {
+    url: "https://zh.wikipedia.org/wiki/%E6%8B%9B%E5%95%86%E5%9C%B0%E4%BA%A7"
+  }
+}
+error {
+  reason: "start node doesn\'t exist"
+}
+
+17:24:20.932 10 numOfCreations: 0
+numOfUpdates: 0
+numOfSkips: 0
+
+17:24:20.933 10 edge {
+  props {
+    type: "HasElement"
+  }
+  startNodeID {
+    url: "https://zh.wikipedia.org/wiki/Category:%E6%B7%B1%E5%9C%B3%E8%AF%81%E5%88%B8%E4%BA%A4%E6%98%93%E6%89%80%E4%B8%8A%E5%B8%82%E5%85%AC%E5%8F%B8"
+  }
+  endNodeID {
+    url: "https://zh.wikipedia.org/wiki/%E4%BA%94%E7%B2%AE%E6%B6%B2"
+  }
+}
+error {
+  reason: "start node doesn\'t exist"
+}
+
+17:24:20.948 10 numOfCreations: 0
+numOfUpdates: 0
+numOfSkips: 0
+
+17:24:20.949 10 edge {
+  props {
+    type: "HasElement"
+  }
+  startNodeID {
+    url: "https://zh.wikipedia.org/wiki/Category:%E6%B7%B1%E5%9C%B3%E8%AF%81%E5%88%B8%E4%BA%A4%E6%98%93%E6%89%80%E4%B8%8A%E5%B8%82%E5%85%AC%E5%8F%B8"
+  }
+  endNodeID {
+    url: "https://zh.wikipedia.org/wiki/%E4%B8%AD%E5%9B%BD%E4%B8%AD%E6%9D%90"
+  }
+}
+error {
+  reason: "start node doesn\'t exist"
+}
+
+17:24:20.963 10 numOfCreations: 0
+numOfUpdates: 0
+numOfSkips: 0
+
+17:24:20.964 10 edge {
+  props {
+    type: "HasElement"
+  }
+  startNodeID {
+    url: "https://zh.wikipedia.org/wiki/Category:%E6%B7%B1%E5%9C%B3%E8%AF%81%E5%88%B8%E4%BA%A4%E6%98%93%E6%89%80%E4%B8%8A%E5%B8%82%E5%85%AC%E5%8F%B8"
+  }
+  endNodeID {
+    url: "https://zh.wikipedia.org/wiki/%E5%B1%B1%E4%B8%9C%E5%A2%A8%E9%BE%99"
+  }
+}
+error {
+  reason: "start node doesn\'t exist"
+}
+
+17:24:20.979 10 numOfCreations: 0
+numOfUpdates: 0
+numOfSkips: 0
+
+17:24:20.979 10 edge {
+  props {
+    type: "HasElement"
+  }
+  startNodeID {
+    url: "https://zh.wikipedia.org/wiki/Category:%E6%B7%B1%E5%9C%B3%E8%AF%81%E5%88%B8%E4%BA%A4%E6%98%93%E6%89%80%E4%B8%8A%E5%B8%82%E5%85%AC%E5%8F%B8"
+  }
+  endNodeID {
+    url: "https://zh.wikipedia.org/wiki/%E7%BE%8E%E7%9A%84%E9%9B%86%E5%9B%A2"
+  }
+}
+error {
+  reason: "start node doesn\'t exist"
+}
+
+17:24:20.994 10 numOfCreations: 0
+numOfUpdates: 0
+numOfSkips: 0
+
+17:24:20.995 10 edge {
+  props {
+    type: "HasElement"
+  }
+  startNodeID {
+    url: "https://zh.wikipedia.org/wiki/Category:%E6%B7%B1%E5%9C%B3%E8%AF%81%E5%88%B8%E4%BA%A4%E6%98%93%E6%89%80%E4%B8%8A%E5%B8%82%E5%85%AC%E5%8F%B8"
+  }
+  endNodeID {
+    url: "https://zh.wikipedia.org/wiki/%E6%BD%8D%E6%9F%B4%E5%8A%A8%E5%8A%9B"
+  }
+}
+error {
+  reason: "start node doesn\'t exist"
+}
+
+17:24:21.011 10 numOfCreations: 0
+numOfUpdates: 0
+numOfSkips: 0
+
+17:24:21.012 10 edge {
+  props {
+    type: "HasElement"
+  }
+  startNodeID {
+    url: "https://zh.wikipedia.org/wiki/Category:%E6%B7%B1%E5%9C%B3%E8%AF%81%E5%88%B8%E4%BA%A4%E6%98%93%E6%89%80%E4%B8%8A%E5%B8%82%E5%85%AC%E5%8F%B8"
+  }
+  endNodeID {
+    url: "https://zh.wikipedia.org/wiki/%E6%B5%B7%E4%BF%A1%E9%9B%86%E5%9B%A2"
+  }
+}
+error {
+  reason: "start node doesn\'t exist"
+}
+
+17:24:21.029 10 numOfCreations: 0
+numOfUpdates: 0
+numOfSkips: 0
+
+17:24:21.030 10 edge {
+  props {
+    type: "HasElement"
+  }
+  startNodeID {
+    url: "https://zh.wikipedia.org/wiki/Category:%E6%B7%B1%E5%9C%B3%E8%AF%81%E5%88%B8%E4%BA%A4%E6%98%93%E6%89%80%E4%B8%8A%E5%B8%82%E5%85%AC%E5%8F%B8"
+  }
+  endNodeID {
+    url: "https://zh.wikipedia.org/wiki/%E6%99%A8%E9%B8%A3%E7%BA%B8%E4%B8%9A"
+  }
+}
+error {
+  reason: "start node doesn\'t exist"
+}
+
+17:24:21.045 10 numOfCreations: 0
+numOfUpdates: 0
+numOfSkips: 0
+
+17:24:21.045 10 edge {
+  props {
+    type: "HasElement"
+  }
+  startNodeID {
+    url: "https://zh.wikipedia.org/wiki/Category:%E6%B7%B1%E5%9C%B3%E8%AF%81%E5%88%B8%E4%BA%A4%E6%98%93%E6%89%80%E4%B8%8A%E5%B8%82%E5%85%AC%E5%8F%B8"
+  }
+  endNodeID {
+    url: "https://zh.wikipedia.org/wiki/%E5%AE%81%E6%B3%A2%E9%93%B6%E8%A1%8C"
+  }
+}
+error {
+  reason: "start node doesn\'t exist"
+}
+
+17:24:21.060 10 numOfCreations: 0
+numOfUpdates: 0
+numOfSkips: 0
+
+17:24:21.060 10 edge {
+  props {
+    type: "HasElement"
+  }
+  startNodeID {
+    url: "https://zh.wikipedia.org/wiki/Category:%E6%B7%B1%E5%9C%B3%E8%AF%81%E5%88%B8%E4%BA%A4%E6%98%93%E6%89%80%E4%B8%8A%E5%B8%82%E5%85%AC%E5%8F%B8"
+  }
+  endNodeID {
+    url: "https://zh.wikipedia.org/wiki/%E7%BE%8E%E7%89%B9%E6%96%AF%E9%82%A6%E5%A8%81"
+  }
+}
+error {
+  reason: "start node doesn\'t exist"
+}
+
+17:24:21.081 10 numOfCreations: 0
+numOfUpdates: 0
+numOfSkips: 0
+
+17:24:21.082 10 edge {
+  props {
+    type: "HasElement"
+  }
+  startNodeID {
+    url: "https://zh.wikipedia.org/wiki/Category:%E6%B7%B1%E5%9C%B3%E8%AF%81%E5%88%B8%E4%BA%A4%E6%98%93%E6%89%80%E4%B8%8A%E5%B8%82%E5%85%AC%E5%8F%B8"
+  }
+  endNodeID {
+    url: "https://zh.wikipedia.org/wiki/%E9%92%B1%E6%B1%9F%E6%91%A9%E6%89%98"
+  }
+}
+error {
+  reason: "start node doesn\'t exist"
+}
+
+17:24:21.095 10 numOfCreations: 0
+numOfUpdates: 0
+numOfSkips: 0
+
+17:24:21.096 10 edge {
+  props {
+    type: "HasElement"
+  }
+  startNodeID {
+    url: "https://zh.wikipedia.org/wiki/Category:%E6%B7%B1%E5%9C%B3%E8%AF%81%E5%88%B8%E4%BA%A4%E6%98%93%E6%89%80%E4%B8%8A%E5%B8%82%E5%85%AC%E5%8F%B8"
+  }
+  endNodeID {
+    url: "https://zh.wikipedia.org/wiki/%E6%B7%B1%E5%9C%B3%E8%AF%81%E5%88%B8%E4%BA%A4%E6%98%93%E6%89%80%E4%B8%8A%E5%B8%82%E5%85%AC%E5%8F%B8%E5%88%97%E8%A1%A8"
+  }
+}
+error {
+  reason: "start node doesn\'t exist"
+}
+
+17:24:21.114 10 numOfCreations: 0
+numOfUpdates: 0
+numOfSkips: 0
+
+17:24:21.115 10 edge {
+  props {
+    type: "HasElement"
+  }
+  startNodeID {
+    url: "https://zh.wikipedia.org/wiki/Category:%E6%B7%B1%E5%9C%B3%E8%AF%81%E5%88%B8%E4%BA%A4%E6%98%93%E6%89%80%E4%B8%8A%E5%B8%82%E5%85%AC%E5%8F%B8"
+  }
+  endNodeID {
+    url: "https://zh.wikipedia.org/wiki/SZSECI"
+  }
+}
+error {
+  reason: "start node doesn\'t exist"
+}
+
+17:24:21.130 10 numOfCreations: 0
+numOfUpdates: 0
+numOfSkips: 0
+
+17:24:21.130 10 edge {
+  props {
+    type: "HasElement"
+  }
+  startNodeID {
+    url: "https://zh.wikipedia.org/wiki/Category:%E6%B7%B1%E5%9C%B3%E8%AF%81%E5%88%B8%E4%BA%A4%E6%98%93%E6%89%80%E4%B8%8A%E5%B8%82%E5%85%AC%E5%8F%B8"
+  }
+  endNodeID {
+    url: "https://zh.wikipedia.org/wiki/%E6%B7%B1%E8%AF%81%E6%88%90%E6%8C%87%E6%88%90%E4%BB%BD%E8%82%A1"
+  }
+}
+error {
+  reason: "start node doesn\'t exist"
+}
+
+17:24:21.147 10 numOfCreations: 0
+numOfUpdates: 0
+numOfSkips: 0
+
+17:24:21.148 10 edge {
+  props {
+    type: "HasElement"
+  }
+  startNodeID {
+    url: "https://zh.wikipedia.org/wiki/Category:%E6%B7%B1%E5%9C%B3%E8%AF%81%E5%88%B8%E4%BA%A4%E6%98%93%E6%89%80%E4%B8%8A%E5%B8%82%E5%85%AC%E5%8F%B8"
+  }
+  endNodeID {
+    url: "https://zh.wikipedia.org/wiki/%E4%BA%91%E5%8D%97%E9%93%9C%E4%B8%9A"
+  }
+}
+error {
+  reason: "start node doesn\'t exist"
+}
+
+17:24:21.165 10 numOfCreations: 0
+numOfUpdates: 0
+numOfSkips: 0
+
+17:24:21.165 10 edge {
+  props {
+    type: "HasElement"
+  }
+  startNodeID {
+    url: "https://zh.wikipedia.org/wiki/Category:%E6%B7%B1%E5%9C%B3%E8%AF%81%E5%88%B8%E4%BA%A4%E6%98%93%E6%89%80%E4%B8%8A%E5%B8%82%E5%85%AC%E5%8F%B8"
+  }
+  endNodeID {
+    url: "https://zh.wikipedia.org/wiki/%E9%A1%BA%E4%B8%B0%E9%80%9F%E8%BF%90"
+  }
+}
+error {
+  reason: "start node doesn\'t exist"
+}
+
+17:24:21.180 10 numOfCreations: 0
+numOfUpdates: 0
+numOfSkips: 0
+
+17:24:21.181 10 edge {
+  props {
+    type: "HasElement"
+  }
+  startNodeID {
+    url: "https://zh.wikipedia.org/wiki/Category:%E6%B7%B1%E5%9C%B3%E8%AF%81%E5%88%B8%E4%BA%A4%E6%98%93%E6%89%80%E4%B8%8A%E5%B8%82%E5%85%AC%E5%8F%B8"
+  }
+  endNodeID {
+    url: "https://zh.wikipedia.org/wiki/%E8%A5%BF%E5%B1%B1%E7%85%A4%E7%94%B5"
+  }
+}
+error {
+  reason: "start node doesn\'t exist"
+}
+
+17:24:21.197 10 numOfCreations: 0
+numOfUpdates: 0
+numOfSkips: 0
+
+17:24:21.198 10 edge {
+  props {
+    type: "HasElement"
+  }
+  startNodeID {
+    url: "https://zh.wikipedia.org/wiki/Category:%E6%B7%B1%E5%9C%B3%E8%AF%81%E5%88%B8%E4%BA%A4%E6%98%93%E6%89%80%E4%B8%8A%E5%B8%82%E5%85%AC%E5%8F%B8"
+  }
+  endNodeID {
+    url: "https://zh.wikipedia.org/wiki/%E6%B7%B1%E5%9C%B3%E8%83%BD%E6%BA%90"
+  }
+}
+error {
+  reason: "start node doesn\'t exist"
+}
+
+17:24:21.216 10 numOfCreations: 0
+numOfUpdates: 0
+numOfSkips: 0
+
+17:24:21.216 10 edge {
+  props {
+    type: "HasElement"
+  }
+  startNodeID {
+    url: "https://zh.wikipedia.org/wiki/Category:%E6%B7%B1%E5%9C%B3%E8%AF%81%E5%88%B8%E4%BA%A4%E6%98%93%E6%89%80%E4%B8%8A%E5%B8%82%E5%85%AC%E5%8F%B8"
+  }
+  endNodeID {
+    url: "https://zh.wikipedia.org/wiki/%E4%B8%AD%E9%9B%86%E9%9B%86%E5%9B%A2"
+  }
+}
+error {
+  reason: "start node doesn\'t exist"
+}
+
+17:24:21.233 10 numOfCreations: 0
+numOfUpdates: 0
+numOfSkips: 0
+
+17:24:21.233 10 edge {
+  props {
+    type: "HasElement"
+  }
+  startNodeID {
+    url: "https://zh.wikipedia.org/wiki/Category:%E6%B7%B1%E5%9C%B3%E8%AF%81%E5%88%B8%E4%BA%A4%E6%98%93%E6%89%80%E4%B8%8A%E5%B8%82%E5%85%AC%E5%8F%B8"
+  }
+  endNodeID {
+    url: "https://zh.wikipedia.org/wiki/%E6%B5%B7%E4%BF%A1%E7%A7%91%E9%BE%99"
+  }
+}
+error {
+  reason: "start node doesn\'t exist"
+}
+
+17:24:21.249 10 numOfCreations: 0
+numOfUpdates: 0
+numOfSkips: 0
+
+17:24:21.250 10 edge {
+  props {
+    type: "HasElement"
+  }
+  startNodeID {
+    url: "https://zh.wikipedia.org/wiki/Category:%E6%B7%B1%E5%9C%B3%E8%AF%81%E5%88%B8%E4%BA%A4%E6%98%93%E6%89%80%E4%B8%8A%E5%B8%82%E5%85%AC%E5%8F%B8"
+  }
+  endNodeID {
+    url: "https://zh.wikipedia.org/wiki/%E5%8D%8E%E8%B0%8A%E5%85%84%E5%BC%9F"
+  }
+}
+error {
+  reason: "start node doesn\'t exist"
+}
+
+17:24:21.267 10 numOfCreations: 0
+numOfUpdates: 0
+numOfSkips: 0
+
+17:24:21.268 10 edge {
+  props {
+    type: "HasElement"
+  }
+  startNodeID {
+    url: "https://zh.wikipedia.org/wiki/Category:%E6%B7%B1%E5%9C%B3%E8%AF%81%E5%88%B8%E4%BA%A4%E6%98%93%E6%89%80%E4%B8%8A%E5%B8%82%E5%85%AC%E5%8F%B8"
+  }
+  endNodeID {
+    url: "https://zh.wikipedia.org/wiki/%E6%B2%88%E9%98%B3%E6%9C%BA%E5%BA%8A"
+  }
+}
+error {
+  reason: "start node doesn\'t exist"
+}
+
+17:24:21.290 10 numOfCreations: 0
+numOfUpdates: 0
+numOfSkips: 0
+
+17:24:21.291 10 edge {
+  props {
+    type: "HasElement"
+  }
+  startNodeID {
+    url: "https://zh.wikipedia.org/wiki/Category:%E6%B7%B1%E5%9C%B3%E8%AF%81%E5%88%B8%E4%BA%A4%E6%98%93%E6%89%80%E4%B8%8A%E5%B8%82%E5%85%AC%E5%8F%B8"
+  }
+  endNodeID {
+    url: "https://zh.wikipedia.org/wiki/%E6%B2%88%E9%98%B3%E6%9C%BA%E5%BA%8A%EF%BC%88%E9%9B%86%E5%9B%A2%EF%BC%89%E6%9C%89%E9%99%90%E8%B4%A3%E4%BB%BB%E5%85%AC%E5%8F%B8"
+  }
+}
+error {
+  reason: "start node doesn\'t exist"
+}
+
+17:24:21.310 10 numOfCreations: 0
+numOfUpdates: 0
+numOfSkips: 0
+
+17:24:21.310 10 edge {
+  props {
+    type: "HasElement"
+  }
+  startNodeID {
+    url: "https://zh.wikipedia.org/wiki/Category:%E6%B7%B1%E5%9C%B3%E8%AF%81%E5%88%B8%E4%BA%A4%E6%98%93%E6%89%80%E4%B8%8A%E5%B8%82%E5%85%AC%E5%8F%B8"
+  }
+  endNodeID {
+    url: "https://zh.wikipedia.org/wiki/%E5%85%89%E7%BA%BF%E4%BC%A0%E5%AA%92"
+  }
+}
+error {
+  reason: "start node doesn\'t exist"
+}
+
+17:24:21.329 10 numOfCreations: 0
+numOfUpdates: 0
+numOfSkips: 0
+
+17:24:21.329 10 edge {
+  props {
+    type: "HasElement"
+  }
+  startNodeID {
+    url: "https://zh.wikipedia.org/wiki/Category:%E6%B7%B1%E5%9C%B3%E8%AF%81%E5%88%B8%E4%BA%A4%E6%98%93%E6%89%80%E4%B8%8A%E5%B8%82%E5%85%AC%E5%8F%B8"
+  }
+  endNodeID {
+    url: "https://zh.wikipedia.org/wiki/%E6%A0%BC%E5%8A%9B%E7%94%B5%E5%99%A8"
+  }
+}
+error {
+  reason: "start node doesn\'t exist"
+}
+
+17:24:21.349 10 numOfCreations: 0
+numOfUpdates: 0
+numOfSkips: 0
+
+17:24:21.349 10 edge {
+  props {
+    type: "HasElement"
+  }
+  startNodeID {
+    url: "https://zh.wikipedia.org/wiki/Category:%E6%B7%B1%E5%9C%B3%E8%AF%81%E5%88%B8%E4%BA%A4%E6%98%93%E6%89%80%E4%B8%8A%E5%B8%82%E5%85%AC%E5%8F%B8"
+  }
+  endNodeID {
+    url: "https://zh.wikipedia.org/wiki/%E5%8D%8E%E4%BE%A8%E5%9F%8E%E9%9B%86%E5%9B%A2"
+  }
+}
+error {
+  reason: "start node doesn\'t exist"
+}
+
+17:24:21.367 10 numOfCreations: 0
+numOfUpdates: 0
+numOfSkips: 0
+
+17:24:21.368 10 edge {
+  props {
+    type: "HasElement"
+  }
+  startNodeID {
+    url: "https://zh.wikipedia.org/wiki/Category:%E6%B7%B1%E5%9C%B3%E8%AF%81%E5%88%B8%E4%BA%A4%E6%98%93%E6%89%80%E4%B8%8A%E5%B8%82%E5%85%AC%E5%8F%B8"
+  }
+  endNodeID {
+    url: "https://zh.wikipedia.org/wiki/%E6%94%80%E9%92%A2%E9%9B%86%E5%9B%A2%E9%92%92%E9%92%9B%E8%B5%84%E6%BA%90"
+  }
+}
+error {
+  reason: "start node doesn\'t exist"
+}
+
+17:24:21.390 10 numOfCreations: 0
+numOfUpdates: 0
+numOfSkips: 0
+
+17:24:21.390 10 edge {
+  props {
+    type: "HasElement"
+  }
+  startNodeID {
+    url: "https://zh.wikipedia.org/wiki/Category:%E6%B7%B1%E5%9C%B3%E8%AF%81%E5%88%B8%E4%BA%A4%E6%98%93%E6%89%80%E4%B8%8A%E5%B8%82%E5%85%AC%E5%8F%B8"
+  }
+  endNodeID {
+    url: "https://zh.wikipedia.org/wiki/%E4%B8%AD%E7%B2%AE%E9%9B%86%E5%9B%A2"
+  }
+}
+error {
+  reason: "start node doesn\'t exist"
+}
+
+17:24:21.413 10 numOfCreations: 0
+numOfUpdates: 0
+numOfSkips: 0
+
+17:24:21.414 10 edge {
+  props {
+    type: "HasElement"
+  }
+  startNodeID {
+    url: "https://zh.wikipedia.org/wiki/Category:%E6%B7%B1%E5%9C%B3%E8%AF%81%E5%88%B8%E4%BA%A4%E6%98%93%E6%89%80%E4%B8%8A%E5%B8%82%E5%85%AC%E5%8F%B8"
+  }
+  endNodeID {
+    url: "https://zh.wikipedia.org/wiki/%E6%B2%B3%E9%92%A2%E9%9B%86%E5%9B%A2"
+  }
+}
+error {
+  reason: "start node doesn\'t exist"
+}
+
+17:24:21.433 10 numOfCreations: 0
+numOfUpdates: 0
+numOfSkips: 0
+
+17:24:21.434 10 edge {
+  props {
+    type: "HasElement"
+  }
+  startNodeID {
+    url: "https://zh.wikipedia.org/wiki/Category:%E6%B7%B1%E5%9C%B3%E8%AF%81%E5%88%B8%E4%BA%A4%E6%98%93%E6%89%80%E4%B8%8A%E5%B8%82%E5%85%AC%E5%8F%B8"
+  }
+  endNodeID {
+    url: "https://zh.wikipedia.org/wiki/%E7%BB%8F%E7%BA%AC%E7%BA%BA%E6%9C%BA"
+  }
+}
+error {
+  reason: "start node doesn\'t exist"
+}
+
+17:24:21.453 10 numOfCreations: 0
+numOfUpdates: 0
+numOfSkips: 0
+
+17:24:21.454 10 edge {
+  props {
+    type: "HasElement"
+  }
+  startNodeID {
+    url: "https://zh.wikipedia.org/wiki/Category:%E6%B7%B1%E5%9C%B3%E8%AF%81%E5%88%B8%E4%BA%A4%E6%98%93%E6%89%80%E4%B8%8A%E5%B8%82%E5%85%AC%E5%8F%B8"
+  }
+  endNodeID {
+    url: "https://zh.wikipedia.org/wiki/%E9%87%91%E8%9E%8D%E8%A1%97%E6%8E%A7%E8%82%A1"
+  }
+}
+error {
+  reason: "start node doesn\'t exist"
+}
+
+17:24:21.473 10 numOfCreations: 0
+numOfUpdates: 0
+numOfSkips: 0
+
+17:24:21.473 10 edge {
+  props {
+    type: "HasElement"
+  }
+  startNodeID {
+    url: "https://zh.wikipedia.org/wiki/Category:%E6%B7%B1%E5%9C%B3%E8%AF%81%E5%88%B8%E4%BA%A4%E6%98%93%E6%89%80%E4%B8%8A%E5%B8%82%E5%85%AC%E5%8F%B8"
+  }
+  endNodeID {
+    url: "https://zh.wikipedia.org/wiki/%E4%B8%80%E6%B1%BD%E8%BD%BF%E8%BD%A6"
+  }
+}
+error {
+  reason: "start node doesn\'t exist"
+}
+
+17:24:21.495 10 numOfCreations: 0
+numOfUpdates: 0
+numOfSkips: 0
+
+17:24:21.496 10 edge {
+  props {
+    type: "HasElement"
+  }
+  startNodeID {
+    url: "https://zh.wikipedia.org/wiki/Category:%E6%B7%B1%E5%9C%B3%E8%AF%81%E5%88%B8%E4%BA%A4%E6%98%93%E6%89%80%E4%B8%8A%E5%B8%82%E5%85%AC%E5%8F%B8"
+  }
+  endNodeID {
+    url: "https://zh.wikipedia.org/wiki/%E9%95%BF%E6%B1%9F%E8%AF%81%E5%88%B8"
+  }
+}
+error {
+  reason: "start node doesn\'t exist"
+}
+
+17:24:21.519 10 numOfCreations: 0
+numOfUpdates: 0
+numOfSkips: 0
+
+17:24:21.519 10 edge {
+  props {
+    type: "HasElement"
+  }
+  startNodeID {
+    url: "https://zh.wikipedia.org/wiki/Category:%E6%B7%B1%E5%9C%B3%E8%AF%81%E5%88%B8%E4%BA%A4%E6%98%93%E6%89%80%E4%B8%8A%E5%B8%82%E5%85%AC%E5%8F%B8"
+  }
+  endNodeID {
+    url: "https://zh.wikipedia.org/wiki/%E5%90%89%E6%9E%97%E6%95%96%E4%B8%9C%E8%8D%AF%E4%B8%9A"
+  }
+}
+error {
+  reason: "start node doesn\'t exist"
+}
+
+17:24:21.539 10 numOfCreations: 0
+numOfUpdates: 0
+numOfSkips: 0
+
+17:24:21.540 10 edge {
+  props {
+    type: "HasElement"
+  }
+  startNodeID {
+    url: "https://zh.wikipedia.org/wiki/Category:%E6%B7%B1%E5%9C%B3%E8%AF%81%E5%88%B8%E4%BA%A4%E6%98%93%E6%89%80%E4%B8%8A%E5%B8%82%E5%85%AC%E5%8F%B8"
+  }
+  endNodeID {
+    url: "https://zh.wikipedia.org/wiki/%E7%9B%90%E6%B9%96%E9%92%BE%E8%82%A5"
+  }
+}
+error {
+  reason: "start node doesn\'t exist"
+}
+
+17:24:21.564 10 numOfCreations: 0
+numOfUpdates: 0
+numOfSkips: 0
+
+17:24:21.565 10 edge {
+  props {
+    type: "HasElement"
+  }
+  startNodeID {
+    url: "https://zh.wikipedia.org/wiki/Category:%E6%B7%B1%E5%9C%B3%E8%AF%81%E5%88%B8%E4%BA%A4%E6%98%93%E6%89%80%E4%B8%8A%E5%B8%82%E5%85%AC%E5%8F%B8"
+  }
+  endNodeID {
+    url: "https://zh.wikipedia.org/wiki/%E5%A4%A9%E6%B4%A5%E6%B3%B0%E8%BE%BE%E8%82%A1%E4%BB%BD"
+  }
+}
+error {
+  reason: "start node doesn\'t exist"
+}
+
+17:24:21.586 10 numOfCreations: 0
+numOfUpdates: 0
+numOfSkips: 0
+
+17:24:21.586 10 edge {
+  props {
+    type: "HasElement"
+  }
+  startNodeID {
+    url: "https://zh.wikipedia.org/wiki/Category:%E6%B7%B1%E5%9C%B3%E8%AF%81%E5%88%B8%E4%BA%A4%E6%98%93%E6%89%80%E4%B8%8A%E5%B8%82%E5%85%AC%E5%8F%B8"
+  }
+  endNodeID {
+    url: "https://zh.wikipedia.org/wiki/%E4%B8%AD%E9%87%91%E5%B2%AD%E5%8D%97"
+  }
+}
+error {
+  reason: "start node doesn\'t exist"
+}
+
+17:24:21.606 10 numOfCreations: 0
+numOfUpdates: 0
+numOfSkips: 0
+
+17:24:21.607 10 edge {
+  props {
+    type: "HasElement"
+  }
+  startNodeID {
+    url: "https://zh.wikipedia.org/wiki/Category:%E6%B7%B1%E5%9C%B3%E8%AF%81%E5%88%B8%E4%BA%A4%E6%98%93%E6%89%80%E4%B8%8A%E5%B8%82%E5%85%AC%E5%8F%B8"
+  }
+  endNodeID {
+    url: "https://zh.wikipedia.org/wiki/%E4%B8%AD%E8%88%AA%E9%A3%9E%E6%9C%BA"
+  }
+}
+error {
+  reason: "start node doesn\'t exist"
+}
+
+17:24:21.624 10 numOfCreations: 0
+numOfUpdates: 0
+numOfSkips: 0
+
+17:24:21.624 10 edge {
+  props {
+    type: "HasElement"
+  }
+  startNodeID {
+    url: "https://zh.wikipedia.org/wiki/Category:%E6%B7%B1%E5%9C%B3%E8%AF%81%E5%88%B8%E4%BA%A4%E6%98%93%E6%89%80%E4%B8%8A%E5%B8%82%E5%85%AC%E5%8F%B8"
+  }
+  endNodeID {
+    url: "https://zh.wikipedia.org/wiki/%E4%B8%AD%E5%9B%BD%E5%85%B5%E5%99%A8%E8%A3%85%E5%A4%87%E9%9B%86%E5%9B%A2"
+  }
+}
+error {
+  reason: "start node doesn\'t exist"
+}
+
+17:24:21.640 10 numOfCreations: 0
+numOfUpdates: 0
+numOfSkips: 0
+
+17:24:21.641 10 edge {
+  props {
+    type: "HasElement"
+  }
+  startNodeID {
+    url: "https://zh.wikipedia.org/wiki/Category:%E6%B7%B1%E5%9C%B3%E8%AF%81%E5%88%B8%E4%BA%A4%E6%98%93%E6%89%80%E4%B8%8A%E5%B8%82%E5%85%AC%E5%8F%B8"
+  }
+  endNodeID {
+    url: "https://zh.wikipedia.org/wiki/%E4%B8%AD%E4%BF%A1%E5%9B%BD%E5%AE%89%E4%BF%A1%E6%81%AF%E4%BA%A7%E4%B8%9A"
+  }
+}
+error {
+  reason: "start node doesn\'t exist"
+}
+
+17:24:21.659 10 numOfCreations: 0
+numOfUpdates: 0
+numOfSkips: 0
+
+17:24:21.659 10 edge {
+  props {
+    type: "HasElement"
+  }
+  startNodeID {
+    url: "https://zh.wikipedia.org/wiki/Category:%E6%B7%B1%E5%9C%B3%E8%AF%81%E5%88%B8%E4%BA%A4%E6%98%93%E6%89%80%E4%B8%8A%E5%B8%82%E5%85%AC%E5%8F%B8"
+  }
+  endNodeID {
+    url: "https://zh.wikipedia.org/wiki/%E9%93%9C%E9%99%B5%E6%9C%89%E8%89%B2"
+  }
+}
+error {
+  reason: "start node doesn\'t exist"
+}
+
+17:24:21.679 10 numOfCreations: 0
+numOfUpdates: 0
+numOfSkips: 0
+
+17:24:21.679 10 edge {
+  props {
+    type: "HasElement"
+  }
+  startNodeID {
+    url: "https://zh.wikipedia.org/wiki/Category:%E6%B7%B1%E5%9C%B3%E8%AF%81%E5%88%B8%E4%BA%A4%E6%98%93%E6%89%80%E4%B8%8A%E5%B8%82%E5%85%AC%E5%8F%B8"
+  }
+  endNodeID {
+    url: "https://zh.wikipedia.org/wiki/%E4%BA%91%E5%8D%97%E9%94%A1%E4%B8%9A"
+  }
+}
+error {
+  reason: "start node doesn\'t exist"
+}
+
+17:24:21.697 10 numOfCreations: 0
+numOfUpdates: 0
+numOfSkips: 0
+
+17:24:21.698 10 edge {
+  props {
+    type: "HasElement"
+  }
+  startNodeID {
+    url: "https://zh.wikipedia.org/wiki/Category:%E6%B7%B1%E5%9C%B3%E8%AF%81%E5%88%B8%E4%BA%A4%E6%98%93%E6%89%80%E4%B8%8A%E5%B8%82%E5%85%AC%E5%8F%B8"
+  }
+  endNodeID {
+    url: "https://zh.wikipedia.org/wiki/%E5%8F%8C%E6%B1%87%E9%9B%86%E5%9B%A2"
+  }
+}
+error {
+  reason: "start node doesn\'t exist"
+}
+
+17:24:21.718 10 numOfCreations: 0
+numOfUpdates: 0
+numOfSkips: 0
+
+17:24:21.719 10 edge {
+  props {
+    type: "HasElement"
+  }
+  startNodeID {
+    url: "https://zh.wikipedia.org/wiki/Category:%E6%B7%B1%E5%9C%B3%E8%AF%81%E5%88%B8%E4%BA%A4%E6%98%93%E6%89%80%E4%B8%8A%E5%B8%82%E5%85%AC%E5%8F%B8"
+  }
+  endNodeID {
+    url: "https://zh.wikipedia.org/wiki/%E5%BA%B7%E4%BD%B3%E9%9B%86%E5%9B%A2"
+  }
+}
+error {
+  reason: "start node doesn\'t exist"
+}
+
+17:24:21.741 10 numOfCreations: 0
+numOfUpdates: 0
+numOfSkips: 0
+
+17:24:21.741 10 edge {
+  props {
+    type: "HasElement"
+  }
+  startNodeID {
+    url: "https://zh.wikipedia.org/wiki/Category:%E6%B7%B1%E5%9C%B3%E8%AF%81%E5%88%B8%E4%BA%A4%E6%98%93%E6%89%80%E4%B8%8A%E5%B8%82%E5%85%AC%E5%8F%B8"
+  }
+  endNodeID {
+    url: "https://zh.wikipedia.org/wiki/%E7%8E%8B%E4%BC%A0%E7%A6%8F"
+  }
+}
+error {
+  reason: "start node doesn\'t exist"
+}
+
+17:24:21.762 10 numOfCreations: 0
+numOfUpdates: 0
+numOfSkips: 0
+
+17:24:21.763 10 edge {
+  props {
+    type: "HasElement"
+  }
+  startNodeID {
+    url: "https://zh.wikipedia.org/wiki/Category:%E6%B7%B1%E5%9C%B3%E8%AF%81%E5%88%B8%E4%BA%A4%E6%98%93%E6%89%80%E4%B8%8A%E5%B8%82%E5%85%AC%E5%8F%B8"
+  }
+  endNodeID {
+    url: "https://zh.wikipedia.org/wiki/%E5%B9%BF%E7%99%BE%E8%82%A1%E4%BB%BD"
+  }
+}
+error {
+  reason: "start node doesn\'t exist"
+}
+
+17:24:21.782 10 numOfCreations: 0
+numOfUpdates: 0
+numOfSkips: 0
+
+17:24:21.783 10 edge {
+  props {
+    type: "HasElement"
+  }
+  startNodeID {
+    url: "https://zh.wikipedia.org/wiki/Category:%E6%B7%B1%E5%9C%B3%E8%AF%81%E5%88%B8%E4%BA%A4%E6%98%93%E6%89%80%E4%B8%8A%E5%B8%82%E5%85%AC%E5%8F%B8"
+  }
+  endNodeID {
+    url: "https://zh.wikipedia.org/wiki/%E9%99%95%E8%A5%BF%E7%94%B5%E5%AD%90%E4%BF%A1%E6%81%AF"
+  }
+}
+error {
+  reason: "start node doesn\'t exist"
+}
+
+17:24:21.801 10 numOfCreations: 0
+numOfUpdates: 0
+numOfSkips: 0
+
+17:24:21.802 10 edge {
+  props {
+    type: "HasElement"
+  }
+  startNodeID {
+    url: "https://zh.wikipedia.org/wiki/Category:%E6%B7%B1%E5%9C%B3%E8%AF%81%E5%88%B8%E4%BA%A4%E6%98%93%E6%89%80%E4%B8%8A%E5%B8%82%E5%85%AC%E5%8F%B8"
+  }
+  endNodeID {
+    url: "https://zh.wikipedia.org/wiki/%E8%8B%8F%E6%B3%8A%E5%B0%94"
+  }
+}
+error {
+  reason: "start node doesn\'t exist"
+}
+
+17:24:21.820 10 numOfCreations: 0
+numOfUpdates: 0
+numOfSkips: 0
+
+17:24:21.821 10 edge {
+  props {
+    type: "HasElement"
+  }
+  startNodeID {
+    url: "https://zh.wikipedia.org/wiki/Category:%E6%B7%B1%E5%9C%B3%E8%AF%81%E5%88%B8%E4%BA%A4%E6%98%93%E6%89%80%E4%B8%8A%E5%B8%82%E5%85%AC%E5%8F%B8"
+  }
+  endNodeID {
+    url: "https://zh.wikipedia.org/wiki/%E8%BF%9C%E5%85%89%E8%BD%AF%E4%BB%B6"
+  }
+}
+error {
+  reason: "start node doesn\'t exist"
+}
+
+17:24:21.839 10 numOfCreations: 0
+numOfUpdates: 0
+numOfSkips: 0
+
+17:24:21.839 10 edge {
+  props {
+    type: "HasElement"
+  }
+  startNodeID {
+    url: "https://zh.wikipedia.org/wiki/Category:%E6%B7%B1%E5%9C%B3%E8%AF%81%E5%88%B8%E4%BA%A4%E6%98%93%E6%89%80%E4%B8%8A%E5%B8%82%E5%85%AC%E5%8F%B8"
+  }
+  endNodeID {
+    url: "https://zh.wikipedia.org/wiki/%E4%B8%AD%E8%81%94%E9%87%8D%E7%A7%91"
+  }
+}
+error {
+  reason: "start node doesn\'t exist"
+}
+
+17:24:21.861 10 numOfCreations: 0
+numOfUpdates: 0
+numOfSkips: 0
+
+17:24:21.861 10 edge {
+  props {
+    type: "HasElement"
+  }
+  startNodeID {
+    url: "https://zh.wikipedia.org/wiki/Category:%E6%B7%B1%E5%9C%B3%E8%AF%81%E5%88%B8%E4%BA%A4%E6%98%93%E6%89%80%E4%B8%8A%E5%B8%82%E5%85%AC%E5%8F%B8"
+  }
+  endNodeID {
+    url: "https://zh.wikipedia.org/wiki/%E5%A4%AA%E5%8E%9F%E9%92%A2%E9%93%81"
+  }
+}
+error {
+  reason: "start node doesn\'t exist"
+}
+
+17:24:21.879 10 numOfCreations: 0
+numOfUpdates: 0
+numOfSkips: 0
+
+17:24:21.880 10 edge {
+  props {
+    type: "HasElement"
+  }
+  startNodeID {
+    url: "https://zh.wikipedia.org/wiki/Category:%E6%B7%B1%E5%9C%B3%E8%AF%81%E5%88%B8%E4%BA%A4%E6%98%93%E6%89%80%E4%B8%8A%E5%B8%82%E5%85%AC%E5%8F%B8"
+  }
+  endNodeID {
+    url: "https://zh.wikipedia.org/wiki/%E7%8F%A0%E6%B1%9F%E9%92%A2%E7%90%B4"
+  }
+}
+error {
+  reason: "start node doesn\'t exist"
+}
+
+17:24:21.898 10 numOfCreations: 0
+numOfUpdates: 0
+numOfSkips: 0
+
+17:24:21.899 10 edge {
+  props {
+    type: "HasElement"
+  }
+  startNodeID {
+    url: "https://zh.wikipedia.org/wiki/Category:%E6%B7%B1%E5%9C%B3%E8%AF%81%E5%88%B8%E4%BA%A4%E6%98%93%E6%89%80%E4%B8%8A%E5%B8%82%E5%85%AC%E5%8F%B8"
+  }
+  endNodeID {
+    url: "https://zh.wikipedia.org/wiki/%E6%B9%96%E5%8C%97%E5%AE%9C%E5%8C%96"
+  }
+}
+error {
+  reason: "start node doesn\'t exist"
+}
+
+17:24:21.914 10 numOfCreations: 0
+numOfUpdates: 0
+numOfSkips: 0
+
+17:24:21.915 10 edge {
+  props {
+    type: "HasElement"
+  }
+  startNodeID {
+    url: "https://zh.wikipedia.org/wiki/Category:%E6%B7%B1%E5%9C%B3%E8%AF%81%E5%88%B8%E4%BA%A4%E6%98%93%E6%89%80%E4%B8%8A%E5%B8%82%E5%85%AC%E5%8F%B8"
+  }
+  endNodeID {
+    url: "https://zh.wikipedia.org/wiki/%E6%B5%B7%E9%9A%86%E8%BD%AF%E4%BB%B6"
+  }
+}
+error {
+  reason: "start node doesn\'t exist"
+}
+
+17:24:21.934 10 numOfCreations: 0
+numOfUpdates: 0
+numOfSkips: 0
+
+17:24:21.935 10 edge {
+  props {
+    type: "HasElement"
+  }
+  startNodeID {
+    url: "https://zh.wikipedia.org/wiki/Category:%E6%B7%B1%E5%9C%B3%E8%AF%81%E5%88%B8%E4%BA%A4%E6%98%93%E6%89%80%E4%B8%8A%E5%B8%82%E5%85%AC%E5%8F%B8"
+  }
+  endNodeID {
+    url: "https://zh.wikipedia.org/wiki/%E6%B1%89%E7%8E%8B%E7%A7%91%E6%8A%80"
+  }
+}
+error {
+  reason: "start node doesn\'t exist"
+}
+
+17:24:21.956 10 numOfCreations: 0
+numOfUpdates: 0
+numOfSkips: 0
+
+17:24:21.956 10 edge {
+  props {
+    type: "HasElement"
+  }
+  startNodeID {
+    url: "https://zh.wikipedia.org/wiki/Category:%E6%B7%B1%E5%9C%B3%E8%AF%81%E5%88%B8%E4%BA%A4%E6%98%93%E6%89%80%E4%B8%8A%E5%B8%82%E5%85%AC%E5%8F%B8"
+  }
+  endNodeID {
+    url: "https://zh.wikipedia.org/wiki/%E6%B7%B1%E5%9C%B3%E8%B5%A4%E6%B9%BE%E6%B8%AF%E8%88%AA"
+  }
+}
+error {
+  reason: "start node doesn\'t exist"
+}
+
+17:24:21.976 10 numOfCreations: 0
+numOfUpdates: 0
+numOfSkips: 0
+
+17:24:21.976 10 edge {
+  props {
+    type: "HasElement"
+  }
+  startNodeID {
+    url: "https://zh.wikipedia.org/wiki/Category:%E6%B7%B1%E5%9C%B3%E8%AF%81%E5%88%B8%E4%BA%A4%E6%98%93%E6%89%80%E4%B8%8A%E5%B8%82%E5%85%AC%E5%8F%B8"
+  }
+  endNodeID {
+    url: "https://zh.wikipedia.org/wiki/%E7%9B%90%E7%94%B0%E5%9B%BD%E9%99%85%E9%9B%86%E8%A3%85%E7%AE%B1%E7%A0%81%E5%A4%B4"
+  }
+}
+error {
+  reason: "start node doesn\'t exist"
+}
+
+17:24:21.997 10 numOfCreations: 0
+numOfUpdates: 0
+numOfSkips: 0
+
+17:24:21.999 10 edge {
+  props {
+    type: "HasElement"
+  }
+  startNodeID {
+    url: "https://zh.wikipedia.org/wiki/Category:%E6%B7%B1%E5%9C%B3%E8%AF%81%E5%88%B8%E4%BA%A4%E6%98%93%E6%89%80%E4%B8%8A%E5%B8%82%E5%85%AC%E5%8F%B8"
+  }
+  endNodeID {
+    url: "https://zh.wikipedia.org/wiki/%E6%8E%A2%E8%B7%AF%E8%80%85"
+  }
+}
+error {
+  reason: "start node doesn\'t exist"
+}
+
+17:24:22.022 10 numOfCreations: 0
+numOfUpdates: 0
+numOfSkips: 0
+
+17:24:22.023 10 edge {
+  props {
+    type: "HasElement"
+  }
+  startNodeID {
+    url: "https://zh.wikipedia.org/wiki/Category:%E6%B7%B1%E5%9C%B3%E8%AF%81%E5%88%B8%E4%BA%A4%E6%98%93%E6%89%80%E4%B8%8A%E5%B8%82%E5%85%AC%E5%8F%B8"
+  }
+  endNodeID {
+    url: "https://zh.wikipedia.org/wiki/%E6%B1%89%E9%BC%8E%E4%BF%A1%E6%81%AF%E7%A7%91%E6%8A%80%E8%82%A1%E4%BB%BD%E6%9C%89%E9%99%90%E5%85%AC%E5%8F%B8"
+  }
+}
+error {
+  reason: "start node doesn\'t exist"
+}
+
+17:24:22.042 10 numOfCreations: 0
+numOfUpdates: 0
+numOfSkips: 0
+
+17:24:22.042 10 edge {
+  props {
+    type: "HasElement"
+  }
+  startNodeID {
+    url: "https://zh.wikipedia.org/wiki/Category:%E6%B7%B1%E5%9C%B3%E8%AF%81%E5%88%B8%E4%BA%A4%E6%98%93%E6%89%80%E4%B8%8A%E5%B8%82%E5%85%AC%E5%8F%B8"
+  }
+  endNodeID {
+    url: "https://zh.wikipedia.org/wiki/%E7%94%B3%E9%80%9A%E5%BF%AB%E9%80%92"
+  }
+}
+error {
+  reason: "start node doesn\'t exist"
+}
+
+17:24:22.063 10 numOfCreations: 0
+numOfUpdates: 0
+numOfSkips: 0
+
+17:24:22.063 10 edge {
+  props {
+    type: "HasElement"
+  }
+  startNodeID {
+    url: "https://zh.wikipedia.org/wiki/Category:%E6%B7%B1%E5%9C%B3%E8%AF%81%E5%88%B8%E4%BA%A4%E6%98%93%E6%89%80%E4%B8%8A%E5%B8%82%E5%85%AC%E5%8F%B8"
+  }
+  endNodeID {
+    url: "https://zh.wikipedia.org/wiki/%E9%B2%81%E8%83%BD%E9%9B%86%E5%9B%A2"
+  }
+}
+error {
+  reason: "start node doesn\'t exist"
+}
+
+17:24:22.081 10 numOfCreations: 0
+numOfUpdates: 0
+numOfSkips: 0
+
+17:24:22.081 10 edge {
+  props {
+    type: "HasElement"
+  }
+  startNodeID {
+    url: "https://zh.wikipedia.org/wiki/Category:%E6%B7%B1%E5%9C%B3%E8%AF%81%E5%88%B8%E4%BA%A4%E6%98%93%E6%89%80%E4%B8%8A%E5%B8%82%E5%85%AC%E5%8F%B8"
+  }
+  endNodeID {
+    url: "https://zh.wikipedia.org/wiki/%E7%AB%8B%E8%AE%AF%E7%B2%BE%E5%AF%86"
+  }
+}
+error {
+  reason: "start node doesn\'t exist"
+}
+
+17:24:22.101 10 numOfCreations: 0
+numOfUpdates: 0
+numOfSkips: 0
+
+17:24:22.102 10 edge {
+  props {
+    type: "HasElement"
+  }
+  startNodeID {
+    url: "https://zh.wikipedia.org/wiki/Category:%E6%B7%B1%E5%9C%B3%E8%AF%81%E5%88%B8%E4%BA%A4%E6%98%93%E6%89%80%E4%B8%8A%E5%B8%82%E5%85%AC%E5%8F%B8"
+  }
+  endNodeID {
+    url: "https://zh.wikipedia.org/wiki/%E5%8D%8E%E5%BD%95%E7%99%BE%E7%BA%B3"
+  }
+}
+error {
+  reason: "start node doesn\'t exist"
+}
+
+17:24:22.122 10 numOfCreations: 0
+numOfUpdates: 0
+numOfSkips: 0
+
+17:24:22.122 10 edge {
+  props {
+    type: "HasElement"
+  }
+  startNodeID {
+    url: "https://zh.wikipedia.org/wiki/Category:%E6%B7%B1%E5%9C%B3%E8%AF%81%E5%88%B8%E4%BA%A4%E6%98%93%E6%89%80%E4%B8%8A%E5%B8%82%E5%85%AC%E5%8F%B8"
+  }
+  endNodeID {
+    url: "https://zh.wikipedia.org/wiki/%E5%BC%A0%E5%AE%B6%E6%B8%AF%E5%86%9C%E6%9D%91%E5%95%86%E4%B8%9A%E9%93%B6%E8%A1%8C"
+  }
+}
+error {
+  reason: "start node doesn\'t exist"
+}
+
+17:24:22.143 10 numOfCreations: 0
+numOfUpdates: 0
+numOfSkips: 0
+
+17:24:22.144 10 edge {
+  props {
+    type: "HasElement"
+  }
+  startNodeID {
+    url: "https://zh.wikipedia.org/wiki/Category:%E6%B7%B1%E5%9C%B3%E8%AF%81%E5%88%B8%E4%BA%A4%E6%98%93%E6%89%80%E4%B8%8A%E5%B8%82%E5%85%AC%E5%8F%B8"
+  }
+  endNodeID {
+    url: "https://zh.wikipedia.org/wiki/%E9%87%91%E9%A3%8E%E7%A7%91%E6%8A%80"
+  }
+}
+error {
+  reason: "start node doesn\'t exist"
+}
+
+17:24:22.163 10 numOfCreations: 0
+numOfUpdates: 0
+numOfSkips: 0
+
+17:24:22.164 10 edge {
+  props {
+    type: "HasElement"
+  }
+  startNodeID {
+    url: "https://zh.wikipedia.org/wiki/Category:%E6%B7%B1%E5%9C%B3%E8%AF%81%E5%88%B8%E4%BA%A4%E6%98%93%E6%89%80%E4%B8%8A%E5%B8%82%E5%85%AC%E5%8F%B8"
+  }
+  endNodeID {
+    url: "https://zh.wikipedia.org/wiki/%E5%86%80%E4%B8%AD%E8%83%BD%E6%BA%90%E8%82%A1%E4%BB%BD"
+  }
+}
+error {
+  reason: "start node doesn\'t exist"
+}
+
+17:24:22.183 10 numOfCreations: 0
+numOfUpdates: 0
+numOfSkips: 0
+
+17:24:22.184 10 edge {
+  props {
+    type: "HasElement"
+  }
+  startNodeID {
+    url: "https://zh.wikipedia.org/wiki/Category:%E6%B7%B1%E5%9C%B3%E8%AF%81%E5%88%B8%E4%BA%A4%E6%98%93%E6%89%80%E4%B8%8A%E5%B8%82%E5%85%AC%E5%8F%B8"
+  }
+  endNodeID {
+    url: "https://zh.wikipedia.org/wiki/%E6%B1%9F%E9%93%83%E6%B1%BD%E8%BD%A6"
+  }
+}
+error {
+  reason: "start node doesn\'t exist"
+}
+
+17:24:22.204 10 numOfCreations: 0
+numOfUpdates: 0
+numOfSkips: 0
+
+17:24:22.205 10 edge {
+  props {
+    type: "HasElement"
+  }
+  startNodeID {
+    url: "https://zh.wikipedia.org/wiki/Category:%E6%B7%B1%E5%9C%B3%E8%AF%81%E5%88%B8%E4%BA%A4%E6%98%93%E6%89%80%E4%B8%8A%E5%B8%82%E5%85%AC%E5%8F%B8"
+  }
+  endNodeID {
+    url: "https://zh.wikipedia.org/wiki/%E6%81%92%E7%94%9F%E6%8C%87%E6%95%B0ETF"
+  }
+}
+error {
+  reason: "start node doesn\'t exist"
+}
+
+17:24:22.220 10 numOfCreations: 0
+numOfUpdates: 0
+numOfSkips: 0
+
+17:24:22.221 10 edge {
+  props {
+    type: "HasElement"
+  }
+  startNodeID {
+    url: "https://zh.wikipedia.org/wiki/Category:%E6%B7%B1%E5%9C%B3%E8%AF%81%E5%88%B8%E4%BA%A4%E6%98%93%E6%89%80%E4%B8%8A%E5%B8%82%E5%85%AC%E5%8F%B8"
+  }
+  endNodeID {
+    url: "https://zh.wikipedia.org/wiki/%E5%9B%BD%E4%BF%A1%E8%AF%81%E5%88%B8"
+  }
+}
+error {
+  reason: "start node doesn\'t exist"
+}
+
+17:24:22.237 10 numOfCreations: 0
+numOfUpdates: 0
+numOfSkips: 0
+
+17:24:22.238 10 edge {
+  props {
+    type: "HasElement"
+  }
+  startNodeID {
+    url: "https://zh.wikipedia.org/wiki/Category:%E6%B7%B1%E5%9C%B3%E8%AF%81%E5%88%B8%E4%BA%A4%E6%98%93%E6%89%80%E4%B8%8A%E5%B8%82%E5%85%AC%E5%8F%B8"
+  }
+  endNodeID {
+    url: "https://zh.wikipedia.org/wiki/%E6%B1%9F%E8%A5%BF%E9%BB%91%E7%8C%AB%E7%82%AD%E9%BB%91"
+  }
+}
+error {
+  reason: "start node doesn\'t exist"
+}
+
+17:24:22.254 10 numOfCreations: 0
+numOfUpdates: 0
+numOfSkips: 0
+
+17:24:22.255 10 edge {
+  props {
+    type: "HasElement"
+  }
+  startNodeID {
+    url: "https://zh.wikipedia.org/wiki/Category:%E6%B7%B1%E5%9C%B3%E8%AF%81%E5%88%B8%E4%BA%A4%E6%98%93%E6%89%80%E4%B8%8A%E5%B8%82%E5%85%AC%E5%8F%B8"
+  }
+  endNodeID {
+    url: "https://zh.wikipedia.org/wiki/%E4%B8%AD%E5%B7%A5%E5%9B%BD%E9%99%85"
+  }
+}
+error {
+  reason: "start node doesn\'t exist"
+}
+
+17:24:22.274 10 numOfCreations: 0
+numOfUpdates: 0
+numOfSkips: 0
+
+17:24:22.274 10 edge {
+  props {
+    type: "HasElement"
+  }
+  startNodeID {
+    url: "https://zh.wikipedia.org/wiki/Category:%E6%B7%B1%E5%9C%B3%E8%AF%81%E5%88%B8%E4%BA%A4%E6%98%93%E6%89%80%E4%B8%8A%E5%B8%82%E5%85%AC%E5%8F%B8"
+  }
+  endNodeID {
+    url: "https://zh.wikipedia.org/wiki/%E9%A6%96%E9%92%A2%E9%9B%86%E5%9B%A2"
+  }
+}
+error {
+  reason: "start node doesn\'t exist"
+}
+
+17:24:22.296 10 numOfCreations: 0
+numOfUpdates: 0
+numOfSkips: 0
+
+17:24:22.296 10 edge {
+  props {
+    type: "HasElement"
+  }
+  startNodeID {
+    url: "https://zh.wikipedia.org/wiki/Category:%E6%B7%B1%E5%9C%B3%E8%AF%81%E5%88%B8%E4%BA%A4%E6%98%93%E6%89%80%E4%B8%8A%E5%B8%82%E5%85%AC%E5%8F%B8"
+  }
+  endNodeID {
+    url: "https://zh.wikipedia.org/wiki/%E4%BD%9B%E5%B1%B1%E7%94%B5%E5%99%A8%E7%85%A7%E6%98%8E"
+  }
+}
+error {
+  reason: "start node doesn\'t exist"
+}
+
+17:24:22.316 10 numOfCreations: 0
+numOfUpdates: 0
+numOfSkips: 0
+
+17:24:22.316 10 edge {
+  props {
+    type: "HasElement"
+  }
+  startNodeID {
+    url: "https://zh.wikipedia.org/wiki/Category:%E6%B7%B1%E5%9C%B3%E8%AF%81%E5%88%B8%E4%BA%A4%E6%98%93%E6%89%80%E4%B8%8A%E5%B8%82%E5%85%AC%E5%8F%B8"
+  }
+  endNodeID {
+    url: "https://zh.wikipedia.org/wiki/%E8%BD%B4%E7%A0%94%E7%A7%91%E6%8A%80"
+  }
+}
+error {
+  reason: "start node doesn\'t exist"
+}
+
+17:24:22.336 10 numOfCreations: 0
+numOfUpdates: 0
+numOfSkips: 0
+
+17:24:22.337 10 edge {
+  props {
+    type: "HasElement"
+  }
+  startNodeID {
+    url: "https://zh.wikipedia.org/wiki/Category:%E6%B7%B1%E5%9C%B3%E8%AF%81%E5%88%B8%E4%BA%A4%E6%98%93%E6%89%80%E4%B8%8A%E5%B8%82%E5%85%AC%E5%8F%B8"
+  }
+  endNodeID {
+    url: "https://zh.wikipedia.org/wiki/%E4%B8%AD%E5%9B%BD%E8%88%AA%E7%A9%BA%E5%B7%A5%E4%B8%9A%E9%9B%86%E5%9B%A2"
+  }
+}
+error {
+  reason: "start node doesn\'t exist"
+}
+
+17:24:22.357 10 numOfCreations: 0
+numOfUpdates: 0
+numOfSkips: 0
+
+17:24:22.358 10 edge {
+  props {
+    type: "HasElement"
+  }
+  startNodeID {
+    url: "https://zh.wikipedia.org/wiki/Category:%E6%B7%B1%E5%9C%B3%E8%AF%81%E5%88%B8%E4%BA%A4%E6%98%93%E6%89%80%E4%B8%8A%E5%B8%82%E5%85%AC%E5%8F%B8"
+  }
+  endNodeID {
+    url: "https://zh.wikipedia.org/wiki/%E5%90%AF%E6%98%8E%E4%BF%A1%E6%81%AF"
+  }
+}
+error {
+  reason: "start node doesn\'t exist"
+}
+
+17:24:22.378 10 numOfCreations: 0
+numOfUpdates: 0
+numOfSkips: 0
+
+17:24:22.378 10 edge {
+  props {
+    type: "HasElement"
+  }
+  startNodeID {
+    url: "https://zh.wikipedia.org/wiki/Category:%E6%B7%B1%E5%9C%B3%E8%AF%81%E5%88%B8%E4%BA%A4%E6%98%93%E6%89%80%E4%B8%8A%E5%B8%82%E5%85%AC%E5%8F%B8"
+  }
+  endNodeID {
+    url: "https://zh.wikipedia.org/wiki/%E4%BB%B2%E6%99%AF%E5%AE%9B%E8%A5%BF%E5%88%B6%E8%8D%AF"
+  }
+}
+error {
+  reason: "start node doesn\'t exist"
+}
+
