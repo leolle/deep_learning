@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 # Python program to detect cycle
 # in a graph
 
@@ -18,9 +20,9 @@ from tqdm import tqdm
 import time
 
 ylog.set_level(logging.DEBUG)
-ylog.console_on()
+# ylog.console_on()
 
-# ylog.filelog_on("wiki_upload")
+ylog.filelog_on("wiki_upload")
 
 
 class Graph():
@@ -76,7 +78,8 @@ class Graph():
     def direct_loop(self):
         for node in self.graph.keys():
             if node in self.graph[node]:
-                print("%s is a direct loop" % node)
+                #                 ylog.debug("%s" % node)
+                print("%s" % node)
 
 
 g = Graph()
@@ -146,13 +149,13 @@ def batch_upload(re, file_path, batch_size, func, start, end):
             if i < start:
                 continue
             if i <= end:
-                print("line #: %s/%s" % (i, 1503))
+                # print("line #: %s/%s" % (i, 1503))
                 try:
                     last_span = re.search(line).span()[0]
                 except AttributeError:
                     continue
                 line_size = len(re.findall(line))
-                ylog.debug(line_size)
+                # ylog.debug(line_size)
                 for i in range(0, line_size, batch_size):
                     # pause if find a file naed pause at the currend dir
                     re_batch = {}

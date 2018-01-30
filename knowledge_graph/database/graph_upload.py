@@ -235,6 +235,8 @@ def upload_edge(dict_re_match_object):
                     if edge_type == 'subcat':
                         subcat_title = item.group(3)[1:-1]
                         cat_title = item.group(2)[1:-1]
+                        if subcat_title == cat_title:
+                            continue
                         if '\\n' in cat_title:
                             end = cat_title.split("\\n")
                             cat_title = end[-1]
