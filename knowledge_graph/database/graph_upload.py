@@ -453,7 +453,7 @@ def upload_cat_node(dict_re_match_object):
                     if zh_title in IGNORE_CATEGORIES:
                         break
                     node = graph_upload_request.graph.nodes.add()
-                    node.props.type = "Oset"
+                    node.props.type = "OSet"
                     p1 = node.props.props.entries.add()
                     p1.key = "url"
                     p1.value = "https://zh.wikipedia.org/wiki/Category:" + quote_plus(
