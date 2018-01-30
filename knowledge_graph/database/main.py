@@ -84,23 +84,23 @@ if __name__ == '__main__':
     #     end=660)
     # print("uploaded number: %s" % (uploaded_number))
 
-    # # # upload edge
+    # # upload edge
 
-    # # chunk_num
-    # # start = chunk_num * chunks
-    # # end = (chunk_num + 1) * chunks
-    # category_link_path = './data/zhwiki-latest-categorylinks.zhs.sql'
-    # wiki_category_link_re = re.compile(
-    #     "\(([0-9]+),('[^,]+'),('[^']+'),('\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}'),('[^']*'),('[^,]+'),('[^,]+')\)"
-    # )
+    # chunk_num
+    # start = chunk_num * chunks
+    # end = (chunk_num + 1) * chunks
+    category_link_path = user_path + '/share/deep_learning/data/zhwiki_cat_pg_lk/zhwiki-latest-categorylinks.zhs.sql'
+    wiki_category_link_re = re.compile(
+        "\(([0-9]+),('[^,]+'),('[^']+'),('\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}'),('[^']*'),('[^,]+'),('[^,]+')\)"
+    )
 
-    # ylog.debug('reading link sql file')
-    # ylog.debug("uploading wiki categorie page link")
-    # uploaded_number = batch_upload(
-    #     wiki_category_link_re,
-    #     category_link_path,
-    #     batch_size,
-    #     upload_edge,
-    #     start=start_edge,
-    #     end=1000000000)
-    # print("uploaded number: %s" % (uploaded_number))
+    ylog.debug('reading link sql file')
+    ylog.debug("uploading wiki categorie page link")
+    uploaded_number = batch_upload(
+        wiki_category_link_re,
+        category_link_path,
+        batch_size,
+        upload_edge,
+        start=start_edge,
+        end=1503)
+    print("uploaded number: %s" % (uploaded_number))

@@ -2,7 +2,7 @@
 import time
 import re
 from lib.gftTools import gftIO
-import graphUpload_pb2
+from lib.gftTools.proto import graphUpload_pb2
 from tqdm import tqdm
 import random
 from ylib import ylog
@@ -15,6 +15,7 @@ from lib.gftTools.gftIO import GSError
 from pymongo import MongoClient
 from google.protobuf.message import DecodeError
 from hanziconv import HanziConv
+import json
 
 PY2 = sys.version_info[0] == 2
 # Python 2.7 compatibiity
@@ -71,7 +72,8 @@ IGNORE_CATEGORIES = [
     '使用Catnav的页面', '缺少Wikidata链接的维基共享资源分类', '隐藏分类', '追踪分类', '维基百科特殊页面',
     '维基百科分类', '维基百科维护', '无需细分的分类', '不要删除的分类', '母分类', '全部重定向分类', '特殊条目'
 ]
-
+EXAMPLE_CATEGORIES = ['深圳证券交易所上市公司', '上海证券交易所上市公司', '各证券交易所上市公司', '证券交易所', '证券']
+EXAMPLE_CATEGORIES_PAGE_DICT = json.load(open('list.txt'))
 # test fetch graph
 test_url = 'http://192.168.1.166:9080'
 # prod_url = 'http://q.gftchina.com:13567/vqservice/vq/'
@@ -132,7 +134,8 @@ def delete_edge(dict_re_match_object):
                     end = subcat_title.split("\\n")
                     subcat_title = end[-1]
                 subcat_title = subcat_title.replace(" ", "_")
-
+                subcat_title_zh = HanziConv.toSimplified(subcat_title)
+                cat_title_zh = HanziConv.toSimplified(cat_title)
                 startNodeID_domain = "https://zh.wikipedia.org/wiki/Category:"
                 startNodeID_primaryKeyInDomain = cat_title
                 endNodeID_domain = "https://zh.wikipedia.org/wiki/Category:"
@@ -216,9 +219,9 @@ def upload_edge(dict_re_match_object):
                     item = dict_re_match_object.get(index)
                     edge_type = item.group(7)[1:-1]
                     if edge_type == 'page':
-                        edge = graph_upload_request.graph.edges.add()
                         page_title = item.group(3)[1:-1]
                         cat_title = item.group(2)[1:-1]
+                        edge = graph_upload_request.graph.edges.add()
                         edge.props.type = "HasElement"
                         if '\\n' in cat_title:
                             end = cat_title.split("\\n")
@@ -227,16 +230,18 @@ def upload_edge(dict_re_match_object):
                             end = page_title.split("\\n")
                             page_title = end[-1]
                         page_title = page_title.replace(" ", "_")
+                        page_title_zh = HanziConv.toSimplified(page_title)
+                        cat_title_zh = HanziConv.toSimplified(cat_title)
 
-                        edge.startNodeID.domain = "https://zh.wikipedia.org/wiki/Category:"
-                        edge.startNodeID.primaryKeyInDomain = cat_title
-                        edge.endNodeID.domain = "https://zh.wikipedia.org/wiki/"
-                        edge.endNodeID.primaryKeyInDomain = page_title
+                        edge.startNodeID.businessID.url = "https://zh.wikipedia.org/wiki/Category:" + quote_plus(
+                            cat_title)
+                        # edge.startNodeID.domain = "https://zh.wikipedia.org/wiki/Category:"
+                        # edge.startNodeID.primaryKeyInDomain = cat_title
+                        # edge.endNodeID.domain = "https://zh.wikipedia.org/wiki/"
+                        # edge.endNodeID.primaryKeyInDomain = page_title
                     if edge_type == 'subcat':
                         subcat_title = item.group(3)[1:-1]
                         cat_title = item.group(2)[1:-1]
-                        if subcat_title == cat_title:
-                            continue
                         if '\\n' in cat_title:
                             end = cat_title.split("\\n")
                             cat_title = end[-1]
@@ -246,13 +251,15 @@ def upload_edge(dict_re_match_object):
                         subcat_title = subcat_title.replace(" ", "_")
                         if subcat_title in IGNORE_CATEGORIES or cat_title in IGNORE_CATEGORIES:
                             continue
+                        if subcat_title == cat_title:
+                            continue
                         edge = graph_upload_request.graph.edges.add()
                         edge.props.type = "HasSubset"
 
-                        edge.startNodeID.domain = "https://zh.wikipedia.org/wiki/Category:"
-                        edge.startNodeID.primaryKeyInDomain = cat_title
-                        edge.endNodeID.domain = "https://zh.wikipedia.org/wiki/Category:"
-                        edge.endNodeID.primaryKeyInDomain = subcat_title
+                        # edge.startNodeID.domain = "https://zh.wikipedia.org/wiki/Category:"
+                        # edge.startNodeID.primaryKeyInDomain = cat_title
+                        # edge.endNodeID.domain = "https://zh.wikipedia.org/wiki/Category:"
+                        # edge.endNodeID.primaryKeyInDomain = subcat_title
 
             graph_upload_request.uploadTag = "uploadWikiEdge"
             graph_upload_request.nodeAction4Duplication = graphUpload_pb2.Action4Duplication.Value(
@@ -428,9 +435,6 @@ def upload_cat_node(dict_re_match_object):
                         break
                     node = graph_upload_request.graph.nodes.add()
                     node.props.type = "Oset"
-                    p0 = node.props.props.entries.add()
-                    p0.key = "_name"
-                    p0.value = HanziConv.toSimplified(title)
                     p1 = node.props.props.entries.add()
                     p1.key = "url"
                     p1.value = "https://zh.wikipedia.org/wiki/Category:" + quote_plus(
@@ -439,9 +443,10 @@ def upload_cat_node(dict_re_match_object):
                     p2.key = "_s_import_source"
                     p2.value = "wiki"
 
-                    node.businessID.domain = "https://zh.wikipedia.org/wiki/Category:"
-                    node.businessID.primaryKeyInDomain = quote_plus(title)
-
+                    # node.businessID.domain = "https://zh.wikipedia.org/wiki/Category:"
+                    # node.businessID.primaryKeyInDomain = quote_plus(title)
+                    node.businessID.url = "https://zh.wikipedia.org/wiki/Category:" + quote_plus(
+                        title)
                     node.names.chinese = zh_title
             # other information of the upload request
             graph_upload_request.uploadTag = "UploadWikiCatNodes"

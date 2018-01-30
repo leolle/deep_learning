@@ -4,7 +4,7 @@ import numpy as np
 from datetime import datetime
 import re
 from lib.gftTools import gftIO
-import graphUpload_pb2
+from lib.gftTools.proto import graphUpload_pb2
 from tqdm import tqdm
 import time
 import hashlib
@@ -157,7 +157,7 @@ try:
         print(response.edgeUpdateResultStatistics)
 except:
     pass
-# TODO: add counter of successful uploaded edges.
+# XXX: fixed # TODO: add counter of successful uploaded edges.
 ylog.debug('start uploading edges')
 last_span = wiki_category_link_re.search(category_link).span()[0]
 for i in range(category_link_size):
@@ -273,7 +273,9 @@ else:
 result = quote_plus(a)
 
 pk_str = "https://zh.wikipedia.org/wiki/" + result
-pk_str = "https://zh.wikipedia.org/wiki/" + "%E8%AF%BA%E8%B4%9D%E5%B0%94%E5%A5%96"
-pk_str = "https://zh.wikipedia.org/wiki/" + "诺贝尔奖"
+# 数学
+pk_str = "https://zh.wikipedia.org/wiki/%E6%95%B0%E5%AD%A6"
 pk_md5 = hashlib.md5(pk_str.encode('utf-8')).hexdigest().upper()
 print(hashlib.md5(pk_md5.encode("utf-8")).hexdigest())
+text = gs_call.get_nodes_binary_data(['8FBBFADD256872063EF29034D6C1A86F'])
+article = text.entries[0].data.data.decode('utf-8')

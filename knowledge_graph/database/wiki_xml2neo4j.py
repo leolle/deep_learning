@@ -75,7 +75,7 @@ from ylib import ylog
 import time
 import re
 from lib.gftTools import gftIO
-import graphUpload_pb2
+from lib.gftTools.proto import graphUpload_pb2
 from tqdm import tqdm
 import random
 from ylib import ylog
@@ -86,6 +86,7 @@ from google.protobuf.message import EncodeError
 from urllib.error import HTTPError
 from lib.gftTools.gftIO import GSError
 from google.protobuf.message import DecodeError
+import json
 
 client = MongoClient('mongodb://localhost:27017/')
 db = client['wiki']
@@ -105,7 +106,7 @@ IGNORE_CATEGORIES = [
     '使用Catnav的页面', '缺少Wikidata链接的维基共享资源分类', '隐藏分类', '追踪分类', '维基百科特殊页面',
     '维基百科分类', '维基百科维护', '无需细分的分类', '不要删除的分类', '母分类', '全部重定向分类', '特殊条目'
 ]
-
+EXAMPLE_CATEGORIES_PAGE_DICT = json.load(open('list.txt'))
 # test fetch graph
 test_url = 'http://192.168.1.166:9080'
 # prod_url = 'http://q.gftchina.com:13567/vqservice/vq/'
@@ -622,6 +623,12 @@ class Extractor(object):
             for sent in text:
                 if not isinstance(sent, text_type):
                     sent = sent.decode('utf-8')
+            title = HanziConv.toSimplified(self.title)
+            # ylog.debug("%s" % title)
+            if not any(title in v
+                       for v in EXAMPLE_CATEGORIES_PAGE_DICT.values()):
+                ylog.info("%s is not target page" % title)
+                return
             joined_text = "\n".join(text)
 
             res = None
@@ -634,7 +641,7 @@ class Extractor(object):
                 try:
                     graph_upload_request = graphUpload_pb2.GraphUploadRequest()
                     node = graph_upload_request.graph.nodes.add()
-                    title = HanziConv.toSimplified(self.title)
+                    # title = HanziConv.toSimplified(self.title)
                     node.props.type = "readonlyDoc"
                     node.subType = "HTML"
                     p1 = node.props.props.entries.add()
@@ -647,8 +654,10 @@ class Extractor(object):
                     p4.key = "url"
                     p4.value = url
 
-                    node.businessID.domain = "https://zh.wikipedia.org/wiki/"
-                    node.businessID.primaryKeyInDomain = get_encoded_title(
+                    # node.businessID.domain = "https://zh.wikipedia.org/wiki/"
+                    # node.businessID.primaryKeyInDomain = get_encoded_title(
+                    #     self.title)
+                    node.businessID.url = "https://zh.wikipedia.org/wiki/" + get_encoded_title(
                         self.title)
                     node.names.chinese = title
                     node.binaryContent = bytes(
@@ -681,7 +690,7 @@ class Extractor(object):
                     nodes_fail_retry += 1
                     res = None
                     if nodes_fail_retry > NODES_FAIL_MAX_RETRIES:
-                        ylog.debug(res)
+                        ylog.info(res)
                         res = "continue"
 
                 if error is not None:
@@ -689,7 +698,7 @@ class Extractor(object):
                     retry += 1
                     res = None
                     if retry > MAX_RETRIES:
-                        ylog.debug(res)
+                        ylog.info(res)
                         exit("no loger attempting to retry.")
                     max_sleep = 2**retry
                     sleep_seconds = random.random() * max_sleep
@@ -705,7 +714,7 @@ class Extractor(object):
                         res.nodeUpdateResultStatistics.numOfSkips
                 if res.uploadedNodes:
                     for updated in res.uploadedNodes:
-                        ylog.debug("uploaded node GID: %s" % updated.gid)
+                        ylog.info("uploaded node GID: %s" % updated.gid)
                 if res.failedNodes:
                     for err in res.failedNodes:
                         if err.error.errorCode != 202001:
@@ -736,7 +745,7 @@ class Extractor(object):
         """
         :param out: a memory file.
         """
-        ylog.info('%s\t%s', self.id, self.title)
+        ylog.debug('%s\t%s', self.id, self.title)
         #        logging.info('%s\t%s', self.id, self.title)
         # Separate header from text with a newline.
         if options.toHTML:

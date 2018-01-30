@@ -14,13 +14,13 @@ from google.protobuf import descriptor_pb2
 _sym_db = _symbol_database.Default()
 
 
-import common_pb2
+from . import common_pb2
 
 
 DESCRIPTOR = _descriptor.FileDescriptor(
   name='graphUpload.proto',
   package='com.gftchina.common.persistence.graphUpload',
-  serialized_pb=_b('\n\x11graphUpload.proto\x12+com.gftchina.common.persistence.graphUpload\x1a\x0c\x63ommon.proto\")\n\x05Names\x12\x0f\n\x07\x63hinese\x18\x01 \x01(\t\x12\x0f\n\x07\x65nglish\x18\x02 \x01(\t\"8\n\nBusinessID\x12\x0e\n\x06\x64omain\x18\x01 \x02(\t\x12\x1a\n\x12primaryKeyInDomain\x18\x02 \x02(\t\"b\n\x15PropertyContainerInfo\x12\x0c\n\x04type\x18\x01 \x02(\t\x12;\n\x05props\x18\x02 \x01(\x0b\x32,.com.gftchina.common.persistence.common.Meta\"\x95\x02\n\x08NodeInfo\x12Q\n\x05props\x18\x01 \x02(\x0b\x32\x42.com.gftchina.common.persistence.graphUpload.PropertyContainerInfo\x12K\n\nbusinessID\x18\x02 \x02(\x0b\x32\x37.com.gftchina.common.persistence.graphUpload.BusinessID\x12\x41\n\x05names\x18\x03 \x02(\x0b\x32\x32.com.gftchina.common.persistence.graphUpload.Names\x12\x0f\n\x07subType\x18\x04 \x01(\t\x12\x15\n\rbinaryContent\x18\x05 \x01(\x0c\"\xe6\x02\n\x08\x45\x64geInfo\x12Q\n\x05props\x18\x01 \x02(\x0b\x32\x42.com.gftchina.common.persistence.graphUpload.PropertyContainerInfo\x12L\n\x0bstartNodeID\x18\x02 \x02(\x0b\x32\x37.com.gftchina.common.persistence.graphUpload.BusinessID\x12J\n\tendNodeID\x18\x03 \x02(\x0b\x32\x37.com.gftchina.common.persistence.graphUpload.BusinessID\x12\x10\n\x06source\x18\x04 \x01(\t:\x00\x12\x10\n\x06target\x18\x05 \x01(\t:\x00\x12I\n\x07subType\x18\x06 \x01(\x0e\x32\x38.com.gftchina.common.persistence.graphUpload.EdgeSubType\"\x93\x01\n\x05Graph\x12\x44\n\x05nodes\x18\x01 \x03(\x0b\x32\x35.com.gftchina.common.persistence.graphUpload.NodeInfo\x12\x44\n\x05\x65\x64ges\x18\x02 \x03(\x0b\x32\x35.com.gftchina.common.persistence.graphUpload.EdgeInfo\"\xac\x02\n\x12GraphUploadRequest\x12\x41\n\x05graph\x18\x01 \x02(\x0b\x32\x32.com.gftchina.common.persistence.graphUpload.Graph\x12\x11\n\tuploadTag\x18\x02 \x02(\t\x12_\n\x16nodeAction4Duplication\x18\x03 \x02(\x0e\x32?.com.gftchina.common.persistence.graphUpload.Action4Duplication\x12_\n\x16\x65\x64geAction4Duplication\x18\x04 \x02(\x0e\x32?.com.gftchina.common.persistence.graphUpload.Action4Duplication\"Z\n\x16UpdateResultStatistics\x12\x16\n\x0enumOfCreations\x18\x01 \x02(\x05\x12\x14\n\x0cnumOfUpdates\x18\x02 \x02(\x05\x12\x12\n\nnumOfSkips\x18\x03 \x02(\x05\"\x8f\x01\n\nFailedNode\x12\x43\n\x04node\x18\x01 \x02(\x0b\x32\x35.com.gftchina.common.persistence.graphUpload.NodeInfo\x12<\n\x05\x65rror\x18\x02 \x02(\x0b\x32-.com.gftchina.common.persistence.common.Error\"\x8f\x01\n\nFailedEdge\x12\x43\n\x04\x65\x64ge\x18\x01 \x02(\x0b\x32\x35.com.gftchina.common.persistence.graphUpload.EdgeInfo\x12<\n\x05\x65rror\x18\x02 \x02(\x0b\x32-.com.gftchina.common.persistence.common.Error\"l\n\x10NodeUploadResult\x12K\n\nbusinessID\x18\x01 \x02(\x0b\x32\x37.com.gftchina.common.persistence.graphUpload.BusinessID\x12\x0b\n\x03gid\x18\x02 \x02(\t\"\xec\x03\n\x13GraphUploadResponse\x12\x11\n\tuploadTag\x18\x01 \x02(\t\x12T\n\ruploadedNodes\x18\x02 \x03(\x0b\x32=.com.gftchina.common.persistence.graphUpload.NodeUploadResult\x12g\n\x1anodeUpdateResultStatistics\x18\x03 \x02(\x0b\x32\x43.com.gftchina.common.persistence.graphUpload.UpdateResultStatistics\x12g\n\x1a\x65\x64geUpdateResultStatistics\x18\x04 \x02(\x0b\x32\x43.com.gftchina.common.persistence.graphUpload.UpdateResultStatistics\x12L\n\x0b\x66\x61iledNodes\x18\x05 \x03(\x0b\x32\x37.com.gftchina.common.persistence.graphUpload.FailedNode\x12L\n\x0b\x66\x61iledEdges\x18\x06 \x03(\x0b\x32\x37.com.gftchina.common.persistence.graphUpload.FailedEdge*+\n\x0b\x45\x64geSubType\x12\x0c\n\x08PASS_REF\x10\x00\x12\x0e\n\nPASS_VALUE\x10\x01**\n\x12\x41\x63tion4Duplication\x12\x08\n\x04SKIP\x10\x00\x12\n\n\x06UPDATE\x10\x01')
+  serialized_pb=_b('\n\x11graphUpload.proto\x12+com.gftchina.common.persistence.graphUpload\x1a\x0c\x63ommon.proto\")\n\x05Names\x12\x0f\n\x07\x63hinese\x18\x01 \x01(\t\x12\x0f\n\x07\x65nglish\x18\x02 \x01(\t\">\n\x10\x44omainPrimaryKey\x12\x0e\n\x06\x64omain\x18\x01 \x02(\t\x12\x1a\n\x12primaryKeyInDomain\x18\x02 \x02(\t\"|\n\nBusinessID\x12Y\n\x10\x64omainPrimaryKey\x18\x01 \x01(\x0b\x32=.com.gftchina.common.persistence.graphUpload.DomainPrimaryKeyH\x00\x12\r\n\x03url\x18\x02 \x01(\tH\x00\x42\x04\n\x02ID\"b\n\x15PropertyContainerInfo\x12\x0c\n\x04type\x18\x01 \x02(\t\x12;\n\x05props\x18\x02 \x01(\x0b\x32,.com.gftchina.common.persistence.common.Meta\"\x95\x02\n\x08NodeInfo\x12Q\n\x05props\x18\x01 \x02(\x0b\x32\x42.com.gftchina.common.persistence.graphUpload.PropertyContainerInfo\x12K\n\nbusinessID\x18\x02 \x02(\x0b\x32\x37.com.gftchina.common.persistence.graphUpload.BusinessID\x12\x41\n\x05names\x18\x03 \x02(\x0b\x32\x32.com.gftchina.common.persistence.graphUpload.Names\x12\x0f\n\x07subType\x18\x04 \x01(\t\x12\x15\n\rbinaryContent\x18\x05 \x01(\x0c\"\xe6\x02\n\x08\x45\x64geInfo\x12Q\n\x05props\x18\x01 \x02(\x0b\x32\x42.com.gftchina.common.persistence.graphUpload.PropertyContainerInfo\x12L\n\x0bstartNodeID\x18\x02 \x02(\x0b\x32\x37.com.gftchina.common.persistence.graphUpload.BusinessID\x12J\n\tendNodeID\x18\x03 \x02(\x0b\x32\x37.com.gftchina.common.persistence.graphUpload.BusinessID\x12\x10\n\x06source\x18\x04 \x01(\t:\x00\x12\x10\n\x06target\x18\x05 \x01(\t:\x00\x12I\n\x07subType\x18\x06 \x01(\x0e\x32\x38.com.gftchina.common.persistence.graphUpload.EdgeSubType\"\x93\x01\n\x05Graph\x12\x44\n\x05nodes\x18\x01 \x03(\x0b\x32\x35.com.gftchina.common.persistence.graphUpload.NodeInfo\x12\x44\n\x05\x65\x64ges\x18\x02 \x03(\x0b\x32\x35.com.gftchina.common.persistence.graphUpload.EdgeInfo\"\xac\x02\n\x12GraphUploadRequest\x12\x41\n\x05graph\x18\x01 \x02(\x0b\x32\x32.com.gftchina.common.persistence.graphUpload.Graph\x12\x11\n\tuploadTag\x18\x02 \x02(\t\x12_\n\x16nodeAction4Duplication\x18\x03 \x02(\x0e\x32?.com.gftchina.common.persistence.graphUpload.Action4Duplication\x12_\n\x16\x65\x64geAction4Duplication\x18\x04 \x02(\x0e\x32?.com.gftchina.common.persistence.graphUpload.Action4Duplication\"Z\n\x16UpdateResultStatistics\x12\x16\n\x0enumOfCreations\x18\x01 \x02(\x05\x12\x14\n\x0cnumOfUpdates\x18\x02 \x02(\x05\x12\x12\n\nnumOfSkips\x18\x03 \x02(\x05\"\x8f\x01\n\nFailedNode\x12\x43\n\x04node\x18\x01 \x02(\x0b\x32\x35.com.gftchina.common.persistence.graphUpload.NodeInfo\x12<\n\x05\x65rror\x18\x02 \x02(\x0b\x32-.com.gftchina.common.persistence.common.Error\"\x8f\x01\n\nFailedEdge\x12\x43\n\x04\x65\x64ge\x18\x01 \x02(\x0b\x32\x35.com.gftchina.common.persistence.graphUpload.EdgeInfo\x12<\n\x05\x65rror\x18\x02 \x02(\x0b\x32-.com.gftchina.common.persistence.common.Error\"l\n\x10NodeUploadResult\x12K\n\nbusinessID\x18\x01 \x02(\x0b\x32\x37.com.gftchina.common.persistence.graphUpload.BusinessID\x12\x0b\n\x03gid\x18\x02 \x02(\t\"\xec\x03\n\x13GraphUploadResponse\x12\x11\n\tuploadTag\x18\x01 \x02(\t\x12T\n\ruploadedNodes\x18\x02 \x03(\x0b\x32=.com.gftchina.common.persistence.graphUpload.NodeUploadResult\x12g\n\x1anodeUpdateResultStatistics\x18\x03 \x02(\x0b\x32\x43.com.gftchina.common.persistence.graphUpload.UpdateResultStatistics\x12g\n\x1a\x65\x64geUpdateResultStatistics\x18\x04 \x02(\x0b\x32\x43.com.gftchina.common.persistence.graphUpload.UpdateResultStatistics\x12L\n\x0b\x66\x61iledNodes\x18\x05 \x03(\x0b\x32\x37.com.gftchina.common.persistence.graphUpload.FailedNode\x12L\n\x0b\x66\x61iledEdges\x18\x06 \x03(\x0b\x32\x37.com.gftchina.common.persistence.graphUpload.FailedEdge*+\n\x0b\x45\x64geSubType\x12\x0c\n\x08PASS_REF\x10\x00\x12\x0e\n\nPASS_VALUE\x10\x01**\n\x12\x41\x63tion4Duplication\x12\x08\n\x04SKIP\x10\x00\x12\n\n\x06UPDATE\x10\x01')
   ,
   dependencies=[common_pb2.DESCRIPTOR,])
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
@@ -42,8 +42,8 @@ _EDGESUBTYPE = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   options=None,
-  serialized_start=2364,
-  serialized_end=2407,
+  serialized_start=2496,
+  serialized_end=2539,
 )
 _sym_db.RegisterEnumDescriptor(_EDGESUBTYPE)
 
@@ -65,8 +65,8 @@ _ACTION4DUPLICATION = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   options=None,
-  serialized_start=2409,
-  serialized_end=2451,
+  serialized_start=2541,
+  serialized_end=2583,
 )
 _sym_db.RegisterEnumDescriptor(_ACTION4DUPLICATION)
 
@@ -115,22 +115,22 @@ _NAMES = _descriptor.Descriptor(
 )
 
 
-_BUSINESSID = _descriptor.Descriptor(
-  name='BusinessID',
-  full_name='com.gftchina.common.persistence.graphUpload.BusinessID',
+_DOMAINPRIMARYKEY = _descriptor.Descriptor(
+  name='DomainPrimaryKey',
+  full_name='com.gftchina.common.persistence.graphUpload.DomainPrimaryKey',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='domain', full_name='com.gftchina.common.persistence.graphUpload.BusinessID.domain', index=0,
+      name='domain', full_name='com.gftchina.common.persistence.graphUpload.DomainPrimaryKey.domain', index=0,
       number=1, type=9, cpp_type=9, label=2,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='primaryKeyInDomain', full_name='com.gftchina.common.persistence.graphUpload.BusinessID.primaryKeyInDomain', index=1,
+      name='primaryKeyInDomain', full_name='com.gftchina.common.persistence.graphUpload.DomainPrimaryKey.primaryKeyInDomain', index=1,
       number=2, type=9, cpp_type=9, label=2,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
@@ -148,7 +148,47 @@ _BUSINESSID = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=123,
-  serialized_end=179,
+  serialized_end=185,
+)
+
+
+_BUSINESSID = _descriptor.Descriptor(
+  name='BusinessID',
+  full_name='com.gftchina.common.persistence.graphUpload.BusinessID',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='domainPrimaryKey', full_name='com.gftchina.common.persistence.graphUpload.BusinessID.domainPrimaryKey', index=0,
+      number=1, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='url', full_name='com.gftchina.common.persistence.graphUpload.BusinessID.url', index=1,
+      number=2, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  extension_ranges=[],
+  oneofs=[
+    _descriptor.OneofDescriptor(
+      name='ID', full_name='com.gftchina.common.persistence.graphUpload.BusinessID.ID',
+      index=0, containing_type=None, fields=[]),
+  ],
+  serialized_start=187,
+  serialized_end=311,
 )
 
 
@@ -184,8 +224,8 @@ _PROPERTYCONTAINERINFO = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=181,
-  serialized_end=279,
+  serialized_start=313,
+  serialized_end=411,
 )
 
 
@@ -242,8 +282,8 @@ _NODEINFO = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=282,
-  serialized_end=559,
+  serialized_start=414,
+  serialized_end=691,
 )
 
 
@@ -307,8 +347,8 @@ _EDGEINFO = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=562,
-  serialized_end=920,
+  serialized_start=694,
+  serialized_end=1052,
 )
 
 
@@ -344,8 +384,8 @@ _GRAPH = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=923,
-  serialized_end=1070,
+  serialized_start=1055,
+  serialized_end=1202,
 )
 
 
@@ -395,8 +435,8 @@ _GRAPHUPLOADREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1073,
-  serialized_end=1373,
+  serialized_start=1205,
+  serialized_end=1505,
 )
 
 
@@ -439,8 +479,8 @@ _UPDATERESULTSTATISTICS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1375,
-  serialized_end=1465,
+  serialized_start=1507,
+  serialized_end=1597,
 )
 
 
@@ -476,8 +516,8 @@ _FAILEDNODE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1468,
-  serialized_end=1611,
+  serialized_start=1600,
+  serialized_end=1743,
 )
 
 
@@ -513,8 +553,8 @@ _FAILEDEDGE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1614,
-  serialized_end=1757,
+  serialized_start=1746,
+  serialized_end=1889,
 )
 
 
@@ -550,8 +590,8 @@ _NODEUPLOADRESULT = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1759,
-  serialized_end=1867,
+  serialized_start=1891,
+  serialized_end=1999,
 )
 
 
@@ -615,10 +655,17 @@ _GRAPHUPLOADRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1870,
-  serialized_end=2362,
+  serialized_start=2002,
+  serialized_end=2494,
 )
 
+_BUSINESSID.fields_by_name['domainPrimaryKey'].message_type = _DOMAINPRIMARYKEY
+_BUSINESSID.oneofs_by_name['ID'].fields.append(
+  _BUSINESSID.fields_by_name['domainPrimaryKey'])
+_BUSINESSID.fields_by_name['domainPrimaryKey'].containing_oneof = _BUSINESSID.oneofs_by_name['ID']
+_BUSINESSID.oneofs_by_name['ID'].fields.append(
+  _BUSINESSID.fields_by_name['url'])
+_BUSINESSID.fields_by_name['url'].containing_oneof = _BUSINESSID.oneofs_by_name['ID']
 _PROPERTYCONTAINERINFO.fields_by_name['props'].message_type = common_pb2._META
 _NODEINFO.fields_by_name['props'].message_type = _PROPERTYCONTAINERINFO
 _NODEINFO.fields_by_name['businessID'].message_type = _BUSINESSID
@@ -643,6 +690,7 @@ _GRAPHUPLOADRESPONSE.fields_by_name['edgeUpdateResultStatistics'].message_type =
 _GRAPHUPLOADRESPONSE.fields_by_name['failedNodes'].message_type = _FAILEDNODE
 _GRAPHUPLOADRESPONSE.fields_by_name['failedEdges'].message_type = _FAILEDEDGE
 DESCRIPTOR.message_types_by_name['Names'] = _NAMES
+DESCRIPTOR.message_types_by_name['DomainPrimaryKey'] = _DOMAINPRIMARYKEY
 DESCRIPTOR.message_types_by_name['BusinessID'] = _BUSINESSID
 DESCRIPTOR.message_types_by_name['PropertyContainerInfo'] = _PROPERTYCONTAINERINFO
 DESCRIPTOR.message_types_by_name['NodeInfo'] = _NODEINFO
@@ -663,6 +711,13 @@ Names = _reflection.GeneratedProtocolMessageType('Names', (_message.Message,), d
   # @@protoc_insertion_point(class_scope:com.gftchina.common.persistence.graphUpload.Names)
   ))
 _sym_db.RegisterMessage(Names)
+
+DomainPrimaryKey = _reflection.GeneratedProtocolMessageType('DomainPrimaryKey', (_message.Message,), dict(
+  DESCRIPTOR = _DOMAINPRIMARYKEY,
+  __module__ = 'graphUpload_pb2'
+  # @@protoc_insertion_point(class_scope:com.gftchina.common.persistence.graphUpload.DomainPrimaryKey)
+  ))
+_sym_db.RegisterMessage(DomainPrimaryKey)
 
 BusinessID = _reflection.GeneratedProtocolMessageType('BusinessID', (_message.Message,), dict(
   DESCRIPTOR = _BUSINESSID,

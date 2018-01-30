@@ -7,9 +7,16 @@ message Names {
 }
 
 // these fields are used to generate business hash
-message BusinessID {
+message DomainPrimaryKey {
 	required string domain = 1; // this value is saved to property _s_business_domain of uploaded node
 	required string primaryKeyInDomain = 2; // this value is saved to property _s_business_pk_in_domain of uploaded node
+}
+
+message BusinessID {
+	oneof ID {
+		DomainPrimaryKey domainPrimaryKey = 1;
+		string url = 2; // non-ascii characters in url should be encoded.
+	}
 }
 
 message PropertyContainerInfo {

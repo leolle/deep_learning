@@ -18,11 +18,19 @@ from pymongo import MongoClient
 import logging
 from tqdm import tqdm
 import time
+from pymongo import MongoClient
+
+client = MongoClient('mongodb://192.168.1.73:27017/')
+db = client['wiki']
+collection = db.zhwiki
+# test_page = collection.find_one({"title": "21"})
 
 ylog.set_level(logging.DEBUG)
-# ylog.console_on()
+ylog.console_on()
 
-ylog.filelog_on("wiki_upload")
+# ylog.filelog_on("wiki_upload")
+
+EXAMPLE_CATEGORIES = ['深圳证券交易所上市公司', '上海证券交易所上市公司', '各证券交易所上市公司', '证券交易所', '证券']
 
 
 class Graph():
@@ -94,6 +102,8 @@ try:
     category_link_path = sys.argv[1]
 except:
     category_link_path = user_path + '/share/deep_learning/data/zhwiki_cat_pg_lk/zhwiki-latest-categorylinks.zhs.sql'
+else:
+    category_link_path = user_path + '/share/deep_learning/data/zhwiki_cat_pg_lk/zhwiki-latest-categorylinks.zhs.sql'
 
 # category_link_path = './data/zhwiki-latest-categorylinks.zhs.sql'
 wiki_category_link_re = re.compile(
@@ -124,7 +134,25 @@ def upload_edge(dict_re_match_object):
                 subcat_title = subcat_title.replace(" ", "_")
                 # ylog.debug(cat_title)
                 # ylog.debug(subcat_title)
-                g.addEdge(cat_title, subcat_title)
+                if subcat_title == cat_title:
+                    continue
+
+                if cat_title in EXAMPLE_CATEGORIES:
+                    g.addEdge(cat_title, subcat_title)
+            if edge_type == 'page':
+                page_title = item.group(3)[1:-1]
+                cat_title = item.group(2)[1:-1]
+                if '\\n' in cat_title:
+                    end = cat_title.split("\\n")
+                    cat_title = end[-1]
+                if '\\n' in page_title:
+                    end = page_title.split("\\n")
+                    page_title = end[-1]
+                page_title = page_title.replace(" ", "_")
+                # ylog.debug(cat_title)
+                # ylog.debug(subcat_title)
+                if cat_title in EXAMPLE_CATEGORIES:
+                    g.addEdge(cat_title, page_title)
 
 
 def batch_upload(re, file_path, batch_size, func, start, end):
