@@ -20,6 +20,7 @@ import logging
 # from gensim.parsing import preprocessing
 from gensim import utils
 from preprocessing import preprocess_string
+from preprocessing import strip_numeric, remove_stopwords, strip_punctuation, tokenize
 user_path = os.path.expanduser("~")
 
 # ylog.debug(page_gid)
@@ -44,6 +45,7 @@ def extract_pages(gid):
     # ylog.debug(text)
     output.write(text + '\n')
     # print text
+    return text
 
 
 gs_call = gftIO.GSCall(test_url, test_user_name, test_pwd)

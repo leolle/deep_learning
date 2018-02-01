@@ -450,8 +450,8 @@ def upload_cat_node(dict_re_match_object):
                     item = dict_re_match_object.get(index)
                     title = item.group(2)[1:-1]
                     zh_title = HanziConv.toSimplified(title)
-                    if zh_title in IGNORE_CATEGORIES:
-                        break
+                    # if zh_title in IGNORE_CATEGORIES:
+                    #     break
                     node = graph_upload_request.graph.nodes.add()
                     node.props.type = "OSet"
                     p1 = node.props.props.entries.add()
@@ -503,7 +503,9 @@ def upload_cat_node(dict_re_match_object):
             res = None
             if retry > MAX_RETRIES:
                 ylog.debug(res)
-                exit("no loger attempting to retry.")
+                # break
+                # exit("no loger attempting to retry.")
+            ylog.debug(res)
             max_sleep = 2**retry
             sleep_seconds = random.random() * max_sleep
             print('Sleeping %f seconds and then retrying...' % sleep_seconds)

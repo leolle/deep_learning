@@ -106,7 +106,7 @@ IGNORE_CATEGORIES = [
     '使用Catnav的页面', '缺少Wikidata链接的维基共享资源分类', '隐藏分类', '追踪分类', '维基百科特殊页面',
     '维基百科分类', '维基百科维护', '无需细分的分类', '不要删除的分类', '母分类', '全部重定向分类', '特殊条目'
 ]
-EXAMPLE_CATEGORIES_PAGE_DICT = json.load(open('list.txt'))
+# EXAMPLE_CATEGORIES_PAGE_DICT = json.load(open('list.txt'))
 # test fetch graph
 test_url = 'http://192.168.1.166:9080'
 # prod_url = 'http://q.gftchina.com:13567/vqservice/vq/'
@@ -625,10 +625,10 @@ class Extractor(object):
                     sent = sent.decode('utf-8')
             title = HanziConv.toSimplified(self.title)
             # ylog.debug("%s" % title)
-            if not any(title in v
-                       for v in EXAMPLE_CATEGORIES_PAGE_DICT.values()):
-                ylog.info("%s is not target page" % title)
-                return
+            # if not any(title in v
+            #            for v in EXAMPLE_CATEGORIES_PAGE_DICT.values()):
+            #     ylog.info("%s is not target page" % title)
+            #     return
             joined_text = "\n".join(text)
 
             res = None
@@ -647,9 +647,6 @@ class Extractor(object):
                     p1 = node.props.props.entries.add()
                     p1.key = "_s_import_source"
                     p1.value = "wiki"
-                    p3 = node.props.props.entries.add()
-                    p3.key = "_name"
-                    p3.value = title
                     p4 = node.props.props.entries.add()
                     p4.key = "url"
                     p4.value = url
