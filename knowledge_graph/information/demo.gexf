@@ -1,0 +1,38 @@
+<?xml version='1.0' encoding='utf-8'?>
+<gexf version="1.2" xmlns="http://www.gexf.net/1.2draft" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.w3.org/2001/XMLSchema-instance">
+  <graph defaultedgetype="undirected" mode="static" name="Petersen Graph">
+    <meta>
+      <creator>NetworkX 2.1</creator>
+      <lastmodified>02/02/2018</lastmodified>
+    </meta>
+    <nodes>
+      <node id="0" label="0" />
+      <node id="1" label="1" />
+      <node id="2" label="2" />
+      <node id="3" label="3" />
+      <node id="4" label="4" />
+      <node id="5" label="5" />
+      <node id="6" label="6" />
+      <node id="7" label="7" />
+      <node id="8" label="8" />
+      <node id="9" label="9" />
+    </nodes>
+    <edges>
+      <edge id="0" source="0" target="1" />
+      <edge id="1" source="0" target="4" />
+      <edge id="2" source="0" target="5" />
+      <edge id="3" source="1" target="2" />
+      <edge id="4" source="1" target="6" />
+      <edge id="5" source="2" target="3" />
+      <edge id="6" source="2" target="7" />
+      <edge id="7" source="3" target="4" />
+      <edge id="8" source="3" target="8" />
+      <edge id="9" source="4" target="9" />
+      <edge id="10" source="5" target="7" />
+      <edge id="11" source="5" target="8" />
+      <edge id="12" source="6" target="8" />
+      <edge id="13" source="6" target="9" />
+      <edge id="14" source="7" target="9" />
+    </edges>
+  </graph>
+</gexf>

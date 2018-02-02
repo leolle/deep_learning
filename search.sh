@@ -1,2 +1,2 @@
 #!/bin/bash
-grep -inR "$@" . --include \*.py
+grep -inR "$@" . --include \*.py --exclude-dir=basic

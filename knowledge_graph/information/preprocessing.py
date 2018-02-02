@@ -20,9 +20,6 @@ import gensim
 from gensim import utils
 import logging
 
-user_path = os.path.expanduser("~")
-jieba.load_userdict(user_path + "/share/deep_learning/data/dict/jieba.txt")
-
 logging.basicConfig(
     format='%(asctime)s : %(levelname)s : %(message)s', level=logging.INFO)
 
