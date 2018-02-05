@@ -49,17 +49,6 @@ else:
     from types import SimpleNamespace
     text_type = str
 
-# ylog.set_level(logging.DEBUG)
-# ylog.console_on()
-# ylog.filelog_on("wiki_upload")
-# ylog.debug("test")
-
-client = MongoClient('mongodb://localhost:27017/')
-db = client['wiki']
-collection = db.zhwiki
-batch_size = 20
-# links number
-# wiki_category_link line size = 1503
 # Maximum number of times to retry before giving up.
 MAX_RETRIES = 10
 NODES_FAIL_MAX_RETRIES = 3
@@ -94,7 +83,13 @@ def test_get_skill_graph(args):
 
 
 def delete_edge(dict_re_match_object):
-    """ upload edge created from regular expression matched object.
+    """ delete edge regular expression object in the dictionary in a batch.
+    1. get each value from the input dictionary.
+    2. create a graph upload request.
+    3. fill edge properties.
+    set edge start node and end node.
+    4. if there's any error upload response, retry.
+    5. print upload statistics.
     (9,'En-3_使用者','MOUNTAIN','2015-09-02 13:44:06','','uppercase','page')
     Keyword Arguments:
     re_match_object -- re object
@@ -201,7 +196,13 @@ def delete_edge(dict_re_match_object):
 
 
 def upload_edge(dict_re_match_object):
-    """ upload edge created from regular expression matched object.
+    """ upload edge regular expression object in the dictionary in a batch.
+    1. get each value from the input dictionary.
+    2. create a graph upload request.
+    3. fill edge properties.
+    set edge start node and end node.
+    4. if there's any error upload response, retry.
+    5. print upload statistics.
     (9,'En-3_使用者','MOUNTAIN','2015-09-02 13:44:06','','uppercase','page')
     (id, from, to,...)
     Keyword Arguments:
@@ -324,113 +325,123 @@ def upload_edge(dict_re_match_object):
     return uploaded_number
 
 
-def upload_page_node(dict_re_match_object):
-    """ upload edge created from regular expression matched object.
-    "(164,4,'模板消息','',263,0,0,0.134616506411337,'20171119123332','20171119123333',46122542,11752,'wikitext',NULL)"
-    Keyword Arguments:
-    re_match_object -- re object
-    f               -- local file to write
-    """
-    res = None
-    error = None
-    re_upload_error = None
-    retry = 0
-    nodes_fail_retry = 0
-    uploaded_number = 0
-    while res is None:
-        try:
-            graph_upload_request = graphUpload_pb2.GraphUploadRequest()
-            # iterate nodes batch
-            for index, value in dict_re_match_object.items():
-                if value is not None:
-                    item = dict_re_match_object.get(index)
-                    node = graph_upload_request.graph.nodes.add()
-                    title = item.group(3)[1:-1]
-                    try:
-                        article = collection.find_one({"title": title})
-                        page_content = article['text']
-                        node.binaryContent = bytes(page_content, "utf-8")
-                    except:
-                        pass
-                    node.props.type = "readonlyDoc"
-                    node.subType = "HTML"
-                    p1 = node.props.props.entries.add()
-                    p1.key = "_s_import_source"
-                    p1.value = "wiki"
-                    p2 = node.props.props.entries.add()
-                    p2.key = "_ownerid"
-                    p2.value = "GFT"
-                    p3 = node.props.props.entries.add()
-                    p3.key = "_name"
-                    p3.value = title
-                    p4 = node.props.props.entries.add()
-                    p4.key = "url"
-                    p4.value = "https://zh.wikipedia.org/wiki/" + title
+# def upload_page_node(dict_re_match_object):
+#     """ upload page regular expression object in the dictionary in a batch.
+#     1. get each value from the input dictionary.
+#     2. create a graph upload request.
+#     3. fill node properties.
+#     use encoded original Chinese title plus url as url property.
+#     4. if there's any error upload response, retry.
+#     5. print upload statistics.
+#     "(164,4,'模板消息','',263,0,0,0.134616506411337,'20171119123332','20171119123333',46122542,11752,'wikitext',NULL)"
+#     Keyword Arguments:
+#     re_match_object -- re object, "\(([0-9]+),([0-9]+),('[^,]+'),('[^,]+|'),([0-9]+),([0-9]+),([0-9]+),0.([0-9]+),('[^,]+'),('[^,]+'|NULL),([0-9]+),([0-9]+),('[^,]+'),([^,]+)\)"
+#     f               -- local file to write
+#     """
+#     res = None
+#     error = None
+#     re_upload_error = None
+#     retry = 0
+#     nodes_fail_retry = 0
+#     uploaded_number = 0
+#     while res is None:
+#         try:
+#             graph_upload_request = graphUpload_pb2.GraphUploadRequest()
+#             # iterate nodes batch
+#             for index, value in dict_re_match_object.items():
+#                 if value is not None:
+#                     item = dict_re_match_object.get(index)
+#                     node = graph_upload_request.graph.nodes.add()
+#                     title = item.group(3)[1:-1]
+#                     try:
+#                         node.binaryContent = bytes(page_content, "utf-8")
+#                     except:
+#                         pass
+#                     node.props.type = "readonlyDoc"
+#                     node.subType = "HTML"
+#                     p1 = node.props.props.entries.add()
+#                     p1.key = "_s_import_source"
+#                     p1.value = "wiki"
+#                     p2 = node.props.props.entries.add()
+#                     p2.key = "_ownerid"
+#                     p2.value = "GFT"
+#                     p3 = node.props.props.entries.add()
+#                     p3.key = "_name"
+#                     p3.value = title
+#                     p4 = node.props.props.entries.add()
+#                     p4.key = "url"
+#                     p4.value = "https://zh.wikipedia.org/wiki/" + title
 
-                    node.businessID.domain = "https://zh.wikipedia.org/wiki/"
-                    node.businessID.primaryKeyInDomain = title
-                    node.names.chinese = title
+#                     # node.businessID.domain = "https://zh.wikipedia.org/wiki/"
+#                     # node.businessID.primaryKeyInDomain = title
+#                     node.names.chinese = title
 
-            # other information of the upload request
-            graph_upload_request.uploadTag = "UploadWikiPageNodes"
-            graph_upload_request.nodeAction4Duplication = graphUpload_pb2.Action4Duplication.Value(
-                'UPDATE')
-            graph_upload_request.edgeAction4Duplication = graphUpload_pb2.Action4Duplication.Value(
-                'UPDATE')
+#             # other information of the upload request
+#             graph_upload_request.uploadTag = "UploadWikiPageNodes"
+#             graph_upload_request.nodeAction4Duplication = graphUpload_pb2.Action4Duplication.Value(
+#                 'UPDATE')
+#             graph_upload_request.edgeAction4Duplication = graphUpload_pb2.Action4Duplication.Value(
+#                 'UPDATE')
 
-            res = gs_call.upload_graph(graph_upload_request)
-        except HTTPError as e:
-            if e.code in RETRIABLE_STATUS_CODES:
-                error = 'A retriable HTTP error %d occurred:\n%s' % (e.code,
-                                                                     e.reason)
-            else:
-                raise
-        except RETRIABLE_EXCEPTIONS as e:
-            error = 'A retriable error occurred: %s' % e
-        try:
-            if res.failedNodes:
-                re_upload_error = "some nodes failed to upload %s" % res.failedNodeds
-        except:
-            pass
-        if re_upload_error is not None:
-            print(re_upload_error)
-            nodes_fail_retry += 1
-            res = None
-            if nodes_fail_retry > NODES_FAIL_MAX_RETRIES:
-                ylog.debug(res)
-                res = "continue"
-        if error is not None:
-            print(error)
-            retry += 1
-            res = None
-            if retry > MAX_RETRIES:
-                ylog.debug(res)
-                exit("no loger attempting to retry.")
-            max_sleep = 2**retry
-            sleep_seconds = random.random() * max_sleep
-            print('Sleeping %f seconds and then retrying...' % sleep_seconds)
-            time.sleep(sleep_seconds)
-    # jump out while response is None:
-    try:
-        if res.nodeUpdateResultStatistics:
-            ylog.debug(res.nodeUpdateResultStatistics)
-            uploaded_number = res.nodeUpdateResultStatistics.numOfCreations + \
-                res.nodeUpdateResultStatistics.numOfUpdates + \
-                res.nodeUpdateResultStatistics.numOfSkips
-        if res.uploadedNodes:
-            for updated in res.uploadedNodes:
-                ylog.debug("uploaded node GID: %s" % updated.gid)
-        if res.failedNodes:
-            for err in res.failedNodes:
-                if err.error.errorCode != 202001:
-                    ylog.debug(err.error)
-    except:
-        pass
-    return uploaded_number
+#             res = gs_call.upload_graph(graph_upload_request)
+#         except HTTPError as e:
+#             if e.code in RETRIABLE_STATUS_CODES:
+#                 error = 'A retriable HTTP error %d occurred:\n%s' % (e.code,
+#                                                                      e.reason)
+#             else:
+#                 raise
+#         except RETRIABLE_EXCEPTIONS as e:
+#             error = 'A retriable error occurred: %s' % e
+#         try:
+#             if res.failedNodes:
+#                 re_upload_error = "some nodes failed to upload %s" % res.failedNodeds
+#         except:
+#             pass
+#         if re_upload_error is not None:
+#             print(re_upload_error)
+#             nodes_fail_retry += 1
+#             res = None
+#             if nodes_fail_retry > NODES_FAIL_MAX_RETRIES:
+#                 ylog.debug(res)
+#                 res = "continue"
+#         if error is not None:
+#             print(error)
+#             retry += 1
+#             res = None
+#             if retry > MAX_RETRIES:
+#                 ylog.debug(res)
+#                 exit("no loger attempting to retry.")
+#             max_sleep = 2**retry
+#             sleep_seconds = random.random() * max_sleep
+#             print('Sleeping %f seconds and then retrying...' % sleep_seconds)
+#             time.sleep(sleep_seconds)
+#     # jump out while response is None:
+#     try:
+#         if res.nodeUpdateResultStatistics:
+#             ylog.debug(res.nodeUpdateResultStatistics)
+#             uploaded_number = res.nodeUpdateResultStatistics.numOfCreations + \
+#                 res.nodeUpdateResultStatistics.numOfUpdates + \
+#                 res.nodeUpdateResultStatistics.numOfSkips
+#         if res.uploadedNodes:
+#             for updated in res.uploadedNodes:
+#                 ylog.debug("uploaded node GID: %s" % updated.gid)
+#         if res.failedNodes:
+#             for err in res.failedNodes:
+#                 if err.error.errorCode != 202001:
+#                     ylog.debug(err.error)
+#     except:
+#         pass
+#     return uploaded_number
 
 
 def upload_cat_node(dict_re_match_object):
-    """ upload node created from regular expression matched object.
+    """ upload category regular expression object in the dictionary in a batch.
+    1. get each value from the input dictionary.
+    2. create a graph upload request.
+    3. fill node properties.
+    use encoded original Chinese title plus url as url property.
+    4. if there's any error upload response, retry.
+    5. print upload statistics.
     ('5', "'科学小作品'", '104', '12', '0')
     Keyword Arguments:
     re_match_object -- re object
@@ -533,7 +544,11 @@ def upload_cat_node(dict_re_match_object):
 
 
 def batch_upload(re, file_path, batch_size, func, start, end):
-    """batch upload categories or page
+    """batch upload categories or edge.
+    1. read sql file line by line.
+    2. extract target string using regular expression.
+    3. put these target content into a dictionary.
+    4. use the upload function with dict as input.
     Keyword Arguments:
     re         -- regular expression
     source     -- file path

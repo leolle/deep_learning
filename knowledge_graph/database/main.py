@@ -1,4 +1,7 @@
 # -*- coding: utf-8 -*-
+"""
+extract wiki categories from dump sql file, and then upload to neo4j.
+"""
 from ylib import ylog
 import re
 from lib.gftTools import gftIO
@@ -10,23 +13,24 @@ from urllib.error import HTTPError
 from urllib.error import URLError
 from pymongo import MongoClient
 from graph_upload import batch_upload, upload_edge, upload_cat_node, upload_page_node, delete_edge
-client = MongoClient('mongodb://localhost:27017/')
-db = client['wiki']
-collection = db.zhwiki
+# how many nodes or edge to upload in a batch
 batch_size = 20
 # links number
 # wiki_category_link line size = 1503
 # wiki_category_link_size = 8
 n = 4
-# chunks = int(wiki_category_link_size / n)
+### chunks = int(wiki_category_link_size / n)
+
 # Maximum number of times to retry before giving up.
 MAX_RETRIES = 10
 NODES_FAIL_MAX_RETRIES = 3
+
 # Always retry when these exceptions are raised.
 RETRIABLE_EXCEPTIONS = (EncodeError, DecodeError, HTTPError)
 # Always retry when an apiclient.errors.HttpError with one of these status
 # codes is raised.
 RETRIABLE_STATUS_CODES = [500, 502, 503, 504, 111]
+# ignore those looped categories
 IGNORE_CATEGORIES = [
     '使用Catnav的页面', '缺少Wikidata链接的维基共享资源分类', '隐藏分类', '追踪分类', '维基百科特殊页面',
     '维基百科分类', '维基百科维护', '无需细分的分类', '不要删除的分类', '母分类', '全部重定向分类', '特殊条目'
@@ -45,6 +49,7 @@ if __name__ == '__main__':
     ylog.console_on()
     ylog.filelog_on("wiki_upload")
     try:
+        # set start line number from sql file
         start_cat = int(sys.argv[1])
         start_page = int(sys.argv[2])
         start_edge = int(sys.argv[3])
@@ -69,26 +74,8 @@ if __name__ == '__main__':
         end=68)
     print("uploaded number: %s" % (uploaded_number))
 
-    # # open page sql file
-    # page_path = "./data/zhwiki-latest-page.zhs.sql"
-    # wiki_page_re = re.compile(
-    #     "\(([0-9]+),([0-9]+),('[^,]+'),('[^,]+|'),([0-9]+),([0-9]+),([0-9]+),0.([0-9]+),('[^,]+'),('[^,]+'|NULL),([0-9]+),([0-9]+),('[^,]+'),([^,]+)\)"
-    # )
-    # print("uploading wiki page")
-    # uploaded_number = batch_upload(
-    #     wiki_page_re,
-    #     page_path,
-    #     batch_size,
-    #     upload_page_node,
-    #     start=start_page,
-    #     end=660)
-    # print("uploaded number: %s" % (uploaded_number))
+    # upload edge
 
-    # # upload edge
-
-    # chunk_num
-    # start = chunk_num * chunks
-    # end = (chunk_num + 1) * chunks
     #    category_link_path = user_path + '/share/deep_learning/data/zhwiki_cat_pg_lk/zhwiki-latest-categorylinks.sql'
     # category_link_path = './data/zhwiki-latest-categorylinks.zhs.sql'
     # wiki_category_link_re = re.compile(

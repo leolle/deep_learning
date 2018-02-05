@@ -19,6 +19,7 @@ import logging
 from tqdm import tqdm
 import time
 from pymongo import MongoClient
+import json
 
 client = MongoClient('mongodb://192.168.1.73:27017/')
 db = client['wiki']
@@ -31,6 +32,13 @@ ylog.console_on()
 # ylog.filelog_on("wiki_upload")
 
 EXAMPLE_CATEGORIES = ['深圳证券交易所上市公司', '上海证券交易所上市公司', '各证券交易所上市公司', '证券交易所', '证券']
+dict_company = json.load(open('list.txt'))
+ls_company = open('listed_company.txt', 'w')
+for comp in dict_company['上海证券交易所上市公司']:
+    ls_company.write(comp + '\n')
+for comp in dict_company['深圳证券交易所上市公司']:
+    ls_company.write(comp + '\n')
+ls_company.close()
 
 
 class Graph():
