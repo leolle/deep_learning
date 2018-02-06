@@ -16,6 +16,8 @@ message BusinessID {
 	oneof ID {
 		DomainPrimaryKey domainPrimaryKey = 1;
 		string url = 2; // non-ascii characters in url should be encoded.
+		// Martin 2018-02-06 add for convert skill result in RespRunNodeAction format to graph defined here. Ignored when upload graph for now.
+		string gid = 3;
 	}
 }
 
