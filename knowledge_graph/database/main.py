@@ -12,7 +12,7 @@ from google.protobuf.message import DecodeError
 from urllib.error import HTTPError
 from urllib.error import URLError
 from pymongo import MongoClient
-from graph_upload import batch_upload, upload_edge, upload_cat_node, upload_page_node, delete_edge
+from graph_upload import batch_upload, upload_edge, upload_cat_node, delete_edge
 # how many nodes or edge to upload in a batch
 batch_size = 20
 # links number
@@ -49,7 +49,7 @@ if __name__ == '__main__':
     ylog.console_on()
     ylog.filelog_on("wiki_upload")
     try:
-        # set start line number from sql file
+        # set start line number from sql file for incremental uploading
         start_cat = int(sys.argv[1])
         start_page = int(sys.argv[2])
         start_edge = int(sys.argv[3])
