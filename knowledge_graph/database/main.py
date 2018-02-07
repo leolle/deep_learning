@@ -38,10 +38,10 @@ IGNORE_CATEGORIES = [
 
 # test fetch graph
 test_url = 'http://192.168.1.166:9080'
-# prod_url = 'http://q.gftchina.com:13567/vqservice/vq/'
+prod_url = 'http://q.gftchina.com:13567/vqservice/vq/'
 test_user_name = 'wuwei'
 test_pwd = 'gft'
-gs_call = gftIO.GSCall(test_url, test_user_name, test_pwd)
+gs_call = gftIO.GSCall(prod_url, test_user_name, test_pwd)
 
 if __name__ == '__main__':
     import logging

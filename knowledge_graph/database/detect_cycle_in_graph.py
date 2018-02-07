@@ -13,32 +13,26 @@ from google.protobuf.message import EncodeError
 from google.protobuf.message import DecodeError
 from urllib.error import HTTPError
 from urllib.error import URLError
-from pymongo import MongoClient
 # from graph_upload import batch_upload, upload_edge, upload_cat_node, upload_page_node, delete_edge
 import logging
 from tqdm import tqdm
 import time
-from pymongo import MongoClient
 import json
-
-client = MongoClient('mongodb://192.168.1.73:27017/')
-db = client['wiki']
-collection = db.zhwiki
-# test_page = collection.find_one({"title": "21"})
+import networkx as nx
 
 ylog.set_level(logging.DEBUG)
 ylog.console_on()
 
 # ylog.filelog_on("wiki_upload")
 
-EXAMPLE_CATEGORIES = ['深圳证券交易所上市公司', '上海证券交易所上市公司', '各证券交易所上市公司', '证券交易所', '证券']
-dict_company = json.load(open('list.txt'))
-ls_company = open('listed_company.txt', 'w')
-for comp in dict_company['上海证券交易所上市公司']:
-    ls_company.write(comp + '\n')
-for comp in dict_company['深圳证券交易所上市公司']:
-    ls_company.write(comp + '\n')
-ls_company.close()
+# EXAMPLE_CATEGORIES = ['深圳证券交易所上市公司', '上海证券交易所上市公司', '各证券交易所上市公司', '证券交易所', '证券']
+# dict_company = json.load(open('list.txt'))
+# ls_company = open('listed_company.txt', 'w')
+# for comp in dict_company['上海证券交易所上市公司']:
+#     ls_company.write(comp + '\n')
+# for comp in dict_company['深圳证券交易所上市公司']:
+#     ls_company.write(comp + '\n')
+# ls_company.close()
 
 
 class Graph():
@@ -118,6 +112,8 @@ wiki_category_link_re = re.compile(
     "\(([0-9]+),('[^,]+'),('[^']+'),('\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}'),('[^']*'),('[^,]+'),('[^,]+')\)"
 )
 
+G = nx.DiGraph()
+
 
 def upload_edge(dict_re_match_object):
     """ upload edge created from regular expression matched object.
@@ -142,8 +138,8 @@ def upload_edge(dict_re_match_object):
                 page_title = page_title.replace(" ", "_")
                 # ylog.debug(cat_title)
                 # ylog.debug(subcat_title)
-                if cat_title in EXAMPLE_CATEGORIES:
-                    g.addEdge(cat_title, page_title)
+                # if cat_title in EXAMPLE_CATEGORIES:
+                # G.add_edge(cat_title, page_title)
             if edge_type == 'subcat':
                 subcat_title = item.group(3)[1:-1]
                 cat_title = item.group(2)[1:-1]
@@ -159,8 +155,8 @@ def upload_edge(dict_re_match_object):
                 if subcat_title == cat_title:
                     continue
 
-                if cat_title in EXAMPLE_CATEGORIES:
-                    g.addEdge(cat_title, subcat_title)
+                # if cat_title in EXAMPLE_CATEGORIES:
+                G.add_edge(cat_title, subcat_title)
 
 
 def batch_upload(re, file_path, batch_size, func, start, end):
@@ -210,14 +206,30 @@ batch_upload(
     category_link_path,
     200,
     upload_edge,
-    start=44,
+    start=0,
     end=1503)
-g.direct_loop()
-# if g.isCyclic() == 1:
-#     print("Graph has a cycle")
-# else:
-#     print("Graph has no cycle")
-for node in g.graph.keys():
-    for i in g.graph[node]:
-        print("(2,'%s','%s','2017-11-23 07:54:28','','uppercase','page')," %
-              (node, i))
+#    start=44,
+#    end=1503)
+ls_cycle = list(nx.simple_cycles(G))
+file_cycle = open('cycle.txt', 'w')
+for loop in ls_cycle:
+    print(loop)
+    for i in loop:
+        file_cycle.write(i + '\t')
+    file_cycle.write('\n')
+file_cycle.close()
+# for comp in dict_company['上海证券交易所上市公司']:
+#     ls_company.write(comp + '\n')
+# for comp in dict_company['深圳证券交易所上市公司']:
+#     ls_company.write(comp + '\n')
+# ls_company.close()
+
+# G = nx.DiGraph([(0, 1), (0, 2), (1, 2), (2, 1)])
+# try:
+#     nx.find_cycle(G, orientation='original')
+# except:
+#     pass
+# a = list(nx.find_cycle(G, orientation='ignore'))
+import matplotlib.pyplot as plt
+# nx.draw_networkx(G)
+# plt.show()
