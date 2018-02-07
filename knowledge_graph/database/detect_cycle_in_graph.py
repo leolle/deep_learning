@@ -9,10 +9,6 @@ import re
 from lib.gftTools import gftIO
 import os
 import sys
-from google.protobuf.message import EncodeError
-from google.protobuf.message import DecodeError
-from urllib.error import HTTPError
-from urllib.error import URLError
 # from graph_upload import batch_upload, upload_edge, upload_cat_node, upload_page_node, delete_edge
 import logging
 from tqdm import tqdm
@@ -39,6 +35,7 @@ class Graph():
 
     def __init__(self):
         self.graph = defaultdict(list)
+        self.loop = defaultdict(list)
         # self.graph = {}
 
     def addEdge(self, u, v):
@@ -57,11 +54,11 @@ class Graph():
         # recStack then graph is cyclic
         for neighbour in self.graph[v]:
             try:
-                if visited[neighbour] == False:
-                    if self.isCyclicUtil(neighbour, visited, recStack) == True:
+                if visited[neighbour] is False:
+                    if self.isCyclicUtil(neighbour, visited, recStack) is True:
                         return True
 
-                    elif recStack[neighbour] == True:
+                    elif recStack[neighbour] is True:
                         return True
             except KeyError:
                 pass
@@ -80,19 +77,27 @@ class Graph():
         print(visited)
         for node in self.graph.keys():
             print(node)
-            if visited[node] == False:
-                if self.isCyclicUtil(node, visited, recStack) == True:
+            if visited[node] is False:
+                if self.isCyclicUtil(node, visited, recStack) is True:
                     return True
         return False
 
-    def direct_loop(self):
+    def self_loop(self):
         for node in self.graph.keys():
             if node in self.graph[node]:
                 #                 ylog.debug("%s" % node)
                 print("%s" % node)
 
+    def direct_loop(self,):
+        for node in self.graph.keys():
+            for element in self.graph[node]:
+                if element in self.graph.keys():
+                    if node in self.graph[element]:
+                        self.loop[node].append(element)
+                        print("(%s, %s), (%s, %s)" % (node, element, element,
+                                                      node))
 
-g = Graph()
+
 # g.addEdge(0, 1)
 # g.addEdge(0, 2)
 # g.addEdge(1, 2)
@@ -103,16 +108,16 @@ user_path = os.path.expanduser("~")
 try:
     category_link_path = sys.argv[1]
 except:
-    category_link_path = user_path + '/share/deep_learning/data/zhwiki_cat_pg_lk/zhwiki-latest-categorylinks.zhs.sql'
+    category_link_path = user_path + \
+        '/share/deep_learning/data/zhwiki_cat_pg_lk/zhwiki-latest-categorylinks.sql'
 else:
-    category_link_path = user_path + '/share/deep_learning/data/zhwiki_cat_pg_lk/zhwiki-latest-categorylinks.zhs.sql'
-
+    category_link_path = user_path + \
+        '/share/deep_learning/data/zhwiki_cat_pg_lk/zhwiki-latest-categorylinks.sql'
 # category_link_path = './data/zhwiki-latest-categorylinks.zhs.sql'
 wiki_category_link_re = re.compile(
     "\(([0-9]+),('[^,]+'),('[^']+'),('\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}'),('[^']*'),('[^,]+'),('[^,]+')\)"
 )
-
-G = nx.DiGraph()
+graph = nx.DiGraph()
 
 
 def upload_edge(dict_re_match_object):
@@ -156,7 +161,8 @@ def upload_edge(dict_re_match_object):
                     continue
 
                 # if cat_title in EXAMPLE_CATEGORIES:
-                G.add_edge(cat_title, subcat_title)
+                graph.add_edge(cat_title, subcat_title)
+                g.addEdge(cat_title, subcat_title)
 
 
 def batch_upload(re, file_path, batch_size, func, start, end):
@@ -173,21 +179,37 @@ def batch_upload(re, file_path, batch_size, func, start, end):
     # with open(file_path, 'r') as f:
     #     print("reading all lines from sql")
     #     total_line_size = len(f.readlines())
-    with open(file_path, 'r') as f:
+    with open(file_path, 'rb') as f:
         for i, line in enumerate(tqdm(f)):
             #         print("line #: %s/%s" % (i, 1503))
             #         print(len(line))
             # print(g.graph.keys())
-            if i < start:
-                continue
-            if i <= end:
-                # print("line #: %s/%s" % (i, 1503))
-                try:
-                    last_span = re.search(line).span()[0]
-                except AttributeError:
+            # print("line #: %s/%s" % (i, 1503))
+            try:
+                if i < start:
                     continue
+                if i <= end:
+                    line = line.decode('utf-8')
+                    try:
+                        last_span = re.search(line).span()[0]
+                    except AttributeError:
+                        continue
+                    line_size = len(re.findall(line))
+                    # ylog.debug(line_size)
+                    for i in range(0, line_size, batch_size):
+                        # pause if find a file naed pause at the currend dir
+                        re_batch = {}
+                        for j in range(batch_size):
+                            re_batch[j] = re.search(line, last_span)
+                            if re_batch[j] is not None:
+                                last_span = re_batch[j].span()[1]
+                        func(re_batch)
+                else:
+                    break
+            except UnicodeDecodeError as e:
+                last_span = e.start + 10
                 line_size = len(re.findall(line))
-                # ylog.debug(line_size)
+                ylog.debug(line_size)
                 for i in range(0, line_size, batch_size):
                     # pause if find a file naed pause at the currend dir
                     re_batch = {}
@@ -196,28 +218,67 @@ def batch_upload(re, file_path, batch_size, func, start, end):
                         if re_batch[j] is not None:
                             last_span = re_batch[j].span()[1]
                     func(re_batch)
-            else:
-                break
+
     # print(g.graph.keys())
 
 
-batch_upload(
-    wiki_category_link_re,
-    category_link_path,
-    200,
-    upload_edge,
-    start=0,
-    end=1503)
+g = Graph()
+# batch_upload(
+#     wiki_category_link_re,
+#     category_link_path,
+#     200,
+#     upload_edge,
+#     start=960,
+#     end=1503)
+# graph = nx.read_gexf('whole_edge.gexf')
+# # nx.write_gexf(graph, 'whole_edges.gexf')
+# ls_nodes = list(graph.nodes)
+
+# g.direct_loop()
+# g.self_loop()
+# print(nx.find_cycle(graph, ls_nodes[4]))
+
+# ls_nodes = list(graph.nodes)
+dict_loop = defaultdict(list)
+# for node in tqdm(ls_nodes):
+#     try:
+#         # remove direct edge:
+#         ls_loop = nx.find_cycle(graph, node)
+#         # print(ls_loop)
+#         if len(ls_loop) == 2:
+#             if ls_loop[0][0] == ls_loop[1][1] and ls_loop[0][1] == ls_loop[1][0]:
+#                 graph.remove_edge(ls_loop[0][0], ls_loop[0][1])
+#         # dict_loop[node].append(nx.find_cycle(G, node)[0])
+#     except nx.NetworkXNoCycle:
+#         pass
+"""save graph removed direct cycle edge."""
+# nx.write_gexf(graph, 'whole_edges.rm_di.gexf')
+
+graph = nx.read_gexf('whole_edges.rm_di.gexf')
+ls_nodes = list(graph.nodes)
+for node in tqdm(ls_nodes):
+    try:
+        # remove direct edge:
+        ls_loop = nx.find_cycle(graph, node)
+        # print(ls_loop)
+        if len(ls_loop) > 2:
+            graph.remove_edge(ls_loop[-1][0], ls_loop[-1][1])
+        # dict_loop[node].append(nx.find_cycle(G, node)[0])
+    except nx.NetworkXNoCycle:
+        pass
+"""save graph removed last edge in the cycle."""
+nx.write_gexf(graph, 'whole_edges.rm_de.gexf')
+
 #    start=44,
 #    end=1503)
-ls_cycle = list(nx.simple_cycles(G))
-file_cycle = open('cycle.txt', 'w')
-for loop in ls_cycle:
-    print(loop)
-    for i in loop:
-        file_cycle.write(i + '\t')
-    file_cycle.write('\n')
-file_cycle.close()
+# ls_cycle = list(nx.simple_cycles(G))
+# file_cycle = open('cycle.txt', 'w')
+# for loop in ls_cycle:
+#     print(loop)
+#     for i in loop:
+#         file_cycle.write(i + '\t')
+#     file_cycle.write('\n')
+# file_cycle.close()
 # for comp in dict_company['上海证券交易所上市公司']:
 #     ls_company.write(comp + '\n')
 # for comp in dict_company['深圳证券交易所上市公司']:
@@ -230,6 +291,22 @@ file_cycle.close()
 # except:
 #     pass
 # a = list(nx.find_cycle(G, orientation='ignore'))
-import matplotlib.pyplot as plt
+
+# import matplotlib.pyplot as plt
 # nx.draw_networkx(G)
 # plt.show()
+# with open(category_link_path, 'rb') as f:
+#     for i, line in enumerate(tqdm(f)):
+#         #         print("line #: %s/%s" % (i, 1503))
+#         #         print(len(line))
+#         # print(g.graph.keys())
+#         # print("line #: %s/%s" % (i, 1503))
+#         try:
+#             line = line.decode('utf-8')
+# #            print(line[10:100])
+
+#         except UnicodeDecodeError as e:
+#             print('Line: {}, Offset: {}, {}'.format(i, e.start, e.reason))
+#             print(line[e.start:(e.start + 100)])
+#             print(line[e.start:e.end])
+#             pass
