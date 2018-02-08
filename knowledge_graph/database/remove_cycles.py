@@ -24,7 +24,9 @@ counter = 0
 total_nodes_num = 287966
 rm_counter = 0
 while True:
+    removed_counter = 0
     print('rm cycles loops number %s' % rm_counter)
+
     for node in tqdm(ls_nodes):
         try:
             # remove direct edge:
@@ -37,11 +39,12 @@ while True:
                 graph.remove_edge(ls_loop[-1][0], ls_loop[-1][1])
             # dict_loop[node].append(nx.find_cycle(G, node)[0])
             counter = 0
+            removed_counter += 1
         except nx.NetworkXNoCycle:
             counter += 1
             pass
     if counter == (total_nodes_num - 1):
         break
-
+    print('rm cycles number %s' % removed_counter)
     rm_counter += 1
 nx.write_gexf(graph, 'whole_edges.no_loops.gexf')

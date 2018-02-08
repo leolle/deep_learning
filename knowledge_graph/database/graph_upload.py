@@ -597,16 +597,16 @@ def batch_upload(re, file_path, batch_size, func, start, end):
                 line = line[last_span:].decode('utf-8')
                 try:
                     last_span = re.search(line).span()[0]
+                    line_size = len(re.findall(line))
+                    for _ in tqdm(range(0, line_size, batch_size)):
+                        # pause if find a file naed pause at the currend dir
+                        re_batch = {}
+                        for j in range(batch_size):
+                            re_batch[j] = re.search(line, last_span)
+                            if re_batch[j] is not None:
+                                last_span = re_batch[j].span()[1]
                 except AttributeError:
-                    continue
-                line_size = len(re.findall(line))
-                for _ in tqdm(range(0, line_size, batch_size)):
-                    # pause if find a file naed pause at the currend dir
-                    re_batch = {}
-                    for j in range(batch_size):
-                        re_batch[j] = re.search(line, last_span)
-                        if re_batch[j] is not None:
-                            last_span = re_batch[j].span()[1]
+                    pass
 
     except KeyboardInterrupt:
         print("uploaded number: %s" % uploaded_number)
