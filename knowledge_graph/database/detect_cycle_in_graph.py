@@ -254,20 +254,21 @@ dict_loop = defaultdict(list)
 """save graph removed direct cycle edge."""
 # nx.write_gexf(graph, 'whole_edges.rm_di.gexf')
 
-graph = nx.read_gexf('whole_edges.rm_di.gexf')
+graph = nx.read_gexf('whole_edges.rm_de.gexf')
 ls_nodes = list(graph.nodes)
-for node in tqdm(ls_nodes):
-    try:
-        # remove direct edge:
-        ls_loop = nx.find_cycle(graph, node)
-        # print(ls_loop)
-        if len(ls_loop) > 2:
-            graph.remove_edge(ls_loop[-1][0], ls_loop[-1][1])
-        # dict_loop[node].append(nx.find_cycle(G, node)[0])
-    except nx.NetworkXNoCycle:
-        pass
-"""save graph removed last edge in the cycle."""
-nx.write_gexf(graph, 'whole_edges.rm_de.gexf')
+
+# for node in tqdm(ls_nodes):
+#     try:
+#         # remove direct edge:
+#         ls_loop = nx.find_cycle(graph, node)
+#         # print(ls_loop)
+#         if len(ls_loop) > 2:
+#             graph.remove_edge(ls_loop[-1][0], ls_loop[-1][1])
+#         # dict_loop[node].append(nx.find_cycle(G, node)[0])
+#     except nx.NetworkXNoCycle:
+#         pass
+# """save graph removed last edge in the cycle."""
+# nx.write_gexf(graph, 'whole_edges.rm_de.gexf')
 
 #    start=44,
 #    end=1503)
@@ -310,3 +311,8 @@ nx.write_gexf(graph, 'whole_edges.rm_de.gexf')
 #             print(line[e.start:(e.start + 100)])
 #             print(line[e.start:e.end])
 #             pass
+for node in ls_nodes:
+    try:
+        print(nx.find_cycle(graph, node))
+    except nx.NetworkXNoCycle:
+        pass

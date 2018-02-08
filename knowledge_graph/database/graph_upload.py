@@ -567,30 +567,46 @@ def batch_upload(re, file_path, batch_size, func, start, end):
 
         with open(file_path, 'r') as f:
             total_line_size = len(f.readlines())
-        with open(file_path, 'r') as f:
-            for i, line in enumerate(tqdm(f)):
-                if i >= start and i <= end:
-                    print("line #: %s/%s" % (i, total_line_size))
-                    try:
-                        last_span = re.search(line).span()[0]
-                    except AttributeError:
-                        continue
-                    line_size = len(re.findall(line))
-                    for i in tqdm(range(0, line_size, batch_size)):
-                        # pause if find a file naed pause at the currend dir
-                        while os.path.isfile('pause'):
-                            time.sleep(100)
-                            print("pause for 100 second")
-                        re_batch = {}
-                        for j in range(batch_size):
-                            re_batch[j] = re.search(line, last_span)
-                            if re_batch[j] is not None:
-                                last_span = re_batch[j].span()[1]
-                        uploaded_counter = func(re_batch)
-                        uploaded_number += uploaded_counter
-
-                elif i > end:
-                    break
+        with open(file_path, 'rb') as f:
+            try:
+                for i, line in enumerate(tqdm(f)):
+                    if i >= start and i <= end:
+                        print("line #: %s/%s" % (i, total_line_size))
+                        line = line.decode('utf-8')
+                        try:
+                            last_span = re.search(line).span()[0]
+                        except AttributeError:
+                            continue
+                        line_size = len(re.findall(line))
+                        for _ in tqdm(range(0, line_size, batch_size)):
+                            # pause if find a file naed pause at the currend dir
+                            while os.path.isfile('pause'):
+                                time.sleep(100)
+                                print("pause for 100 second")
+                            re_batch = {}
+                            for j in range(batch_size):
+                                re_batch[j] = re.search(line, last_span)
+                                if re_batch[j] is not None:
+                                    last_span = re_batch[j].span()[1]
+                            uploaded_counter = func(re_batch)
+                            uploaded_number += uploaded_counter
+                    elif i > end:
+                        break
+            except UnicodeDecodeError as e:
+                last_span = e.start + 10
+                line = line[last_span:].decode('utf-8')
+                try:
+                    last_span = re.search(line).span()[0]
+                except AttributeError:
+                    continue
+                line_size = len(re.findall(line))
+                for _ in tqdm(range(0, line_size, batch_size)):
+                    # pause if find a file naed pause at the currend dir
+                    re_batch = {}
+                    for j in range(batch_size):
+                        re_batch[j] = re.search(line, last_span)
+                        if re_batch[j] is not None:
+                            last_span = re_batch[j].span()[1]
 
     except KeyboardInterrupt:
         print("uploaded number: %s" % uploaded_number)
