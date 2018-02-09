@@ -13,7 +13,7 @@ import networkx as nx
 
 ylog.set_level(logging.DEBUG)
 ylog.console_on()
-
+ylog.filelog_on('remove_cycles')
 user_path = os.path.expanduser("~")
 try:
     category_link_path = sys.argv[1]
@@ -54,7 +54,7 @@ def upload_edge(dict_re_match_object):
                 # ylog.debug(cat_title)
                 # ylog.debug(subcat_title)
                 # if cat_title in EXAMPLE_CATEGORIES:
-                graph.add_edge(cat_title, page_title, subtype='page')
+                graph.add_edge(cat_title, page_title, subtype=0)
             if edge_type == 'subcat':
                 subcat_title = item.group(3)[1:-1]
                 cat_title = item.group(2)[1:-1]
@@ -69,7 +69,7 @@ def upload_edge(dict_re_match_object):
                 # ylog.debug(subcat_title)
                 if subcat_title == cat_title:
                     continue
-                graph.add_edge(cat_title, subcat_title, subtype='subcat')
+                graph.add_edge(cat_title, subcat_title, subtype=1)
 
 
 #                g.addEdge(cat_title, subcat_title)
@@ -92,45 +92,41 @@ def batch_upload(re, file_path, batch_size, func, start, end):
     #     total_line_size = len(f.readlines())
     with open(file_path, 'rb') as f:
         for i, line in enumerate(tqdm(f)):
-            #         print("line #: %s/%s" % (i, 1503))
-            #         print(len(line))
-            # print(g.graph.keys())
-            # print("line #: %s/%s" % (i, 1503))
-            try:
+            line_start_position = 0
+            line_end_position = len(line)
+            # try to process the whole line in a wile loop until it's done
+            while True:
                 if i < start:
-                    continue
-                if i <= end:
-                    line = line.decode('utf-8')
+                    break
+                elif i <= end:
                     try:
-                        last_span = re.search(line).span()[0]
-                    except AttributeError:
-                        continue
-                    line_size = len(re.findall(line))
-                    # ylog.debug(line_size)
-                    for i in range(0, line_size, batch_size):
-                        # pause if find a file naed pause at the currend dir
-                        re_batch = {}
-                        for j in range(batch_size):
-                            re_batch[j] = re.search(line, last_span)
-                            if re_batch[j] is not None:
-                                last_span = re_batch[j].span()[1]
-                        func(re_batch)
+                        test_string = line[line_start_position:].decode('utf-8')
+                        line_size = len(re.findall(test_string))
+
+                    except UnicodeDecodeError as e:
+                        line_end_position = e.start
+                        ylog.debug('start at %s' % line_end_position)
+                    finally:
+                        string = line[line_start_position:
+                                      line_end_position].decode('utf-8')
+                        line_size = len(re.findall(string))
+                        try:
+                            last_span = re.search(string).span()[0]
+                        except AttributeError:
+                            break
+                        line_size = len(re.findall(string))
+                        for _ in range(0, line_size, batch_size):
+                            # pause if find a file naed pause at the currend dir
+                            re_batch = {}
+                            for j in range(batch_size):
+                                re_batch[j] = re.search(string, last_span)
+                                if re_batch[j] is not None:
+                                    last_span = re_batch[j].span()[1]
+                            func(re_batch)
+                        line_end_position = len(line)
+                        line_start_position = line_end_position + 10
                 else:
                     break
-            except UnicodeDecodeError as e:
-                last_span = e.start + 10
-                line_size = len(re.findall(line))
-                ylog.debug(line_size)
-                for i in range(0, line_size, batch_size):
-                    # pause if find a file naed pause at the currend dir
-                    re_batch = {}
-                    for j in range(batch_size):
-                        re_batch[j] = re.search(line, last_span)
-                        if re_batch[j] is not None:
-                            last_span = re_batch[j].span()[1]
-                    func(re_batch)
-
-    # print(g.graph.keys())
 
 
 batch_upload(
@@ -140,8 +136,9 @@ batch_upload(
     upload_edge,
     start=0,
     end=10000)
+ylog.debug('write graph')
+# nx.write_gexf(graph, 'whole_edges.gexf')
 # graph = nx.read_gexf('whole_edge.gexf')
-nx.write_gexf(graph, 'whole_edges.gexf')
 ls_nodes = list(graph.nodes)
 counter = 0
 total_nodes_num = 287966
@@ -165,6 +162,8 @@ try:
                     # remove big loop:
                     elif len(ls_loop) > 2:
                         graph.remove_edge(ls_loop[-1][0], ls_loop[-1][1])
+                    elif len(ls_loop) == 1:
+                        break
                         # remove all edges in the loop, then next create edge first in.
                         # for i in range(len(ls_loop) - 1):
                         #     graph.remove_edge(ls_loop[i + 1][0],
