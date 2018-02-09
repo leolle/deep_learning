@@ -85,7 +85,7 @@ except:
 else:
     category_link_path = user_path + \
         '/share/deep_learning/data/zhwiki_cat_pg_lk/zhwiki-latest-categorylinks.sql'
-category_link_path = './data/zhwiki-latest-categorylinks.zhs.sql'
+# category_link_path = './data/zhwiki-latest-categorylinks.zhs.sql'
 wiki_category_link_re = re.compile(
     "\(([0-9]+),('[^,]+'),('[^']+'),('\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}'),('[^']*'),('[^,]+'),('[^,]+')\)"
 )
@@ -273,15 +273,17 @@ except KeyboardInterrupt:
 batch_size = 20
 
 
-def upload_edge(graph):
+def upload_edge(ls_edges):
     """upload edge one by one
     Parameters:
-    graph -- networkx graph
+    ls_edges -- list of edge tuples
     """
-    ls_edges = list(graph.edges)
     len_edges = len(ls_edges)
     uploaded_number = 0
-    for e in tqdm(graph.edges):
+    batch_counter = 0
+    for edge_counter in tqdm(range(0, len_edges, batch_size)):
+        batch_counter += batch_size
+
         res = None
         error = None
         re_upload_error = None
@@ -291,27 +293,26 @@ def upload_edge(graph):
         while res is None:
             try:
                 graph_upload_request = graphUpload_pb2.GraphUploadRequest()
-                # print(e)
-                #                 return edge
-                node_from = e[0]
-                node_to = e[1]
-                edge_type = graph[node_from][node_to]['subtype']
-                edge = graph_upload_request.graph.edges.add()
+                for e in ls_edges[batch_counter:batch_counter + batch_size]:
+                    node_from = e[0]
+                    node_to = e[1]
+                    edge_type = e[2]
+                    edge = graph_upload_request.graph.edges.add()
 
-                # page edge
-                if edge_type == 0:
-                    edge.props.type = "HasElement"
-                    edge.startNodeID.url = "https://zh.wikipedia.org/wiki/Category:" + quote_plus(
-                        node_from)
-                    edge.endNodeID.url = "https://zh.wikipedia.org/wiki/" + quote_plus(
-                        node_to)
+                    # page edge
+                    if edge_type == 0:
+                        edge.props.type = "HasElement"
+                        edge.startNodeID.url = "https://zh.wikipedia.org/wiki/Category:" + quote_plus(
+                            node_from)
+                        edge.endNodeID.url = "https://zh.wikipedia.org/wiki/" + quote_plus(
+                            node_to)
                 # categories edge
-                else:
-                    edge.startNodeID.url = "https://zh.wikipedia.org/wiki/Category:" + quote_plus(
-                        node_from)
-                    edge.endNodeID.url = "https://zh.wikipedia.org/wiki/Category:" + quote_plus(
-                        node_to)
-                    edge.props.type = "HasSubset"
+                    else:
+                        edge.startNodeID.url = "https://zh.wikipedia.org/wiki/Category:" + quote_plus(
+                            node_from)
+                        edge.endNodeID.url = "https://zh.wikipedia.org/wiki/Category:" + quote_plus(
+                            node_to)
+                        edge.props.type = "HasSubset"
                 graph_upload_request.uploadTag = "uploadWikiEdge"
                 graph_upload_request.nodeAction4Duplication = graphUpload_pb2.Action4Duplication.Value(
                     'UPDATE')
@@ -357,11 +358,7 @@ def upload_edge(graph):
             pass
 
     return uploaded_number
-    # for edge_counter in range(
-    #         0,
-    #         len_edges,batch_size):
-    #     ylog.debug(ls_edges[edge_counter])
 
 
-num = upload_edge(graph)
+num = upload_edge(ls_edges)
 ylog.log('upload edge number %s' % num)
