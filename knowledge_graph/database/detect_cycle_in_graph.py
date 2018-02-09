@@ -27,7 +27,8 @@ ylog.filelog_on('remove_cycles')
 MAX_RETRIES = 10
 NODES_FAIL_MAX_RETRIES = 3
 # Always retry when these exceptions are raised.
-RETRIABLE_EXCEPTIONS = (EncodeError, DecodeError, HTTPError)
+RETRIABLE_EXCEPTIONS = (EncodeError, DecodeError, HTTPError,
+                        ConnectionResetError)
 # Always retry when an apiclient.errors.HttpError with one of these status
 # codes is raised.
 RETRIABLE_STATUS_CODES = [500, 502, 503, 504, 111]
@@ -84,7 +85,7 @@ except:
 else:
     category_link_path = user_path + \
         '/share/deep_learning/data/zhwiki_cat_pg_lk/zhwiki-latest-categorylinks.sql'
-# category_link_path = './data/zhwiki-latest-categorylinks.zhs.sql'
+category_link_path = './data/zhwiki-latest-categorylinks.zhs.sql'
 wiki_category_link_re = re.compile(
     "\(([0-9]+),('[^,]+'),('[^']+'),('\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}'),('[^']*'),('[^,]+'),('[^,]+')\)"
 )
@@ -190,6 +191,27 @@ def batch_upload(re, file_path, batch_size, func, start, end):
                     break
 
 
+def write_graph(graph):
+    """
+    Keyword Arguments:
+    graph --
+
+    Return:
+    list -- [(node1, node2, type)]
+    """
+    ls_edges = []
+    for e in tqdm(graph.edges):
+        node_from = e[0]
+        node_to = e[1]
+        edge_type = graph[node_from][node_to]['subtype']
+        ls_edges.append(tuple([node_from, node_to, edge_type]))
+    import pickle
+
+    with open('graph.pkl', 'wb') as fp:
+        pickle.dump(ls_edges, fp)
+    return ls_edges
+
+
 batch_upload(
     wiki_category_link_re,
     category_link_path,
@@ -198,6 +220,8 @@ batch_upload(
     start=0,
     end=10000)
 ylog.debug('write graph')
+ls_edges = write_graph(graph)
+# nx.write_yaml(graph, 'whole_edges.yaml')
 # nx.write_gexf(graph, 'whole_edges.gexf')
 # graph = nx.read_gexf('whole_edge.gexf')
 ls_nodes = list(graph.nodes)
@@ -250,10 +274,14 @@ batch_size = 20
 
 
 def upload_edge(graph):
+    """upload edge one by one
+    Parameters:
+    graph -- networkx graph
+    """
     ls_edges = list(graph.edges)
     len_edges = len(ls_edges)
     uploaded_number = 0
-    for e in graph.edges:
+    for e in tqdm(graph.edges):
         res = None
         error = None
         re_upload_error = None

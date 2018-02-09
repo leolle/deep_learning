@@ -19,7 +19,7 @@ if not logger.handlers:
 
 # load model
 phrase_filename = '/home/weiwu/share/deep_learning/data/model/phrase/enwiki_economy_pages_only/word2vec_org'
-finance_level5_model_filepath = '/home/weiwu/share/deep_learning/data/model/phrase/word2vec_org_finance_level_5'
+finance_level5_model_filepath = '/home/weiwu/share/deep_learning/data/model/phrase/zhwiki/word2vec_org_whole_wiki_corpus_user_dict'
 # model_level5 = KeyedVectors.load_word2vec_format(phrase_filename, binary=False)
 logger.debug('loading model completes.')
 
