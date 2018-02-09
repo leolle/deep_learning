@@ -326,7 +326,7 @@ def upload_edge(dict_re_match_object):
     return uploaded_number
 
 
-def upload_edge_from_graph(graph_path):
+def upload_edge_from_graph(ls_edges, batch_size):
     """ upload edge regular expression object in the dictionary in a batch.
     1. get each value from the input dictionary.
     2. create a graph upload request.
@@ -339,121 +339,88 @@ def upload_edge_from_graph(graph_path):
     Keyword Arguments:
     re_match_object -- re object
     """
-    res = None
-    error = None
-    re_upload_error = None
-    retry = 0
-    nodes_fail_retry = 0
+    """upload edge one by one
+    Parameters:
+    ls_edges -- list of edge tuples
+    """
+    len_edges = len(ls_edges)
     uploaded_number = 0
-    graph = nx.read_gexf(graph_path)
-    edges = list(graph.edges)
-    while res is None:
-        try:
-            graph_upload_request = graphUpload_pb2.GraphUploadRequest()
-            # iterate nodes batch
-            for index, value in dict_re_match_object.items():
-                if value is not None:
-                    item = dict_re_match_object.get(index)
-                    edge_type = item.group(7)[1:-1]
-                    if edge_type == 'page':
-                        page_title = item.group(3)[1:-1]
-                        cat_title = item.group(2)[1:-1]
-                        if '\\n' in cat_title:
-                            end = cat_title.split("\\n")
-                            cat_title = end[-1]
-                        if '\\n' in page_title:
-                            end = page_title.split("\\n")
-                            page_title = end[-1]
-                        page_title = page_title.replace(" ", "_")
-                        page_title_zh = HanziConv.toSimplified(page_title)
-                        cat_title_zh = HanziConv.toSimplified(cat_title)
-                        # if not cat_title_zh in EXAMPLE_CATEGORIES_PAGE_DICT:
-                        #     continue
+    batch_counter = 0
+    for edge_counter in tqdm(range(0, len_edges, batch_size)):
 
-                        edge = graph_upload_request.graph.edges.add()
+        res = None
+        error = None
+        re_upload_error = None
+        retry = 0
+        nodes_fail_retry = 0
+        graph_upload_request = graphUpload_pb2.GraphUploadRequest()
+        while res is None:
+            try:
+                graph_upload_request = graphUpload_pb2.GraphUploadRequest()
+                for e in ls_edges[batch_counter:batch_counter + batch_size]:
+                    node_from = e[0]
+                    node_to = e[1]
+                    edge_type = e[2]
+                    edge = graph_upload_request.graph.edges.add()
+
+                    # page edge
+                    if edge_type == 0:
                         edge.props.type = "HasElement"
                         edge.startNodeID.url = "https://zh.wikipedia.org/wiki/Category:" + quote_plus(
-                            cat_title)
+                            node_from)
                         edge.endNodeID.url = "https://zh.wikipedia.org/wiki/" + quote_plus(
-                            page_title)
-
-                    if edge_type == 'subcat':
-                        subcat_title = item.group(3)[1:-1]
-                        cat_title = item.group(2)[1:-1]
-                        if '\\n' in cat_title:
-                            end = cat_title.split("\\n")
-                            cat_title = end[-1]
-                        if '\\n' in subcat_title:
-                            end = subcat_title.split("\\n")
-                            subcat_title = end[-1]
-                        subcat_title = subcat_title.replace(" ", "_")
-                        subcat_title_zh = HanziConv.toSimplified(subcat_title)
-                        cat_title_zh = HanziConv.toSimplified(cat_title)
-
-                        # if not cat_title_zh in EXAMPLE_CATEGORIES_PAGE_DICT:
-                        #     continue
-                        if subcat_title_zh == cat_title_zh:
-                            continue
-                        edge = graph_upload_request.graph.edges.add()
+                            node_to)
+                # categories edge
+                    else:
                         edge.startNodeID.url = "https://zh.wikipedia.org/wiki/Category:" + quote_plus(
-                            cat_title)
+                            node_from)
                         edge.endNodeID.url = "https://zh.wikipedia.org/wiki/Category:" + quote_plus(
-                            subcat_title)
+                            node_to)
                         edge.props.type = "HasSubset"
+                graph_upload_request.uploadTag = "uploadWikiEdge"
+                graph_upload_request.nodeAction4Duplication = graphUpload_pb2.Action4Duplication.Value(
+                    'UPDATE')
+                graph_upload_request.edgeAction4Duplication = graphUpload_pb2.Action4Duplication.Value(
+                    'UPDATE')
+                res = gs_call.upload_graph(graph_upload_request)
 
-            graph_upload_request.uploadTag = "uploadWikiEdge"
-            graph_upload_request.nodeAction4Duplication = graphUpload_pb2.Action4Duplication.Value(
-                'UPDATE')
-            graph_upload_request.edgeAction4Duplication = graphUpload_pb2.Action4Duplication.Value(
-                'UPDATE')
-            res = gs_call.upload_graph(graph_upload_request)
-            # ylog.debug(res)
-        except HTTPError as e:
-            if e.code in RETRIABLE_STATUS_CODES:
-                error = 'A retriable HTTP error %d occurred:\n%s' % (e.code,
-                                                                     e.reason)
-            else:
-                raise
-        except RETRIABLE_EXCEPTIONS as e:
-            error = 'A retriable error occurred: %s' % e
-        # try:
-        #     if res.failedEdges:
-        #         re_upload_error = "some nodes failed to upload %s" % res.failedEdges
-        # except:
-        #     pass
-        # if re_upload_error is not None:
-        #     print(re_upload_error)
-        #     nodes_fail_retry += 1
-        #     res = None
-        #     if nodes_fail_retry > NODES_FAIL_MAX_RETRIES:
-        #         ylog.debug(res)
-        #         res = "continue"
-        if error is not None:
-            print(error)
-            retry += 1
-            res = None
-            if retry > MAX_RETRIES:
-                ylog.debug(res)
-                exit("no loger attempting to retry.")
-            max_sleep = 2**retry
-            sleep_seconds = random.random() * max_sleep
-            print('Sleeping %f seconds and then retrying...' % sleep_seconds)
-            time.sleep(sleep_seconds)
-    try:
-        if res.edgeUpdateResultStatistics:
-            ylog.debug(res.edgeUpdateResultStatistics)
-            uploaded_number = res.edgeUpdateResultStatistics.numOfCreations + \
-                res.edgeUpdateResultStatistics.numOfUpdates + \
-                res.edgeUpdateResultStatistics.numOfSkips
-        if res.failedEdges:
-            for err in res.failedEdges:
-                ylog.debug(err)
-                ylog.debug(
-                    "start node: %s" % err.edge.startNodeID.primaryKeyInDomain)
-                ylog.debug(
-                    "end node: %s" % err.edge.endNodeID.primaryKeyInDomain)
-    except:
-        pass
+            except HTTPError as e:
+                if e.code in RETRIABLE_STATUS_CODES:
+                    error = 'A retriable HTTP error %d occurred:\n%s' % (
+                        e.code, e.reason)
+                else:
+                    raise
+            except RETRIABLE_EXCEPTIONS as e:
+                error = 'A retriable error occurred: %s' % e
+            if error is not None:
+                print(error)
+                retry += 1
+                res = None
+                if retry > MAX_RETRIES:
+                    ylog.debug(res)
+                    exit("no loger attempting to retry.")
+                max_sleep = 2**retry
+                sleep_seconds = random.random() * max_sleep
+                print(
+                    'Sleeping %f seconds and then retrying...' % sleep_seconds)
+                time.sleep(sleep_seconds)
+        try:
+            if res.edgeUpdateResultStatistics:
+                ylog.debug(res.edgeUpdateResultStatistics)
+                number = res.edgeUpdateResultStatistics.numOfCreations + \
+                    res.edgeUpdateResultStatistics.numOfUpdates + \
+                    res.edgeUpdateResultStatistics.numOfSkips
+                uploaded_number += number
+            if res.failedEdges:
+                for err in res.failedEdges:
+                    ylog.debug(err)
+                    ylog.debug("start node: %s" %
+                               err.edge.startNodeID.primaryKeyInDomain)
+                    ylog.debug(
+                        "end node: %s" % err.edge.endNodeID.primaryKeyInDomain)
+        except:
+            pass
+        batch_counter += batch_size
 
     return uploaded_number
 

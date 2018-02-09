@@ -219,8 +219,6 @@ batch_upload(
     add_edge,
     start=0,
     end=10000)
-ylog.debug('write graph')
-ls_edges = write_graph(graph)
 # nx.write_yaml(graph, 'whole_edges.yaml')
 # nx.write_gexf(graph, 'whole_edges.gexf')
 # graph = nx.read_gexf('whole_edge.gexf')
@@ -239,8 +237,9 @@ try:
             while True:
                 try:
                     ls_loop = nx.find_cycle(graph, node)
+                    removed_counter += 1
                     # remove direct edge:
-                    ylog.debug(ls_loop)
+                    #                    ylog.debug(ls_loop)
                     if len(ls_loop) == 2:
                         if ls_loop[0][0] == ls_loop[1][1] and ls_loop[0][1] == ls_loop[1][0]:
                             graph.remove_edge(ls_loop[0][0], ls_loop[0][1])
@@ -254,22 +253,22 @@ try:
                         #     graph.remove_edge(ls_loop[i + 1][0],
                         #                       ls_loop[i + 1][1])
                     # counter = 0
-                    removed_counter += 1
                 except nx.NetworkXNoCycle:
                     counter += 1
                     if removed_counter != 0:
                         ylog.debug('rm cycles number %s' % removed_counter)
                     break
 
-        if counter >= total_nodes_num - 1:
-            break
+        break
 except KeyboardInterrupt:
-    nx.write_gexf(graph, 'whole_edges.no_loops.gexf')
+    # nx.write_gexf(graph, 'whole_edges.no_loops.gexf')
     try:
         sys.exit(0)
     except SystemExit:
         os._exit(0)
 # nx.write_gexf(graph, 'whole_edges.no_loops.gexf')
+ylog.debug('write graph')
+ls_edges = write_graph(graph)
 batch_size = 20
 
 
@@ -282,7 +281,6 @@ def upload_edge(ls_edges):
     uploaded_number = 0
     batch_counter = 0
     for edge_counter in tqdm(range(0, len_edges, batch_size)):
-        batch_counter += batch_size
 
         res = None
         error = None
@@ -356,6 +354,7 @@ def upload_edge(ls_edges):
                         "end node: %s" % err.edge.endNodeID.primaryKeyInDomain)
         except:
             pass
+        batch_counter += batch_size
 
     return uploaded_number
 
