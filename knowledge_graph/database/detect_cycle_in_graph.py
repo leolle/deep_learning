@@ -2,18 +2,79 @@
 
 # Python program to detect cycle
 # in a graph
-
-from ylib import ylog
+import time
 import re
-import os
-import sys
-import logging
+from lib.gftTools import gftIO
+from lib.gftTools.proto import graphUpload_pb2
 from tqdm import tqdm
+import random
+from ylib import ylog
+import logging
+import os, sys
+import hashlib
+from google.protobuf.message import EncodeError
+from urllib.error import HTTPError
+from lib.gftTools.gftIO import GSError
+from pymongo import MongoClient
+from google.protobuf.message import DecodeError
+from hanziconv import HanziConv
 import networkx as nx
 
 ylog.set_level(logging.DEBUG)
 ylog.console_on()
 ylog.filelog_on('remove_cycles')
+# Maximum number of times to retry before giving up.
+MAX_RETRIES = 10
+NODES_FAIL_MAX_RETRIES = 3
+# Always retry when these exceptions are raised.
+RETRIABLE_EXCEPTIONS = (EncodeError, DecodeError, HTTPError)
+# Always retry when an apiclient.errors.HttpError with one of these status
+# codes is raised.
+RETRIABLE_STATUS_CODES = [500, 502, 503, 504, 111]
+IGNORE_CATEGORIES = [
+    '使用Catnav的页面', '缺少Wikidata链接的维基共享资源分类', '隐藏分类', '追踪分类', '维基百科特殊页面',
+    '维基百科分类', '维基百科维护', '无需细分的分类', '不要删除的分类', '母分类', '全部重定向分类', '特殊条目'
+]
+
+PY2 = sys.version_info[0] == 2
+# Python 2.7 compatibiity
+if PY2:
+    from urllib import quote
+    from urllib import quote_plus
+    from urlparse import urlparse, parse_qs
+    from htmlentitydefs import name2codepoint
+    from itertools import izip as zip, izip_longest as zip_longest
+    range = xrange  # Use Python 3 equivalent
+    chr = unichr  # Use Python 3 equivalent
+    text_type = unicode
+
+    class SimpleNamespace(object):
+
+        def __init__(self, **kwargs):
+            self.__dict__.update(kwargs)
+
+        def __repr__(self):
+            keys = sorted(self.__dict__)
+            items = ("{}={!r}".format(k, self.__dict__[k]) for k in keys)
+            return "{}({})".format(type(self).__name__, ", ".join(items))
+
+        def __eq__(self, other):
+            return self.__dict__ == other.__dict__
+else:
+    from urllib.parse import quote_plus, urlparse, parse_qs
+    from urllib.parse import quote
+    from html.entities import name2codepoint
+    from itertools import zip_longest
+    from types import SimpleNamespace
+    text_type = str
+
+# test fetch graph
+# test_url = 'http://192.168.1.166:9080'
+prod_url = 'http://q.gftchina.com:13567'
+test_user_name = 'wuwei'
+test_pwd = 'gft'
+gs_call = gftIO.GSCall(prod_url, test_user_name, test_pwd)
+
 user_path = os.path.expanduser("~")
 try:
     category_link_path = sys.argv[1]
@@ -30,7 +91,7 @@ wiki_category_link_re = re.compile(
 graph = nx.DiGraph()
 
 
-def upload_edge(dict_re_match_object):
+def add_edge(dict_re_match_object):
     """ upload edge created from regular expression matched object.
     (9,'En-3_使用者','MOUNTAIN','2015-09-02 13:44:06','','uppercase','page')
     Keyword Arguments:
@@ -133,7 +194,7 @@ batch_upload(
     wiki_category_link_re,
     category_link_path,
     200,
-    upload_edge,
+    add_edge,
     start=0,
     end=10000)
 ylog.debug('write graph')
@@ -141,7 +202,7 @@ ylog.debug('write graph')
 # graph = nx.read_gexf('whole_edge.gexf')
 ls_nodes = list(graph.nodes)
 counter = 0
-total_nodes_num = 287966
+total_nodes_num = len(graph.nodes)
 rm_counter = 0
 try:
     while True:
@@ -149,7 +210,7 @@ try:
 
         for node in tqdm(ls_nodes):
             removed_counter = 0
-            ylog.debug('rm cycles of node %s' % node)
+            # ylog.debug('rm cycles of node %s' % node)
 
             while True:
                 try:
@@ -184,4 +245,95 @@ except KeyboardInterrupt:
         sys.exit(0)
     except SystemExit:
         os._exit(0)
-nx.write_gexf(graph, 'whole_edges.no_loops.gexf')
+# nx.write_gexf(graph, 'whole_edges.no_loops.gexf')
+batch_size = 20
+
+
+def upload_edge(graph):
+    ls_edges = list(graph.edges)
+    len_edges = len(ls_edges)
+    uploaded_number = 0
+    for e in graph.edges:
+        res = None
+        error = None
+        re_upload_error = None
+        retry = 0
+        nodes_fail_retry = 0
+        graph_upload_request = graphUpload_pb2.GraphUploadRequest()
+        while res is None:
+            try:
+                graph_upload_request = graphUpload_pb2.GraphUploadRequest()
+                # print(e)
+                #                 return edge
+                node_from = e[0]
+                node_to = e[1]
+                edge_type = graph[node_from][node_to]['subtype']
+                edge = graph_upload_request.graph.edges.add()
+
+                # page edge
+                if edge_type == 0:
+                    edge.props.type = "HasElement"
+                    edge.startNodeID.url = "https://zh.wikipedia.org/wiki/Category:" + quote_plus(
+                        node_from)
+                    edge.endNodeID.url = "https://zh.wikipedia.org/wiki/" + quote_plus(
+                        node_to)
+                # categories edge
+                else:
+                    edge.startNodeID.url = "https://zh.wikipedia.org/wiki/Category:" + quote_plus(
+                        node_from)
+                    edge.endNodeID.url = "https://zh.wikipedia.org/wiki/Category:" + quote_plus(
+                        node_to)
+                    edge.props.type = "HasSubset"
+                graph_upload_request.uploadTag = "uploadWikiEdge"
+                graph_upload_request.nodeAction4Duplication = graphUpload_pb2.Action4Duplication.Value(
+                    'UPDATE')
+                graph_upload_request.edgeAction4Duplication = graphUpload_pb2.Action4Duplication.Value(
+                    'UPDATE')
+                res = gs_call.upload_graph(graph_upload_request)
+
+            except HTTPError as e:
+                if e.code in RETRIABLE_STATUS_CODES:
+                    error = 'A retriable HTTP error %d occurred:\n%s' % (
+                        e.code, e.reason)
+                else:
+                    raise
+            except RETRIABLE_EXCEPTIONS as e:
+                error = 'A retriable error occurred: %s' % e
+            if error is not None:
+                print(error)
+                retry += 1
+                res = None
+                if retry > MAX_RETRIES:
+                    ylog.debug(res)
+                    exit("no loger attempting to retry.")
+                max_sleep = 2**retry
+                sleep_seconds = random.random() * max_sleep
+                print(
+                    'Sleeping %f seconds and then retrying...' % sleep_seconds)
+                time.sleep(sleep_seconds)
+        try:
+            if res.edgeUpdateResultStatistics:
+                ylog.debug(res.edgeUpdateResultStatistics)
+                number = res.edgeUpdateResultStatistics.numOfCreations + \
+                    res.edgeUpdateResultStatistics.numOfUpdates + \
+                    res.edgeUpdateResultStatistics.numOfSkips
+                uploaded_number += number
+            if res.failedEdges:
+                for err in res.failedEdges:
+                    ylog.debug(err)
+                    ylog.debug("start node: %s" %
+                               err.edge.startNodeID.primaryKeyInDomain)
+                    ylog.debug(
+                        "end node: %s" % err.edge.endNodeID.primaryKeyInDomain)
+        except:
+            pass
+
+    return uploaded_number
+    # for edge_counter in range(
+    #         0,
+    #         len_edges,batch_size):
+    #     ylog.debug(ls_edges[edge_counter])
+
+
+num = upload_edge(graph)
+ylog.log('upload edge number %s' % num)
