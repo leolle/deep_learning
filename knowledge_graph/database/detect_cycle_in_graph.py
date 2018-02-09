@@ -3,107 +3,17 @@
 # Python program to detect cycle
 # in a graph
 
-from collections import defaultdict
 from ylib import ylog
 import re
-from lib.gftTools import gftIO
 import os
 import sys
-# from graph_upload import batch_upload, upload_edge, upload_cat_node, upload_page_node, delete_edge
 import logging
 from tqdm import tqdm
-import time
-import json
 import networkx as nx
 
 ylog.set_level(logging.DEBUG)
 ylog.console_on()
 
-# ylog.filelog_on("wiki_upload")
-
-# EXAMPLE_CATEGORIES = ['深圳证券交易所上市公司', '上海证券交易所上市公司', '各证券交易所上市公司', '证券交易所', '证券']
-# dict_company = json.load(open('list.txt'))
-# ls_company = open('listed_company.txt', 'w')
-# for comp in dict_company['上海证券交易所上市公司']:
-#     ls_company.write(comp + '\n')
-# for comp in dict_company['深圳证券交易所上市公司']:
-#     ls_company.write(comp + '\n')
-# ls_company.close()
-
-
-class Graph():
-
-    def __init__(self):
-        self.graph = defaultdict(list)
-        self.loop = defaultdict(list)
-        # self.graph = {}
-
-    def addEdge(self, u, v):
-        self.graph[u].append(v)
-        # self.graph[u].update(v)
-
-    def isCyclicUtil(self, v, visited, recStack):
-
-        # Mark current node as visited and
-        # adds to recursion stack
-        visited[v] = True
-        recStack[v] = True
-
-        # Recur for all neighbours
-        # if any neighbour is visited and in
-        # recStack then graph is cyclic
-        for neighbour in self.graph[v]:
-            try:
-                if visited[neighbour] is False:
-                    if self.isCyclicUtil(neighbour, visited, recStack) is True:
-                        return True
-
-                    elif recStack[neighbour] is True:
-                        return True
-            except KeyError:
-                pass
-        # The node needs to be poped from
-        # recursion stack before function ends
-        recStack[v] = False
-        return False
-
-    # Returns true if graph is cyclic else false
-    def isCyclic(self):
-        #         visited = [False] * self.graph.keys()
-        #         recStack = [False] * self.graph.keys()
-        visited = dict.fromkeys(self.graph, False)
-        recStack = dict.fromkeys(self.graph, False)
-        print('visited')
-        print(visited)
-        for node in self.graph.keys():
-            print(node)
-            if visited[node] is False:
-                if self.isCyclicUtil(node, visited, recStack) is True:
-                    return True
-        return False
-
-    def self_loop(self):
-        for node in self.graph.keys():
-            if node in self.graph[node]:
-                #                 ylog.debug("%s" % node)
-                print("%s" % node)
-
-    def direct_loop(self,):
-        for node in self.graph.keys():
-            for element in self.graph[node]:
-                if element in self.graph.keys():
-                    if node in self.graph[element]:
-                        self.loop[node].append(element)
-                        print("(%s, %s), (%s, %s)" % (node, element, element,
-                                                      node))
-
-
-# g.addEdge(0, 1)
-# g.addEdge(0, 2)
-# g.addEdge(1, 2)
-# # g.addEdge(2, 0)
-# g.addEdge(3, 4)
-# g.addEdge(3, 3)
 user_path = os.path.expanduser("~")
 try:
     category_link_path = sys.argv[1]
@@ -223,14 +133,13 @@ def batch_upload(re, file_path, batch_size, func, start, end):
     # print(g.graph.keys())
 
 
-g = Graph()
 batch_upload(
     wiki_category_link_re,
     category_link_path,
     200,
     upload_edge,
-    start=960,
-    end=1503)
+    start=0,
+    end=10000)
 # graph = nx.read_gexf('whole_edge.gexf')
 nx.write_gexf(graph, 'whole_edges.gexf')
 ls_nodes = list(graph.nodes)
@@ -277,99 +186,3 @@ except KeyboardInterrupt:
     except SystemExit:
         os._exit(0)
 nx.write_gexf(graph, 'whole_edges.no_loops.gexf')
-
-# ls_nodes = list(graph.nodes)
-
-# g.direct_loop()
-# g.self_loop()
-# print(nx.find_cycle(graph, ls_nodes[4]))
-
-# ls_nodes = list(graph.nodes)
-# dict_loop = defaultdict(list)
-# # for node in tqdm(ls_nodes):
-# #     try:
-# #         # remove direct edge:
-# #         ls_loop = nx.find_cycle(graph, node)
-# #         # print(ls_loop)
-# #         if len(ls_loop) == 2:
-# #             if ls_loop[0][0] == ls_loop[1][1] and ls_loop[0][1] == ls_loop[1][0]:
-# #                 graph.remove_edge(ls_loop[0][0], ls_loop[0][1])
-# #         # dict_loop[node].append(nx.find_cycle(G, node)[0])
-# #     except nx.NetworkXNoCycle:
-# #         pass
-# """save graph removed direct cycle edge."""
-# # nx.write_gexf(graph, 'whole_edges.rm_di.gexf')
-
-# graph = nx.read_gexf('whole_edges.rm_de.gexf')
-# ls_nodes = list(graph.nodes)
-
-# # for node in tqdm(ls_nodes):
-# #     try:
-# #         # remove direct edge:
-# #         ls_loop = nx.find_cycle(graph, node)
-# #         # print(ls_loop)
-# #         if len(ls_loop) > 2:
-# #             graph.remove_edge(ls_loop[-1][0], ls_loop[-1][1])
-# #         # dict_loop[node].append(nx.find_cycle(G, node)[0])
-# #     except nx.NetworkXNoCycle:
-# #         pass
-# # """save graph removed last edge in the cycle."""
-# # nx.write_gexf(graph, 'whole_edges.rm_de.gexf')
-
-# #    start=44,
-# #    end=1503)
-# # ls_cycle = list(nx.simple_cycles(G))
-# # file_cycle = open('cycle.txt', 'w')
-# # for loop in ls_cycle:
-# #     print(loop)
-# #     for i in loop:
-# #         file_cycle.write(i + '\t')
-# #     file_cycle.write('\n')
-# # file_cycle.close()
-# # for comp in dict_company['上海证券交易所上市公司']:
-# #     ls_company.write(comp + '\n')
-# # for comp in dict_company['深圳证券交易所上市公司']:
-# #     ls_company.write(comp + '\n')
-# # ls_company.close()
-
-# # G = nx.DiGraph([(0, 1), (0, 2), (1, 2), (2, 1)])
-# # try:
-# #     nx.find_cycle(G, orientation='original')
-# # except:
-# #     pass
-# # a = list(nx.find_cycle(G, orientation='ignore'))
-
-# # import matplotlib.pyplot as plt
-# # nx.draw_networkx(G)
-# # plt.show()
-# # with open(category_link_path, 'rb') as f:
-# #     for i, line in enumerate(tqdm(f)):
-# #         #         print("line #: %s/%s" % (i, 1503))
-# #         #         print(len(line))
-# #         # print(g.graph.keys())
-# #         # print("line #: %s/%s" % (i, 1503))
-# #         try:
-# #             line = line.decode('utf-8')
-# # #            print(line[10:100])
-
-# #         except UnicodeDecodeError as e:
-# #             print('Line: {}, Offset: {}, {}'.format(i, e.start, e.reason))
-# #             print(line[e.start:(e.start + 100)])
-# #             print(line[e.start:e.end])
-# #             pass
-# # for node in ls_nodes:
-# #     try:
-# #         print(nx.find_cycle(graph, node))
-# #     except nx.NetworkXNoCycle:
-# #         pass
-# for node in tqdm(ls_nodes):
-#     try:
-#         # remove direct edge:
-#         ls_loop = nx.find_cycle(graph, node)
-#         # print(ls_loop)
-#         if len(ls_loop) == 2:
-#             if ls_loop[0][0] == ls_loop[1][1] and ls_loop[0][1] == ls_loop[1][0]:
-#                 graph.remove_edge(ls_loop[0][0], ls_loop[0][1])
-#         # dict_loop[node].append(nx.find_cycle(G, node)[0])
-#     except nx.NetworkXNoCycle:
-#         pass
