@@ -339,7 +339,7 @@ def upload_edge(ls_edges):
                     'Sleeping %f seconds and then retrying...' % sleep_seconds)
                 time.sleep(sleep_seconds)
         try:
-            if res.edgeUpdateResultStatistics:
+           if res.edgeUpdateResultStatistics:
                 ylog.debug(res.edgeUpdateResultStatistics)
                 number = res.edgeUpdateResultStatistics.numOfCreations + \
                     res.edgeUpdateResultStatistics.numOfUpdates + \

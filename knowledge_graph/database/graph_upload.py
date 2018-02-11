@@ -17,6 +17,7 @@ from google.protobuf.message import DecodeError
 from hanziconv import HanziConv
 import json
 import networkx as nx
+from http.client import RemoteDisconnected
 
 PY2 = sys.version_info[0] == 2
 # Python 2.7 compatibiity
@@ -54,7 +55,8 @@ else:
 MAX_RETRIES = 10
 NODES_FAIL_MAX_RETRIES = 3
 # Always retry when these exceptions are raised.
-RETRIABLE_EXCEPTIONS = (EncodeError, DecodeError, HTTPError)
+RETRIABLE_EXCEPTIONS = (EncodeError, DecodeError, HTTPError,
+                        ConnectionResetError, RemoteDisconnected)
 # Always retry when an apiclient.errors.HttpError with one of these status
 # codes is raised.
 RETRIABLE_STATUS_CODES = [500, 502, 503, 504, 111]
