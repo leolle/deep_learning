@@ -81,7 +81,8 @@ if __name__ == '__main__':
     with open("graph.pkl", 'rb') as fp:
         itemlist = pickle.load(fp)
     ylog.debug("uploading wiki categorie page link")
-    uploaded_number = upload_edge_from_graph(itemlist, int(sys.argv[1]))
+    uploaded_number = upload_edge_from_graph(itemlist[int(sys.argv[2]):],
+                                             int(sys.argv[1]))
     # uploaded_number = batch_upload(
     #     wiki_category_link_re,
     #     category_link_path,
