@@ -1,22 +1,19 @@
 # -*- coding: utf-8 -*-
 import time
-import re
 from lib.gftTools import gftIO
 from lib.gftTools.proto import graphUpload_pb2
 from tqdm import tqdm
 import random
 from ylib import ylog
-import logging
+import pickle
 import os, sys
 import hashlib
 from google.protobuf.message import EncodeError
 from urllib.error import HTTPError
 from lib.gftTools.gftIO import GSError
-from pymongo import MongoClient
 from google.protobuf.message import DecodeError
 from hanziconv import HanziConv
 import json
-import networkx as nx
 from http.client import RemoteDisconnected
 
 PY2 = sys.version_info[0] == 2
@@ -26,7 +23,6 @@ if PY2:
     from urllib import quote_plus
     from urlparse import urlparse, parse_qs
     from htmlentitydefs import name2codepoint
-    from itertools import izip as zip, izip_longest as zip_longest
     range = xrange  # Use Python 3 equivalent
     chr = unichr  # Use Python 3 equivalent
     text_type = unicode
@@ -60,10 +56,13 @@ RETRIABLE_EXCEPTIONS = (EncodeError, DecodeError, HTTPError,
 # Always retry when an apiclient.errors.HttpError with one of these status
 # codes is raised.
 RETRIABLE_STATUS_CODES = [500, 502, 503, 504, 111]
-IGNORE_CATEGORIES = [
-    '使用Catnav的页面', '缺少Wikidata链接的维基共享资源分类', '隐藏分类', '追踪分类', '维基百科特殊页面',
-    '维基百科分类', '维基百科维护', '无需细分的分类', '不要删除的分类', '母分类', '全部重定向分类', '特殊条目'
-]
+with open('ignored_cat.pkl', 'rb') as fp:
+    IGNORE_CATEGORIES = pickle.load(fp)
+
+# IGNORE_CATEGORIES = [
+#     '使用Catnav的页面', '缺少Wikidata链接的维基共享资源分类', '隐藏分类', '追踪分类', '维基百科特殊页面',
+#     '维基百科分类', '维基百科维护', '无需细分的分类', '不要删除的分类', '母分类', '全部重定向分类', '特殊条目'
+# ]
 EXAMPLE_CATEGORIES = ['深圳证券交易所上市公司', '上海证券交易所上市公司', '各证券交易所上市公司', '证券交易所', '证券']
 EXAMPLE_CATEGORIES_PAGE_DICT = json.load(open('list.txt'))
 # test fetch graph
@@ -363,10 +362,10 @@ def upload_edge_from_graph(ls_edges, batch_size):
                     node_from = e[0]
                     node_to = e[1]
                     edge_type = e[2]
-                    edge = graph_upload_request.graph.edges.add()
 
                     # page edge
                     if edge_type == 0:
+                        edge = graph_upload_request.graph.edges.add()
                         edge.props.type = "HasElement"
                         edge.startNodeID.url = "https://zh.wikipedia.org/wiki/Category:" + quote_plus(
                             node_from)
@@ -374,6 +373,9 @@ def upload_edge_from_graph(ls_edges, batch_size):
                             node_to)
                 # categories edge
                     else:
+                        if node_from in IGNORE_CATEGORIES:
+                            continue
+                        edge = graph_upload_request.graph.edges.add()
                         edge.startNodeID.url = "https://zh.wikipedia.org/wiki/Category:" + quote_plus(
                             node_from)
                         edge.endNodeID.url = "https://zh.wikipedia.org/wiki/Category:" + quote_plus(

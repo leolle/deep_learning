@@ -45,6 +45,7 @@ test_pwd = 'gft'
 gs_call = gftIO.GSCall(prod_url, test_user_name, test_pwd)
 
 if __name__ == '__main__':
+    user_path = os.path.expanduser("~")
     import logging
     ylog.set_level(logging.DEBUG)
     ylog.console_on()
@@ -60,11 +61,10 @@ if __name__ == '__main__':
     #     start_cat = 0
     #     start_page = 0
     #     start_edge = 0
-    user_path = os.path.expanduser("~")
-    category_path = "./data/zhwiki-latest-category.zhs.sql"
-    # open category sql file
-    wiki_category_re = re.compile(
-        "\(([0-9]+),('[^,]+'),([0-9]+),([0-9]+),([0-9]+)\)")
+    # category_path = "./data/zhwiki-latest-category.zhs.sql"
+    # # open category sql file
+    # wiki_category_re = re.compile(
+    #     "\(([0-9]+),('[^,]+'),([0-9]+),([0-9]+),([0-9]+)\)")
     # print("uploading wiki categories")
     # uploaded_number = batch_upload(
     #     wiki_category_re,
@@ -78,7 +78,7 @@ if __name__ == '__main__':
     # upload edge
 
     ylog.debug('reading link sql file')
-    with open("graph.pkl", 'rb') as fp:
+    with open("graph_whole.pkl", 'rb') as fp:
         itemlist = pickle.load(fp)
     ylog.debug("uploading wiki categorie page link")
     uploaded_number = upload_edge_from_graph(itemlist[int(sys.argv[2]):],
