@@ -51,8 +51,8 @@ else:
 MAX_RETRIES = 10
 NODES_FAIL_MAX_RETRIES = 3
 # Always retry when these exceptions are raised.
-RETRIABLE_EXCEPTIONS = (EncodeError, DecodeError, HTTPError,
-                        ConnectionResetError, RemoteDisconnected)
+RETRIABLE_EXCEPTIONS = (HTTPError, ConnectionResetError, RemoteDisconnected)
+GRAPH_EXCEPTIONS = (EncodeError, DecodeError)
 # Always retry when an apiclient.errors.HttpError with one of these status
 # codes is raised.
 RETRIABLE_STATUS_CODES = [500, 502, 503, 504, 111]
@@ -285,6 +285,8 @@ def upload_edge(dict_re_match_object):
                 raise
         except RETRIABLE_EXCEPTIONS as e:
             error = 'A retriable error occurred: %s' % e
+        except GRAPH_EXCEPTIONS as e:
+            break
         # try:
         #     if res.failedEdges:
         #         re_upload_error = "some nodes failed to upload %s" % res.failedEdges
@@ -396,6 +398,8 @@ def upload_edge_from_graph(ls_edges, batch_size):
                     raise
             except RETRIABLE_EXCEPTIONS as e:
                 error = 'A retriable error occurred: %s' % e
+            except GRAPH_EXCEPTIONS as e:
+                break
             if error is not None:
                 print(error)
                 retry += 1
