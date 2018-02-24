@@ -19,20 +19,21 @@ import hashlib
 from google.protobuf.message import EncodeError
 from urllib.error import HTTPError
 from lib.gftTools.gftIO import GSError
-from pymongo import MongoClient
 from google.protobuf.message import DecodeError
-from hanziconv import HanziConv
+from http.client import RemoteDisconnected
 import networkx as nx
 
 ylog.set_level(logging.DEBUG)
 ylog.console_on()
 ylog.filelog_on('remove_cycles')
+# batch upload size
+BATCH_SIZE = 20
 # Maximum number of times to retry before giving up.
 MAX_RETRIES = 10
 NODES_FAIL_MAX_RETRIES = 3
 # Always retry when these exceptions are raised.
-RETRIABLE_EXCEPTIONS = (EncodeError, DecodeError, HTTPError,
-                        ConnectionResetError)
+RETRIABLE_EXCEPTIONS = (HTTPError, ConnectionResetError, RemoteDisconnected)
+GRAPH_EXCEPTIONS = (EncodeError, DecodeError)
 # Always retry when an apiclient.errors.HttpError with one of these status
 # codes is raised.
 RETRIABLE_STATUS_CODES = [500, 502, 503, 504, 111]
@@ -74,7 +75,7 @@ else:
     text_type = str
 
 # test fetch graph
-# test_url = 'http://192.168.1.166:9080'
+test_url = 'http://192.168.1.166:9080'
 prod_url = 'http://q.gftchina.com:13567'
 test_user_name = 'wuwei'
 test_pwd = 'gft'
@@ -134,9 +135,7 @@ def add_edge(dict_re_match_object):
                     end = page_title.split("\\n")
                     page_title = end[-1]
                 page_title = page_title.replace(" ", "_")
-                # ylog.debug(cat_title)
-                # ylog.debug(subcat_title)
-                # if cat_title in EXAMPLE_CATEGORIES:
+                # page subtype is 0
                 graph.add_edge(cat_title, page_title, subtype=0)
             if edge_type == 'subcat':
                 subcat_title = item.group(3)[1:-1]
@@ -148,10 +147,9 @@ def add_edge(dict_re_match_object):
                     end = subcat_title.split("\\n")
                     subcat_title = end[-1]
                 subcat_title = subcat_title.replace(" ", "_")
-                # ylog.debug(cat_title)
-                # ylog.debug(subcat_title)
                 if subcat_title == cat_title:
                     continue
+                # subcategory subtype is 1
                 graph.add_edge(cat_title, subcat_title, subtype=1)
                 g.addEdge(cat_title, subcat_title)
 
@@ -182,35 +180,37 @@ def batch_upload(re, file_path, batch_size, func, start, end):
             while True:
                 if i < start:
                     break
-                elif i <= end:
-                    try:
-                        test_string = line[line_start_position:].decode('utf-8')
-                        line_size = len(re.findall(test_string))
 
-                    except UnicodeDecodeError as e:
-                        line_end_position = e.start
-                        ylog.debug('start at %s' % line_end_position)
-                    finally:
-                        string = line[line_start_position:
-                                      line_end_position].decode('utf-8')
-                        line_size = len(re.findall(string))
-                        try:
-                            last_span = re.search(string).span()[0]
-                        except AttributeError:
-                            break
-                        line_size = len(re.findall(string))
-                        for _ in range(0, line_size, batch_size):
-                            # pause if find a file naed pause at the currend dir
-                            re_batch = {}
-                            for j in range(batch_size):
-                                re_batch[j] = re.search(string, last_span)
-                                if re_batch[j] is not None:
-                                    last_span = re_batch[j].span()[1]
-                            func(re_batch)
-                        line_end_position = len(line)
-                        line_start_position = line_end_position + 10
-                else:
-                    break
+
+#                 elif i <= end:
+                try:
+                    test_string = line[line_start_position:].decode('utf-8')
+                    line_size = len(re.findall(test_string))
+
+                except UnicodeDecodeError as e:
+                    line_end_position = e.start
+                    ylog.debug('start at %s' % line_end_position)
+                finally:
+                    string = line[line_start_position:line_end_position].decode(
+                        'utf-8')
+                    line_size = len(re.findall(string))
+                    try:
+                        last_span = re.search(string).span()[0]
+                    except AttributeError:
+                        break
+                    line_size = len(re.findall(string))
+                    for _ in range(0, line_size, batch_size):
+                        # pause if find a file naed pause at the currend dir
+                        re_batch = {}
+                        for j in range(batch_size):
+                            re_batch[j] = re.search(string, last_span)
+                            if re_batch[j] is not None:
+                                last_span = re_batch[j].span()[1]
+                        func(re_batch)
+                    line_end_position = len(line)
+                    line_start_position = line_end_position + 10
+            else:
+                break
 
 
 def write_graph(graph):
@@ -234,149 +234,228 @@ def write_graph(graph):
     return ls_edges
 
 
-batch_upload(
-    wiki_category_link_re,
-    category_link_path,
-    200,
-    add_edge,
-    start=0,
-    end=10000)
+# batch_upload(
+#     wiki_category_link_re,
+#     category_link_path,
+#     200,
+#     add_edge,
+#     start=0,
+#     end=10000000)
 
-ls_nodes = list(graph.nodes)
-counter = 0
-total_nodes_num = len(graph.nodes)
-rm_counter = 0
-try:
-    while True:
-        ylog.debug('rm cycles loops number %s' % counter)
+# ls_nodes = list(graph.nodes)
+# counter = 0
+# total_nodes_num = len(graph.nodes)
+# rm_counter = 0
+# try:
+#     while True:
+#         ylog.debug('rm cycles loops number %s' % counter)
 
-        for node in tqdm(ls_nodes):
-            removed_counter = 0
-            # ylog.debug('rm cycles of node %s' % node)
+#         for node in tqdm(ls_nodes):
+#             removed_counter = 0
+#             # ylog.debug('rm cycles of node %s' % node)
 
-            while True:
-                try:
-                    ls_loop = nx.find_cycle(graph, node)
-                    removed_counter += 1
-                    # remove direct edge:
-                    #                    ylog.debug(ls_loop)
-                    if len(ls_loop) == 2:
-                        if ls_loop[0][0] == ls_loop[1][1] and ls_loop[0][1] == ls_loop[1][0]:
-                            graph.remove_edge(ls_loop[0][0], ls_loop[0][1])
-                    # remove big loop:
-                    elif len(ls_loop) == 1:
-                        break
-                    elif len(ls_loop) > 2:
-                        break
-                        # graph.remove_edge(ls_loop[-1][0], ls_loop[-1][1])
-                        # remove all edges in the loop, then next create edge first in.
-                        # for i in range(len(ls_loop) - 1):
-                        #     graph.remove_edge(ls_loop[i + 1][0],
-                        #                       ls_loop[i + 1][1])
-                    # counter = 0
-                except nx.NetworkXNoCycle:
-                    counter += 1
-                    if removed_counter != 0:
-                        ylog.debug('rm cycles number %s' % removed_counter)
+#             while True:
+#                 try:
+#                     ls_loop = nx.find_cycle(graph, node)
+#                     removed_counter += 1
+#                     # remove direct edge:
+#                     #                    ylog.debug(ls_loop)
+#                     if len(ls_loop) == 2:
+#                         if ls_loop[0][0] == ls_loop[1][1] and ls_loop[0][1] == ls_loop[1][0]:
+#                             graph.remove_edge(ls_loop[0][0], ls_loop[0][1])
+#                     # remove big loop:
+#                     elif len(ls_loop) == 1:
+#                         break
+#                     elif len(ls_loop) > 2:
+#                         break
+#                         # graph.remove_edge(ls_loop[-1][0], ls_loop[-1][1])
+#                         # remove all edges in the loop, then next create edge first in.
+#                         # for i in range(len(ls_loop) - 1):
+#                         #     graph.remove_edge(ls_loop[i + 1][0],
+#                         #                       ls_loop[i + 1][1])
+#                     # counter = 0
+#                 except nx.NetworkXNoCycle:
+#                     counter += 1
+#                     if removed_counter != 0:
+#                         ylog.debug('rm cycles number %s' % removed_counter)
+#                     break
+
+#         break
+# except KeyboardInterrupt:
+#     # nx.write_gexf(graph, 'whole_edges.no_loops.gexf')
+#     try:
+#         sys.exit(0)
+#     except SystemExit:
+#         os._exit(0)
+# ylog.debug('write graph')
+
+# ls_edges = write_graph(graph)
+
+
+def upload_single_edge(e):
+    res = None
+    error = None
+    retry = 0
+    while res is None:
+        try:
+            graph_upload_request = graphUpload_pb2.GraphUploadRequest()
+            node_from = e[0]
+            node_to = e[1]
+            edge_type = e[2]
+
+            if edge_type == 0:
+                edge = graph_upload_request.graph.edges.add()
+                edge.props.type = "HasElement"
+                edge.startNodeID.url = "https://zh.wikipedia.org/wiki/Category:" + quote_plus(
+                    node_from)
+                edge.endNodeID.url = "https://zh.wikipedia.org/wiki/" + quote_plus(
+                    node_to)
+            # categories edge
+            else:
+                if node_from in IGNORE_CATEGORIES:
                     break
+                edge = graph_upload_request.graph.edges.add()
+                edge.startNodeID.url = "https://zh.wikipedia.org/wiki/Category:" + quote_plus(
+                    node_from)
+                edge.endNodeID.url = "https://zh.wikipedia.org/wiki/Category:" + quote_plus(
+                    node_to)
+                edge.props.type = "HasSubset"
+            graph_upload_request.uploadTag = "uploadWikiEdge"
+            graph_upload_request.nodeAction4Duplication = graphUpload_pb2.Action4Duplication.Value(
+                'UPDATE')
+            graph_upload_request.edgeAction4Duplication = graphUpload_pb2.Action4Duplication.Value(
+                'UPDATE')
+            res = gs_call.upload_graph(graph_upload_request)
+            print(res)
+        except HTTPError as e:
+            if e.code in RETRIABLE_STATUS_CODES:
+                error = 'A retriable HTTP error %d occurred:\n%s' % (e.code,
+                                                                     e.reason)
+            else:
+                raise
+        except RETRIABLE_EXCEPTIONS as e:
+            error = 'A retriable error occurred: %s' % e
+        except GRAPH_EXCEPTIONS as e:
+            break
 
-        break
-except KeyboardInterrupt:
-    # nx.write_gexf(graph, 'whole_edges.no_loops.gexf')
+        if error is not None:
+            print(error)
+            retry += 1
+            res = None
+            if retry > MAX_RETRIES:
+                ylog.debug(res)
+                exit("no loger attempting to retry.")
+            max_sleep = 2**retry
+            sleep_seconds = random.random() * max_sleep
+            print('Sleeping %f seconds and then retrying...' % sleep_seconds)
+            time.sleep(sleep_seconds)
     try:
-        sys.exit(0)
-    except SystemExit:
-        os._exit(0)
-# nx.write_gexf(graph, 'whole_edges.no_loops.gexf')
-ylog.debug('write graph')
-ls_edges = write_graph(graph)
-batch_size = 20
+        if res.edgeUpdateResultStatistics:
+            ylog.debug(res.edgeUpdateResultStatistics)
+            uploaded_number = res.edgeUpdateResultStatistics.numOfCreations + \
+                res.edgeUpdateResultStatistics.numOfUpdates + \
+                res.edgeUpdateResultStatistics.numOfSkips
+            ylog.debug(e)
+        # if res.failedEdges:
+        #     for err in res.failedEdges:
+        #         print(err)
+        #         print(
+        #             "start node: %s" % err.edge.startNodeID.primaryKeyInDomain)
+        #         print("end node: %s" % err.edge.endNodeID.primaryKeyInDomain)
+    except:
+        pass
 
-# def upload_edge(ls_edges):
-#     """upload edge one by one
-#     Parameters:
-#     ls_edges -- list of edge tuples
-#     """
-#     len_edges = len(ls_edges)
-#     uploaded_number = 0
-#     batch_counter = 0
-#     for edge_counter in tqdm(range(0, len_edges, batch_size)):
 
-#         res = None
-#         error = None
-#         re_upload_error = None
-#         retry = 0
-#         nodes_fail_retry = 0
-#         graph_upload_request = graphUpload_pb2.GraphUploadRequest()
-#         while res is None:
-#             try:
-#                 graph_upload_request = graphUpload_pb2.GraphUploadRequest()
-#                 for e in ls_edges[batch_counter:batch_counter + batch_size]:
-#                     node_from = e[0]
-#                     node_to = e[1]
-#                     edge_type = e[2]
-#                     edge = graph_upload_request.graph.edges.add()
+def upload_edge(ls_edges):
+    """upload edge one by one
+    Parameters:
+    ls_edges -- list of edge tuples
+    """
+    len_edges = len(ls_edges)
+    uploaded_number = 0
+    batch_counter = 0
+    for edge_counter in tqdm(range(0, len_edges, batch_size)):
 
-#                     # page edge
-#                     if edge_type == 0:
-#                         edge.props.type = "HasElement"
-#                         edge.startNodeID.url = "https://zh.wikipedia.org/wiki/Category:" + quote_plus(
-#                             node_from)
-#                         edge.endNodeID.url = "https://zh.wikipedia.org/wiki/" + quote_plus(
-#                             node_to)
-#                 # categories edge
-#                     else:
-#                         edge.startNodeID.url = "https://zh.wikipedia.org/wiki/Category:" + quote_plus(
-#                             node_from)
-#                         edge.endNodeID.url = "https://zh.wikipedia.org/wiki/Category:" + quote_plus(
-#                             node_to)
-#                         edge.props.type = "HasSubset"
-#                 graph_upload_request.uploadTag = "uploadWikiEdge"
-#                 graph_upload_request.nodeAction4Duplication = graphUpload_pb2.Action4Duplication.Value(
-#                     'UPDATE')
-#                 graph_upload_request.edgeAction4Duplication = graphUpload_pb2.Action4Duplication.Value(
-#                     'UPDATE')
-#                 res = gs_call.upload_graph(graph_upload_request)
+        res = None
+        error = None
+        retry = 0
+        graph_upload_request = graphUpload_pb2.GraphUploadRequest()
+        while res is None:
+            try:
+                graph_upload_request = graphUpload_pb2.GraphUploadRequest()
+                for e in ls_edges[batch_counter:batch_counter + batch_size]:
+                    node_from = e[0]
+                    node_to = e[1]
+                    edge_type = e[2]
 
-#             except HTTPError as e:
-#                 if e.code in RETRIABLE_STATUS_CODES:
-#                     error = 'A retriable HTTP error %d occurred:\n%s' % (
-#                         e.code, e.reason)
-#                 else:
-#                     raise
-#             except RETRIABLE_EXCEPTIONS as e:
-#                 error = 'A retriable error occurred: %s' % e
-#             if error is not None:
-#                 print(error)
-#                 retry += 1
-#                 res = None
-#                 if retry > MAX_RETRIES:
-#                     ylog.debug(res)
-#                     exit("no loger attempting to retry.")
-#                 max_sleep = 2**retry
-#                 sleep_seconds = random.random() * max_sleep
-#                 print(
-#                     'Sleeping %f seconds and then retrying...' % sleep_seconds)
-#                 time.sleep(sleep_seconds)
-#         try:
-#             if res.edgeUpdateResultStatistics:
-#                 ylog.debug(res.edgeUpdateResultStatistics)
-#                 number = res.edgeUpdateResultStatistics.numOfCreations + \
-#                     res.edgeUpdateResultStatistics.numOfUpdates + \
-#                     res.edgeUpdateResultStatistics.numOfSkips
-#                 uploaded_number += number
-#             if res.failedEdges:
-#                 for err in res.failedEdges:
-#                     ylog.debug(err)
-#                     ylog.debug("start node: %s" %
-#                                err.edge.startNodeID.primaryKeyInDomain)
-#                     ylog.debug(
-#                         "end node: %s" % err.edge.endNodeID.primaryKeyInDomain)
-#         except:
-#             pass
-#         batch_counter += batch_size
+                    # page edge
+                    if edge_type == 0:
+                        edge = graph_upload_request.graph.edges.add()
+                        edge.props.type = "HasElement"
+                        edge.startNodeID.url = "https://zh.wikipedia.org/wiki/Category:" + quote_plus(
+                            node_from)
+                        edge.endNodeID.url = "https://zh.wikipedia.org/wiki/" + quote_plus(
+                            node_to)
+                # categories edge
+                    else:
+                        if node_from in IGNORE_CATEGORIES:
+                            continue
+                        edge = graph_upload_request.graph.edges.add()
+                        edge.startNodeID.url = "https://zh.wikipedia.org/wiki/Category:" + quote_plus(
+                            node_from)
+                        edge.endNodeID.url = "https://zh.wikipedia.org/wiki/Category:" + quote_plus(
+                            node_to)
+                        edge.props.type = "HasSubset"
+                graph_upload_request.uploadTag = "uploadWikiEdge"
+                graph_upload_request.nodeAction4Duplication = graphUpload_pb2.Action4Duplication.Value(
+                    'UPDATE')
+                graph_upload_request.edgeAction4Duplication = graphUpload_pb2.Action4Duplication.Value(
+                    'UPDATE')
+                res = gs_call.upload_graph(graph_upload_request)
 
-#     return uploaded_number
+            except HTTPError as e:
+                if e.code in RETRIABLE_STATUS_CODES:
+                    error = 'A retriable HTTP error %d occurred:\n%s' % (
+                        e.code, e.reason)
+                else:
+                    raise
+            except RETRIABLE_EXCEPTIONS as e:
+                error = 'A retriable error occurred: %s' % e
+            except GRAPH_EXCEPTIONS as e:
+                ylog.debug('A graph error occurred: %s' % e)
+                break
+            if error is not None:
+                print(error)
+                retry += 1
+                res = None
+                if retry > MAX_RETRIES:
+                    ylog.debug(res)
+                    exit("no loger attempting to retry.")
+                max_sleep = 2**retry
+                sleep_seconds = random.random() * max_sleep
+                print(
+                    'Sleeping %f seconds and then retrying...' % sleep_seconds)
+                time.sleep(sleep_seconds)
+        try:
+            if res.edgeUpdateResultStatistics:
+                ylog.debug(res.edgeUpdateResultStatistics)
+                number = res.edgeUpdateResultStatistics.numOfCreations + \
+                    res.edgeUpdateResultStatistics.numOfUpdates + \
+                    res.edgeUpdateResultStatistics.numOfSkips
+                uploaded_number += number
+            if res.failedEdges:
+                for err in res.failedEdges:
+                    ylog.debug(err)
+                    ylog.debug("start node: %s" %
+                               err.edge.startNodeID.primaryKeyInDomain)
+                    ylog.debug(
+                        "end node: %s" % err.edge.endNodeID.primaryKeyInDomain)
+        except:
+            pass
+        batch_counter += batch_size
+
+    return uploaded_number
+
 
 # num = upload_edge(ls_edges)
 # ylog.log('upload edge number %s' % num)

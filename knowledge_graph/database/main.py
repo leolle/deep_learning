@@ -7,13 +7,14 @@ import re
 from lib.gftTools import gftIO
 import os
 import sys
+from tqdm import tqdm
 from google.protobuf.message import EncodeError
 from google.protobuf.message import DecodeError
 import pickle
 from urllib.error import HTTPError
 from urllib.error import URLError
 from pymongo import MongoClient
-from graph_upload import batch_upload, upload_edge, upload_cat_node, delete_edge, upload_edge_from_graph
+from graph_upload import batch_upload, upload_edge, upload_cat_node, delete_edge, upload_edge_from_graph, upload_single_edge
 # how many nodes or edge to upload in a batch
 batch_size = 200
 # links number
@@ -32,10 +33,6 @@ RETRIABLE_EXCEPTIONS = (EncodeError, DecodeError, HTTPError)
 # codes is raised.
 RETRIABLE_STATUS_CODES = [500, 502, 503, 504, 111]
 # ignore those looped categories
-IGNORE_CATEGORIES = [
-    '使用Catnav的页面', '缺少Wikidata链接的维基共享资源分类', '隐藏分类', '追踪分类', '维基百科特殊页面',
-    '维基百科分类', '维基百科维护', '无需细分的分类', '不要删除的分类', '母分类', '全部重定向分类', '特殊条目'
-]
 
 # test fetch graph
 test_url = 'http://192.168.1.166:9080'
@@ -78,9 +75,11 @@ if __name__ == '__main__':
     # upload edge
 
     ylog.debug('reading link sql file')
-    with open("graph_whole.pkl", 'rb') as fp:
+    with open("graph_no_loop.pkl", 'rb') as fp:
         itemlist = pickle.load(fp)
     ylog.debug("uploading wiki categorie page link")
+    # for i in tqdm(itemlist[5308253:]):
+    #     upload_single_edge(i)
     uploaded_number = upload_edge_from_graph(itemlist[int(sys.argv[2]):],
                                              int(sys.argv[1]))
     # uploaded_number = batch_upload(

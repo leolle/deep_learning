@@ -59,15 +59,10 @@ RETRIABLE_STATUS_CODES = [500, 502, 503, 504, 111]
 with open('ignored_cat.pkl', 'rb') as fp:
     IGNORE_CATEGORIES = pickle.load(fp)
 
-# IGNORE_CATEGORIES = [
-#     '使用Catnav的页面', '缺少Wikidata链接的维基共享资源分类', '隐藏分类', '追踪分类', '维基百科特殊页面',
-#     '维基百科分类', '维基百科维护', '无需细分的分类', '不要删除的分类', '母分类', '全部重定向分类', '特殊条目'
-# ]
-EXAMPLE_CATEGORIES = ['深圳证券交易所上市公司', '上海证券交易所上市公司', '各证券交易所上市公司', '证券交易所', '证券']
 EXAMPLE_CATEGORIES_PAGE_DICT = json.load(open('list.txt'))
 # test fetch graph
 test_url = 'http://192.168.1.166:9080'
-# prod_url = 'http://q.gftchina.com:13567/vqservice/vq/'
+prod_url = 'http://q.gftchina.com:13567'
 test_user_name = 'wuwei'
 test_pwd = 'gft'
 gs_call = gftIO.GSCall(test_url, test_user_name, test_pwd)
@@ -399,6 +394,7 @@ def upload_edge_from_graph(ls_edges, batch_size):
             except RETRIABLE_EXCEPTIONS as e:
                 error = 'A retriable error occurred: %s' % e
             except GRAPH_EXCEPTIONS as e:
+                ylog.debug('A graph error occurred: %s' % e)
                 break
             if error is not None:
                 print(error)
@@ -421,10 +417,10 @@ def upload_edge_from_graph(ls_edges, batch_size):
                 uploaded_number += number
             if res.failedEdges:
                 for err in res.failedEdges:
-                    ylog.debug(err)
-                    ylog.debug("start node: %s" %
-                               err.edge.startNodeID.primaryKeyInDomain)
-                    ylog.debug(
+                    print(err)
+                    print("start node: %s" %
+                          err.edge.startNodeID.primaryKeyInDomain)
+                    print(
                         "end node: %s" % err.edge.endNodeID.primaryKeyInDomain)
         except:
             pass
@@ -723,3 +719,77 @@ def batch_upload(re, file_path, batch_size, func, start, end):
         except SystemExit:
             os._exit(0)
     return uploaded_number
+
+
+def upload_single_edge(e):
+    res = None
+    error = None
+    retry = 0
+    while res is None:
+        try:
+            graph_upload_request = graphUpload_pb2.GraphUploadRequest()
+            node_from = e[0]
+            node_to = e[1]
+            edge_type = e[2]
+
+            if edge_type == 0:
+                edge = graph_upload_request.graph.edges.add()
+                edge.props.type = "HasElement"
+                edge.startNodeID.url = "https://zh.wikipedia.org/wiki/Category:" + quote_plus(
+                    node_from)
+                edge.endNodeID.url = "https://zh.wikipedia.org/wiki/" + quote_plus(
+                    node_to)
+            # categories edge
+            else:
+                if node_from in IGNORE_CATEGORIES:
+                    break
+                edge = graph_upload_request.graph.edges.add()
+                edge.startNodeID.url = "https://zh.wikipedia.org/wiki/Category:" + quote_plus(
+                    node_from)
+                edge.endNodeID.url = "https://zh.wikipedia.org/wiki/Category:" + quote_plus(
+                    node_to)
+                edge.props.type = "HasSubset"
+            graph_upload_request.uploadTag = "uploadWikiEdge"
+            graph_upload_request.nodeAction4Duplication = graphUpload_pb2.Action4Duplication.Value(
+                'UPDATE')
+            graph_upload_request.edgeAction4Duplication = graphUpload_pb2.Action4Duplication.Value(
+                'UPDATE')
+            res = gs_call.upload_graph(graph_upload_request)
+            print(res)
+        except HTTPError as e:
+            if e.code in RETRIABLE_STATUS_CODES:
+                error = 'A retriable HTTP error %d occurred:\n%s' % (e.code,
+                                                                     e.reason)
+            else:
+                raise
+        except RETRIABLE_EXCEPTIONS as e:
+            error = 'A retriable error occurred: %s' % e
+        except GRAPH_EXCEPTIONS as e:
+            break
+
+        if error is not None:
+            print(error)
+            retry += 1
+            res = None
+            if retry > MAX_RETRIES:
+                ylog.debug(res)
+                exit("no loger attempting to retry.")
+            max_sleep = 2**retry
+            sleep_seconds = random.random() * max_sleep
+            print('Sleeping %f seconds and then retrying...' % sleep_seconds)
+            time.sleep(sleep_seconds)
+    try:
+        if res.edgeUpdateResultStatistics:
+            ylog.debug(res.edgeUpdateResultStatistics)
+            uploaded_number = res.edgeUpdateResultStatistics.numOfCreations + \
+                res.edgeUpdateResultStatistics.numOfUpdates + \
+                res.edgeUpdateResultStatistics.numOfSkips
+            ylog.debug(e)
+        # if res.failedEdges:
+        #     for err in res.failedEdges:
+        #         print(err)
+        #         print(
+        #             "start node: %s" % err.edge.startNodeID.primaryKeyInDomain)
+        #         print("end node: %s" % err.edge.endNodeID.primaryKeyInDomain)
+    except:
+        pass
