@@ -2,8 +2,9 @@
 from aip import AipNlp
 from sqlalchemy import create_engine
 from sqlalchemy import MetaData
+from sqlalchemy import Column, Integer, String, DateTime
 from sqlalchemy import Table
-from sqlalchemy.ext.automap import automap_base
+from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import Session
 import numpy as np
 import pandas as pd
@@ -20,19 +21,43 @@ engine = create_engine(
     'mysql+mysqlconnector://datatec:0.618@[172.16.103.103]:3306/JYDB',
     echo=False)
 
-# Create MetaData instance
-metadata = MetaData(engine, reflect=True)
-# print(metadata.tables)
+# # Create MetaData instance
+# metadata = MetaData(engine, reflect=True)
 
-# Get Table
-ex_table = metadata.tables['C_RR_ResearchReport']
-print(ex_table)
+# # Get Table
+# ex_table = metadata.tables['C_RR_ResearchReport']
+# print(ex_table)
 
-Base = automap_base()
-Base.prepare(engine, reflect=True)
-research_tbl = Base.classes.C_RR_ResearchReport
-session = Session(engine)
-query = session.query(research_tbl)
+df_research = pd.read_sql(
+    "SELECT * FROM JYDB.C_RR_ResearchReport order by InfoPublDate desc limit 1;",
+    engine)
+for item in df_research.iterrows():
+    print(item[0])
+    #  print(item[1]['Conclusion'])
+    title = item[1]['Title']
+
+    text = item[1]['Conclusion']
+    res = client.lexer(text)
+    tag = client.commentTag(text)
+    # 文章标签
+    keyword = client.keyword(title, text)
+    # 文本分类
+    topic = client.topic(title, text)
+    # 情感倾向分析
+    sentiment = client.sentimentClassify(text)
+# Base = declarative_base()
+
+# class C_RR_ResearchReport(Base):
+#     __tablename__ = 'C_RR_ResearchReport'
+#     id = Column(Integer, primary_key=True)
+#     InfoPublDate = Column(DateTime)
+#     OrgName = Column(String(100))
+#     OrgNameDisc = Column(String(100))
+
+# session = Session(engine)
+# for instance in session.query(C_RR_ResearchReport).order_by(
+#         C_RR_ResearchReport.id):
+#     print(instance.OrgName)
 
 # text = "市场价值最高的A股股票，市盈率，股息"
 # text = "云南铜业股份有限公司（深交所：000878），简称云铜股份"
