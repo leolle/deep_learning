@@ -5,27 +5,15 @@ fetch all the page from field csv files, pack them to a file.
 fetch skill gid and extract page.
 python wiki_preprocess.py > zh.wiki.docs
 """
-import pandas as pd
-import datetime
 import gensim
 import logging
 import multiprocessing
 import os
-import re
 import sys
-from time import time, sleep
-from timeit import default_timer
+from time import time
 from gensim.models.word2vec import LineSentence
-import codecs
-import itertools
-import string
-from sys import stdin
-from gensim import utils
-from tqdm import tqdm
-from gensim.models import KeyedVectors
-import jieba
 from fetch import extract_pages
-from ylib import ylog
+# from ylib import ylog
 from preprocessing import complete_dir_path
 from lib.gftTools import gftIO
 
@@ -60,26 +48,21 @@ def skill_extraction(skill_gid, key, key_string, target_key, gs_call):
 
 if __name__ == '__main__':
 
-    # if len(sys.argv) != 2:
-    #     print("Please use python wiki_preprocess.py output_path")
-    #     exit()
-    #    output_path = sys.argv[1]
-    ylog.set_level(logging.DEBUG)
-    ylog.console_on()
-    ylog.filelog_on("wiki_upload")
-    ylog.info("start")
+    # ylog.set_level(logging.DEBUG)
+    # ylog.console_on()
+    # ylog.filelog_on("wiki_train")
+    # ylog.info("start")
+    logging.basicConfig(
+        format='%(asctime)s : %(levelname)s : %(message)s', level=logging.INFO)
+
     begin = time()
     user_path = os.path.expanduser("~")
-    cat_path = user_path + '/share/deep_learning/data/GID/cat.txt'
-    page_path = user_path + "/share/deep_learning/data/GID/page.txt"
-    page_gid_file = open(page_path)
-    lines = page_gid_file.read().splitlines()
-    # page_gid = [s.strip() for s in lines]
     page_gid = skill_extraction('A0F920E1D1DB9E6EFD378FD1B9200461', '_type',
                                 'readonlyDoc', '_gid', gs_call)
     output_path = sys.argv[1]
 
     extract_pages(page_gid, gs_call)
+    logging.info("start training")
     model = gensim.models.Word2Vec(
         LineSentence('/tmp/test.txt'),
         size=200,

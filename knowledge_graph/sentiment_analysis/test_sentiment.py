@@ -10,6 +10,7 @@ import numpy as np
 import pandas as pd
 from ylib import ylog
 from requests.exceptions import ConnectionError, ChunkedEncodingError
+from snownlp import SnowNLP
 
 # """ 你的 APPID AK SK """
 APP_ID = '10850025'
@@ -45,27 +46,3 @@ for item in df_research.iterrows():
     topic = client.topic(title, text)
     # 情感倾向分析
     sentiment = client.sentimentClassify(text)
-# Base = declarative_base()
-
-# class C_RR_ResearchReport(Base):
-#     __tablename__ = 'C_RR_ResearchReport'
-#     id = Column(Integer, primary_key=True)
-#     InfoPublDate = Column(DateTime)
-#     OrgName = Column(String(100))
-#     OrgNameDisc = Column(String(100))
-
-# session = Session(engine)
-# for instance in session.query(C_RR_ResearchReport).order_by(
-#         C_RR_ResearchReport.id):
-#     print(instance.OrgName)
-
-# text = "市场价值最高的A股股票，市盈率，股息"
-# text = "云南铜业股份有限公司（深交所：000878），简称云铜股份"
-# text = u'''云南铜业股份有限公司（深交所：000878），简称云铜股份、云铜'''
-# """ 调用词法分析 """
-# res = client.lexer(text)
-# # print(res)
-# options = {}
-# options["type"] = 8
-# print(client.commentTag(text, options))
-# print(client.topic(text[:10], text))

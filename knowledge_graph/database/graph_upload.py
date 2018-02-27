@@ -65,7 +65,7 @@ test_url = 'http://192.168.1.166:9080'
 prod_url = 'http://q.gftchina.com:13567'
 test_user_name = 'wuwei'
 test_pwd = 'gft'
-gs_call = gftIO.GSCall(test_url, test_user_name, test_pwd)
+gs_call = gftIO.GSCall(prod_url, test_user_name, test_pwd)
 
 
 def test_get_skill_graph(args):
@@ -664,54 +664,47 @@ def batch_upload(re, file_path, batch_size, func, start, end):
     """
     uploaded_number = 0
     try:
-        # TODO:     total_line_size = len(f.readlines())
-        #   File "/home/weiwu/.virtualenvs/graph/lib/python3.6/codecs.py", line 321, in decode
-        #     (result, consumed) = self._buffer_decode(data, self.errors, final)
         # UnicodeDecodeError: 'utf-8' codec can't decode byte 0xe5 in position 7629: invalid continuation byte
 
-        with open(file_path, 'r') as f:
-            total_line_size = len(f.readlines())
         with open(file_path, 'rb') as f:
-            try:
-                for i, line in enumerate(tqdm(f)):
-                    if i >= start and i <= end:
-                        print("line #: %s/%s" % (i, total_line_size))
-                        line = line.decode('utf-8')
+            for i, line in enumerate(tqdm(f)):
+                line_start_position = 0
+                line_end_position = len(line)
+                # try to process the whole line in a wile loop until it's done
+                while True:
+                    if i < start:
+                        break
+
+            #                 elif i <= end:
+                    try:
+                        test_string = line[line_start_position:].decode('utf-8')
+                        line_size = len(re.findall(test_string))
+
+                    except UnicodeDecodeError as e:
+                        line_end_position = e.start
+                        ylog.debug('start at %s' % line_end_position)
+                    finally:
+                        string = line[line_start_position:
+                                      line_end_position].decode('utf-8')
+                        line_size = len(re.findall(string))
                         try:
-                            last_span = re.search(line).span()[0]
+                            last_span = re.search(string).span()[0]
                         except AttributeError:
-                            continue
-                        line_size = len(re.findall(line))
-                        for _ in tqdm(range(0, line_size, batch_size)):
+                            break
+                        line_size = len(re.findall(string))
+                        for _ in range(0, line_size, batch_size):
                             # pause if find a file naed pause at the currend dir
-                            while os.path.isfile('pause'):
-                                time.sleep(100)
-                                print("pause for 100 second")
                             re_batch = {}
                             for j in range(batch_size):
-                                re_batch[j] = re.search(line, last_span)
+                                re_batch[j] = re.search(string, last_span)
                                 if re_batch[j] is not None:
                                     last_span = re_batch[j].span()[1]
-                            uploaded_counter = func(re_batch)
-                            uploaded_number += uploaded_counter
-                    elif i > end:
-                        break
-            except UnicodeDecodeError as e:
-                last_span = e.start + 10
-                line = line[last_span:].decode('utf-8')
-                try:
-                    last_span = re.search(line).span()[0]
-                    line_size = len(re.findall(line))
-                    for _ in tqdm(range(0, line_size, batch_size)):
-                        # pause if find a file naed pause at the currend dir
-                        re_batch = {}
-                        for j in range(batch_size):
-                            re_batch[j] = re.search(line, last_span)
-                            if re_batch[j] is not None:
-                                last_span = re_batch[j].span()[1]
-                except AttributeError:
-                    pass
-
+                            uploaded_count = func(re_batch)
+                            uploaded_number += uploaded_count
+                        line_end_position = len(line)
+                        line_start_position = line_end_position + 10
+                else:
+                    break
     except KeyboardInterrupt:
         print("uploaded number: %s" % uploaded_number)
         try:

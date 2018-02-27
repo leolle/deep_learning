@@ -1,24 +1,10 @@
 # -*- coding: utf-8 -*-
-import time
-import re
 from lib.gftTools import gftIO
-from lib.gftTools.proto import graphUpload_pb2
-from tqdm import tqdm
-import random
 from ylib import ylog
 import logging
-import os, sys
-import hashlib
-from google.protobuf.message import EncodeError
-from urllib.error import HTTPError
-from lib.gftTools.gftIO import GSError
-from pymongo import MongoClient
+import os
 from google.protobuf.message import DecodeError
-from hanziconv import HanziConv
-import json
 import logging
-# from gensim.parsing import preprocessing
-from gensim import utils
 from preprocessing import preprocess_string
 from preprocessing import strip_numeric, remove_stopwords, strip_punctuation, tokenize
 user_path = os.path.expanduser("~")
@@ -30,13 +16,17 @@ prod_url = 'http://q.gftchina.com:13567'
 test_user_name = 'wuwei'
 test_pwd = 'gft'
 
+logging.basicConfig(
+    format='%(asctime)s : %(levelname)s : %(message)s', level=logging.INFO)
+
 
 def extract_pages(ls_pageid, gs_call):
     from tempfile import gettempdir
     tmp_dir = gettempdir()
     output = open(tmp_dir + '/test.txt', 'w')
+    logging.info("extract pages")
     for page_id in ls_pageid:
-        ylog.debug(page_id)
+        logging.info(page_id)
         try:
             text = gs_call.get_nodes_binary_data([page_id])
         except DecodeError:
@@ -49,9 +39,9 @@ def extract_pages(ls_pageid, gs_call):
 
 
 if __name__ == '__main__':
-    ylog.set_level(logging.DEBUG)
-    ylog.console_on()
-    ylog.filelog_on("wiki_upload")
+    # ylog.set_level(logging.DEBUG)
+    # ylog.console_on()
+    # ylog.filelog_on("wiki_upload")
     gs_call = gftIO.GSCall(prod_url, test_user_name, test_pwd)
     cat_path = user_path + '/share/deep_learning/data/GID/cat.txt'
     page_path = user_path + "/share/deep_learning/data/GID/page.txt"
