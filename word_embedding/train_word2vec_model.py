@@ -257,7 +257,6 @@ def find_category_page(cat_path):
 
 
 def extract_pages(ls_pageid):
-    str_paragraph = u''
     from tempfile import gettempdir
     tmp_dir = gettempdir()
     # output_path = sys.argv[2]

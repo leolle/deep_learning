@@ -58,19 +58,19 @@ if __name__ == '__main__':
     #     start_cat = 0
     #     start_page = 0
     #     start_edge = 0
-    # category_path = "./data/zhwiki-latest-category.zhs.sql"
-    # # open category sql file
-    # wiki_category_re = re.compile(
-    #     "\(([0-9]+),('[^,]+'),([0-9]+),([0-9]+),([0-9]+)\)")
-    # print("uploading wiki categories")
-    # uploaded_number = batch_upload(
-    #     wiki_category_re,
-    #     category_path,
-    #     batch_size,
-    #     upload_cat_node,
-    #     start=start_cat,
-    #     end=68)
-    # print("uploaded number: %s" % (uploaded_number))
+    category_path = "./data/zhwiki-latest-category.zhs.sql"
+    # open category sql file
+    wiki_category_re = re.compile(
+        "\(([0-9]+),('[^,]+'),([0-9]+),([0-9]+),([0-9]+)\)")
+    print("uploading wiki categories")
+    uploaded_number = batch_upload(
+        wiki_category_re,
+        category_path,
+        batch_size,
+        upload_cat_node,
+        start=0,
+        end=68)
+    print("uploaded number: %s" % (uploaded_number))
 
     # upload edge
 

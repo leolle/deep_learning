@@ -42,12 +42,12 @@ def skill_result_2_graph(resp_run_node_action):
 
 # test fetch graph
 test_url = 'http://192.168.1.166:9080'
-# prod_url = 'http://q.gftchina.com:13567/vqservice/vq/'
+prod_url = 'http://q.gftchina.com:13567'
 test_user_name = 'wuwei'
 test_pwd = 'gft'
-gs_call = gftIO.GSCall(test_url, test_user_name, test_pwd)
-gftIO.test_skill_2_graph('D81A370D094AAAC4A018AFBE409A645A', gs_call)
-# graph = gs_call.get_graph_from_neo4j('D81A370D094AAAC4A018AFBE409A645A')
+gs_call = gftIO.GSCall(prod_url, test_user_name, test_pwd)
+gftIO.test_skill_2_graph('932D3E7CF48B1481BCEEB25448A39DF7', gs_call)
+graph = gs_call.get_graph_from_neo4j('932D3E7CF48B1481BCEEB25448A39DF7')
 # graph_message = graphUpload_pb2.Graph()
 # # edges = graph.graphs[0].graph
 # nodes = {}

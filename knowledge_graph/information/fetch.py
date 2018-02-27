@@ -26,33 +26,33 @@ user_path = os.path.expanduser("~")
 # ylog.debug(page_gid)
 # test fetch graph
 test_url = 'http://192.168.1.166:9080'
+prod_url = 'http://q.gftchina.com:13567'
 test_user_name = 'wuwei'
 test_pwd = 'gft'
 
 
-def extract_pages(gid):
-    str_paragraph = u''
+def extract_pages(ls_pageid, gs_call):
     from tempfile import gettempdir
     tmp_dir = gettempdir()
-    # output_path = sys.argv[2]
     output = open(tmp_dir + '/test.txt', 'w')
-    try:
-        text = gs_call.get_nodes_binary_data([gid])
-    except DecodeError:
-        return
-    page = text.entries[0].data.data.decode('utf-8')
-    text = preprocess_string(page)
-    # ylog.debug(text)
-    output.write(text + '\n')
-    # print text
-    return text
+    for page_id in ls_pageid:
+        ylog.debug(page_id)
+        try:
+            text = gs_call.get_nodes_binary_data([page_id])
+        except DecodeError:
+            continue
+        page = text.entries[0].data.data.decode('utf-8')
+        text = preprocess_string(page)
+        # ylog.debug(text)
+        output.write(text + '\n')
+    output.close()
 
 
-gs_call = gftIO.GSCall(test_url, test_user_name, test_pwd)
 if __name__ == '__main__':
     ylog.set_level(logging.DEBUG)
     ylog.console_on()
     ylog.filelog_on("wiki_upload")
+    gs_call = gftIO.GSCall(prod_url, test_user_name, test_pwd)
     cat_path = user_path + '/share/deep_learning/data/GID/cat.txt'
     page_path = user_path + "/share/deep_learning/data/GID/page.txt"
     page_gid_file = open(page_path)
@@ -60,4 +60,4 @@ if __name__ == '__main__':
     page_gid = [s.strip() for s in lines]
     for gid in page_gid:
         ylog.debug(gid)
-        extract_pages(gid)
+        extract_pages(gid, gs_call)

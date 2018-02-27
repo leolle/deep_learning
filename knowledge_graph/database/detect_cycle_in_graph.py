@@ -22,6 +22,7 @@ from lib.gftTools.gftIO import GSError
 from google.protobuf.message import DecodeError
 from http.client import RemoteDisconnected
 import networkx as nx
+from collections import defaultdict
 
 ylog.set_level(logging.DEBUG)
 ylog.console_on()
@@ -94,9 +95,9 @@ else:
 wiki_category_link_re = re.compile(
     "\(([0-9]+),('[^,]+'),('[^']+'),('\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}'),('[^']*'),('[^,]+'),('[^,]+')\)"
 )
+category_path = user_path + \
+        '/share/deep_learning/data/zhwiki_cat_pg_lk/zhwiki-latest-category.sql'
 graph = nx.DiGraph()
-
-from collections import defaultdict
 
 
 class Graph():
@@ -154,16 +155,25 @@ def add_edge(dict_re_match_object):
                 g.addEdge(cat_title, subcat_title)
 
 
-#                g.addEdge(cat_title, subcat_title)
-# if cat_title in EXAMPLE_CATEGORIES:
+def add_node(dict_re_match_object):
+    """ upload node created from regular expression matched object.
+    (6,'深圳证券交易所上市公司',13,0,0)
+    Keyword Arguments:
+    re_match_object -- re object
+    """
+    # iterate nodes batch
+    for index, value in dict_re_match_object.items():
+        if value is not None:
+            item = dict_re_match_object.get(index)
+            graph.add_node(item.group(2)[1:-1])
 
 
-def batch_upload(re, file_path, batch_size, func, start, end):
+def batch_upload(re, file_path, BATCH_SIZE, func, start, end):
     """batch upload categories or page
     Keyword Arguments:
     re         -- regular expression
     source     -- file path
-    batch_size --
+    BATCH_SIZE --
     func       -- upload function
     start      -- start position
     end        -- end position
@@ -199,10 +209,10 @@ def batch_upload(re, file_path, batch_size, func, start, end):
                     except AttributeError:
                         break
                     line_size = len(re.findall(string))
-                    for _ in range(0, line_size, batch_size):
+                    for _ in range(0, line_size, BATCH_SIZE):
                         # pause if find a file naed pause at the currend dir
                         re_batch = {}
-                        for j in range(batch_size):
+                        for j in range(BATCH_SIZE):
                             re_batch[j] = re.search(string, last_span)
                             if re_batch[j] is not None:
                                 last_span = re_batch[j].span()[1]
@@ -233,6 +243,12 @@ def write_graph(graph):
         pickle.dump(ls_edges, fp)
     return ls_edges
 
+
+wiki_category_re = re.compile(
+    "\(([0-9]+),('[^,]+'),([0-9]+),([0-9]+),([0-9]+)\)")
+
+batch_upload(
+    wiki_category_re, category_path, 200, add_node, start=0, end=10000000)
 
 # batch_upload(
 #     wiki_category_link_re,
@@ -374,7 +390,7 @@ def upload_edge(ls_edges):
     len_edges = len(ls_edges)
     uploaded_number = 0
     batch_counter = 0
-    for edge_counter in tqdm(range(0, len_edges, batch_size)):
+    for edge_counter in tqdm(range(0, len_edges, BATCH_SIZE)):
 
         res = None
         error = None
@@ -383,7 +399,7 @@ def upload_edge(ls_edges):
         while res is None:
             try:
                 graph_upload_request = graphUpload_pb2.GraphUploadRequest()
-                for e in ls_edges[batch_counter:batch_counter + batch_size]:
+                for e in ls_edges[batch_counter:batch_counter + BATCH_SIZE]:
                     node_from = e[0]
                     node_to = e[1]
                     edge_type = e[2]
@@ -452,7 +468,7 @@ def upload_edge(ls_edges):
                         "end node: %s" % err.edge.endNodeID.primaryKeyInDomain)
         except:
             pass
-        batch_counter += batch_size
+        batch_counter += BATCH_SIZE
 
     return uploaded_number
 
