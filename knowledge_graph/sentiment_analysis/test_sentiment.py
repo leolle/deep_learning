@@ -28,21 +28,97 @@ engine = create_engine(
 # # Get Table
 # ex_table = metadata.tables['C_RR_ResearchReport']
 # print(ex_table)
-df_analysis = pd.DataFrame()
-df_research = pd.read_sql(
-    "SELECT * FROM JYDB.C_RR_ResearchReport order by InfoPublDate desc limit 1;",
-    engine)
-for item in df_research.iterrows():
-    print(item[0])
-    #  print(item[1]['Conclusion'])
-    title = item[1]['Title']
+dates = pd.date_range('2/1/2018', periods=20)
+df_analysis = pd.DataFrame(columns=['datetime', 'text', 'score'])
 
-    text = item[1]['Conclusion']
-    res = client.lexer(text)
-    tag = client.commentTag(text)
-    # 文章标签
-    keyword = client.keyword(title, text)
-    # 文本分类
-    topic = client.topic(title, text)
-    # 情感倾向分析
-    sentiment = client.sentimentClassify(text)
+# df_research_articles = pd.read_sql(
+#     "SELECT * FROM JYDB.C_RR_ResearchReport where InfoPublDate == '''2018-02-01 00:00:00''' order by InfoPublDate desc limit 1;",
+#     engine)
+# for item in df_research_articles.iterrows():
+#     print(item[0])
+#     #  print(item[1]['Conclusion'])
+#     title = item[1]['Title']
+
+#     text = item[1]['Conclusion']
+#     res = client.lexer(text)
+#     tag = client.commentTag(text)
+#     # 文章标签
+#     keyword = client.keyword(title, text)
+#     # 文本分类
+#     topic = client.topic(title, text)
+#     # 情感倾向分析
+#     sentiment = client.sentimentClassify(text)
+#     datetime = item[1]['InfoPublDate']
+#     if text:
+#         try:
+#             score = sentiment['items'][0]['sentiment']
+#         except KeyError:
+#             s = SnowNLP(text)
+#             score = s.sentiments * 2
+#         #   continue
+#         df_analysis = df_analysis.append(
+#             {
+#                 'datetime': datetime,
+#                 'score': score,
+#                 'text': text
+#             },
+#             ignore_index=True)
+
+
+def analyze_sentiment(df_research_articles):
+    """
+    Keyword Arguments:
+    df_research_articles --
+    """
+    df_sentiment = pd.DataFrame(columns=['datetime', 'text', 'score'])
+    for item in df_research_articles.iterrows():
+        print(item[0])
+        #  print(item[1]['Conclusion'])
+        title = item[1]['Title']
+
+        text = item[1]['Conclusion']
+        res = client.lexer(text)
+        tag = client.commentTag(text)
+        # 文章标签
+        keyword = client.keyword(title, text)
+        # 文本分类
+        topic = client.topic(title, text)
+        # 情感倾向分析
+        sentiment = client.sentimentClassify(text)
+        datetime = item[1]['InfoPublDate']
+        if text:
+            try:
+                score = sentiment['items'][0]['sentiment']
+            except KeyError:
+                s = SnowNLP(text)
+                score = s.sentiments * 2
+            #   continue
+            df_sentiment = df_sentiment.append(
+                {
+                    'datetime': datetime,
+                    'score': score,
+                    'text': text
+                },
+                ignore_index=True)
+    return df_sentiment
+
+
+def retrieve_articles(datetime, limit):
+    """ retrieve articles from mysql database
+    Keyword Arguments:
+    datetime --
+    limit    --
+
+    Return:
+    dataframe
+    """
+    sql_syntax = "SELECT * FROM JYDB.C_RR_ResearchReport where InfoPublDate >= '''%s''' order by InfoPublDate desc limit %s;" % (
+        str(datetime), limit)
+    df_research_articles = pd.read_sql(sql_syntax, engine)
+    return df_research_articles
+
+
+for dt in dates:
+    df_articles = retrieve_articles(dt, 5)
+    df = analyze_sentiment(df_articles)
+    df_analysis = df_analysis.append(df, ignore_index=True)

@@ -63,15 +63,15 @@ if __name__ == '__main__':
     # open category sql file
     wiki_category_re = re.compile(
         "\(([0-9]+),('[^,]+'),([0-9]+),([0-9]+),([0-9]+)\)")
-    print("uploading wiki categories")
-    uploaded_number = batch_upload(
-        wiki_category_re,
-        category_path,
-        batch_size,
-        upload_cat_node,
-        start=0,
-        end=608)
-    print("uploaded number: %s" % (uploaded_number))
+    # print("uploading wiki categories")
+    # uploaded_number = batch_upload(
+    #     wiki_category_re,
+    #     category_path,
+    #     batch_size,
+    #     upload_cat_node,
+    #     start=0,
+    #     end=608)
+    # print("uploaded number: %s" % (uploaded_number))
 
     # upload edge
 

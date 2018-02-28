@@ -9,7 +9,7 @@ import pickle
 import os, sys
 import hashlib
 from google.protobuf.message import EncodeError
-from urllib.error import HTTPError
+from urllib.error import HTTPError, URLError
 from lib.gftTools.gftIO import GSError
 from google.protobuf.message import DecodeError
 from hanziconv import HanziConv
@@ -51,7 +51,8 @@ else:
 MAX_RETRIES = 10
 NODES_FAIL_MAX_RETRIES = 3
 # Always retry when these exceptions are raised.
-RETRIABLE_EXCEPTIONS = (HTTPError, ConnectionResetError, RemoteDisconnected)
+RETRIABLE_EXCEPTIONS = (HTTPError, ConnectionResetError, RemoteDisconnected,
+                        ConnectionRefusedError, URLError)
 GRAPH_EXCEPTIONS = (EncodeError, DecodeError)
 # Always retry when an apiclient.errors.HttpError with one of these status
 # codes is raised.
