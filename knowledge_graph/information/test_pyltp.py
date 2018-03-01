@@ -6,6 +6,7 @@ from preprocessing import strip_numeric
 from preprocessing import remove_stopwords
 from preprocessing import strip_punctuation
 from preprocessing import tokenize
+from collections import defaultdict
 from timeit import default_timer
 import os
 
@@ -51,6 +52,10 @@ recognizer.load(ner_model_path)  # 加载模型
 netags = recognizer.recognize(words, postags)  # 命名实体识别
 
 #print('\t'.join(netags))
+dict_netags = defaultdict(list)
+ls_netags = list(zip(netags, words))
+for x, y in ls_netags:
+    dict_netags[x].append(y)
 print(list(zip(words, netags)))
 recognizer.release()  # 释放模型
 

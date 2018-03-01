@@ -12,6 +12,37 @@ from ylib import ylog
 from requests.exceptions import ConnectionError, ChunkedEncodingError
 from snownlp import SnowNLP
 import logging
+from pyltp import SentenceSplitter
+from ylib.preprocessing import preprocess_string
+from ylib.preprocessing import strip_numeric
+from ylib.preprocessing import remove_stopwords
+from ylib.preprocessing import strip_punctuation
+from ylib.preprocessing import tokenize
+from collections import defaultdict
+from timeit import default_timer
+import os
+from pyltp import Segmentor
+from pyltp import Postagger
+from pyltp import NamedEntityRecognizer
+import itertools
+import matplotlib.pyplot as plt
+
+filter_setting = [tokenize, strip_punctuation]
+
+LTP_DATA_DIR = '/home/weiwu/share/software/ltp_data_v3.4.0'  # ltp模型目录的路径
+
+# 词性标注
+pos_model_path = os.path.join(LTP_DATA_DIR,
+                              'pos.model')  # 词性标注模型路径，模型名称为`pos.model`
+postagger = Postagger()  # 初始化实例
+postagger.load(pos_model_path)  # 加载模型
+
+# 命名实体识别
+ner_model_path = os.path.join(LTP_DATA_DIR,
+                              'ner.model')  # 命名实体识别模型路径，模型名称为`pos.model`
+
+recognizer = NamedEntityRecognizer()  # 初始化实例
+recognizer.load(ner_model_path)  # 加载模型
 
 # """ 你的 APPID AK SK """
 APP_ID = '10850025'
@@ -32,9 +63,6 @@ logging.basicConfig(
 # # Get Table
 # ex_table = metadata.tables['C_RR_ResearchReport']
 # print(ex_table)
-dates = pd.date_range('2/1/2018', periods=2)
-df_analysis = pd.DataFrame(
-    columns=['datetime', 'text', 'keyword', 'summary', 'score'])
 
 # df_research_articles = pd.read_sql(
 #     "SELECT * FROM JYDB.C_RR_ResearchReport where InfoPublDate == '''2018-02-01 00:00:00''' order by InfoPublDate desc limit 1;",
@@ -76,11 +104,12 @@ def analyze_sentiment(df_research_articles):
     df_research_articles --
     """
     df_result = pd.DataFrame(
-        columns=['datetime', 'text', 'keyword', 'summary', 'score'])
+        columns=['datetime', 'text', 'entity', 'keyword', 'summary', 'score'])
     for item in df_research_articles.iterrows():
-        logging.info(item[0])
         #  print(item[1]['Conclusion'])
         title = item[1]['Title']
+        logging.info(item[0])
+        logging.info(title)
 
         text = item[1]['Conclusion']
         #res = client.lexer(text)
@@ -93,13 +122,33 @@ def analyze_sentiment(df_research_articles):
         # sentiment = client.sentimentClassify(text)
         datetime = item[1]['InfoPublDate']
         if text:
+            text_split = preprocess_string(text, filter_setting)
+            # 词性标注
+            #            postagger = Postagger()  # 初始化实例
+
+            words = text_split.split()  # 分词结果
+            postags = postagger.postag(words)  # 词性标注
+
+            # 命名实体识别
+
+            #            recognizer = NamedEntityRecognizer()  # 初始化实例
+
+            netags = recognizer.recognize(words, postags)  # 命名实体识别
+
+            dict_netags = defaultdict(list)
+            ls_netags = list(zip(netags, words))
+            for x, y in ls_netags:
+                dict_netags[x].append(y)
+
             s = SnowNLP(text)
             score = s.sentiments * 2
             #   continue
+            ls_entity = [dict_netags[x] for x in ['B-Ni', 'E-Ni', 'I-Ni']]
             df_result = df_result.append(
                 {
                     'datetime': datetime,
                     'keyword': ','.join(s.keywords()),
+                    'entity': list(itertools.chain.from_iterable(ls_entity)),
                     'summary': ';'.join(s.summary()),
                     'score': score,
                     'text': text
@@ -118,17 +167,59 @@ def retrieve_articles(datetime, limit):
     dataframe
     """
     sql_syntax = '''SELECT * FROM JYDB.C_RR_ResearchReport where WritingDate = "%s" limit %s;''' % (
-        dt.date().strftime("%Y-%m-%d"), limit)
+        datetime.date().strftime("%Y-%m-%d"), limit)
     df_research_articles = pd.read_sql(sql_syntax, engine)
     return df_research_articles
 
 
+dates = pd.date_range('1/1/2018', periods=4)
+df_analysis = pd.DataFrame(
+    columns=['datetime', 'text', 'entity', 'keyword', 'summary', 'score'])
+
+# for dt in dates:
+#     logging.info(dt)
+#     df_articles = retrieve_articles(dt, 2)
+#     df = analyze_sentiment(df_articles)
+#     df_analysis = df_analysis.append(df, ignore_index=True)
+
+# df_sentiment = df_analysis[['datetime', 'score']].groupby('datetime').mean()
+# df_sentiment['count'] = df_analysis[['datetime',
+#                                      'score']].groupby('datetime').count()
+
+# index = pd.read_csv(
+#     '~/share/deep_learning/data/sentiment/shangzheng_index.csv',
+#     usecols=['tradeDate', 'closeindex'],
+#     encoding="ISO-8859-1")
+# index = index.set_index(pd.DatetimeIndex(index['tradeDate'])).drop(
+#     'tradeDate', axis=1)
+# index = index[index.closeindex != 0]
+# index_ret = index.pct_change()
+# # index_ret['sentiment'] = df_sentiment.pct_change()
+# print(index_ret)
+
+index = pd.read_csv(
+    '~/share/deep_learning/data/sentiment/shangzheng.csv',
+    usecols=['datetime', 'return'],
+    encoding="ISO-8859-1")
+index_ret = index[index < -1.0].dropna()
+index_ret = index_ret.set_index(pd.DatetimeIndex(index_ret['datetime'])).drop(
+    'datetime', axis=1)
+dates = index_ret.index
+
 for dt in dates:
     logging.info(dt)
-    df_articles = retrieve_articles(dt, 5)
+    df_articles = retrieve_articles(dt, 9999)
     df = analyze_sentiment(df_articles)
     df_analysis = df_analysis.append(df, ignore_index=True)
-
-# sql_syntax = '''SELECT * FROM JYDB.C_RR_ResearchReport where WritingDate = "2018-02-02" limit 5;'''
-# df_research_articles = pd.read_sql(sql_syntax, engine)
-# print(df_research_articles)
+    pre_dt = dt - pd.DateOffset(days=1)
+    if pre_dt not in dates:
+        logging.info(pre_dt)
+        df_articles = retrieve_articles(pre_dt, 9999)
+        df = analyze_sentiment(df_articles)
+        df_analysis = df_analysis.append(df, ignore_index=True)
+df_sentiment = df_analysis[['datetime', 'score']].groupby('datetime').mean()
+df_sentiment['count'] = df_analysis[['datetime',
+                                     'score']].groupby('datetime').count()
+# 释放模型
+postagger.release()
+recognizer.release()
