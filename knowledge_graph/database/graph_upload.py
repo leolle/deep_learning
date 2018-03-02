@@ -51,7 +51,7 @@ else:
 MAX_RETRIES = 10
 NODES_FAIL_MAX_RETRIES = 3
 # Always retry when these exceptions are raised.
-RETRIABLE_EXCEPTIONS = (HTTPError, ConnectionResetError, RemoteDisconnected,
+RETRIABLE_EXCEPTIONS = (ConnectionResetError, RemoteDisconnected,
                         ConnectionRefusedError, URLError)
 GRAPH_EXCEPTIONS = (EncodeError, DecodeError)
 # Always retry when an apiclient.errors.HttpError with one of these status
@@ -301,7 +301,9 @@ def upload_edge(dict_re_match_object):
             res = None
             if retry > MAX_RETRIES:
                 ylog.debug(res)
-                exit("no loger attempting to retry.")
+                ylog.debug("no loger attempting to retry.")
+                error = None
+                # exit("no loger attempting to retry.")
             max_sleep = 2**retry
             sleep_seconds = random.random() * max_sleep
             print('Sleeping %f seconds and then retrying...' % sleep_seconds)
@@ -403,7 +405,9 @@ def upload_edge_from_graph(ls_edges, batch_size):
                 res = None
                 if retry > MAX_RETRIES:
                     ylog.debug(res)
-                    exit("no loger attempting to retry.")
+                    # exit("no loger attempting to retry.")
+                    ylog.debug("no loger attempting to retry.")
+                    error = None
                 max_sleep = 2**retry
                 sleep_seconds = random.random() * max_sleep
                 print(

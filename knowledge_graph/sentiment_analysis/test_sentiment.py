@@ -144,16 +144,20 @@ def analyze_sentiment(df_research_articles):
             score = s.sentiments * 2
             #   continue
             ls_entity = [dict_netags[x] for x in ['B-Ni', 'E-Ni', 'I-Ni']]
-            df_result = df_result.append(
-                {
-                    'datetime': datetime,
-                    'keyword': ','.join(s.keywords()),
-                    'entity': list(itertools.chain.from_iterable(ls_entity)),
-                    'summary': ';'.join(s.summary()),
-                    'score': score,
-                    'text': text
-                },
-                ignore_index=True)
+            try:
+                df_result = df_result.append(
+                    {
+                        'datetime': datetime,
+                        'keyword': ','.join(s.keywords()),
+                        'entity':
+                        list(itertools.chain.from_iterable(ls_entity)),
+                        'summary': ';'.join(s.summary()),
+                        'score': score,
+                        'text': text
+                    },
+                    ignore_index=True)
+            except:
+                continue
     return df_result
 
 
@@ -201,12 +205,13 @@ index = pd.read_csv(
     '~/share/deep_learning/data/sentiment/shangzheng.csv',
     usecols=['datetime', 'return'],
     encoding="ISO-8859-1")
+index = index.set_index('datetime')
 index_ret = index[index < -1.0].dropna()
 index_ret = index_ret.set_index(pd.DatetimeIndex(index_ret['datetime'])).drop(
     'datetime', axis=1)
 dates = index_ret.index
 
-for dt in dates:
+for dt in dates[int(dates.get_loc('2015-07-03')):]:
     logging.info(dt)
     df_articles = retrieve_articles(dt, 9999)
     df = analyze_sentiment(df_articles)
