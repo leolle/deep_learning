@@ -23,3 +23,4 @@ while i < depth:
     base_nodes = copy.copy(end_nodes)
     end_nodes = []
     i += 1
+nx.write_gexf(graph, "random.gexf")
