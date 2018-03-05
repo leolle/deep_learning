@@ -26,10 +26,12 @@ from pyltp import Postagger
 from pyltp import NamedEntityRecognizer
 import itertools
 import matplotlib.pyplot as plt
+from tqdm import tqdm
 
 filter_setting = [tokenize, strip_punctuation]
+user_path = os.path.expanduser("~")
 
-LTP_DATA_DIR = '/home/weiwu/share/software/ltp_data_v3.4.0'  # ltp模型目录的路径
+LTP_DATA_DIR = user_path + '/share/software/ltp_data_v3.4.0'  # ltp模型目录的路径
 
 # 词性标注
 pos_model_path = os.path.join(LTP_DATA_DIR,
@@ -104,7 +106,7 @@ def analyze_sentiment(df_research_articles):
     df_research_articles --
     """
     df_result = pd.DataFrame(
-        columns=['datetime', 'text', 'entity', 'keyword', 'summary', 'score'])
+        columns=['datetime', 'entity', 'keyword', 'summary', 'score'])
     for item in df_research_articles.iterrows():
         #  print(item[1]['Conclusion'])
         title = item[1]['Title']
@@ -152,8 +154,8 @@ def analyze_sentiment(df_research_articles):
                         'entity':
                         list(itertools.chain.from_iterable(ls_entity)),
                         'summary': ';'.join(s.summary()),
-                        'score': score,
-                        'text': text
+                        'score': score
+                        # 'text': text,
                     },
                     ignore_index=True)
             except:
@@ -178,7 +180,7 @@ def retrieve_articles(datetime, limit):
 
 dates = pd.date_range('1/1/2018', periods=4)
 df_analysis = pd.DataFrame(
-    columns=['datetime', 'text', 'entity', 'keyword', 'summary', 'score'])
+    columns=['datetime', 'entity', 'keyword', 'summary', 'score'])
 
 # for dt in dates:
 #     logging.info(dt)
@@ -202,16 +204,15 @@ df_analysis = pd.DataFrame(
 # print(index_ret)
 
 index = pd.read_csv(
-    '~/share/deep_learning/data/sentiment/shangzheng.csv',
+    user_path + '/share/deep_learning/data/sentiment/shangzheng.csv',
     usecols=['datetime', 'return'],
     encoding="ISO-8859-1")
 index = index.set_index('datetime')
-index_ret = index[index < -1.0].dropna()
-index_ret = index_ret.set_index(pd.DatetimeIndex(index_ret['datetime'])).drop(
-    'datetime', axis=1)
+# index_ret = index[index < -1.0].dropna()
+index_ret = index.set_index(pd.DatetimeIndex(index.index))
 dates = index_ret.index
 
-for dt in dates[int(dates.get_loc('2015-07-03')):]:
+for dt in tqdm(dates):
     logging.info(dt)
     df_articles = retrieve_articles(dt, 9999)
     df = analyze_sentiment(df_articles)
@@ -225,6 +226,14 @@ for dt in dates[int(dates.get_loc('2015-07-03')):]:
 df_sentiment = df_analysis[['datetime', 'score']].groupby('datetime').mean()
 df_sentiment['count'] = df_analysis[['datetime',
                                      'score']].groupby('datetime').count()
+df_sentiment.to_csv('sentiment.csv')
 # 释放模型
 postagger.release()
 recognizer.release()
+# df_sentiment.loc['2017-12']['score'].plot(legend=True)
+# df_sentiment.loc['2017-12']['return'].plot(kind='bar')
+# df_sentiment.ix['2017-12']['count'].plot(
+#     secondary_y=True, style='g', legend=True)
+
+# df_sentiment['score'].rolling(20).mean().plot()
+# df_sentiment['return'].plot(secondary_y=True)

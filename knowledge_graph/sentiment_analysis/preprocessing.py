@@ -162,7 +162,7 @@ def tokenize(s):
     return " ".join(w for w in tokens_generator)
 
 
-stopwords = codecs.open('stopwords', 'r', 'utf-8').read().split()
+# stopwords = codecs.open('stopwords', 'r', 'utf-8').read().split()
 
 # process_count = multiprocessing.cpu_count()
 
