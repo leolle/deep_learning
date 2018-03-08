@@ -102,6 +102,7 @@ logging.basicConfig(
 
 def analyze_sentiment(df_research_articles):
     """
+    natural language processing on every row from the input.
     Keyword Arguments:
     df_research_articles --
     """
@@ -163,7 +164,7 @@ def analyze_sentiment(df_research_articles):
     return df_result
 
 
-def retrieve_articles(datetime, limit):
+def retrieve_data(datetime, limit):
     """ retrieve articles from mysql database
     Keyword Arguments:
     datetime --
@@ -214,19 +215,20 @@ dates = index_ret.index
 
 for dt in tqdm(dates):
     logging.info(dt)
-    df_articles = retrieve_articles(dt, 9999)
+    df_articles = retrieve_data(dt, 9999)
     df = analyze_sentiment(df_articles)
     df_analysis = df_analysis.append(df, ignore_index=True)
     pre_dt = dt - pd.DateOffset(days=1)
     if pre_dt not in dates:
         logging.info(pre_dt)
-        df_articles = retrieve_articles(pre_dt, 9999)
+        df_articles = retrieve_data(pre_dt, 9999)
         df = analyze_sentiment(df_articles)
         df_analysis = df_analysis.append(df, ignore_index=True)
 df_sentiment = df_analysis[['datetime', 'score']].groupby('datetime').mean()
 df_sentiment['count'] = df_analysis[['datetime',
                                      'score']].groupby('datetime').count()
 df_sentiment.to_csv('sentiment.csv')
+df_analysis.to_csv('article_summary.csv')
 # 释放模型
 postagger.release()
 recognizer.release()

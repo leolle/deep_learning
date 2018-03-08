@@ -21,6 +21,9 @@ logging.basicConfig(
 
 
 def extract_pages(ls_pageid, gs_call):
+    """ Extract nodes read only documents from input list of gid,
+    preprocess text, remove punctuation, remove stopwords, tokenize.
+    """
     from tempfile import gettempdir
     tmp_dir = gettempdir()
     output = open(tmp_dir + '/test.txt', 'w')
