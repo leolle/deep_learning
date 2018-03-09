@@ -72,33 +72,33 @@ def skill_extraction(skill_gid, key, key_string, target_key, gs_call):
     return ls_extract
 
 
-if __name__ == '__main__':
+# if __name__ == '__main__':
 
-    # ylog.set_level(logging.DEBUG)
-    # ylog.console_on()
-    # ylog.filelog_on("wiki_train")
-    # ylog.info("start")
-    logging.basicConfig(
-        format='%(asctime)s : %(levelname)s : %(message)s', level=logging.INFO)
+# ylog.set_level(logging.DEBUG)
+# ylog.console_on()
+# ylog.filelog_on("wiki_train")
+# ylog.info("start")
+logging.basicConfig(
+    format='%(asctime)s : %(levelname)s : %(message)s', level=logging.INFO)
 
-    begin = time()
-    user_path = os.path.expanduser("~")
-    page_gid = skill_extraction('A0F920E1D1DB9E6EFD378FD1B9200461', '_type',
-                                'readonlyDoc', '_gid', gs_call)
-    output_path = sys.argv[1]
+begin = time()
+user_path = os.path.expanduser("~")
+page_gid = skill_extraction('A0F920E1D1DB9E6EFD378FD1B9200461', '_type',
+                            'readonlyDoc', '_gid', gs_call)
+# output_path = sys.argv[1]
 
-    extract_pages(page_gid, gs_call)
-    logging.info("start training")
-    model = gensim.models.Word2Vec(
-        LineSentence('/tmp/test.txt'),
-        size=200,
-        window=5,
-        min_count=2,
-        workers=multiprocessing.cpu_count())
-    model.wv.save_word2vec_format(
-        complete_dir_path(output_path) + "wiki.w2v_org",
-        complete_dir_path(output_path) + "wiki.vocab",
-        binary=False)
-    end = time()
-    load_duration = end - begin
-    logging.info("Total procesing time: %d seconds" % (end - begin))
+extract_pages(page_gid, gs_call)
+logging.info("start training")
+model = gensim.models.Word2Vec(
+    LineSentence('/tmp/test.txt'),
+    size=200,
+    window=5,
+    min_count=2,
+    workers=multiprocessing.cpu_count())
+# model.wv.save_word2vec_format(
+#     complete_dir_path(output_path) + "wiki.w2v_org",
+#     complete_dir_path(output_path) + "wiki.vocab",
+#     binary=False)
+end = time()
+load_duration = end - begin
+logging.info("Total procesing time: %d seconds" % (end - begin))

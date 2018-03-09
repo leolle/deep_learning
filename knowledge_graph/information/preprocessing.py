@@ -160,10 +160,6 @@ def tokenize(s):
     return " ".join(w for w in tokens_generator)
 
 
-stopwords = codecs.open('stopwords', 'r', 'utf-8').read().split()
-
-# process_count = multiprocessing.cpu_count()
-
 DEFAULT_FILTERS = [
     cut_article, strip_numeric, remove_stopwords, strip_punctuation, tokenize
 ]
