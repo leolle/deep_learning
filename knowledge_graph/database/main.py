@@ -60,34 +60,41 @@ if __name__ == '__main__':
     #     start_edge = 0
     category_path = user_path + \
         '/share/deep_learning/data/zhwiki_cat_pg_lk/zhwiki-latest-category.sql'
+    category_path = './data/zhwiki-latest-category.zhs.sql'
     # open category sql file
     wiki_category_re = re.compile(
         "\(([0-9]+),('[^,]+'),([0-9]+),([0-9]+),([0-9]+)\)")
-    # print("uploading wiki categories")
-    # uploaded_number = batch_upload(
-    #     wiki_category_re,
-    #     category_path,
-    #     batch_size,
-    #     upload_cat_node,
-    #     start=0,
-    #     end=608)
-    # print("uploaded number: %s" % (uploaded_number))
+    print("uploading wiki categories")
+    uploaded_number = batch_upload(
+        wiki_category_re,
+        category_path,
+        batch_size,
+        upload_cat_node,
+        start=0,
+        end=6080000000)
+    print("uploaded number: %s" % (uploaded_number))
 
     # upload edge
 
-    ylog.debug('reading link sql file')
-    with open("graph_no_loop.pkl", 'rb') as fp:
-        itemlist = pickle.load(fp)
+    # ylog.debug('reading link sql file')
+
+    # with open("graph_no_loop.pkl", 'rb') as fp:
+    #     itemlist = pickle.load(fp)
     ylog.debug("uploading wiki categorie page link")
+    category_link_path = './data/zhwiki-latest-categorylinks.zhs.sql'
+    wiki_category_link_re = re.compile(
+        "\(([0-9]+),('[^,]+'),('[^']+'),('\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}'),('[^']*'),('[^,]+'),('[^,]+')\)"
+    )
+
     # for i in tqdm(itemlist[5308253:]):
     #     upload_single_edge(i)
-    uploaded_number = upload_edge_from_graph(itemlist[int(sys.argv[2]):],
-                                             int(sys.argv[1]))
-    # uploaded_number = batch_upload(
-    #     wiki_category_link_re,
-    #     category_link_path,
-    #     batch_size,
-    #     upload_edge,
-    #     start=start_edge,
-    #     end=1503)
+    # uploaded_number = upload_edge_from_graph(itemlist[int(sys.argv[2]):],
+    #                                          int(sys.argv[1]))
+    uploaded_number = batch_upload(
+        wiki_category_link_re,
+        category_link_path,
+        batch_size,
+        upload_edge,
+        start=0,
+        end=15030000)
     print("uploaded number: %s" % (uploaded_number))

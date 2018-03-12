@@ -652,6 +652,113 @@ def upload_cat_node(dict_re_match_object):
     return uploaded_number
 
 
+def upload_node(dict_re_match_object):
+    """ upload regular expression object in the dictionary in a batch.
+    1. get each value from the input dictionary.
+    2. create a graph upload request.
+    3. fill node properties.
+    use encoded original Chinese title plus url as url property.
+    4. if there's any error upload response, retry.
+    5. print upload statistics.
+    Keyword Arguments:
+    re_match_object -- re object
+    """
+    res = None
+    error = None
+    re_upload_error = None
+    retry = 0
+    nodes_fail_retry = 0
+    uploaded_number = 0
+    while res is None:
+        try:
+            graph_upload_request = graphUpload_pb2.GraphUploadRequest()
+            # iterate nodes batch
+            for index, value in dict_re_match_object.items():
+                if value is not None:
+                    item = dict_re_match_object.get(index)
+                    # print(item)
+                    title = item.group()[1:-1]
+                    zh_title = HanziConv.toSimplified(title)
+                    # if zh_title in IGNORE_CATEGORIES:
+                    #     break
+                    node = graph_upload_request.graph.nodes.add()
+                    node.props.type = "OSet"
+                    p1 = node.props.props.entries.add()
+                    p1.key = "url"
+                    p1.value = "https://www.google.com.hk/search?hl=en&source=hp&q=" + quote_plus(
+                        title)
+                    p2 = node.props.props.entries.add()
+                    p2.key = "_s_import_source"
+                    p2.value = "word2vec model"
+
+                    node.businessID.url = "https://www.google.com.hk/search?hl=en&source=hp&q=" + quote_plus(
+                        title)
+                    node.names.chinese = zh_title
+            # other information of the upload request
+            graph_upload_request.uploadTag = "UploadWord2VecVocabNodes"
+            graph_upload_request.nodeAction4Duplication = graphUpload_pb2.Action4Duplication.Value(
+                'UPDATE')
+            graph_upload_request.edgeAction4Duplication = graphUpload_pb2.Action4Duplication.Value(
+                'UPDATE')
+
+            res = gs_call.upload_graph(graph_upload_request)
+
+        except HTTPError as e:
+            if e.code in RETRIABLE_STATUS_CODES:
+                error = 'A retriable HTTP error %d occurred:\n%s' % (e.code,
+                                                                     e.reason)
+            else:
+                raise
+        except RETRIABLE_EXCEPTIONS as e:
+            error = 'A retriable error occurred: %s' % e
+        try:
+            if res.failedNodes:
+                re_upload_error = "some nodes failed to upload %s" % res.failedNodeds
+        except:
+            pass
+        if re_upload_error is not None:
+            print(re_upload_error)
+            nodes_fail_retry += 1
+            res = None
+            if nodes_fail_retry > NODES_FAIL_MAX_RETRIES:
+                ylog.debug(res)
+                res = "continue"
+
+        if error is not None:
+            print(error)
+            retry += 1
+            res = None
+            if retry > MAX_RETRIES:
+                ylog.debug(res)
+                # break
+                # exit("no loger attempting to retry.")
+            ylog.debug(res)
+            max_sleep = 2**retry
+            sleep_seconds = random.random() * max_sleep
+            print('Sleeping %f seconds and then retrying...' % sleep_seconds)
+            time.sleep(sleep_seconds)
+    # ylog.debug(res)
+    # jump out while response is None:
+    try:
+        if res.nodeUpdateResultStatistics:
+            ylog.debug(res.nodeUpdateResultStatistics)
+            uploaded_number = res.nodeUpdateResultStatistics.numOfCreations + \
+                res.nodeUpdateResultStatistics.numOfUpdates + \
+                res.nodeUpdateResultStatistics.numOfSkips
+        if res.uploadedNodes:
+            for updated in res.uploadedNodes:
+                ylog.debug("uploaded node GID: %s" % updated.gid)
+        if res.failedNodes:
+            for err in res.failedNodes:
+                if err.error.errorCode != 202001:
+                    ylog.info(err.error)
+                    ylog.debug(err.error)
+    except:
+        pass
+
+    return uploaded_number
+
+
 def batch_upload(re, file_path, batch_size, func, start, end):
     """batch upload categories or edge.
     1. read sql file line by line.
