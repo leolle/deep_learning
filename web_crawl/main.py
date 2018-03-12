@@ -1,15 +1,17 @@
 # -*- coding: utf-8 -*-
+from google_search.magic_google import MagicGoogle as GoogleSearch
+from google_news.news import MagicGoogle_News as GoogleNews
+from xueqiu import Xueqiu
+new_kw = '创业板'
 
-import MagicGoogle
-from MagicGoogle import MagicGoogle
-from Xueqiu.Xueqiu import Xueqiu
-new_kw = '李小璐'
+gs = GoogleSearch()
+# data = gs.gain_data(query=new_kw, language='en', nums=100)
 
-# mg = MagicGoogle()
-# data = mg.gain_data(query=new_kw, language='en', nums=100)
+gn = GoogleNews()
+data = gn.gain_data(query=new_kw, language='en', nums=100)
 
-mg = Xueqiu()
-infos = mg.gain_data(query='创业板 2018-03-11', nums=260)
+# mg = Xueqiu()
+# infos = mg.gain_data(query='创业板 2018-03-11', nums=260)
 
 
 def main():
