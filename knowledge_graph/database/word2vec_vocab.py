@@ -38,10 +38,10 @@ RETRIABLE_STATUS_CODES = [500, 502, 503, 504, 111]
 
 # test fetch graph
 test_url = 'http://192.168.1.166:9080'
-prod_url = 'http://q.gftchina.com:13567/vqservice/vq/'
+prod_url = 'http://q.gftchina.com:13567'
 test_user_name = 'wuwei'
 test_pwd = 'gft'
-gs_call = gftIO.GSCall(test_url, test_user_name, test_pwd)
+gs_call = gftIO.GSCall(prod_url, test_user_name, test_pwd)
 
 if __name__ == '__main__':
     user_path = os.path.expanduser("~")
@@ -51,16 +51,16 @@ if __name__ == '__main__':
     ylog.filelog_on("wiki_upload")
     # model_path = user_path + \
     #     '/share/deep_learning/data/model/phrase/zhwiki/word2vec_org_whole_wiki_corpus_user_dict_m5'
-    # model_path = '~/share/deep_learning/data/model/phrase/zhwiki/word2vec_org_whole_wiki_corpus_user_dict_m5'
+    model_path = '~/share/deep_learning/data/model/analyst_report.w2v_org'
     # # open category sql file
-    # ylog.debug("reading model file")
-    # model_zhwiki = KeyedVectors.load_word2vec_format(model_path, binary=False)
-    vocab_path = '/tmp/test.txt'
+    ylog.debug("reading model file")
+    model = KeyedVectors.load_word2vec_format(model_path, binary=False)
+    vocab_path = '/tmp/vocab.txt'
     dict_key_re = re.compile("'[\u4e00-\u9fa5A-Za-z]+'")
     print("writing nodes to local file")
     # writing
-    # with open('/tmp/test.txt', 'w') as f:
-    #     f.write(str(model_zhwiki.vocab.keys()))
+    with open('/tmp/vocab.txt', 'w') as f:
+        f.write(str(model.vocab.keys()))
     ylog.debug("upload nodes to neo4j")
     uploaded_number = batch_upload(
         dict_key_re,

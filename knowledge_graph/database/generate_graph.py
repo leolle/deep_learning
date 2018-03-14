@@ -1,24 +1,33 @@
 # -*- coding: utf-8 -*-
 import networkx as nx
-import random
-import uuid
+# import random
+# import uuid
 import copy
 import logging
 from tqdm import tqdm
+from web_crawl.google_search.magic_google import MagicGoogle as GoogleSearch
 
 logging.basicConfig(
     format='%(asctime)s : %(levelname)s : %(message)s', level=logging.DEBUG)
 
-depth = 2
+depth = 10
 graph = nx.DiGraph()
 base_nodes = []
 end_nodes = []
 i = 0
-for _ in range(random.randint(1, 3)):
-    base_nodes.append(str(uuid.uuid4()))
+new_kw = '创业板'
+
+gs = GoogleSearch()
+data = gs.gain_data(query=new_kw, language='en', nums=10)
+related_keywords = data['RelatedKeywords']
+for kw in related_keywords:
+    base_nodes.append(kw)
 while i < depth:
     for index, b in enumerate(base_nodes):
-        nodes = [str(uuid.uuid4()) for _ in range(random.randint(2, 3))]
+        logging.debug(b)
+        data = gs.gain_data(query=b, language='en', nums=10)
+        nodes = data['RelatedKeywords']
+        # nodes = [str(uuid.uuid4()) for _ in range(related_keywords)]
         end_nodes.extend(nodes)
         if len(nodes) > 0:
             for n in nodes:
@@ -65,4 +74,4 @@ while True:
                     logging.debug('rm cycles number %s' % removed_counter)
                 break
 
-nx.write_gexf(graph, "random.gexf")
+nx.write_gexf(graph, "~/share/deep_learning/data/knowledge_graph/创业板.gexf")

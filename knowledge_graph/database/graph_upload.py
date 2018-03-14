@@ -595,7 +595,6 @@ def upload_cat_node(dict_re_match_object):
                 'UPDATE')
 
             res = gs_call.upload_graph(graph_upload_request)
-
         except HTTPError as e:
             if e.code in RETRIABLE_STATUS_CODES:
                 error = 'A retriable HTTP error %d occurred:\n%s' % (e.code,
@@ -683,10 +682,10 @@ def upload_node(dict_re_match_object):
                     #     break
                     node = graph_upload_request.graph.nodes.add()
                     node.props.type = "OSet"
-                    p1 = node.props.props.entries.add()
-                    p1.key = "url"
-                    p1.value = "https://www.google.com.hk/search?hl=en&source=hp&q=" + quote_plus(
-                        title)
+                    # p1 = node.props.props.entries.add()
+                    # p1.key = "url"
+                    # p1.value = "https://www.google.com.hk/search?hl=en&source=hp&q=" + quote_plus(
+                    #     title)
                     p2 = node.props.props.entries.add()
                     p2.key = "_s_import_source"
                     p2.value = "word2vec model"
@@ -694,15 +693,14 @@ def upload_node(dict_re_match_object):
                     node.businessID.url = "https://www.google.com.hk/search?hl=en&source=hp&q=" + quote_plus(
                         title)
                     node.names.chinese = zh_title
+
             # other information of the upload request
             graph_upload_request.uploadTag = "UploadWord2VecVocabNodes"
             graph_upload_request.nodeAction4Duplication = graphUpload_pb2.Action4Duplication.Value(
                 'UPDATE')
             graph_upload_request.edgeAction4Duplication = graphUpload_pb2.Action4Duplication.Value(
                 'UPDATE')
-
             res = gs_call.upload_graph(graph_upload_request)
-
         except HTTPError as e:
             if e.code in RETRIABLE_STATUS_CODES:
                 error = 'A retriable HTTP error %d occurred:\n%s' % (e.code,
