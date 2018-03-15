@@ -7,6 +7,9 @@ new_kw = '创业板'
 gs = GoogleSearch()
 data = gs.gain_data(query=new_kw, language='en', nums=100)
 
+# mg = Xueqiu.Xueqiu()
+# infos = mg.gain_data(query='创业板', nums=160)
+
 # gn = GoogleNews()
 # data = gn.gain_data(query=new_kw, language='en', nums=100)
 

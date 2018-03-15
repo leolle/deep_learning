@@ -10,8 +10,11 @@ import requests
 from math import ceil
 from pyquery import PyQuery as pq
 from .config import USER_AGENT, DOMAIN, BLACK_DOMAIN, URL_SEARCH, LOGGER
-
+import logging
 from urllib.parse import quote_plus, urlparse, parse_qs
+
+logging.basicConfig(
+    format='%(asctime)s : %(levelname)s : %(message)s', level=logging.DEBUG)
 
 
 class MagicGoogle():
@@ -31,18 +34,21 @@ class MagicGoogle():
         self.proxies = random.choice(PROXIES)
 
     def counts_result(self, bsObj, start):
-
-        pq_content = self.pq_html(bsObj)
-        if pq_content is not None:
-            m = pq_content('div.sd')[0].text
-            if start == 0:
-                pattern = re.compile(u'(\d+)')
-                result_count = int(''.join(re.findall(pattern, m)))
-                return result_count
-            else:
-                pattern = re.compile(u'(\d+)')
-                result_count = int(''.join(re.findall(pattern, m)[1:]))
-                return result_count
+        try:
+            pq_content = self.pq_html(bsObj)
+            # logging.debug(pq_content)
+            if pq_content is not None:
+                m = pq_content('div.sd')[0].text
+                if start == 0:
+                    pattern = re.compile(u'(\d+)')
+                    result_count = int(''.join(re.findall(pattern, m)))
+                    return result_count
+                else:
+                    pattern = re.compile(u'(\d+)')
+                    result_count = int(''.join(re.findall(pattern, m)[1:]))
+                    return result_count
+        except IndexError:
+            return None
 
     def content(self, bsObj):
         global PageURL

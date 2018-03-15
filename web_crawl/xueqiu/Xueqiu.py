@@ -85,7 +85,9 @@ class Xueqiu():
             Title = BeautifulSoup(title, "lxml").text
             # print Title
 
-            created_at = iid['created_at']
+            created_at = datetime.datetime.fromtimestamp(
+                iid['created_at'] / 1000).strftime('%Y-%m-%d %H:%M:%S')
+
             # print created_at
 
             reply_count = iid['reply_count']
