@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 import logging
 
 # Define some constants
@@ -11,5 +13,7 @@ URL_SEARCH = "https://{domain}/search?hl={language}&q={query}&btnG=Search&gbv=2&
 logging.getLogger("urllib3").setLevel(logging.WARNING)
 logging.getLogger("chardet").setLevel(logging.WARNING)
 logging.getLogger("requests").setLevel(logging.WARNING)
-logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(name)s - %(levelname)s: %(message)s')
+logging.basicConfig(
+    level=logging.DEBUG,
+    format='%(asctime)s - %(name)s - %(levelname)s: %(message)s')
 LOGGER = logging.getLogger('magic_google_news')

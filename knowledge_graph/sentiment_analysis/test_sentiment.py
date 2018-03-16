@@ -46,12 +46,12 @@ ner_model_path = os.path.join(LTP_DATA_DIR,
 recognizer = NamedEntityRecognizer()  # 初始化实例
 recognizer.load(ner_model_path)  # 加载模型
 
-# """ 你的 APPID AK SK """
-APP_ID = '10850025'
-API_KEY = 'eYAUNnDTmO7qTsSYRlvfnAqh'
-SECRET_KEY = 'ZQXDsGb03HpXXawLcLIiZn1MfSkYquVN'
+# # """ 你的 APPID AK SK """
+# APP_ID = '10850025'
+# API_KEY = 'eYAUNnDTmO7qTsSYRlvfnAqh'
+# SECRET_KEY = 'ZQXDsGb03HpXXawLcLIiZn1MfSkYquVN'
 
-client = AipNlp(APP_ID, API_KEY, SECRET_KEY)
+# client = AipNlp(APP_ID, API_KEY, SECRET_KEY)
 engine = create_engine(
     'mysql+mysqlconnector://datatec:0.618@[172.16.103.103]:3306/JYDB',
     echo=False)
@@ -100,15 +100,20 @@ logging.basicConfig(
 #             ignore_index=True)
 
 
-def analyze_sentiment(df_research_articles):
+def analyze_sentiment(df_text):
     """
     natural language processing on every row from the input.
+    1. for loop dataframe:
+    2. preprocess text in the df.
+    3. get entity using pyLTP
+    4. get sentiment, keywords, summary using SnowNLP.
+    5. append result to df
     Keyword Arguments:
-    df_research_articles --
+    df_text --
     """
     df_result = pd.DataFrame(
         columns=['datetime', 'entity', 'keyword', 'summary', 'score'])
-    for item in df_research_articles.iterrows():
+    for item in df_text.iterrows():
         #  print(item[1]['Conclusion'])
         title = item[1]['Title']
         logging.info(item[0])

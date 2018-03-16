@@ -21,6 +21,8 @@ new_kw = '创业板'
 gs = GoogleSearch()
 data = gs.gain_data(query=new_kw, language='en', nums=1)
 base_nodes = data['RelatedKeywords']
+logging.debug('base nodes %s' % base_nodes)
+
 #related_keywords = data['RelatedKeywords']
 #for kw in related_keywords:
 #    base_nodes.append(kw)
@@ -29,17 +31,18 @@ logging.debug(base_nodes)
 while i < depth:
     for index, b in enumerate(base_nodes):
         if b not in graph:
-            logging.debug(b)
+            logging.debug('crawling %s' % b)
             data = gs.gain_data(query=b, language='en', nums=1)
             nodes = data['RelatedKeywords']
         else:
             nodes = []
+        logging.debug("new nodes %s" % nodes)
         end_nodes.extend(nodes)
         if len(nodes) > 0:
             for n in nodes:
                 graph.add_edge(b, n)
     base_nodes = copy.copy(end_nodes)
-    logging.debug(end_nodes)
+    logging.debug('level %s nodes: %s' % (i, end_nodes))
     end_nodes = []
     i += 1
 

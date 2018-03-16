@@ -36,7 +36,7 @@ RETRIABLE_STATUS_CODES = [500, 502, 503, 504, 111]
 
 # test fetch graph
 test_url = 'http://192.168.1.166:9080'
-prod_url = 'http://q.gftchina.com:13567/vqservice/vq/'
+prod_url = 'http://q.gftchina.com:13567'
 test_user_name = 'wuwei'
 test_pwd = 'gft'
 gs_call = gftIO.GSCall(prod_url, test_user_name, test_pwd)
