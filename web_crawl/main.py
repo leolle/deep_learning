@@ -4,12 +4,12 @@ from google_news.news import MagicGoogle_News as GoogleNews
 from xueqiu import Xueqiu
 new_kw = 'china 50'
 
-gs = GoogleSearch()
-data = gs.gain_data(query=new_kw, language='en', nums=10)
-print(data['RelatedKeywords'])
+# gs = GoogleSearch()
+# data = gs.gain_data(query=new_kw, language='en', nums=10)
+# print(data['RelatedKeywords'])
 
-# mg = Xueqiu.Xueqiu()
-# infos = mg.gain_data(query='创业板', nums=160)
+mg = Xueqiu.Xueqiu()
+infos = mg.gain_data(query='创业板', nums=1600)
 
 # gn = GoogleNews()
 # data = gn.gain_data(query=new_kw, language='en', nums=100)

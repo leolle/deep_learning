@@ -40,7 +40,7 @@ class Xueqiu():
         try:
             cookies = {
                 'Cookie':
-                'device_id=7fcd4c28ad0e89ba428a8c56a4453d31; s=ff14amelyq; webp=0; bid=345537d98b511672eaec478c4fcd5981_j78it1r0; u=601519629157904; xq_a_token=19f5e0044f535b6b1446bb8ae1da980a48bbe850; xq_r_token=6d30415b5f855c12fd74c6e2fb7662ea40272056; Hm_lvt_1db88642e346389874251b5a1eded6e3=1519955346,1520561220,1520735671,1520738899; aliyungf_tc=AQAAAJLO6SRs6wwA2nGotP+HuHu9OY52; __utma=1.1948606804.1520756528.1520756528.1520756528.1; __utmc=1; __utmz=1.1520756528.1.1.utmcsr=(direct)|utmccn=(direct)|utmcmd=(none); __utmt=1; __utmb=1.1.10.1520756528; Hm_lpvt_1db88642e346389874251b5a1eded6e3=1520756528'
+                "device_id=7fcd4c28ad0e89ba428a8c56a4453d31; webp=0; bid=345537d98b511672eaec478c4fcd5981_j78it1r0; u=601519629157904; __utmc=1; Hm_lvt_1db88642e346389874251b5a1eded6e3=1520738899,1520833686,1520835733,1520835753; __utmz=1.1521014332.160.54.utmcsr=xueqiu.com|utmccn=(referral)|utmcmd=referral|utmcct=/; __utma=1.1112574955.1499134501.1521164244.1521180735.166; __utmt=1; Hm_lpvt_1db88642e346389874251b5a1eded6e3=1521181841; __utmb=1.28.10.1521180735"
             }
             headers = {'user-agent': self.get_random_user_agent()}
             time.sleep(0.02)
