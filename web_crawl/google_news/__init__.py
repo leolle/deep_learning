@@ -1,1 +1,1 @@
-from .news import MagicGoogle_News
+# from .news import MagicGoogle_News

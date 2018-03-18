@@ -86,7 +86,7 @@ class Xueqiu():
             # print Title
 
             created_at = datetime.datetime.fromtimestamp(
-                iid['created_at'] / 1000).strftime('%Y-%m-%d %H:%M:%S')
+                iid['created_at'] / 1000).strftime('%Y-%m-%d')
 
             # print created_at
 

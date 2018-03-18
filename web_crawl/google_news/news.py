@@ -7,7 +7,7 @@ import cchardet
 import requests
 from math import ceil
 from pyquery import PyQuery as pq
-from config import USER_AGENT, DOMAIN, BLACK_DOMAIN, URL_SEARCH, LOGGER
+from .config import USER_AGENT, DOMAIN, BLACK_DOMAIN, URL_SEARCH, LOGGER
 from urllib.parse import quote_plus, urlparse, parse_qs
 
 
