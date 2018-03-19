@@ -144,8 +144,8 @@ df_result = analyze_sentiment(df_analyst_report[:100])
 df_result.to_pickle('df_sentiment.pkl')
 organization = None
 # organization = '中通'
-# people = '亿元'
-people = '刘士余'
+people = '亿元'
+# people = '刘士余'
 
 geography = None
 # geography = '中国'

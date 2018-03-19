@@ -12,6 +12,7 @@ import os
 
 begin = default_timer()
 str_test = u'''云南铜业股份有限公司（深交所：000878），简称云铜股份、云铜，前身为云南冶炼厂，成立于1958年，1998年改制为股份公司，更名为现称，1998年6月2日于深圳证券交易所上市。公司是中国第四大铜业企业，生产高纯阴极铜、电工用铜线坏、工业硫酸、金锭、银锭、电工用圆铜线、硫酸铜等主产品，并能综合回收金、银、铝、铋、铂、钯等多种有色金属。2007年10月，中国铝业收购云铜母公司云南铜业集团的49%股权，改名“中铝云南铜业集团”。'''
+str_test = '''金瑞矿业跨界恐遭叫停，重组标的业绩未达标已停牌'''
 filter_setting = [tokenize, strip_punctuation]
 text = preprocess_string(str_test, filter_setting)
 
@@ -52,6 +53,11 @@ recognizer.load(ner_model_path)  # 加载模型
 netags = recognizer.recognize(words, postags)  # 命名实体识别
 
 #print('\t'.join(netags))
+# # 人名（Nh）、地名（Ns）、机构名（Ni。）
+# # B、I、E、S
+# ls_organization = [dict_netags[x] for x in ['S-Ni', 'B-Ni', 'E-Ni', 'I-Ni']]
+# ls_people = [dict_netags[x] for x in ['S-Nh', 'B-Nh', 'E-Nh', 'I-Nh']]
+# ls_geography = [dict_netags[x] for x in ['S-Ns', 'B-Ns', 'E-Ns', 'I-Ns']]
 dict_netags = defaultdict(list)
 ls_netags = list(zip(netags, words))
 for x, y in ls_netags:
