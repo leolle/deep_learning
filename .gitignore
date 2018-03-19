@@ -4,6 +4,7 @@ sklearn-theano
 *.tar
 *.txt
 *.h5
+*.pdf
 word_embedding/text8
 *.bin
 *.log
