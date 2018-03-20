@@ -17,7 +17,32 @@ new_kw = 'china 50'
 # print(data['RelatedKeywords'])
 
 mg = Xueqiu.Xueqiu()
-infos = mg.gain_data(query='创业板', nums=1000)
+query = '创业板'
+query_list = ['创业板', '上证', '深证']
+
+
+def get_data(source, query, num=1000):
+    """ get source using query as target keyword, return text content.
+    Keyword Arguments:
+    source --
+    query  --
+    """
+    infos = source.gain_data(query=query, nums=num)
+    return infos['all_info']
+
+
+for q in query_list:
+    crawl_data = get_data(mg, q)
+    for post in crawl_data:
+        # insert data
+        try:
+            # mongo_client.insert_one(post)
+            post['name'] = q
+            mongo_client.update(post, post, upsert=True)
+        except DuplicateKeyError:
+            continue
+
+infos = mg.gain_data(query=query, nums=1000)
 
 df_sentiment = pd.DataFrame(infos['all_info'])
 df_sentiment = df_sentiment.set_index(
@@ -29,6 +54,7 @@ for post in infos['all_info']:
     # insert data
     try:
         # mongo_client.insert_one(post)
+        post['name'] = query
         mongo_client.update(post, post, upsert=True)
     except DuplicateKeyError:
         continue

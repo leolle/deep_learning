@@ -13,3 +13,9 @@
 [submodule "word_embedding/word2vec-explorer"]
 	path = word_embedding/word2vec-explorer
 	url = git@github.com:dominiek/word2vec-explorer.git
+[submodule "Information-Extraction-Chinese"]
+	path = Information-Extraction-Chinese
+	url = https://github.com/crownpku/Information-Extraction-Chinese
+[submodule "ChineseNER"]
+	path = ChineseNER
+	url = git@github.com:zjy-ucas/ChineseNER.git
