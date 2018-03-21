@@ -19,3 +19,6 @@
 [submodule "ChineseNER"]
 	path = ChineseNER
 	url = git@github.com:zjy-ucas/ChineseNER.git
+[submodule "entity_relation_extraction/Chinese-Annotator"]
+	path = entity_relation_extraction/Chinese-Annotator
+	url = git@github.com:crownpku/Chinese-Annotator.git
