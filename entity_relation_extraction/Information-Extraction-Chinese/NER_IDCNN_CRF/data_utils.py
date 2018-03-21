@@ -3,9 +3,11 @@ import re
 import math
 import codecs
 import random
-
+import os
 import numpy as np
+user_path = os.path.expanduser("~")
 import jieba
+jieba.load_userdict(user_path + "/share/deep_learning/data/dict/jieba.txt")
 jieba.initialize()
 
 
@@ -167,8 +169,7 @@ def load_word2vec(emb_path, id_to_word, word_dim, old_weights):
         line = line.rstrip().split()
         if len(line) == word_dim + 1:
             pre_trained[line[0]] = np.array(
-                [float(x) for x in line[1:]]
-            ).astype(np.float32)
+                [float(x) for x in line[1:]]).astype(np.float32)
         else:
             emb_invalid += 1
     if emb_invalid > 0:
@@ -187,26 +188,21 @@ def load_word2vec(emb_path, id_to_word, word_dim, old_weights):
             new_weights[i] = pre_trained[word.lower()]
             c_lower += 1
         elif re.sub('\d', '0', word.lower()) in pre_trained:
-            new_weights[i] = pre_trained[
-                re.sub('\d', '0', word.lower())
-            ]
+            new_weights[i] = pre_trained[re.sub('\d', '0', word.lower())]
             c_zeros += 1
     print('Loaded %i pretrained embeddings.' % len(pre_trained))
     print('%i / %i (%.4f%%) words have been initialized with '
-          'pretrained embeddings.' % (
-        c_found + c_lower + c_zeros, n_words,
-        100. * (c_found + c_lower + c_zeros) / n_words)
-    )
+          'pretrained embeddings.' %
+          (c_found + c_lower + c_zeros, n_words,
+           100. * (c_found + c_lower + c_zeros) / n_words))
     print('%i found directly, %i after lowercasing, '
-          '%i after lowercasing + zero.' % (
-        c_found, c_lower, c_zeros
-    ))
+          '%i after lowercasing + zero.' % (c_found, c_lower, c_zeros))
     return new_weights
 
 
 def full_to_half(s):
     """
-    Convert full-width character to half-width one 
+    Convert full-width character to half-width one
     """
     n = []
     for char in s:
@@ -222,7 +218,7 @@ def full_to_half(s):
 
 def cut_to_sentence(text):
     """
-    Cut text to sentences 
+    Cut text to sentences
     """
     sentence = []
     sentences = []
@@ -232,14 +228,14 @@ def cut_to_sentence(text):
         sentence.append(word)
         cut = False
         if pre_cut:
-            cut=True
-            pre_cut=False
+            cut = True
+            pre_cut = False
         if word in u"。;!?\n":
             cut = True
-            if len_p > idx+1:
-                if text[idx+1] in ".。”\"\'“”‘’?!":
+            if len_p > idx + 1:
+                if text[idx + 1] in ".。”\"\'“”‘’?!":
                     cut = False
-                    pre_cut=True
+                    pre_cut = True
 
         if cut:
             sentences.append(sentence)
@@ -250,16 +246,16 @@ def cut_to_sentence(text):
 
 
 def replace_html(s):
-    s = s.replace('&quot;','"')
-    s = s.replace('&amp;','&')
-    s = s.replace('&lt;','<')
-    s = s.replace('&gt;','>')
-    s = s.replace('&nbsp;',' ')
+    s = s.replace('&quot;', '"')
+    s = s.replace('&amp;', '&')
+    s = s.replace('&lt;', '<')
+    s = s.replace('&gt;', '>')
+    s = s.replace('&nbsp;', ' ')
     s = s.replace("&ldquo;", "“")
     s = s.replace("&rdquo;", "”")
-    s = s.replace("&mdash;","")
+    s = s.replace("&mdash;", "")
     s = s.replace("\xa0", " ")
-    return(s)
+    return (s)
 
 
 def input_from_line(line, char_to_id):
@@ -272,8 +268,10 @@ def input_from_line(line, char_to_id):
     inputs = list()
     inputs.append([line])
     line.replace(" ", "$")
-    inputs.append([[char_to_id[char] if char in char_to_id else char_to_id["<UNK>"]
-                   for char in line]])
+    inputs.append([[
+        char_to_id[char] if char in char_to_id else char_to_id["<UNK>"]
+        for char in line
+    ]])
     inputs.append([get_seg_features(line)])
     inputs.append([[]])
     return inputs
@@ -281,16 +279,17 @@ def input_from_line(line, char_to_id):
 
 class BatchManager(object):
 
-    def __init__(self, data,  batch_size):
+    def __init__(self, data, batch_size):
         self.batch_data = self.sort_and_pad(data, batch_size)
         self.len_data = len(self.batch_data)
 
     def sort_and_pad(self, data, batch_size):
-        num_batch = int(math.ceil(len(data) /batch_size))
+        num_batch = int(math.ceil(len(data) / batch_size))
         sorted_data = sorted(data, key=lambda x: len(x[0]))
         batch_data = list()
         for i in range(num_batch):
-            batch_data.append(self.pad_data(sorted_data[i*batch_size : (i+1)*batch_size]))
+            batch_data.append(
+                self.pad_data(sorted_data[i * batch_size:(i + 1) * batch_size]))
         return batch_data
 
     @staticmethod

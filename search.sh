@@ -1,9 +1,7 @@
 #!/bin/bash
 if [ -z "$*" ]
 then
-    git commit -m "update notes"
+    grep -inR "$@" . --include \*.py --exclude-dir=basic
 else
-    git commit -m "$*"
+    grep -inR "$@" "$*" --include \*.py --exclude-dir=basic
 fi
-
-grep -inR "$@" . --include \*.py --exclude-dir=basic

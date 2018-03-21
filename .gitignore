@@ -12,7 +12,9 @@ word_embedding/text8
 knowledge_graph/database/wiki.yaml
 *.log.*
 *.pkl
+*.pyc
 ./basic/computer_vision_cs231n/assignment1/cs231n/datasets
 word_embedding/data/raw_data/
 #./basic/courses
 #./word_embedding/word2gm
+entity_relation_extraction/Chinese-Annotator/
