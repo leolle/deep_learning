@@ -36,19 +36,25 @@ def main(_):
         with sess.as_default():
 
             initializer = tf.contrib.layers.xavier_initializer()
-            with tf.variable_scope("model", reuse=None, initializer=initializer):
-                m = network.GRU(is_training=True, word_embeddings=wordembedding, settings=settings)
+            with tf.variable_scope(
+                    "model", reuse=None, initializer=initializer):
+                m = network.GRU(
+                    is_training=True,
+                    word_embeddings=wordembedding,
+                    settings=settings)
             global_step = tf.Variable(0, name="global_step", trainable=False)
             optimizer = tf.train.AdamOptimizer(0.0005)
 
             train_op = optimizer.minimize(m.final_loss, global_step=global_step)
             sess.run(tf.global_variables_initializer())
             saver = tf.train.Saver(max_to_keep=None)
-           
-            merged_summary = tf.summary.merge_all()
-            summary_writer = tf.summary.FileWriter(FLAGS.summary_dir + '/train_loss', sess.graph)
 
-            def train_step(word_batch, pos1_batch, pos2_batch, y_batch, big_num):
+            merged_summary = tf.summary.merge_all()
+            summary_writer = tf.summary.FileWriter(
+                FLAGS.summary_dir + '/train_loss', sess.graph)
+
+            def train_step(word_batch, pos1_batch, pos2_batch, y_batch,
+                           big_num):
 
                 feed_dict = {}
                 total_shape = []
@@ -78,15 +84,18 @@ def main(_):
                 feed_dict[m.input_y] = y_batch
 
                 temp, step, loss, accuracy, summary, l2_loss, final_loss = sess.run(
-                    [train_op, global_step, m.total_loss, m.accuracy, merged_summary, m.l2_loss, m.final_loss],
-                    feed_dict)
+                    [
+                        train_op, global_step, m.total_loss, m.accuracy,
+                        merged_summary, m.l2_loss, m.final_loss
+                    ], feed_dict)
                 time_str = datetime.datetime.now().isoformat()
                 accuracy = np.reshape(np.array(accuracy), (big_num))
                 acc = np.mean(accuracy)
                 summary_writer.add_summary(summary, step)
 
                 if step % 50 == 0:
-                    tempstr = "{}: step {}, softmax_loss {:g}, acc {:g}".format(time_str, step, loss, acc)
+                    tempstr = "{}: step {}, softmax_loss {:g}, acc {:g}".format(
+                        time_str, step, loss, acc)
                     print(tempstr)
 
             for one_epoch in range(settings.num_epochs):
@@ -100,7 +109,8 @@ def main(_):
                     temp_pos2 = []
                     temp_y = []
 
-                    temp_input = temp_order[i * settings.big_num:(i + 1) * settings.big_num]
+                    temp_input = temp_order[i * settings.big_num:(
+                        i + 1) * settings.big_num]
                     for k in temp_input:
                         temp_word.append(train_word[k])
                         temp_pos1.append(train_pos1[k])
@@ -119,12 +129,17 @@ def main(_):
                     temp_pos2 = np.array(temp_pos2)
                     temp_y = np.array(temp_y)
 
-                    train_step(temp_word, temp_pos1, temp_pos2, temp_y, settings.big_num)
+                    train_step(temp_word, temp_pos1, temp_pos2, temp_y,
+                               settings.big_num)
 
                     current_step = tf.train.global_step(sess, global_step)
-                    if current_step > 8000 and current_step % 100 == 0:
+                    if current_step > 100 and current_step % 10 == 0:
+                        #                    if current_step > 100 and current_step % 100 == 0:
                         print('saving model')
-                        path = saver.save(sess, save_path + 'ATT_GRU_model', global_step=current_step)
+                        path = saver.save(
+                            sess,
+                            save_path + 'ATT_GRU_model',
+                            global_step=current_step)
                         tempstr = 'have saved model to ' + path
                         print(tempstr)
 

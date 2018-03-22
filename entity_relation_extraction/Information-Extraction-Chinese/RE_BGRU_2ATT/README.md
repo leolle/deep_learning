@@ -45,7 +45,19 @@ unknown, 父母, 夫妻, 师生, 兄弟姐妹, 合作, 情侣, 祖孙, 好友, �
 #python3 train_GRU.py
 ```
 
+4. add more relation classes
+```network.py
+class Settings(object):
+    def __init__(self):
+        self.num_classes = 12
+```
+```test_GRU.py
+def main_for_evaluation():
+    test_settings.num_classes = 12
+def main(_):
+    test_settings.num_classes = 12
 
+```
 ### * Inference, remeber to change the model name:
 
 ```
@@ -153,4 +165,3 @@ No.1: 合作, Probability is 0.819008
 No.2: 上下级, Probability is 0.116768
 No.3: 师生, Probability is 0.0448312
 ```
-
