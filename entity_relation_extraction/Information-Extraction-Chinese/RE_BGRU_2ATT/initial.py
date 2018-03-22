@@ -65,10 +65,8 @@ def init():
     # max length of position embedding is 60 (-60~+60)
     maxlen = 60
 
-    train_sen = {
-    }  # {entity pair:[[[label1-sentence 1],[label1-sentence 2]...],[[label2-sentence 1],[label2-sentence 2]...]}
-    train_ans = {
-    }  # {entity pair:[label1,label2,...]} the label is one-hot vector
+    train_sen = {}  # {entity pair:[[[label1-sentence 1],[label1-sentence 2]...],[[label2-sentence 1],[label2-sentence 2]...]}
+    train_ans = {}  # {entity pair:[label1,label2,...]} the label is one-hot vector
 
     print('reading train data...')
     f = open('./origin_data/train.txt', 'r', encoding='utf-8')
@@ -117,7 +115,7 @@ def init():
 
         en1pos = 0
         en2pos = 0
-
+        
         #For Chinese
         en1pos = sentence.find(en1)
         if en1pos == -1:
@@ -125,7 +123,7 @@ def init():
         en2pos = sentence.find(en2)
         if en2pos == -1:
             en2post = 0
-
+        
         output = []
 
         #Embeding the position
@@ -149,8 +147,7 @@ def init():
     print('reading test data ...')
 
     test_sen = {}  # {entity pair:[[sentence 1],[sentence 2]...]}
-    test_ans = {
-    }  # {entity pair:[labels,...]} the labels is N-hot vector (N is the number of multi-label)
+    test_ans = {}  # {entity pair:[labels,...]} the labels is N-hot vector (N is the number of multi-label)
 
     f = open('./origin_data/test.txt', 'r', encoding='utf-8')
 
@@ -184,7 +181,7 @@ def init():
 
         en1pos = 0
         en2pos = 0
-
+        
         #For Chinese
         en1pos = sentence.find(en1)
         if en1pos == -1:
@@ -192,7 +189,7 @@ def init():
         en2pos = sentence.find(en2)
         if en2pos == -1:
             en2post = 0
-
+            
         output = []
 
         for i in range(fixlen):
@@ -226,9 +223,7 @@ def init():
         for j in range(lenth):
             train_x.append(train_sen[i][j])
             train_y.append(train_ans[i][j])
-            f.write(
-                str(temp) + '\t' + i[0] + '\t' + i[1] + '\t' +
-                str(np.argmax(train_ans[i][j])) + '\n')
+            f.write(str(temp) + '\t' + i[0] + '\t' + i[1] + '\t' + str(np.argmax(train_ans[i][j])) + '\n')
             temp += 1
     f.close()
 
@@ -256,6 +251,8 @@ def init():
     np.save('./data/train_y.npy', train_y)
     np.save('./data/testall_x.npy', test_x)
     np.save('./data/testall_y.npy', test_y)
+
+   
 
 
 def seperate():
@@ -325,6 +322,7 @@ def seperate():
     np.save('./data/testall_word.npy', test_word)
     np.save('./data/testall_pos1.npy', test_pos1)
     np.save('./data/testall_pos2.npy', test_pos2)
+
 
 
 # get answer metric for PR curve evaluation

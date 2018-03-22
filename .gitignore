@@ -18,3 +18,6 @@ word_embedding/data/raw_data/
 #./basic/courses
 #./word_embedding/word2gm
 entity_relation_extraction/Chinese-Annotator/
+entity_relation_extraction/Information-Extraction-Chinese/RE_BGRU_2ATT/train_loss/
+entity_relation_extraction/Information-Extraction-Chinese/RE_BGRU_2ATT/model/
+entity_relation_extraction/Information-Extraction-Chinese/RE_BGRU_2ATT/__pycache__/
