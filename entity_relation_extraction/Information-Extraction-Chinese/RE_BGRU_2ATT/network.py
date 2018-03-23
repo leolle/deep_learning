@@ -1,5 +1,6 @@
 import tensorflow as tf
 import numpy as np
+CLASS_NUM = 14
 
 
 class Settings(object):
@@ -8,7 +9,7 @@ class Settings(object):
         self.vocab_size = 16691
         self.num_steps = 70
         self.num_epochs = 10
-        self.num_classes = 13
+        self.num_classes = CLASS_NUM
         self.gru_size = 230
         self.keep_prob = 0.5
         self.num_layers = 1

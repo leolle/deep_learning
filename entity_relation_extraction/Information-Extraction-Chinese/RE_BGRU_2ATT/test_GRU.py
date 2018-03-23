@@ -9,6 +9,7 @@ import network
 from sklearn.metrics import average_precision_score
 
 FLAGS = tf.app.flags.FLAGS
+CLASS_NUM = 14
 
 
 # embedding the position
@@ -28,7 +29,7 @@ def main_for_evaluation():
 
     test_settings = network.Settings()
     test_settings.vocab_size = 16693
-    test_settings.num_classes = 13
+    test_settings.num_classes = CLASS_NUM
     test_settings.big_num = 5561
 
     big_num_test = test_settings.big_num
@@ -139,7 +140,7 @@ def main(_):
     wordembedding = np.load('./data/vec.npy')
     test_settings = network.Settings()
     test_settings.vocab_size = 16693
-    test_settings.num_classes = 13
+    test_settings.num_classes = CLASS_NUM
     test_settings.big_num = 1
 
     with tf.Graph().as_default():
