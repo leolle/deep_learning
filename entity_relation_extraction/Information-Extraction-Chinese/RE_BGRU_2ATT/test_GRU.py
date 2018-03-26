@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+from config import CLASS_NUM
 from pprint import pprint
 
 import tensorflow as tf
@@ -9,7 +11,6 @@ import network
 from sklearn.metrics import average_precision_score
 
 FLAGS = tf.app.flags.FLAGS
-CLASS_NUM = 14
 
 
 # embedding the position
@@ -136,7 +137,7 @@ def main_for_evaluation():
 
 
 def main(_):
-    pathname = "./model/ATT_GRU_model-190"
+    pathname = "./model/ATT_GRU_model-180"
     wordembedding = np.load('./data/vec.npy')
     test_settings = network.Settings()
     test_settings.vocab_size = 16693

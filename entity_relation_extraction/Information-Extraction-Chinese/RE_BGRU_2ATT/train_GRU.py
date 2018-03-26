@@ -133,7 +133,7 @@ def main(_):
                                settings.big_num)
 
                     current_step = tf.train.global_step(sess, global_step)
-                    if current_step > 100 and current_step % 10 == 0:
+                    if current_step > 100 and current_step % 20 == 0:
                         #                    if current_step > 100 and current_step % 100 == 0:
                         print('saving model')
                         path = saver.save(

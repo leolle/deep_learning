@@ -1,6 +1,7 @@
+# -*- coding: utf-8 -*-
+from config import CLASS_NUM
 import tensorflow as tf
 import numpy as np
-CLASS_NUM = 14
 
 
 class Settings(object):
