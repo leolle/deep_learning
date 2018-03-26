@@ -43,6 +43,7 @@ test_user_name = 'wuwei'
 test_pwd = 'gft'
 gs_call = gftIO.GSCall(prod_url, test_user_name, test_pwd)
 
+
 if __name__ == '__main__':
     user_path = os.path.expanduser("~")
     import logging
@@ -62,13 +63,14 @@ if __name__ == '__main__':
     with open('/tmp/vocab.txt', 'w') as f:
         f.write(str(model.vocab.keys()))
     ylog.debug("upload nodes to neo4j")
-    uploaded_number = batch_upload(
-        dict_key_re,
-        vocab_path,
-        batch_size,
-        upload_node,
-        start=0,
-        end=6080000000)
+    # uploaded_number = batch_upload(
+    #     dict_key_re,
+    #     vocab_path,
+    #     batch_size,
+    #     upload_node,
+    #     start=0,
+    #     end=6080000000)
+
 # print("uploaded number: %s" % (uploaded_number))
 # with open(vocab_path, 'rb') as f:
 #     for i, line in enumerate(tqdm(f)):
