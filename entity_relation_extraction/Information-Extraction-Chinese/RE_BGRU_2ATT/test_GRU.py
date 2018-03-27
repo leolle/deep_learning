@@ -10,6 +10,7 @@ import os
 import network
 from sklearn.metrics import average_precision_score
 
+from config import MODEL_PATH
 FLAGS = tf.app.flags.FLAGS
 
 
@@ -137,7 +138,7 @@ def main_for_evaluation():
 
 
 def main(_):
-    pathname = "./model/ATT_GRU_model-180"
+    pathname = MODEL_PATH
     wordembedding = np.load('./data/vec.npy')
     test_settings = network.Settings()
     test_settings.vocab_size = 16693

@@ -1,4 +1,12 @@
 # encoding=utf8
+"""
+SSE信息披露正则表达式提取标题: [\u4e00-\u9fa5][\u4e00-\u9fa5\S]{20,}\n
+# train
+python3 main.py --train=True --clean=True --model_type=idcnn
+# test
+python3 main.py --ckpt_path=ckpt_IDCNN
+python3 main.py --ckpt_path=ckpt_biLSTM
+"""
 import os
 import codecs
 import pickle
@@ -243,9 +251,10 @@ def evaluate_line():
                 sentences = corpus[key]
                 sentences = list(set(sentences))
                 for sen in sentences:
+                    sen_strip = sen.replace(' ', '')
                     result = model.evaluate_line(sess,
                                                  input_from_line(
-                                                     sen, char_to_id),
+                                                     sen_strip, char_to_id),
                                                  id_to_tag)
                     extract_entity(result, key)
         # while True:

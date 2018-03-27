@@ -1,6 +1,8 @@
+# -*- coding: utf-8 -*-
+
 import numpy as np
 import os
-
+from config import TRAIN_DATA_PATH
 
 # embedding the position
 def pos_embed(x):
@@ -71,7 +73,7 @@ def init():
     }  # {entity pair:[label1,label2,...]} the label is one-hot vector
 
     print('reading train data...')
-    f = open('./origin_data/train.txt', 'r', encoding='utf-8')
+    f = open(TRAIN_DATA_PATH, 'r', encoding='utf-8')
 
     while True:
         content = f.readline()
@@ -83,6 +85,7 @@ def init():
         en1 = content[0]
         en2 = content[1]
         relation = 0
+        # print(content)
         if content[2] not in relation2id:
             relation = relation2id['NA']
         else:
