@@ -2,7 +2,7 @@
 
 import numpy as np
 import os
-from config import TRAIN_DATA_PATH
+from config import TRAIN_DATA_PATH, TEST_DATA_PATH
 
 # embedding the position
 def pos_embed(x):
@@ -27,6 +27,26 @@ def find_index(x, y):
 
 # reading data
 def init():
+    """
+map word2vec vectors to a dictionary{word: id}.
+Map relation to a dictionary{relation: id}
+    train_sen {(entity pair):[[[label1-sentence 1],[label1-sentence 2]...],[[label2-sentence 1],[label2-sentence 2]...]}
+    train_ans {entity pair:[label1,label2,...]} the label is one-hot vector
+    test_sen {entity pair:[[sentence 1],[sentence 2]...]}
+('鹤岗市京港选煤有限公司',
+  '以浩良河化肥分公司'): [[[197, 41, 19],
+   [140, 42, 20],
+   [6, 43, 21],
+   [648, 44, 22],
+   [406, 45, 23],
+
+    test_ans  {entity pair:[labels,...]} the labels is N-hot vector (N is the number of multi-label)
+('湘电股份', '湘电军工公司'): [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0],
+
+
+test_q_a 0	鹤岗市京港选煤有限公司	以浩良河化肥分公司	13
+
+    """
     print('reading word embedding data...')
     vec = []
     word2id = {}
@@ -155,7 +175,7 @@ def init():
     test_ans = {
     }  # {entity pair:[labels,...]} the labels is N-hot vector (N is the number of multi-label)
 
-    f = open('./origin_data/test.txt', 'r', encoding='utf-8')
+    f = open(TEST_DATA_PATH, 'r', encoding='utf-8')
 
     while True:
         content = f.readline()
@@ -261,7 +281,9 @@ def init():
     np.save('./data/testall_y.npy', test_y)
 
 
-def seperate():
+def separate():
+    """ Map training/test labeled data to dict id.
+    """
     print('reading training data')
     x_train = np.load('./data/train_x.npy')
 
@@ -269,7 +291,7 @@ def seperate():
     train_pos1 = []
     train_pos2 = []
 
-    print('seprating train data')
+    print('separating train data')
     for i in range(len(x_train)):
         word = []
         pos1 = []
@@ -332,6 +354,8 @@ def seperate():
 
 # get answer metric for PR curve evaluation
 def getans():
+    """Test_y to one hot array.
+    """
     test_y = np.load('./data/testall_y.npy')
     eval_y = []
     for i in test_y:
@@ -341,6 +365,8 @@ def getans():
 
 
 def get_metadata():
+    """Write word embedding vectors to metadata.tsv
+    """
     fwrite = open('./data/metadata.tsv', 'w', encoding='utf-8')
     f = open('./origin_data/vec.txt', encoding='utf-8')
     f.readline()
@@ -356,6 +382,6 @@ def get_metadata():
 
 if __name__ == '__main__':
     init()
-    seperate()
+    separate()
     getans()
     get_metadata()
