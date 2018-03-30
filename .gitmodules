@@ -16,3 +16,6 @@
 [submodule "entity_relation_extraction/Chinese-Annotator"]
 	path = entity_relation_extraction/Chinese-Annotator
 	url = git@github.com:crownpku/Chinese-Annotator.git
+[submodule "basic/tensorflow/models"]
+	path = basic/tensorflow/models
+	url = git@github.com:tensorflow/models.git
