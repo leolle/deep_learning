@@ -4,6 +4,7 @@ import numpy as np
 import os
 from config import TRAIN_DATA_PATH, TEST_DATA_PATH
 
+
 # embedding the position
 def pos_embed(x):
     if x < -60:
