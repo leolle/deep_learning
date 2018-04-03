@@ -19,3 +19,9 @@
 [submodule "basic/tensorflow/models"]
 	path = basic/tensorflow/models
 	url = git@github.com:tensorflow/models.git
+[submodule "entity_relation_extraction/TextRank4ZH"]
+	path = entity_relation_extraction/TextRank4ZH
+	url = git@github.com:letiantian/TextRank4ZH.git
+[submodule "entity_relation_extraction/TextRank"]
+	path = entity_relation_extraction/TextRank
+	url = git@github.com:davidadamojr/TextRank.git
