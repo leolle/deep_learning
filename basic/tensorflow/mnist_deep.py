@@ -149,6 +149,8 @@ def main(_):
             y_: mnist.test.labels,
             keep_prob: 1.0
         }))
+        saver = tf.train.Saver()
+        save_path = saver.save(sess, './my_model.ckpt')
 
 
 if __name__ == '__main__':
