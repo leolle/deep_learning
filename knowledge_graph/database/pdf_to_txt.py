@@ -7,7 +7,7 @@ import pdfminer.layout
 import pdfminer.high_level
 pdfminer.settings.STRICT = False
 
-fp = '/home/weiwu/share/deep_learning/data/docs/raw/龙蟒佰利：重大资产重组停牌公告.PDF'
+fp = '/home/weiwu/share/deep_learning/data/docs/raw/20170122-长江证券-长江证券金融工程：基于网络的动量选股策略.pdf'
 fout = './data/research.txt'
 
 
@@ -75,8 +75,7 @@ def extract_text(
     return outfp
 
 
-# main
-def main(args=None):
+def convert_pdf2txt(args=None):
     import argparse
     P = argparse.ArgumentParser(description=__doc__)
     P.add_argument(
@@ -223,4 +222,4 @@ def main(args=None):
     return 0
 
 
-main(args=None)
+convert_pdf2txt(args=None)
