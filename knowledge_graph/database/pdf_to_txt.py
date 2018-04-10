@@ -223,3 +223,4 @@ def convert_pdf2txt(args=None):
 
 
 convert_pdf2txt(args=None)
+# with open()
