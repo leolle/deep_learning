@@ -10,6 +10,7 @@ import pdfminer.layout
 import pdfminer.high_level
 from gensim import utils
 import os
+import re
 import math
 import networkx as nx
 import numpy as np
@@ -306,12 +307,18 @@ with open(tmp_dir + '/text.txt', 'rb') as f:
 
 s = utils.to_unicode(text)
 text = s.replace('\n\n', '')
-
+text = re.sub(
+    "[^!#$%&'()*+,-./:;<=>?@[\]^_`{|}~\u4e00-\u9fa5a-zA-Z0-9\u3002\uff1b\uff0c\uff1a\u201c\u201d\uff08\uff09\u3001\uff1f\u300a\u300b\n\s]+",
+    '', text)
+text = re.sub("\u000C", "", text)
+text = re.sub("[\uFF08(][^\s]+[\uFF09)]", "", text)
+text = re.sub("[!#$%&'()*+,-./:;<=>?@[\]^_`{|}~a-zA-Z0-9]{10,}", '', text)
 sentence_delimiters = ['?', '!', ';', '？', '！', '。', '；', '……', '…', '\n']
-allow_speech_tags = [
-    'an', 'i', 'j', 'l', 'n', 'nr', 'nrfg', 'ns', 'nt', 'nz', 't', 'v', 'vd',
-    'vn', 'eng'
-]
+# allow_speech_tags = [
+#     'an', 'i', 'j', 'l', 'n', 'nr', 'nrfg', 'ns', 'nt', 'nz', 't', 'v', 'vd',
+#     'vn', 'eng'
+# ]
+global allow_speech_tags = ['an', 'n', 'nt', 'x', 'eng', 'nt', 'nz']
 
 
 def debug(*args):
@@ -764,9 +771,9 @@ print('extract keywords')
 tr4w = TextRank4Keyword()
 
 tr4w.analyze(
-    text=text, lower=True,
+    text=text, lower=False,
     window=2)  # py2中text必须是utf8编码的str或者unicode对象，py3中必须是utf8编码的bytes或者str对象
 
 print('关键词：')
-for item in tr4w.get_keywords(10, word_min_len=2):
+for item in tr4w.get_keywords(3, word_min_len=2):
     print(item.word, item.weight)

@@ -5,6 +5,7 @@ import pdfminer.settings
 from pdfminer.image import ImageWriter
 import pdfminer.layout
 import pdfminer.high_level
+from gensim import utils
 pdfminer.settings.STRICT = False
 
 fp = '/home/weiwu/share/deep_learning/data/docs/raw/20170122-长江证券-长江证券金融工程：基于网络的动量选股策略.pdf'
