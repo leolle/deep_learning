@@ -1,9 +1,9 @@
 * Features:
-** train word embedding
-** visualize word embedding in tensorboard
-** preprocess wikipedia dump
-** dump pages of wikipedia to mongodb
-** retrieve content from mongodb and train word embedding model
+- train word embedding
+- visualize word embedding in tensorboard
+- preprocess wikipedia dump
+- dump pages of wikipedia to mongodb
+- retrieve content from mongodb and train word embedding model
 * File description
 | file_name                     | function                                              | log     |
 | similar_words_gensim.py       | word embedding via gensim                             | phrases |
