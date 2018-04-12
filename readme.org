@@ -96,9 +96,3 @@ Named Entity Recognization, Entity Relation Extraction, Recurrent Neural Network
 - [ ] analyst research reports, analyst research reports, report classification, analyst ranking
 - [ ] textbooks
 *** TODO Knowledge Graph
-* Debug
-** Check log on 192.168.1.166
-docker ps
-docker exec -it kjasdf bash
-cd /opt/apps/vqservice/logs
-tail -n -f 1000 filename.log

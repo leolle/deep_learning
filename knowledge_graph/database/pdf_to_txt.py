@@ -1,15 +1,19 @@
 # -*- coding: utf-8 -*-
 import sys
 import six
+import re
 import pdfminer.settings
 from pdfminer.image import ImageWriter
 import pdfminer.layout
 import pdfminer.high_level
 from gensim import utils
+
 pdfminer.settings.STRICT = False
 
 fp = '/home/weiwu/share/deep_learning/data/docs/raw/20170122-长江证券-长江证券金融工程：基于网络的动量选股策略.pdf'
 fout = './data/research.txt'
+f_parsed = './data/research_converted.txt'
+max_page_num = '9'
 
 
 def extract_text(
@@ -188,8 +192,8 @@ def convert_pdf2txt(args=None):
         default=False,
         action="store_true",
         help="Strip control in XML mode")
-    A = P.parse_args(args=[fp, '--outfile', fout])
-    #     A = P.parse_args(args=args)
+    # A = P.parse_args(args=[fp, '--outfile', fout])
+    A = P.parse_args(args=args)
 
     if A.page_numbers:
         A.page_numbers = set([x - 1 for x in A.page_numbers])
@@ -223,5 +227,21 @@ def convert_pdf2txt(args=None):
     return 0
 
 
-convert_pdf2txt(args=None)
-# with open()
+convert_pdf2txt(args=[fp, '--outfile', fout, '--maxpages', str(max_page_num)])
+with open(fout, 'r') as fp:
+    text = fp.read()
+    s = utils.to_unicode(text)
+    text = s.replace('\n\n', '')
+    # remove nonsense character from formula
+    text = re.sub(
+        "[^!#$%&'()*+,-./:;<=>?@[\]^_`{|}~\u4e00-\u9fa5a-zA-Z0-9\u3002\uff1b\uff0c\uff1a\u201c\u201d\uff08\uff09\u3001\uff1f\u300a\u300b\n\s]+",
+        '', text)
+    # remove ^L
+    text = re.sub("\u000C", "", text)
+    # remove ( )
+    text = re.sub("[\uFF08(][^\s]+[\uFF09)]", "", text)
+    # remove following pattern 888888777777id
+    text = re.sub("[!#$%&'()*+,-./:;<=>?@[\]^_`{|}~a-zA-Z0-9]{10,}", '', text)
+
+with open(f_parsed, 'w') as f:
+    f.write(text)
