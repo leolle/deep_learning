@@ -58,6 +58,7 @@ if __name__ == '__main__':
     #     start_cat = 0
     #     start_page = 0
     #     start_edge = 0
+
     category_path = user_path + \
         '/share/deep_learning/data/zhwiki_cat_pg_lk/zhwiki-latest-category.sql'
     category_path = './data/zhwiki-latest-category.zhs.sql'

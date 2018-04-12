@@ -681,7 +681,7 @@ def upload_node(dict_re_match_object):
                     # if zh_title in IGNORE_CATEGORIES:
                     #     break
                     node = graph_upload_request.graph.nodes.add()
-                    node.props.type = "OSet"
+                    node.props.type = "readonlyDoc"
                     # p1 = node.props.props.entries.add()
                     # p1.key = "url"
                     # p1.value = "https://www.google.com.hk/search?hl=en&source=hp&q=" + quote_plus(
