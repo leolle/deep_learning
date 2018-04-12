@@ -1,16 +1,8 @@
 # -*- coding: utf-8 -*-
-import pymongo
-from pymongo import MongoClient
-client = MongoClient()
-
-client = MongoClient('mongodb://192.168.1.73:27017/')
-import gensim
 import logging
-import multiprocessing
 import os
 import re
-import sys, os
-
+import sys
 from pattern.en import tokenize as p_tokenize
 from nltk import tokenize as n_tokenize
 from nltk.corpus import stopwords

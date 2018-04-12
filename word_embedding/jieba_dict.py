@@ -1,5 +1,9 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
+"""
+This script is used for add/remove customized words to jieba dictionary.
+Test example is provided.
+"""
 from __future__ import print_function, unicode_literals
 import sys
 sys.path.append("../")

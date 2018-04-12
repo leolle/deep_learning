@@ -1,4 +1,10 @@
-* File description3
+* Features:
+** train word embedding
+** visualize word embedding in tensorboard
+** preprocess wikipedia dump
+** dump pages of wikipedia to mongodb
+** retrieve content from mongodb and train word embedding model
+* File description
 | file_name                     | function                                              | log     |
 | similar_words_gensim.py       | word embedding via gensim                             | phrases |
 | train_word2vec_with_gensim.py | en wiki plain files to model                          |         |
@@ -21,7 +27,6 @@
 | word2vec_basic.py             | using tensorflow to build word embedding from scratch |         |
 | word2vec.py                   | Multi-threaded word2vec mini-batched skip-gram model  |         |
 |                               |                                                       |         |
-* statement
 * Visualize embedding in tensorboard projector:
 - how to visualize embedding at tensorboard:
 open [[https://projector.tensorflow.org][tensorboard]], click load data at the left panel, step 1: load a tsv file of vectors, choose [[file:./enwiki_economy_pages_only/all_vocab/tensor.tsv]], step 2: load a tsv file of metadata, choose [[file:./enwiki_economy_pages_only/all_vocab/metadata.tsv]].
