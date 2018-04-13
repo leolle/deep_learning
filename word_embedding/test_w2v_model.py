@@ -24,6 +24,8 @@ zh_finance_vocab = [
     u'销售', u'营业额', u'收入', u'增长率', u'净收入', u'现金流', u'负债', u'资产', u'股息率', u'公司',
     u'有限公司', u'盈利', u'账面', u'价值', u'利率'
 ]
+
+theme = [u'动量', u'因子']
 topn = 20
 
 
@@ -42,12 +44,17 @@ def test_similarity(vocabs, model, topn=topn):
 
 
 zh_wiki_file = user_path + '/share/deep_learning/data/model/phrase/zhwiki/word2vec_org_whole_wiki_corpus_user_dict_m5'
+analyst_report_model_path = '~/share/deep_learning/data/model/analyst_report.w2v_org'
+model = KeyedVectors.load_word2vec_format(
+    analyst_report_model_path, binary=False)
+
 zh_wiki_file_level_3 = './data/'
 # model_zhwiki_level_3 = KeyedVectors.load_word2vec_format(\
 #                                                         zh_wiki_file_level_3, binary=False)
 model_zhwiki = KeyedVectors.load_word2vec_format(zh_wiki_file, binary=False)
 test_similarity(vocabs=zh_finance_vocab, model=model_zhwiki)
 #test_similarity(vocabs=zh_finance_vocab, model=model_zhwiki_level_3)
+test_similarity(vocabs=zh_finance_vocab, model=model)
 
 result = model_zhwiki.most_similar(u"责任有限公司", topn=10)
 for e in result:

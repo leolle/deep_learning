@@ -519,7 +519,7 @@ class WordSegmentation:
             jieba_result = [w for w in jieba_result]
 
         # 去除特殊符号
-        word_list = [w.word.strip() for w in jieba_result if w.flag != 'x']
+        word_list = [w.word-trip() for w in jieba_result if w.flag != 'x']
         word_list = [word for word in word_list if len(word) > 0]
 
         if lower:
@@ -777,3 +777,20 @@ tr4w.analyze(
 print('关键词：')
 for item in tr4w.get_keywords(3, word_min_len=2):
     print(item.word, item.weight)
+
+print()
+print('关键短语：')
+for phrase in tr4w.get_keyphrases(keywords_num=20,min_occur_num=1):
+#for phrase in tr4w.get_keyphrases(keywords_num=20, min_occur_num=2):
+    print(phrase)
+
+tr4s = TextRank4Sentence()
+tr4s.analyze(text=text, lower=True, source='all_filters')
+print()
+print('摘要：')
+for item in tr4s.get_key_sentences(num=100):
+    print(item.index, item.weight, item.sentence)
+result = tr4s.get_key_sentences(num=100)
+# summary = [(x.index, x.sentence) for x in tr4s.get_key_sentences(num=100)]
+summary = pd.DataFrame(result)
+summary = summary.set_index('index').sort_index()
