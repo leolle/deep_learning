@@ -17,6 +17,7 @@ import numpy as np
 import jieba.posseg as pseg
 import codecs
 from tempfile import gettempdir
+from ylib.graph_upload import batch_upload, upload_node
 stopwords_path = '/home/weiwu/share/deep_learning/code/stopwords'
 user_dict_path = '/home/weiwu/share/deep_learning/data/dict/jieba.txt'
 import jieba
@@ -318,7 +319,8 @@ sentence_delimiters = ['?', '!', ';', '？', '！', '。', '；', '……', '…
 #     'an', 'i', 'j', 'l', 'n', 'nr', 'nrfg', 'ns', 'nt', 'nz', 't', 'v', 'vd',
 #     'vn', 'eng'
 # ]
-global allow_speech_tags = ['an', 'n', 'nt', 'x', 'eng', 'nt', 'nz']
+global allow_speech_tags
+allow_speech_tags = ['an', 'n', 'nt', 'x', 'eng', 'nt', 'nz']
 
 
 def debug(*args):
@@ -519,7 +521,7 @@ class WordSegmentation:
             jieba_result = [w for w in jieba_result]
 
         # 去除特殊符号
-        word_list = [w.word-trip() for w in jieba_result if w.flag != 'x']
+        word_list = [w.word.strip() for w in jieba_result if w.flag != 'x']
         word_list = [word for word in word_list if len(word) > 0]
 
         if lower:
@@ -767,6 +769,42 @@ class TextRank4Keyword(object):
         ]
 
 
+def keyword_extraction(text, keywords_num_fraction, keywords_output_num):
+    print('extract keywords')
+    tr4w = TextRank4Keyword(
+        allow_speech_tags=['an', 'n', 'nt', 'x', 'eng', 'nt', 'nz'],
+        delimiters=['?', '!', ';', '？', '！', '。', '；', '……', '…', '\n'])
+
+    # allow_speech_tags = [
+    #     'an', 'i', 'j', 'l', 'n', 'nr', 'nrfg', 'ns', 'nt', 'nz', 't', 'v', 'vd',
+    #     'vn', 'eng'
+    # ]
+    from tempfile import gettempdir
+    tmp_dir = gettempdir()
+    nodes_path = tmp_dir + '/file.txt'
+    n_re = re.compile("'\S+'")
+
+    tr4w.analyze(text=text, lower=False, window=2)
+
+    print('关键词：')
+    keywords = tr4w.get_keywords(
+        keywords_num_fraction, keywords_output_num, word_min_len=2)
+    import codecs
+    with codecs.open(nodes_path, "w", encoding="utf-8") as d:
+        d.write(str([x.word for x in keywords]))
+    uploaded_number = batch_upload(
+        n_re, nodes_path, batch_size=200, upload_node, start=0, end=15030000)
+    print("uploaded number: %s" % (uploaded_number))
+
+    for item in keywords:
+        print(item.word, item.weight)
+    df = pd.DataFrame(keywords, columns=['word', 'weight'])
+    df['word'] = df['word'].apply(hash)
+    df['word'] = gftIO.gidStrArray2CharArray(df['word'].values.copy())
+    # return pd.DataFrame(data=[x.word for x in keywords])
+    return df
+
+
 print('extract keywords')
 tr4w = TextRank4Keyword()
 
@@ -780,17 +818,6 @@ for item in tr4w.get_keywords(3, word_min_len=2):
 
 print()
 print('关键短语：')
-for phrase in tr4w.get_keyphrases(keywords_num=20,min_occur_num=1):
-#for phrase in tr4w.get_keyphrases(keywords_num=20, min_occur_num=2):
+# for phrase in tr4w.get_keyphrases(keywords_num=10,min_occur_num=1):
+for phrase in tr4w.get_keyphrases(keywords_num=20, min_occur_num=2):
     print(phrase)
-
-tr4s = TextRank4Sentence()
-tr4s.analyze(text=text, lower=True, source='all_filters')
-print()
-print('摘要：')
-for item in tr4s.get_key_sentences(num=100):
-    print(item.index, item.weight, item.sentence)
-result = tr4s.get_key_sentences(num=100)
-# summary = [(x.index, x.sentence) for x in tr4s.get_key_sentences(num=100)]
-summary = pd.DataFrame(result)
-summary = summary.set_index('index').sort_index()

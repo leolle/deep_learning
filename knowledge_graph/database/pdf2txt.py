@@ -10,6 +10,14 @@ from pdfminer.pdfpage import PDFPage
 from pdfminer.pdfparser import PDFParser
 from pdfminer.converter import PDFPageAggregator
 from pdfminer.pdfdocument import PDFDocument, PDFNoOutlines
+import sys
+import logging
+import six
+import pdfminer.settings
+pdfminer.settings.STRICT = False
+import pdfminer.high_level
+import pdfminer.layout
+from pdfminer.image import ImageWriter
 
 # class P2T():
 
@@ -156,14 +164,6 @@ from pdfminer.pdfdocument import PDFDocument, PDFNoOutlines
 #     i = re.sub(removeNoneLine, "\n", i)
 #     a.write(i)
 # a.close()
-import sys
-import logging
-import six
-import pdfminer.settings
-pdfminer.settings.STRICT = False
-import pdfminer.high_level
-import pdfminer.layout
-from pdfminer.image import ImageWriter
 
 
 def extract_text(

@@ -18,6 +18,8 @@ from gensim.models.word2vec import LineSentence
 from tqdm import tqdm
 from gensim.models import KeyedVectors
 from ylib.preprocessing import preprocess_string, cut_article, remove_stopwords, strip_punctuation, tokenize, strip_numeric, filter_speech_tag
+from textrank4zh import TextRank4Keyword, TextRank4Sentence
+
 user_path = os.path.expanduser("~")
 
 logging.basicConfig(
@@ -37,9 +39,12 @@ def complete_dir_path(dir_path):
         return dir_path
 
 
+tr4w = TextRank4Keyword(
+    allow_speech_tags=['an', 'n', 'nt', 'x', 'eng', 'nt', 'nz'])
 input_path = '/home/weiwu/projects/deep_learning/knowledge_graph/database/data/research_converted.txt'
 with open(input_path, 'r') as fp:
     text = fp.read()
+    tr4w.analyze(text=text, lower=False, window=2)
     text = preprocess_string(text, filters=filters)
 tmp_dir = gettempdir()
 output = open(tmp_dir + '/test.txt', 'wb')
@@ -53,6 +58,23 @@ model = gensim.models.Word2Vec(
     window=5,
     min_count=1,
     workers=multiprocessing.cpu_count())
+
+keywords = [x.word for x in tr4w.get_keywords(99999, word_min_len=2)]
+
+
+def find_similar_words(model, target_words):
+    similar_words = [
+        x[0] for x in model.most_similar(target_words, topn=20)
+        if x[0] in keywords
+    ]
+    print(similar_words)
+
+
+find_similar_words(model, u'动量')
+
+# model.most_similar(u'动量', topn=20)
+# model.most_similar(u'模型', topn=20)
+
 # class MySentences(object):
 
 #     def __init__(self, dirname):
@@ -95,8 +117,10 @@ if __name__ == '__main__':
         min_count=2,
         workers=multiprocessing.cpu_count())
     model.wv.save_word2vec_format(
-        complete_dir_path(output_path) + 'research_converted' + ".w2v_org",
-        complete_dir_path(output_path) + 'research_converted' + ".vocab",
+        complete_dir_path(output_path) + input_path.split('/')[-1][:-4] +
+        ".w2v_org",
+        complete_dir_path(output_path) + input_path.split('/')[-1][:-4] +
+        ".vocab",
         binary=False)
     end = time()
     load_duration = end - begin
