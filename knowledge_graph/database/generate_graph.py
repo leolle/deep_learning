@@ -1,4 +1,8 @@
 # -*- coding: utf-8 -*-
+"""
+Tue Apr 17 10:46:14 CST 2018
+generate webcrawl graph with searching words and related words.
+"""
 import networkx as nx
 # import random
 # import uuid

@@ -39,14 +39,16 @@ def complete_dir_path(dir_path):
         return dir_path
 
 
+tmp_dir = gettempdir()
+
 tr4w = TextRank4Keyword(
     allow_speech_tags=['an', 'n', 'nt', 'x', 'eng', 'nt', 'nz'])
-input_path = '/home/weiwu/projects/deep_learning/knowledge_graph/database/data/research_converted.txt'
+input_path = tmp_dir + '/text.txt'
+# input_path = '/home/weiwu/projects/deep_learning/knowledge_graph/database/data/research_converted.txt'
 with open(input_path, 'r') as fp:
     text = fp.read()
     tr4w.analyze(text=text, lower=False, window=2)
     text = preprocess_string(text, filters=filters)
-tmp_dir = gettempdir()
 output = open(tmp_dir + '/test.txt', 'wb')
 output.write(text.encode('utf-8'))
 output.close()
@@ -70,7 +72,10 @@ def find_similar_words(model, target_words):
     print(similar_words)
 
 
-find_similar_words(model, u'动量')
+# find_similar_words(model, u'黄金')
+# find_similar_words(model, u'模型')
+# find_similar_words(model, u'策略')
+find_similar_words(model, u'福耀玻璃')
 
 # model.most_similar(u'动量', topn=20)
 # model.most_similar(u'模型', topn=20)

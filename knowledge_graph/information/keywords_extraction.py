@@ -18,6 +18,7 @@ import jieba.posseg as pseg
 import codecs
 from tempfile import gettempdir
 from ylib.graph_upload import batch_upload, upload_node
+from lib.gftTools import gftIO
 stopwords_path = '/home/weiwu/share/deep_learning/code/stopwords'
 user_dict_path = '/home/weiwu/share/deep_learning/data/dict/jieba.txt'
 import jieba
@@ -72,7 +73,7 @@ else:
 
 __DEBUG = None
 
-x0 = 'D6B8F9A4422036868574F4DB43BEFEA4'
+x0 = '8C2372AE3ED505C44AB0456C783FFC3A'
 mg = MongoClient('mongodb://172.16.103.134:27017/')
 fs_db = mg['binData']
 fs = gridfs.GridFS(fs_db)
@@ -265,8 +266,8 @@ def convert_pdf2txt(args=None):
         default=False,
         action="store_true",
         help="Strip control in XML mode")
-    A = P.parse_args(args=[fp, '--outfile', fout, '--maxpages', '9'])
-    #     A = P.parse_args(args=args)
+    # A = P.parse_args(args=[fp, '--outfile', fout, '--maxpages', '9'])
+    A = P.parse_args(args=args)
 
     if A.page_numbers:
         A.page_numbers = set([x - 1 for x in A.page_numbers])
@@ -301,19 +302,25 @@ def convert_pdf2txt(args=None):
 
 
 print('convert pdf to txt')
-convert_pdf2txt(args=None)
+convert_pdf2txt(args=[fp, '--outfile', fout, '--maxpages', '25'])
 
 with open(tmp_dir + '/text.txt', 'rb') as f:
     text = f.read()
 
 s = utils.to_unicode(text)
 text = s.replace('\n\n', '')
+# 去年非可读字符
 text = re.sub(
     "[^!#$%&'()*+,-./:;<=>?@[\]^_`{|}~\u4e00-\u9fa5a-zA-Z0-9\u3002\uff1b\uff0c\uff1a\u201c\u201d\uff08\uff09\u3001\uff1f\u300a\u300b\n\s]+",
     '', text)
+# 去掉^L
 text = re.sub("\u000C", "", text)
+# 去掉()
 text = re.sub("[\uFF08(][^\s]+[\uFF09)]", "", text)
-text = re.sub("[!#$%&'()*+,-./:;<=>?@[\]^_`{|}~a-zA-Z0-9]{10,}", '', text)
+# 去年连续多余重复字符，包括》10个的字母，数字
+text = re.sub("[!#$%&'()*+,./:;<=>?@[\]^_`{|}~a-zA-Z0-9]{10,}", '', text)
+with open(fout, 'w') as f:
+    f.write(text)
 sentence_delimiters = ['?', '!', ';', '？', '！', '。', '；', '……', '…', '\n']
 # allow_speech_tags = [
 #     'an', 'i', 'j', 'l', 'n', 'nr', 'nrfg', 'ns', 'nt', 'nz', 't', 'v', 'vd',
@@ -793,7 +800,7 @@ def keyword_extraction(text, keywords_num_fraction, keywords_output_num):
     with codecs.open(nodes_path, "w", encoding="utf-8") as d:
         d.write(str([x.word for x in keywords]))
     uploaded_number = batch_upload(
-        n_re, nodes_path, batch_size=200, upload_node, start=0, end=15030000)
+        n_re, nodes_path, 200, upload_node, start=0, end=15030000)
     print("uploaded number: %s" % (uploaded_number))
 
     for item in keywords:

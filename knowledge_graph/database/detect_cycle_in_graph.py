@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 """
+Tue Apr 17 11:01:53 CST 2018
 Python program to detect cycle in a graph.
 1. add edges into a graph.
 2. delete edges with loops.
@@ -246,17 +247,20 @@ def write_graph(graph):
 
 wiki_category_re = re.compile(
     "\(([0-9]+),('[^,]+'),([0-9]+),([0-9]+),([0-9]+)\)")
-
+ylog.debug('create graph nodes')
 batch_upload(
     wiki_category_re, category_path, 200, add_node, start=0, end=10000000)
 
-# batch_upload(
-#     wiki_category_link_re,
-#     category_link_path,
-#     200,
-#     add_edge,
-#     start=0,
-#     end=10000000)
+ylog.debug('create graph edges')
+batch_upload(
+    wiki_category_link_re,
+    category_link_path,
+    200,
+    add_edge,
+    start=0,
+    end=10000000)
+
+# nx.write_gexf(graph, 'graph.whole.gexf')
 
 # ls_nodes = list(graph.nodes)
 # counter = 0
