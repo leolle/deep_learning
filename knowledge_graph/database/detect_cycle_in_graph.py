@@ -12,11 +12,13 @@ import re
 from lib.gftTools import gftIO
 from lib.gftTools.proto import graphUpload_pb2
 from tqdm import tqdm
+from collections import defaultdict
 import random
 from ylib import ylog
 import logging
 import os, sys
 import hashlib
+from hanziconv import HanziConv
 from google.protobuf.message import EncodeError
 from urllib.error import HTTPError
 from lib.gftTools.gftIO import GSError
@@ -138,6 +140,8 @@ def add_edge(dict_re_match_object):
                     page_title = end[-1]
                 page_title = page_title.replace(" ", "_")
                 # page subtype is 0
+                page_title = HanziConv.toSimplified(page_title)
+                cat_title = HanziConv.toSimplified(cat_title)
                 graph.add_edge(cat_title, page_title, subtype=0)
             if edge_type == 'subcat':
                 subcat_title = item.group(3)[1:-1]
@@ -152,6 +156,8 @@ def add_edge(dict_re_match_object):
                 if subcat_title == cat_title:
                     continue
                 # subcategory subtype is 1
+                subcat_title = HanziConv.toSimplified(subcat_title)
+                cat_title = HanziConv.toSimplified(cat_title)
                 graph.add_edge(cat_title, subcat_title, subtype=1)
                 g.addEdge(cat_title, subcat_title)
 
@@ -166,7 +172,7 @@ def add_node(dict_re_match_object):
     for index, value in dict_re_match_object.items():
         if value is not None:
             item = dict_re_match_object.get(index)
-            graph.add_node(item.group(2)[1:-1])
+            graph.add_node(HanziConv.toSimplified(item.group(2)[1:-1]))
 
 
 def batch_upload(re, file_path, BATCH_SIZE, func, start, end):
@@ -259,6 +265,17 @@ batch_upload(
     add_edge,
     start=0,
     end=10000000)
+d = defaultdict(list)
+for k, v in list(graph.out_edges('技术分析')):
+    d[k].append(v)
+
+
+def write_dict(dictionary, category):
+    for k, v in list(graph.out_edges(category)):
+        dictionary[k].append(v)
+
+
+write_dict(d, '财务比率')
 
 # nx.write_gexf(graph, 'graph.whole.gexf')
 

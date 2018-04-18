@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from collections import defaultdict
 import pandas as pd
 from pymongo import MongoClient
 import gridfs
@@ -74,6 +75,7 @@ else:
 __DEBUG = None
 
 x0 = '8C2372AE3ED505C44AB0456C783FFC3A'
+x0 = 'D6B8F9A4422036868574F4DB43BEFEA4'
 mg = MongoClient('mongodb://172.16.103.134:27017/')
 fs_db = mg['binData']
 fs = gridfs.GridFS(fs_db)
@@ -828,3 +830,11 @@ print('关键短语：')
 # for phrase in tr4w.get_keyphrases(keywords_num=10,min_occur_num=1):
 for phrase in tr4w.get_keyphrases(keywords_num=20, min_occur_num=2):
     print(phrase)
+
+d = defaultdict(list, {
+    '技术分析': [
+        '标准差', '道氏理论', '布林带', '艾略特波浪理论', 'K线', '相对强弱指数', '技术分析', '移动平均', 'MACD',
+        '牛熊分界线', '支撑线', '威廉指标', '兴登堡凶兆', '斐波那契回调', '随机指标', '美国线', '型态学', '乖离率',
+        '压力线', '动向指数', '死猫反弹', '动量指标', '振盪指标', '技术指标', '一目均衡表', '抛物线指标'
+    ]
+})
