@@ -25,3 +25,6 @@
 [submodule "entity_relation_extraction/TextRank"]
 	path = entity_relation_extraction/TextRank
 	url = git@github.com:davidadamojr/TextRank.git
+[submodule "web_crawl/Web-crawler-and-data-analysis"]
+	path = web_crawl/Web-crawler-and-data-analysis
+	url = git@github.com:xUFduO/Web-crawler-and-data-analysis.git
