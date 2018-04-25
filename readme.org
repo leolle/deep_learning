@@ -12,7 +12,7 @@
 #+CREATOR: Emacs 24.5.1 (Org mode 8.3.4)
 
 * Deep Learning
-** description
+** Natural Language Processing description
 [[https://docs.google.com/spreadsheets/d/1mxwMNg7eDc5bVEVdYmsm_hdyI3d2jbIF5M4nKR04Tq0/edit#gid=1648960929][technique_excel_table]] 具体每项技术细节在excel table 的链接里面。
 1. 分词
 
@@ -52,36 +52,36 @@
 8. 知识图谱
 
  知识图谱是把识别到的实体，用实体之间关系组成的一个图。涉及到了图数据库（当然也可以用关系型数据库），实体抽取和关系抽取。
- [[file:./knowledge_graph/basic/graph_database/search.py][英雄联盟知识图谱]]
-** Natural Language Processing
 
-*** Personalized Intelligent Agents(PIA)
-**** Objective:
-***** Short Term
+ [[file:./knowledge_graph/basic/graph_database/search.py][英雄联盟知识图谱]]
+
+** Personalized Intelligent Agents(PIA)
+*** Objective:
+**** Short Term
 - make traditional and mature NLP model customizable visually by end users at multiple levels e.g., training data, model parameter.
 - incorporate customizable NLP signals into both qualitative and quantitative investment strategies and research process.
 - recommendation of context sensitive synonyms.
 - Hot-word trending analysis on various topics, technology, industrial sectors, analysts comment, company announcement, Deep Learning authors comments, popular topics, papges, etc. Scrape the historical archives of web text in order to get for each post the following information: date, keywords, text.
 
-***** Long Term
+**** Long Term
 - context sensitive, Personalized Intelligent Agents, forming an eco-system collaborating, competing and evolving together on behalf of their owners.
 - Graph2vec, 把word2vec应用在用户workflow使用序列上，根据用户使用app/func的顺序，把app/func看做单词，也是可以形成这样的序列数据，进而训练处每个app对应的向量。利用这个向量计算app之间的相似度，把真正内容相关的app聚合在一起，推荐给用户。
 - 可计算的知识服务引擎, like WolframAlpha.
-****** 智能投顾
+***** 智能投顾
 - 基于金融理财产品知识图谱的语义查询。知识图谱从互联网上公开信息构建，并支持如“高收益”这样的语义搜索。
 - 搜索相关主题的股票，及其新闻，公告，如“雄安题材”，“苹果主题”，“独角兽”等。
-****** 金融新闻Bots
+***** 金融新闻Bots
 - 实时监控各大金融新闻网站的数据，构建了一个监控平台。 根据用户输入的自然语言问题，自动推送与其相关的新闻，并标记其中和用户输入问题相关的段落。
 - Event-Driven Stock prediction, using sentiment analysis on the web-crawling tokens/documents with doc2vec.
-******* 金融搜索
+****** 金融搜索
 显示当前关键词所有的新闻消息，公告，根据消息数量得出的热度。
-****** 智能选股
+***** 智能选股
 | 百科类筛选 | ST股票， 非ST股票， 上证50股票                                         |
 | 数据类筛选 | 股价小于100块股票                                                      |
 | 事件类筛选 | 刚复牌股票，今年刚上市的股票                                           |
 | 选股类筛选 | 每股收益在0.2-0.3之间，且市盈率小于30的股票;浙江省市盈率小于20倍的公司 |
 
-****** 知识图谱分析
+***** 知识图谱分析
 通过知识图谱相关技术从招股书、年报、公司公告、券商研究报告、新闻等半结构化表格和非结构化文本数据中批量自动抽取公司的股东、子公司、供应商、客户、合作伙伴、竞争对手等信息，构建出公司的知识图谱。
 
 关系可以是企业的上下游、合作、竞争对手、子母公司、投资、对标等关系，可以是高管与企业间的任职等关系，也可以是行业间的逻辑关系，实体则是投资机构、投资人、企业等等，把它们用知识图谱表示出来，从而进行更深入的知识推理。
@@ -89,43 +89,26 @@
 在某个宏观经济事件或者企业相关事件发生的时候，券商分析师、交易员、基金公司基金经理等投资研究人员可以通过此图谱做更深层次的分析和更好的投资决策，比如在美国限制向中兴通讯出口的消息发布之后，如果我们有中兴通讯的客户供应商、合作伙伴以及竞争对手的关系图谱，就能在中兴通讯停牌的情况下快速地筛选出受影响的国际国内上市公司从而挖掘投资机会或者进行投资组合风险控制。
 
 某公司打算借壳上市，通过知识图谱相关技术寻找相关联的公司，找到有可能的潜在借壳对象。
-[[./img/knowledge_graph_company.jpg]]
-
-[[./img/knowledge_graph_organization.png]]
-****** Event-Driven Strategies
-******* Goal:
+***** Event-Driven Strategies
+****** Goal:
 Detect event from announcement, predict stock price.
-******* events:
+****** events:
 - Earnings Releases:
 Corporate earnings tend to move markets when they come in above or below the market’s expectations, which means that it’s important for active traders to understand the expected figures beforehand.
 - Mergers & Acquisitions:
 M&A tends to produce dramatic increases or decreases in share prices depending on the terms of the deal, while creating an opportunity for arbitrage strategies between the buyer and seller.
 - Spin-Offs:
 Spin-offs tend to see an initial decline in share price as institutional investors who received shares sell off their stake to comply with regulatory requirements or other rules, thereby creating opportunities for traders.
-******* Tool:
+****** Tool:
 Named Entity Recognization, Entity Relation Extraction, Recurrent Neural Networks, CNN.
 
-**** Overview Steps:
+*** Overview Steps:
 - 数据爬虫 -> 数据清洗(干净数据) -> 语义分析, 命名实体识别(识别金融实体、实体提取及消歧、关系提取,分区语义网络) -> 文档树/表 -> 图谱(根据业务需要，定义并识别金融实体间的各种关系，进而生成知识图谱) -> 本体，本体存储 -> 语用分析 -> 分析推理，逻辑(定义并表达业务逻辑，通过在知识图谱上实现各种具体任务来体现数据价值，如推理等，实现数据到智能的升华。)
 
 - Pipeline: choose category and depth in GS skill -> return pages GID -> fetch paper via GID in python -> text processing -> word embedding models, entity extraction, classification, topic extraction, relation extraction, sequence to sequenc, sentiment analysis -> help users to select X,y.
 
-**** Model
-- State of the Art NL models based on DNN
-  - CBOW
-  - Skip gram
-  - RNN(Sequence to sequence)
-  - LSTM
-  - Convolutional Network Sentence classification
-- Libraries
-  - Gensim
-  - SPACY
-  - IEPY
-  - Stanford coreNLP
-  - NLTK
-
-**** Data
-***** Text Labeled with (semi) structured data
+*** Data
+**** Text Labeled with (semi) structured data
 - [X] wiki page titles and page text, wiki category
 - [ ] company filings text, filing classification, event time series data (attributes manually extracted)
 - [ ] finance conference scripts.
@@ -133,7 +116,6 @@ Named Entity Recognization, Entity Relation Extraction, Recurrent Neural Network
 - [ ] company filings text, company industry classification
 - [ ] textbook or CFA chapter name, chapter exercise questions, multiple choice questions
 - [ ] SSRN paper keyword, category, title, abstract, data, model and conclusion
-***** Text Unlabeled
+**** Text Unlabeled
 - [ ] analyst research reports, analyst research reports, report classification, analyst ranking
 - [ ] textbooks
-*** TODO Knowledge Graph
