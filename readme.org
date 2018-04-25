@@ -12,6 +12,47 @@
 #+CREATOR: Emacs 24.5.1 (Org mode 8.3.4)
 
 * Deep Learning
+** description
+[[https://docs.google.com/spreadsheets/d/1mxwMNg7eDc5bVEVdYmsm_hdyI3d2jbIF5M4nKR04Tq0/edit#gid=1648960929][technique_excel_table]] 具体每项技术细节在excel table 的链接里面。
+1. 分词
+
+ 中文自然语言处理首先要解决的一个问题是分词问题，即一个句子，怎么样把它拆分成一组一组的词或者单个意义的字。
+
+[[file:./knowledge_graph/information/test_jieba.py][jieba分词]]
+2. 词向量化
+
+ 怎么样让计算机可以读懂中文呢？得想办法把字符转换成数字。
+
+ 这里面有两个方法，一个是one-hot mapping，把每个字用一个单独的向量来表示，向量的dimension就是所有搜集到词的词典的大小。这里有个问题就是词与词之间的向量是没有联系的。
+ 另一个方法是word embedding, 用distributed representation的方式来表示所有词，把一个向量压缩到一个100维或者200维的空间里面，这样训练出来的模型词与词之间在空间上就有联系。具体看principle里面的内容介绍。
+
+[[file:./word_embedding/train_word2vec_model.py][词向量化]]
+3. 词向量可视化
+
+ 怎么样把这些高维空间的向量可视化，或者说怎么知道一个词的向量与另一个词向量之间空间上的关系，就是embedding visualization, 也就是降维。里面运用到的技术主要有t-SNE和PCA.
+
+[[file:./word_embedding/visualize_tsne.py][词向量可视化t-sne]]
+4. 实体抽取与关系抽取
+
+ 怎么样知道一段话里面说了什么东西，他们之间的关系是怎么样的，运用了实体抽取和关系抽取的技术。现在这两个都是由深度学习模型循环神经网络来做了。当然也有deepdive这样已经集成化的library.
+
+[[file:./entity_relation_extraction/Information-Extraction-Chinese/RE_BGRU_2ATT/test_GRU.py][关系抽取]]
+5. 关键词抽取
+
+ 怎么把一段话，一篇文章里面的关键词，关键句子找出来，运用了textrank技术，这种技术是从pagerank得到启发。
+ 将原文本拆分为句子，在每个句子中过滤掉停用词（可选），并只保留指定词性的单词（可选）。由此可以得到句子的集合和单词的集合。每个单词作为pagerank中的一个节点。设定窗口大小为k，假设一个句子依次由下面的单词组成：w1, w2, w3, w4, w5, ..., wn，w1, w2, ..., wk、w2, w3, ...,wk+1、w3, w4, ...,wk+2等都是一个窗口。在一个窗口中的任两个单词对应的节点之间存在一个无向无权的边。k=2:10.基于上面构成图，可以计算出每个单词节点的重要性。最重要的若干单词可以作为关键词。
+
+[[file:./knowledge_graph/information/test_jieba.py][textrank]]
+6. 文档相似性
+
+ 怎么分辨文档与文档之间的相关性运用了LDA, TF-IDF技术，具体可在文档里面查看。
+7. 网络爬虫
+
+ 网络爬虫是用来从某个网站上搜集数据的，一般是结构化数据。
+8. 知识图谱
+
+ 知识图谱是把识别到的实体，用实体之间关系组成的一个图。涉及到了图数据库（当然也可以用关系型数据库），实体抽取和关系抽取。
+[[file:./knowledge_graph/basic/graph_database/search.py][英雄联盟知识图谱]]
 ** Natural Language Processing
 
 *** Personalized Intelligent Agents(PIA)
