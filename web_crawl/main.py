@@ -12,9 +12,9 @@ mongo_client = db.xueqiu
 
 new_kw = 'china 50'
 
-# gs = GoogleSearch()
-# data = gs.gain_data(query=new_kw, language='en', nums=10)
-# print(data['RelatedKeywords'])
+gs = GoogleSearch()
+data = gs.gain_data(query=new_kw, language='en', nums=10)
+print(data['RelatedKeywords'])
 
 mg = Xueqiu.Xueqiu()
 query = '创业板'
