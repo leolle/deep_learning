@@ -220,3 +220,8 @@ class MagicGoogle():
 if __name__ == '__main__':
     mg = MagicGoogle()
     data = mg.gain_data(query='china', language='en', nums=100)
+    from pws import Google
+    from pws import Bing
+
+    # print(Google.search(query='hello world', num=5, start=2, country_code="es"))
+    print(Bing.search('hello world', 5, 2))
