@@ -9,7 +9,7 @@ Created on Mon Jan 29 19:02:07 2018
 import requests
 import re
 import pandas as pd
-import os 
+import os
 import bs4
 from bs4 import BeautifulSoup
 import time
@@ -28,13 +28,13 @@ headers = {
              }
 proxies = { "http": "http://127.0.0.1:1080", "https": "http://127.0.0.1:1080"}
 url='https://scholar.google.com/scholar?lr=&q=lda+finance&hl=zh-CN'
-Resp2=requests.get(url,headers=headers,proxies=proxies) 
+Resp2=requests.get(url,headers=headers,proxies=proxies)
 print Resp2
 html = Resp2.text
 bsObj = BeautifulSoup(html, "lxml")
 
 
-    
+
 breif_counts=bsObj.find_all('div',id='gs_ab_md')[0].text
 print breif_counts
 
@@ -44,8 +44,8 @@ for iid in bsObj.find_all('div',class_={'gs_r' ,'gs_or' ,'gs_scl'}):
     print Link
     Title=iid.find('h3',class_='gs_rt').text
     print Title
-    
-    if len(iid.find_all('div',class_='gs_a'))!=0:       
+
+    if len(iid.find_all('div',class_='gs_a'))!=0:
         infos=iid.find_all('div',class_='gs_a')[0].text
         items=infos.split('-')
         if len(items)>2:
@@ -61,14 +61,14 @@ for iid in bsObj.find_all('div',class_={'gs_r' ,'gs_or' ,'gs_scl'}):
             public=items[1]
             print public
             source=None
-        
+
     if iid.find('div',class_='gs_rs') is not None:
         abstarct= iid.find('div',class_='gs_rs').text
         print abstarct
-    if len(iid.find_all('div',class_='gs_ggsd'))!=0:       
+    if len(iid.find_all('div',class_='gs_ggsd'))!=0:
         download_link= iid.find_all('div',class_='gs_ggsd')[0].text
         print download_link
-    if iid.find_all('div',class_='gs_fl') is not None: 
+    if iid.find_all('div',class_='gs_fl') is not None:
         if len(iid.find_all('div',class_='gs_fl'))==2:
             cited= iid.find_all('div',class_='gs_fl')[1].text
             pattern=re.compile(u'被引用次数：(\d+) 相关文章')
@@ -92,10 +92,7 @@ for iid in bsObj.find_all('div',class_={'gs_r' ,'gs_or' ,'gs_scl'}):
         'cited_counts':cited_counts
            }
     infomation.append(infos)
-    
 
-   
+
+
     print '*'*100
-    
-    
-    
