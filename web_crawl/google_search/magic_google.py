@@ -9,12 +9,24 @@ import cchardet
 import requests
 from math import ceil
 from pyquery import PyQuery as pq
-from .config import USER_AGENT, DOMAIN, BLACK_DOMAIN, URL_SEARCH, LOGGER
+# from config import USER_AGENT, DOMAIN, BLACK_DOMAIN, URL_SEARCH, LOGGER
+from deep_learning.web_crawl.config import USER_AGENT, DOMAIN, BLACK_DOMAIN, URL_SEARCH, LOGGER
 import logging
 from urllib.parse import quote_plus, urlparse, parse_qs
+from ylib import ylog
+import logging
+
+from ylib.yaml_config import Configuraion
+
+ylog.set_level(logging.DEBUG)
+ylog.console_on()
+ylog.filelog_on("app")
 
 logging.basicConfig(
     format='%(asctime)s : %(levelname)s : %(message)s', level=logging.DEBUG)
+config = Configuraion()
+
+# config.load('./config.yaml')
 
 
 class MagicGoogle():
@@ -120,19 +132,28 @@ class MagicGoogle():
 
         RelatedKw = []
         pq_content = self.pq_html(bsObj)
-        if pq_content is not None:
-            for item in pq_content('p._Bmc').items():
-                href = item('a').attr('href')
-                if href:
-                    o = urlparse(href, 'http')
-                    if o.netloc:
-                        kw = href
-                    if href.startswith('/search?'):
-                        href = parse_qs(o.query)['q'][0]
-                        o = urlparse(href, 'http')
-                        if o.path:
-                            kw = href
-                    RelatedKw.append(kw)
+        # ylog.info(pq_content)
+        related_str = (str(pq_content))
+        related_str_re = re.compile("\"rfs\":\[[^!]+\]")
+        related_str_rfs = related_str_re.search(related_str).group()
+        ylog.debug(related_str_rfs)
+        related_ls_re = re.compile("(:\[|,)(\"[A-Za-z\s]*\")")
+        ls_related = related_ls_re.findall(related_str_rfs)
+        RelatedKw = [x[1][1:-1] for x in ls_related]
+        ylog.debug(RelatedKw)
+        # if pq_content is not None:
+        #     for item in pq_content('p._Bmc').items():
+        #         href = item('a').attr('href')
+        #         if href:
+        #             o = urlparse(href, 'http')
+        #             if o.netloc:
+        #                 kw = href
+        #             if href.startswith('/search?'):
+        #                 href = parse_qs(o.query)['q'][0]
+        #                 o = urlparse(href, 'http')
+        #                 if o.path:
+        #                     kw = href
+        #             RelatedKw.append(kw)
         return RelatedKw
 
     def req_url(self, query, language=None, start=0, pause=2):
@@ -219,9 +240,14 @@ class MagicGoogle():
 
 if __name__ == '__main__':
     mg = MagicGoogle()
-    data = mg.gain_data(query='china', language='en', nums=100)
+    data = mg.gain_data(query='china', language='en', nums=10)
+    # ylog.debug(data)
     from pws import Google
     from pws import Bing
 
-    # print(Google.search(query='hello world', num=5, start=2, country_code="es"))
-    print(Bing.search('hello world', 5, 2))
+    # ylog.debug(
+    # Google.search(query='hello world', num=5, start=2, country_code="es"))
+
+    # print(Bing.search('hello world', 5, 2))
+mg = MagicGoogle()
+data = mg.gain_data(query='china', language='en', nums=10)

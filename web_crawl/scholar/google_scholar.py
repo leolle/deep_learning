@@ -167,7 +167,10 @@ import re
 import sys
 import warnings
 import random
-
+from ylib import ylog
+import logging
+ylog.set_level(logging.DEBUG)
+ylog.console_on()
 try:
     # Try importing for Python 3
     # pylint: disable-msg=F0401
@@ -1112,7 +1115,7 @@ class ScholarQuerier(object):
                 headers={'User-Agent': ScholarConf.USER_AGENT})
             hdl = self.opener.open(req)
             html = hdl.read()
-
+            ylog.debug(log_msg)
             ScholarUtils.log('debug', log_msg)
             ScholarUtils.log('debug', '>>>>' + '-' * 68)
             ScholarUtils.log('debug', 'url: %s' % hdl.geturl())
@@ -1173,15 +1176,15 @@ def citation_export(querier):
 
 def main():
     usage = """scholar.py [options] <query string>
-A command-line interface to Google Scholar.
-Examples:
-# Retrieve one article written by Einstein on quantum theory:
-scholar.py -c 1 --author "albert einstein" --phrase "quantum theory"
-# Retrieve a BibTeX entry for that quantum theory paper:
-scholar.py -c 1 -C 17749203648027613321 --citation bt
-# Retrieve five articles written by Einstein after 1970 where the title
-# does not contain the words "quantum" and "theory":
-scholar.py -c 5 -a "albert einstein" -t --none "quantum theory" --after 1970"""
+    A command-line interface to Google Scholar.
+    Examples:
+    # Retrieve one article written by Einstein on quantum theory:
+    scholar.py -c 1 --author "albert einstein" --phrase "quantum theory"
+    # Retrieve a BibTeX entry for that quantum theory paper:
+    scholar.py -c 1 -C 17749203648027613321 --citation bt
+    # Retrieve five articles written by Einstein after 1970 where the title
+    # does not contain the words "quantum" and "theory":
+    scholar.py -c 5 -a "albert einstein" -t --none "quantum theory" --after 1970"""
 
     fmt = optparse.IndentedHelpFormatter(max_help_position=50, width=100)
     parser = optparse.OptionParser(usage=usage, formatter=fmt)
@@ -1322,7 +1325,7 @@ scholar.py -c 5 -a "albert einstein" -t --none "quantum theory" --after 1970"""
     parser.add_option_group(group)
 
     options, _ = parser.parse_args()
-
+    ylog.debug(options)
     # Show help if we have neither keyword search nor author name
     if len(sys.argv) == 1:
         parser.print_help()
@@ -1393,7 +1396,6 @@ scholar.py -c 5 -a "albert einstein" -t --none "quantum theory" --after 1970"""
             query.set_include_patents(False)
         if options.no_citations:
             query.set_include_citations(False)
-
     if options.count is not None:
         options.count = min(options.count, ScholarConf.MAX_PAGE_RESULTS)
         query.set_num_page_results(options.count)
@@ -1416,4 +1418,8 @@ scholar.py -c 5 -a "albert einstein" -t --none "quantum theory" --after 1970"""
 
 
 if __name__ == "__main__":
+    ylog.debug('start')
     sys.exit(main())
+    # main([
+    #     '-c', '1', '--author', "albert einstein", '--phrase', 'quantum theory'
+    # ])
