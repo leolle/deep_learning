@@ -130,7 +130,7 @@ class MagicGoogle():
 
     def search_relation(self, bsObj, pause=2):
 
-        RelatedKw = []
+        # RelatedKw = []
         pq_content = self.pq_html(bsObj)
         # ylog.info(pq_content)
         related_str = (str(pq_content))
