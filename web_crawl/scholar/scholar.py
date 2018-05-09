@@ -26,10 +26,16 @@ class Scholar():
     scholar google search.
     """
 
-    def __init__(self, proxies=None):
-        self.proxies = random.choice(proxies)
-        if proxies: pass
-        else: None
+    def __init__(self, rate_delay=2, error_delay=5):
+
+        PROXIES = [{
+            'http': 'http://192.168.1.126:1080',
+            'https': 'http://192.168.1.126:1080'
+        }]
+
+        self.rate_delay = rate_delay
+        self.error_delay = error_delay
+        self.proxies = random.choice(PROXIES)
 
     def counts_result(self, bsObj):
         breif_counts = bsObj.find_all('div', id='gs_ab_md')[0].text

@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-
 import os
 import random
 import sys
@@ -10,12 +9,12 @@ import requests
 from math import ceil
 from pyquery import PyQuery as pq
 # from config import USER_AGENT, DOMAIN, BLACK_DOMAIN, URL_SEARCH, LOGGER
-from deep_learning.web_crawl.config import USER_AGENT, DOMAIN, BLACK_DOMAIN, URL_SEARCH, LOGGER
+from deep_learning.web_crawl.config import LOGGER
+# from deep_learning.web_crawl.config import USER_AGENT, DOMAIN, BLACK_DOMAIN, URL_SEARCH, LOGGER
+
 import logging
 from urllib.parse import quote_plus, urlparse, parse_qs
 from ylib import ylog
-import logging
-
 from ylib.yaml_config import Configuraion
 
 ylog.set_level(logging.DEBUG)
@@ -26,7 +25,13 @@ logging.basicConfig(
     format='%(asctime)s : %(levelname)s : %(message)s', level=logging.DEBUG)
 config = Configuraion()
 
-# config.load('./config.yaml')
+config.load('../config.yaml')
+USER_AGENT = config.USER_AGENT
+DOMAIN = config.DOMAIN
+BLACK_DOMAIN = config.BLACK_DOMAIN
+URL_SEARCH = config.URL_SEARCH
+
+# LOGGER = config.LOGGER
 
 
 class MagicGoogle():
@@ -249,5 +254,5 @@ if __name__ == '__main__':
     # Google.search(query='hello world', num=5, start=2, country_code="es"))
 
     # print(Bing.search('hello world', 5, 2))
-mg = MagicGoogle()
-data = mg.gain_data(query='china', language='en', nums=10)
+# mg = MagicGoogle()
+# data = mg.gain_data(query='china', language='en', nums=10)
