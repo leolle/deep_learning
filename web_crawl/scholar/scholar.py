@@ -189,10 +189,20 @@ class Scholar():
         """
         return random.choice(self.read_file('user_agents.txt', USER_AGENT))
 
+    def get_related_keywords(self, bs_obj):
+        """get related keywords in the infomation output.
+
+        """
+        letters = bs_obj.find_all("div", id="gs_qsuggest")[-1]
+        a_bf = BeautifulSoup(str(letters))
+        a = a_bf.find_all('a')
+        return [gs_li.get_text() for gs_li in a]
+
     def gain_data(self, query, language=None, nums=None, pause=2):
         start = 0
         url = self.req_url(query, language, start, pause=2)
         bsObj = self.Cold_boot(url)
+        related_keywords = self.get_related_keywords(bsObj)
         total_count = self.counts_result(bsObj)
         pages = int(ceil(nums / 10))
         page = 0
@@ -206,7 +216,12 @@ class Scholar():
             info = self.content(bsObj, pause=2)
             all_info = all_info + info
             page = page + 1
-        infos = {'total_count': total_count, 'url': url, 'all_info': all_info}
+        infos = {
+            'total_count': total_count,
+            'url': url,
+            'all_info': all_info,
+            'related_kw': related_keywords
+        }
 
         return infos
 
@@ -233,4 +248,4 @@ if __name__ == '__main__':
     data = scholar.gain_data('china', nums=10, pause=2)
 
 scholar = Scholar()
-data = scholar.gain_data('china', language='en', nums=20, pause=2)
+data = scholar.gain_data('machine learning', language='en', nums=20, pause=2)
