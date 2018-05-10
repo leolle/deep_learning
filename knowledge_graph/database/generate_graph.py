@@ -10,6 +10,7 @@ import copy
 import logging
 from tqdm import tqdm
 from web_crawl.google_search.magic_google import MagicGoogle as GoogleSearch
+from web_crawl.scholar.scholar import Scholar
 import time
 
 logging.basicConfig(
@@ -22,9 +23,12 @@ end_nodes = []
 i = 0
 new_kw = '创业板'
 
-gs = GoogleSearch()
-data = gs.gain_data(query=new_kw, language='en', nums=1)
-base_nodes = data['RelatedKeywords']
+# gs = GoogleSearch()
+# data = gs.gain_data(query=new_kw, language='en', nums=1)
+scholar = Scholar()
+data = scholar.gain_data('machine learning', language='en', nums=10, pause=2)
+
+base_nodes = data['related_keywords']
 logging.debug('base nodes %s' % base_nodes)
 
 #related_keywords = data['RelatedKeywords']
@@ -36,8 +40,8 @@ while i < depth:
     for index, b in enumerate(base_nodes):
         if b not in graph:
             logging.debug('crawling %s' % b)
-            data = gs.gain_data(query=b, language='en', nums=1)
-            nodes = data['RelatedKeywords']
+            data = scholar.gain_data(query=b, language='en', nums=1)
+            nodes = data['related_keywords']
         else:
             nodes = []
         logging.debug("new nodes %s" % nodes)
@@ -88,4 +92,4 @@ rm_counter = 0
 #                     logging.debug('rm cycles number %s' % removed_counter)
 #                 break
 
-nx.write_gexf(graph, "创业板.gexf")
+nx.write_gexf(graph, "machine_learning.gexf")

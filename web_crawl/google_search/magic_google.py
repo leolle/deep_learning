@@ -25,7 +25,7 @@ logging.basicConfig(
     format='%(asctime)s : %(levelname)s : %(message)s', level=logging.DEBUG)
 config = Configuraion()
 
-config.load('../config.yaml')
+config.load('/home/weiwu/projects/deep_learning/web_crawl/config.yaml')
 USER_AGENT = config.USER_AGENT
 DOMAIN = config.DOMAIN
 BLACK_DOMAIN = config.BLACK_DOMAIN

@@ -32,7 +32,7 @@ logging.basicConfig(
     format='%(asctime)s : %(levelname)s : %(message)s', level=logging.DEBUG)
 config = Configuraion()
 
-config.load('../config.yaml')
+config.load('/home/weiwu/projects/deep_learning/web_crawl/config.yaml')
 USER_AGENT = config.USER_AGENT
 DOMAIN = config.DOMAIN
 BLACK_DOMAIN = config.BLACK_DOMAIN
@@ -75,40 +75,40 @@ class Scholar():
         infomation = []
         for iid in bsObj.find_all('div', class_={'gs_r', 'gs_or', 'gs_scl'}):
             Link = iid.find('a').attrs['href']
-            print(Link)
+            # print(Link)
             Title = iid.find('h3', class_='gs_rt').text
-            print(Title)
+            # print(Title)
 
             if len(iid.find_all('div', class_='gs_a')) != 0:
                 infos = iid.find_all('div', class_='gs_a')[0].text
                 items = infos.split('-')
                 if len(items) > 2:
                     Author = items[0]
-                    print(Author)
+                    # print(Author)
                     public = items[1]
-                    print(public)
+                    # print(public)
                     source = '-'.join(items[2:])
-                    print(source)
+                    # print(source)
                 elif len(items) == 2:
-                    print(items)
+                    # print(items)
                     Author = items[0]
-                    print(Author)
+                    # print(Author)
                     public = items[1]
-                    print(public)
+                    # print(public)
                     source = None
                 else:
                     public = items[0]
-                    print(public)
+                    # print(public)
 
 
 #                    print '*'*30
 
             if iid.find('div', class_='gs_rs') is not None:
                 abstarct = iid.find('div', class_='gs_rs').text
-                print(abstarct)
+                # print(abstarct)
             if len(iid.find_all('div', class_='gs_ggsd')) != 0:
                 download_link = iid.find_all('div', class_='gs_ggsd')[0].text
-                print(download_link)
+                # print(download_link)
             if iid.find_all('div', class_='gs_fl') is not None:
                 if len(iid.find_all('div', class_='gs_fl')) == 2:
                     cited = iid.find_all(
@@ -116,7 +116,7 @@ class Scholar():
                     pattern = re.compile(u'(\d+)')
                     if len(re.findall(pattern, cited[0])) != 0:
                         cited_counts = int(re.findall(pattern, cited[0])[0])
-                        print(cited_counts)
+                        # print(cited_counts)
                     else:
                         cited_counts = 0
 
@@ -126,7 +126,7 @@ class Scholar():
                     pattern = re.compile(u'(\d+)')
                     if len(re.findall(pattern, cited[0])) != 0:
                         cited_counts = int(re.findall(pattern, cited[0])[0])
-                        print(cited_counts)
+                        # print(cited_counts)
                     else:
                         cited_counts = 0
 
@@ -191,10 +191,10 @@ class Scholar():
 
     def get_related_keywords(self, bs_obj):
         """get related keywords in the infomation output.
-
+        bs_obj -- beautiful soup object
         """
-        letters = bs_obj.find_all("div", id="gs_qsuggest")[-1]
-        a_bf = BeautifulSoup(str(letters))
+        suggests = bs_obj.find_all("div", id="gs_qsuggest")[-1]
+        a_bf = BeautifulSoup(str(suggests), 'lxml')
         a = a_bf.find_all('a')
         return [gs_li.get_text() for gs_li in a]
 
@@ -208,10 +208,10 @@ class Scholar():
         page = 0
         all_info = []
         while page < pages:
-            print(page)
+            # print(page)
             start = page * 10
             url = self.req_url(query, start, pause=2)
-            print(url)
+            # print(url)
             bsObj = self.Cold_boot(url)
             info = self.content(bsObj, pause=2)
             all_info = all_info + info
@@ -220,7 +220,7 @@ class Scholar():
             'total_count': total_count,
             'url': url,
             'all_info': all_info,
-            'related_kw': related_keywords
+            'related_keywords': related_keywords
         }
 
         return infos
@@ -248,4 +248,4 @@ if __name__ == '__main__':
     data = scholar.gain_data('china', nums=10, pause=2)
 
 scholar = Scholar()
-data = scholar.gain_data('machine learning', language='en', nums=20, pause=2)
+data = scholar.gain_data('machine learning', language='en', nums=10, pause=2)
