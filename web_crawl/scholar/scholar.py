@@ -1,3 +1,9 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Wed May  9 11:36:42 CST 2018
+@author: Wei Wu
+crawl google scholar using beautiful soup 4
+"""
 import os
 import random
 import sys
@@ -5,14 +11,34 @@ import time
 import re
 import cchardet
 import requests
-import pandas as pd
-import bs4
+#import pandas as pd
+# import bs4
 from bs4 import BeautifulSoup
-from pandas import DataFrame
+# from pandas import DataFrame
 from math import ceil
-import config
+# import config
+# from config import USER_AGENT, URL_SEARCH, URL_NEXT, LOGGER
+from deep_learning.web_crawl.config import LOGGER
+import logging
+from urllib.parse import quote_plus, urlparse, parse_qs
+from ylib import ylog
+from ylib.yaml_config import Configuraion
 
-from config import USER_AGENT, URL_SEARCH, URL_NEXT, LOGGER
+ylog.set_level(logging.DEBUG)
+ylog.console_on()
+ylog.filelog_on("app")
+
+logging.basicConfig(
+    format='%(asctime)s : %(levelname)s : %(message)s', level=logging.DEBUG)
+config = Configuraion()
+
+config.load('../config.yaml')
+USER_AGENT = config.USER_AGENT
+DOMAIN = config.DOMAIN
+BLACK_DOMAIN = config.BLACK_DOMAIN
+URL_SEARCH = config.URL_GOOGLE_SCHOLAR
+URL_NEXT = config.URL_GOOGLE_SCHOLAR_NEXT
+PROXIES = config.PROXIES
 
 if sys.version_info[0] > 2:
     from urllib.parse import quote_plus, urlparse, parse_qs
@@ -26,16 +52,11 @@ class Scholar():
     scholar google search.
     """
 
-    def __init__(self, rate_delay=2, error_delay=5):
-
-        PROXIES = [{
-            'http': 'http://192.168.1.126:1080',
-            'https': 'http://192.168.1.126:1080'
-        }]
+    def __init__(self, rate_delay=2, error_delay=5, proxies=PROXIES):
 
         self.rate_delay = rate_delay
         self.error_delay = error_delay
-        self.proxies = random.choice(PROXIES)
+        self.proxies = proxies
 
     def counts_result(self, bsObj):
         breif_counts = bsObj.find_all('div', id='gs_ab_md')[0].text
@@ -114,18 +135,18 @@ class Scholar():
             infos = {
                 'Link': Link,
                 'Title': Title,
-                'Author': Author,
-                'public': public,
-                'source': source,
-                'abstarct': abstarct,
-                'download_link': download_link,
-                'cited_counts': cited_counts
+                # 'Author': Author,
+                # 'public': public,
+                # 'source': source,
+                # 'abstarct': abstarct,
+                # 'download_link': download_link,
+                # 'cited_counts': cited_counts
             }
             infomation.append(infos)
 
         return infomation
 
-    def req_url(self, query, start, pause=2):
+    def req_url(self, query, language=None, start=0, pause=2):
         time.sleep(pause)
         #        domain = ''
         if start > 0:
@@ -134,7 +155,7 @@ class Scholar():
         else:
 
             url = URL_SEARCH
-            url = url.format(query=quote_plus(query))
+            url = url.format(query=quote_plus(query), language=language)
         return url
 
     def Cold_boot(self, url, pause=2):
@@ -166,11 +187,11 @@ class Scholar():
         Get a random user agent string.
         :return: Random user agent string.
         """
-        return random.choice(self.get_data('user_agents.txt', USER_AGENT))
+        return random.choice(self.read_file('user_agents.txt', USER_AGENT))
 
-    def gain_data(self, query, nums=None, pause=2):
+    def gain_data(self, query, language=None, nums=None, pause=2):
         start = 0
-        url = self.req_url(query, start, pause=2)
+        url = self.req_url(query, language, start, pause=2)
         bsObj = self.Cold_boot(url)
         total_count = self.counts_result(bsObj)
         pages = int(ceil(nums / 10))
@@ -189,14 +210,15 @@ class Scholar():
 
         return infos
 
-    def get_data(self, filename, default=''):
+    def read_file(self, filename, default=''):
         """
         Get data from a file
         :param filename: filename
         :param default: default value
         :return: data
         """
-        root_folder = os.path.dirname(__file__)
+        # root_folder = os.path.dirname(__file__)
+        root_folder = os.getcwd()
         user_agents_file = os.path.join(
             os.path.join(root_folder, 'data'), filename)
         try:
@@ -205,3 +227,10 @@ class Scholar():
         except:
             data = [default]
         return data
+
+if __name__ == '__main__':
+    scholar = Scholar()
+    data = scholar.gain_data('china', nums=10, pause=2)
+
+scholar = Scholar()
+data = scholar.gain_data('china', language='en', nums=20, pause=2)

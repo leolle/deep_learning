@@ -5,8 +5,19 @@ BLACK_DOMAIN:
   - 'www.google.gf'
   - 'www.google.io'
   - 'www.google.com.lc'
+PROXIES:
+  http:
+        'http://192.168.1.126:1080'
+  https:
+        'http://192.168.1.126:1080'
 
 DOMAIN:
   'www.google.com'
-URL_SEARCH:
+URL_SEARCH_NEWS:
   "https://{domain}/search?hl={language}&q={query}&btnG=Search&gbv=2&num=20&start={start}&source=lnms&tbm=nws"
+URL_GOOGLE_SCHOLAR:
+  "https://scholar.google.com/scholar?&q={query}&hl={language}&as_sdt=0,5"
+URL_GOOGLE_SCHOLAR_NEXT:
+  "https://scholar.google.com/scholar?start={start}&q={query}&hl=zh-CN&as_sdt=0,5"
+URL_GOOGLE_SEARCH:
+  "https://{domain}/search?hl={language}&q={query}&btnG=Search&gbv=1&num=20&start={start}"

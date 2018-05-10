@@ -29,7 +29,8 @@ config.load('../config.yaml')
 USER_AGENT = config.USER_AGENT
 DOMAIN = config.DOMAIN
 BLACK_DOMAIN = config.BLACK_DOMAIN
-URL_SEARCH = config.URL_SEARCH
+URL_SEARCH = config.URL_GOOGLE_SEARCH
+PROXIES = config.PROXIES
 
 # LOGGER = config.LOGGER
 
@@ -37,18 +38,22 @@ URL_SEARCH = config.URL_SEARCH
 class MagicGoogle():
     """
     Magic google search.
+    pseudo code:
+    1. initialization, set rate delay, error delay, proxies
+    2. gain data
+
     """
 
-    def __init__(self, rate_delay=2, error_delay=5):
+    def __init__(self, rate_delay=2, error_delay=5, proxies=PROXIES):
 
-        PROXIES = [{
-            'http': 'http://192.168.1.126:1080',
-            'https': 'http://192.168.1.126:1080'
-        }]
+        # PROXIES = [{
+        #     'http': 'http://192.168.1.126:1080',
+        #     'https': 'http://192.168.1.126:1080'
+        # }]
 
         self.rate_delay = rate_delay
         self.error_delay = error_delay
-        self.proxies = random.choice(PROXIES)
+        self.proxies = proxies
 
     def counts_result(self, bsObj, start):
         try:
@@ -68,42 +73,45 @@ class MagicGoogle():
             return None
 
     def content(self, bsObj):
+        """
+        to parse content from bsObj, which is got from requests.get(url)
+        """
         global PageURL
         pq_content = self.pq_html(bsObj)
         result = []
         if pq_content is not None:
             for item in pq_content('div.g').items():
-                information = {
-                    'Title': None,
-                    'PageURL': None,
-                    'MatchedAbstract': None
-                }
+                information = {'Title': None, 'PageURL': None, 'Abstract': None}
                 Title = item('h3.r>a').eq(0).text()
                 href = item('h3.r>a').eq(0).attr('href')
                 if href:
                     PageURL = self.filter_link(href)
 
-                MatchedAbstract = item('span.st').text()
+                Abstract = item('span.st').text()
                 information = {
                     'Title': Title,
                     'PageURL': PageURL,
-                    'MatchedAbstract': MatchedAbstract
+                    'Abstract': Abstract
                 }
                 result.append(information)
         return result
 
     def gain_data(self, query, nums, language=None, start=0, pause=2):
+        """
+
+        """
         global PageURL
         QueryURL = self.req_url(query, language, start, pause=2)
         bsObj = self.Cold_boot(QueryURL)
         TotalCount = self.counts_result(bsObj, start)
         RelatedKeywords = self.search_relation(bsObj, pause=2)
+        # every page has 10 articles
         pages = int(ceil(nums / 20))
         page = 0
         Allinformations = []
         while page < pages:
             print(page)
-            start = page * 20
+            start = page * 10
             url = self.req_url(query, language, start, pause=2)
             print(url)
             bsObj = self.Cold_boot(url)
@@ -122,15 +130,16 @@ class MagicGoogle():
         }
         return infos
 
-    def kw_gain_data(self, query, nums, language=None, start=0, pause=2):
+    def get_related_keywords(self, query, nums, language=None, start=0,
+                             pause=2):
         #        global m
         #        print (m)
         #        m=self.m
         global PageURL
-        QueryURL = self.req_url(query, language, start, pause=2)
-        print(QueryURL)
+        QueryURL = self.req_url(query, language, start, pause=pause)
+        # print(QueryURL)
         bsObj = self.Cold_boot(QueryURL)
-        RelatedKeywords = self.search_relation(bsObj, pause=2)
+        RelatedKeywords = self.search_relation(bsObj, pause=pause)
         return RelatedKeywords
 
     def search_relation(self, bsObj, pause=2):
@@ -162,6 +171,9 @@ class MagicGoogle():
         return RelatedKw
 
     def req_url(self, query, language=None, start=0, pause=2):
+        """
+        add searching query, language, start to domain, get url
+        """
         time.sleep(pause)
         domain = self.get_random_domain()
         url = URL_SEARCH
@@ -175,7 +187,9 @@ class MagicGoogle():
         return url
 
     def Cold_boot(self, url, pause=3):
-
+        """
+        retry if errors are met
+        """
         headers = {'user-agent': self.get_random_user_agent()}
         try:
             requests.packages.urllib3.disable_warnings(
@@ -194,6 +208,7 @@ class MagicGoogle():
             bsObj = content.decode(charset['encoding'])
             return bsObj
         except (ValueError, Exception) as e:
+            print('something')
             print(e.message)
             print("Sleeping for %i" % self.error_delay)
             time.sleep(self.error_delay)
@@ -222,17 +237,18 @@ class MagicGoogle():
             return None
 
     def get_random_user_agent(self):
-        return random.choice(self.get_data('user_agents.txt', USER_AGENT))
+        return random.choice(self.read_file('user_agents.txt', USER_AGENT))
 
     def get_random_domain(self):
-        domain = random.choice(self.get_data('all_domain.txt', DOMAIN))
+        domain = random.choice(self.read_file('all_domain.txt', DOMAIN))
         if domain in BLACK_DOMAIN:
             self.get_random_domain()
         else:
             return domain
 
-    def get_data(self, filename, default=''):
-        root_folder = os.path.dirname(__file__)
+    def read_file(self, filename, default=''):
+        # root_folder = os.path.dirname(__file__)
+        root_folder = os.getcwd()
         user_agents_file = os.path.join(
             os.path.join(root_folder, 'data'), filename)
         try:
@@ -247,8 +263,8 @@ if __name__ == '__main__':
     mg = MagicGoogle()
     data = mg.gain_data(query='china', language='en', nums=10)
     # ylog.debug(data)
-    from pws import Google
-    from pws import Bing
+    # from pws import Google
+    # from pws import Bing
 
     # ylog.debug(
     # Google.search(query='hello world', num=5, start=2, country_code="es"))
