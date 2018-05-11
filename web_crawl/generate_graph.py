@@ -91,15 +91,5 @@ rm_counter = 0
 #                 if removed_counter != 0:
 #                     logging.debug('rm cycles number %s' % removed_counter)
 #                 break
-# import matplotlib.pyplot as plt
-# pos = nx.spring_layout(graph)
-# nx.draw(
-#     graph,
-#     pos,
-#     node_color='#A0CBE2',
-#     width=4,
-#     edge_cmap=plt.cm.Blues,
-#     with_labels=False)
-# plt.show()
 
 nx.write_gexf(graph, "machine_learning.gexf")

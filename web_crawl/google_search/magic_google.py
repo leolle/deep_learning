@@ -96,27 +96,27 @@ class MagicGoogle():
                 result.append(information)
         return result
 
-    def gain_data(self, query, nums, language=None, start=0, pause=2):
+    def gain_data(self, query, nums, language=None, start=0, pause=5):
         """
 
         """
         global PageURL
-        QueryURL = self.req_url(query, language, start, pause=2)
+        QueryURL = self.req_url(query, language, start, pause)
         bsObj = self.Cold_boot(QueryURL)
         TotalCount = self.counts_result(bsObj, start)
-        RelatedKeywords = self.search_relation(bsObj, pause=2)
+        RelatedKeywords = self.search_relation(bsObj, pause)
         # every page has 10 articles
         pages = int(ceil(nums / 20))
         page = 0
         Allinformations = []
         while page < pages:
-            print(page)
+            # print(page)
             start = page * 10
             url = self.req_url(query, language, start, pause=2)
-            print(url)
+            # print(url)
             bsObj = self.Cold_boot(url)
             info = self.content(bsObj)
-            print(len(info))
+            # print(len(info))
             if len(info) == 0:
                 break
             Allinformations = Allinformations + info
@@ -125,13 +125,13 @@ class MagicGoogle():
             'Query': query,
             'TotalCount': TotalCount,
             'QueryURL': QueryURL,
-            'RelatedKeywords': RelatedKeywords,
+            'related_keywords': RelatedKeywords,
             'Allinformations': Allinformations
         }
         return infos
 
     def get_related_keywords(self, query, nums, language=None, start=0,
-                             pause=2):
+                             pause=5):
         #        global m
         #        print (m)
         #        m=self.m
@@ -149,9 +149,13 @@ class MagicGoogle():
         # ylog.info(pq_content)
         related_str = (str(pq_content))
         related_str_re = re.compile("\"rfs\":\[[^!]+\]")
-        related_str_rfs = related_str_re.search(related_str).group()
-        ylog.debug(related_str_rfs)
-        related_ls_re = re.compile("(:\[|,)(\"[A-Za-z\s]*\")")
+        try:
+            related_str_rfs = related_str_re.search(related_str).group()
+        except AttributeError:
+            LOGGER.debug(related_str)
+            return None
+        # ylog.debug(related_str_rfs)
+        related_ls_re = re.compile("(:\[|,)(\"[A-Za-z\s\u4e00-\u9fa5]*\")")
         ls_related = related_ls_re.findall(related_str_rfs)
         RelatedKw = [x[1][1:-1] for x in ls_related]
         ylog.debug(RelatedKw)
@@ -208,7 +212,7 @@ class MagicGoogle():
             bsObj = content.decode(charset['encoding'])
             return bsObj
         except (ValueError, Exception) as e:
-            print('something')
+            # print('something')
             print(e.message)
             print("Sleeping for %i" % self.error_delay)
             time.sleep(self.error_delay)
@@ -247,8 +251,8 @@ class MagicGoogle():
             return domain
 
     def read_file(self, filename, default=''):
-        # root_folder = os.path.dirname(__file__)
-        root_folder = os.getcwd()
+        root_folder = os.path.dirname(__file__)
+        # root_folder = os.getcwd()
         user_agents_file = os.path.join(
             os.path.join(root_folder, 'data'), filename)
         try:
@@ -270,5 +274,10 @@ if __name__ == '__main__':
     # Google.search(query='hello world', num=5, start=2, country_code="es"))
 
     # print(Bing.search('hello world', 5, 2))
+# related_keywords = [
+#     'china wiki', 'republic of china', 'china government', 'china flag',
+#     'china military', 'china economy', 'china map'
+# ]
 # mg = MagicGoogle()
-# data = mg.gain_data(query='china', language='en', nums=10)
+# for kw in related_keywords:
+#     data = mg.gain_data(query=kw, language='en', nums=10)

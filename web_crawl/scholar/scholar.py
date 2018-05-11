@@ -39,7 +39,10 @@ BLACK_DOMAIN = config.BLACK_DOMAIN
 URL_SEARCH = config.URL_GOOGLE_SCHOLAR
 URL_NEXT = config.URL_GOOGLE_SCHOLAR_NEXT
 PROXIES = config.PROXIES
-
+cookies = {
+    'cookies_are':
+    "APISID=NeZFvwIlSf_VFLLJ/AOXrafdbi6JV4sc64; SAPISID=5qcC8Xkb7UO3GcNM/AIrZPXgugYcCDpquH; SID=uwV2PDOC2LmzKo50QvpQ19IU0QLQfVaJGDyRRa9--0zos_5rj0RdrxHiphOvMjAlJ_fT2A.; GSP=LM=1517809417:S=VxTG0tj3nNKGSTw4; 1P_JAR=2018-5-10-9; SIDCC=AEfoLeb5HkWQrTD0hOirs5Oa23UgF7h2AIJw5CY1s6_9Nm1SDxutibR0KXB0Eyk1RSvrZZN0J3Ng6_JMBPko"
+}
 if sys.version_info[0] > 2:
     from urllib.parse import quote_plus, urlparse, parse_qs
 else:
@@ -57,6 +60,16 @@ class Scholar():
         self.rate_delay = rate_delay
         self.error_delay = error_delay
         self.proxies = proxies
+
+    def get_random_user_agent(self):
+        return random.choice(self.read_file('user_agents.txt', USER_AGENT))
+
+    def get_random_domain(self):
+        domain = random.choice(self.read_file('all_domain.txt', DOMAIN))
+        if domain in BLACK_DOMAIN:
+            self.get_random_domain()
+        else:
+            return domain
 
     def counts_result(self, bsObj):
         breif_counts = bsObj.find_all('div', id='gs_ab_md')[0].text
@@ -149,13 +162,16 @@ class Scholar():
     def req_url(self, query, language=None, start=0, pause=2):
         time.sleep(pause)
         #        domain = ''
+        domain = self.get_random_domain()
         if start > 0:
             url = URL_NEXT
-            url = url.format(query=quote_plus(query), start=start)
+            url = url.format(
+                domain=domain, query=quote_plus(query), start=start)
         else:
 
             url = URL_SEARCH
-            url = url.format(query=quote_plus(query), language=language)
+            url = url.format(
+                domain=domain, query=quote_plus(query), language=language)
         return url
 
     def Cold_boot(self, url, pause=2):
@@ -169,6 +185,7 @@ class Scholar():
                 url=url,
                 proxies=self.proxies,
                 headers=headers,
+                cookies=cookies,
                 allow_redirects=False,
                 verify=False,
                 timeout=30)
@@ -193,10 +210,13 @@ class Scholar():
         """get related keywords in the infomation output.
         bs_obj -- beautiful soup object
         """
-        suggests = bs_obj.find_all("div", id="gs_qsuggest")[-1]
-        a_bf = BeautifulSoup(str(suggests), 'lxml')
-        a = a_bf.find_all('a')
-        return [gs_li.get_text() for gs_li in a]
+        try:
+            suggests = bs_obj.find_all("div", id="gs_qsuggest")[-1]
+            a_bf = BeautifulSoup(str(suggests), 'lxml')
+            a = a_bf.find_all('a')
+            return [gs_li.get_text() for gs_li in a]
+        except IndexError:
+            return []
 
     def gain_data(self, query, language=None, nums=None, pause=2):
         start = 0
@@ -245,7 +265,7 @@ class Scholar():
 
 if __name__ == '__main__':
     scholar = Scholar()
-    data = scholar.gain_data('china', nums=10, pause=2)
+    data = scholar.gain_data('china', nums=10, pause=30)
 
-scholar = Scholar()
-data = scholar.gain_data('machine learning', language='en', nums=10, pause=2)
+# scholar = Scholar()
+# data = scholar.gain_data('nlp', language='en', nums=10, pause=30)
