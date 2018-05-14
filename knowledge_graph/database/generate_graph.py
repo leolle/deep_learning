@@ -16,17 +16,17 @@ import time
 logging.basicConfig(
     format='%(asctime)s : %(levelname)s : %(message)s', level=logging.DEBUG)
 
-depth = 10
+depth = 1
 graph = nx.DiGraph()
 base_nodes = []
 end_nodes = []
 i = 0
 new_kw = 'google scholar crawler'
 
-gs = GoogleSearch()
-data = gs.gain_data(query=new_kw, language='en', nums=10, pause=3)
-# scholar = Scholar()
-# data = scholar.gain_data('nlp', language='en', nums=10, pause=2)
+# gs = GoogleSearch()
+# data = gs.gain_data(query=new_kw, language='en', nums=10, pause=3)
+gs = Scholar()
+data = gs.gain_data('nlp', language='en', nums=10, pause=2)
 
 base_nodes = data['related_keywords']
 logging.debug('base nodes %s' % base_nodes)
