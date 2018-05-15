@@ -8,11 +8,9 @@
 import scrapy
 
 
-class WeatherItem(scrapy.Item):
+class DoubanItem(scrapy.Item):
     # define the fields for your item here like:
-    city = scrapy.Field()
-    date = scrapy.Field()
-    day_desc = scrapy.Field()
-    day_temp = scrapy.Field()
-    day_tip = scrapy.Field()
-    day_week = scrapy.Field()
+    # name = scrapy.Field()
+    title = scrapy.Field()
+    rate = scrapy.Field()
+    author = scrapy.Field()

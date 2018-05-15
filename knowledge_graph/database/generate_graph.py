@@ -16,26 +16,27 @@ import time
 logging.basicConfig(
     format='%(asctime)s : %(levelname)s : %(message)s', level=logging.DEBUG)
 
-depth = 1
+depth = 2
 graph = nx.DiGraph()
 base_nodes = []
 end_nodes = []
 i = 0
-new_kw = 'google scholar crawler'
+new_kw = 'python'
 
-# gs = GoogleSearch()
-# data = gs.gain_data(query=new_kw, language='en', nums=10, pause=3)
-gs = Scholar()
-data = gs.gain_data('nlp', language='en', nums=10, pause=2)
+gs = GoogleSearch()
+data = gs.gain_data(query=new_kw, language='en', nums=10, pause=5)
+# gs = Scholar()
+# data = gs.gain_data('nlp', language='en', nums=10, pause=2)
 
-base_nodes = data['related_keywords']
+base_nodes = new_kw
 logging.debug('base nodes %s' % base_nodes)
 
-#related_keywords = data['RelatedKeywords']
-#for kw in related_keywords:
-#    base_nodes.append(kw)
-#     graph.add_edge(new_kw, kw)
+related_keywords = data['related_keywords']
+for kw in related_keywords:
+    end_nodes.append(kw)
+    graph.add_edge(new_kw, kw)
 logging.debug(base_nodes)
+base_nodes = related_keywords
 while i < depth:
     for index, b in enumerate(base_nodes):
         if b not in graph:
@@ -102,4 +103,4 @@ rm_counter = 0
 #     with_labels=False)
 # plt.show()
 
-nx.write_gexf(graph, "machine_learning.gexf")
+nx.write_gexf(graph, new_kw + ".gexf")
