@@ -157,6 +157,7 @@ content = r.content
 charset = cchardet.detect(content)
 text = content.decode(charset['encoding'])
 bsObj = BeautifulSoup(text, "lxml")
+
 # result counts
 brief_counts = bsObj.find_all('div', id='gs_ab_md')[0].text
 print(brief_counts)
