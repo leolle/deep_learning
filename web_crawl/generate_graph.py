@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-Tue Apr 17 10:46:14 CST 2018
+Wed May 16 09:45:38 CST 2018
 generate webcrawl graph with searching words and related words.
 """
 import networkx as nx
@@ -16,32 +16,36 @@ import time
 logging.basicConfig(
     format='%(asctime)s : %(levelname)s : %(message)s', level=logging.DEBUG)
 
-depth = 10
+depth = 2
 graph = nx.DiGraph()
 base_nodes = []
 end_nodes = []
 i = 0
-new_kw = 'google scholar crawler'
+new_kw = 'python'
 
 gs = GoogleSearch()
-data = gs.gain_data(query=new_kw, language='en', nums=10, pause=3)
-# scholar = Scholar()
-# data = scholar.gain_data('nlp', language='en', nums=10, pause=2)
+data = gs.gain_data(query=new_kw, language='en', nums=10, pause=1)
+# gs = Scholar()
+# data = gs.gain_data('nlp', language='en', nums=10, pause=2)
 
 base_nodes = data['related_keywords']
 logging.debug('base nodes %s' % base_nodes)
 
 #related_keywords = data['RelatedKeywords']
-#for kw in related_keywords:
-#    base_nodes.append(kw)
-#     graph.add_edge(new_kw, kw)
-logging.debug(base_nodes)
+for kw in base_nodes:
+    # base_nodes.append(kw)
+    graph.add_edge(new_kw, kw)
+# logging.debug(base_nodes)
 while i < depth:
     for index, b in enumerate(base_nodes):
-        if b not in graph:
-            logging.debug('crawling %s' % b)
-            data = gs.gain_data(query=b, language='en', nums=1)
+        # if b not in graph:
+        if len(graph.out_edges(b)) == 0:
+            logging.info('crawling %s' % b)
+            data = gs.gain_data(query=b, language='en', nums=10, pause=2)
             nodes = data['related_keywords']
+            if not nodes:
+                continue
+            # logging.debug('%s is already in graph' % b)
         else:
             nodes = []
         logging.debug("new nodes %s" % nodes)
@@ -50,7 +54,7 @@ while i < depth:
             for n in nodes:
                 graph.add_edge(b, n)
     base_nodes = copy.copy(end_nodes)
-    logging.debug('level %s nodes: %s' % (i, end_nodes))
+    logging.info('level %s nodes: %s' % (i, end_nodes))
     end_nodes = []
     i += 1
 
@@ -91,5 +95,15 @@ rm_counter = 0
 #                 if removed_counter != 0:
 #                     logging.debug('rm cycles number %s' % removed_counter)
 #                 break
+# import matplotlib.pyplot as plt
+# pos = nx.spring_layout(graph)
+# nx.draw(
+#     graph,
+#     pos,
+#     node_color='#A0CBE2',
+#     width=4,
+#     edge_cmap=plt.cm.Blues,
+#     with_labels=False)
+# plt.show()
 
-nx.write_gexf(graph, "machine_learning.gexf")
+nx.write_gexf(graph, new_kw + ".gexf")

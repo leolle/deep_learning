@@ -5,6 +5,7 @@ BLACK_DOMAIN:
   - 'www.google.gf'
   - 'www.google.io'
   - 'www.google.com.lc'
+
 PROXIES:
   http:
         'http://192.168.1.126:1080'
@@ -13,7 +14,7 @@ PROXIES:
 
 DOMAIN:
   'www.google.com'
-URL_SEARCH_NEWS:
+URL_GOOGLE_NEWS:
   "https://{domain}/search?hl={language}&q={query}&btnG=Search&gbv=2&num=20&start={start}&source=lnms&tbm=nws"
 URL_GOOGLE_SCHOLAR:
   "https://{domain}/scholar?&q={query}&hl={language}&as_sdt=0,5"
@@ -21,3 +22,6 @@ URL_GOOGLE_SCHOLAR_NEXT:
   "https://{domain}/scholar?start={start}&q={query}&hl=zh-CN&as_sdt=0,5"
 URL_GOOGLE_SEARCH:
   "https://{domain}/search?hl={language}&q={query}&btnG=Search&gbv=1&num=20&start={start}"
+COOKIES:
+  'cookies_are':
+    "APISID=NeZFvwIlSf_VFLLJ/AOXrafdbi6JV4sc64; SAPISID=5qcC8Xkb7UO3GcNM/AIrZPXgugYcCDpquH; SID=uwV2PDOC2LmzKo50QvpQ19IU0QLQfVaJGDyRRa9--0zos_5rj0RdrxHiphOvMjAlJ_fT2A.; GSP=LM=1517809417:S=VxTG0tj3nNKGSTw4; 1P_JAR=2018-5-10-9; SIDCC=AEfoLeb5HkWQrTD0hOirs5Oa23UgF7h2AIJw5CY1s6_9Nm1SDxutibR0KXB0Eyk1RSvrZZN0J3Ng6_JMBPko"

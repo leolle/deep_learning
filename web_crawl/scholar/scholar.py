@@ -265,7 +265,7 @@ class Scholar():
 
 if __name__ == '__main__':
     scholar = Scholar()
-    data = scholar.gain_data('china', nums=10, pause=30)
+    data = scholar.gain_data('china', nums=10, pause=5)
 
-# scholar = Scholar()
-# data = scholar.gain_data('nlp', language='en', nums=10, pause=30)
+scholar = Scholar()
+data = scholar.gain_data('nlp', language='en', nums=10, pause=5)

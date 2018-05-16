@@ -37,12 +37,13 @@ PROXIES = config.PROXIES
 rate_delay = 2
 error_delay = 5
 proxies = config.PROXIES
+cookies = config.COOKIES
 
 
-def get_data(filename, default=''):
+def get_data(filename, folder, default=''):
     root_folder = os.getcwd()
     # root_folder = os.path.dirname(__file__)
-    user_agents_file = os.path.join(os.path.join(root_folder, 'data'), filename)
+    user_agents_file = os.path.join(os.path.join(root_folder, folder), filename)
     try:
         with open(user_agents_file) as fp:
             data = [_.strip() for _ in fp.readlines()]
@@ -52,11 +53,11 @@ def get_data(filename, default=''):
 
 
 def get_random_user_agent():
-    return random.choice(get_data('user_agents.txt', USER_AGENT))
+    return random.choice(get_data('user_agents.txt', 'data', USER_AGENT))
 
 
 def get_random_domain():
-    domain = random.choice(get_data('all_domain.txt', DOMAIN))
+    domain = random.choice(get_data('all_domain.txt', 'data', DOMAIN))
     if domain in BLACK_DOMAIN:
         get_random_domain()
     else:
@@ -83,6 +84,7 @@ def Cold_boot(url, pause=3):
         r = requests.get(
             url=url,
             proxies=proxies,
+            cookies=cookies,
             headers=headers,
             allow_redirects=False,
             verify=False,
@@ -123,7 +125,7 @@ pause = 2
 
 # gain data
 global PageURL
-time.sleep(pause)
+# time.sleep(pause)
 domain = get_random_domain()
 url = URL_SEARCH
 url = url.format(
@@ -134,10 +136,48 @@ QueryURL = req_url(query, language, start, pause=2)
 
 # cold boot
 # bsObj = Cold_boot(QueryURL)
-r = ''
-while r == '':
+with open('./data/all_domain.txt', 'r') as f:
+    scholar_domains = f.readlines()
+scholar_domains = [w.replace('\n', '') for w in scholar_domains]
+r = 'a'
+for domain in scholar_domains:
     try:
         headers = {'user-agent': get_random_user_agent()}
+        # domain = get_random_domain()
+        url = URL_SEARCH
+        url = url.format(
+            domain=domain,
+            query=quote_plus(query),
+            language=language,
+            start=start)
+        requests.packages.urllib3.disable_warnings(
+            requests.packages.urllib3.exceptions.InsecureRequestWarning)
+        r = requests.get(
+            url=url,
+            proxies=proxies,
+            headers=headers,
+            cookies=cookies,
+            allow_redirects=False,
+            verify=False,
+            timeout=30)
+        print(url)
+        time.sleep(30)
+    except requests.exceptions.SSLError as e:
+        print(e)
+        # LOGGER.info(url)
+        ylog.debug(domain)
+        time.sleep(30)
+
+while r != '':
+    try:
+        headers = {'user-agent': get_random_user_agent()}
+        domain = get_random_domain()
+        url = URL_SEARCH
+        url = url.format(
+            domain=domain,
+            query=quote_plus(query),
+            language=language,
+            start=start)
         requests.packages.urllib3.disable_warnings(
             requests.packages.urllib3.exceptions.InsecureRequestWarning)
         r = requests.get(
@@ -147,10 +187,12 @@ while r == '':
             allow_redirects=False,
             verify=False,
             timeout=30)
-        time.sleep(3)
-    except:
-        print('exception')
-        time.sleep(pause)
+        time.sleep(5)
+    except requests.exceptions.SSLError as e:
+        print(e)
+        # LOGGER.info(url)
+        ylog.debug(domain)
+        time.sleep(5)
         continue
 LOGGER.info(url)
 content = r.content
