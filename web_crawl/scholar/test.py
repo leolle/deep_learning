@@ -160,12 +160,11 @@ for domain in scholar_domains:
             allow_redirects=False,
             verify=False,
             timeout=30)
-        print(url)
+        ylog.debug(domain)
         time.sleep(30)
     except requests.exceptions.SSLError as e:
         print(e)
         # LOGGER.info(url)
-        ylog.debug(domain)
         time.sleep(30)
 
 while r != '':
