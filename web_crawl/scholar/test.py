@@ -139,35 +139,8 @@ QueryURL = req_url(query, language, start, pause=2)
 with open('./data/all_domain.txt', 'r') as f:
     scholar_domains = f.readlines()
 scholar_domains = [w.replace('\n', '') for w in scholar_domains]
-r = 'a'
-for domain in scholar_domains:
-    try:
-        headers = {'user-agent': get_random_user_agent()}
-        # domain = get_random_domain()
-        url = URL_SEARCH
-        url = url.format(
-            domain=domain,
-            query=quote_plus(query),
-            language=language,
-            start=start)
-        requests.packages.urllib3.disable_warnings(
-            requests.packages.urllib3.exceptions.InsecureRequestWarning)
-        r = requests.get(
-            url=url,
-            proxies=proxies,
-            headers=headers,
-            cookies=cookies,
-            allow_redirects=False,
-            verify=False,
-            timeout=30)
-        ylog.debug(domain)
-        time.sleep(30)
-    except requests.exceptions.SSLError as e:
-        print(e)
-        # LOGGER.info(url)
-        time.sleep(30)
-
-while r != '':
+r = ''
+while r == '':
     try:
         headers = {'user-agent': get_random_user_agent()}
         domain = get_random_domain()

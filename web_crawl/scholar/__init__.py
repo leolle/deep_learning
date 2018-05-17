@@ -1,1 +1,1 @@
-from .scholar import Scholar
+# from .scholar import Scholar

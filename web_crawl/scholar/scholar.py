@@ -39,10 +39,7 @@ BLACK_DOMAIN = config.BLACK_DOMAIN
 URL_SEARCH = config.URL_GOOGLE_SCHOLAR
 URL_NEXT = config.URL_GOOGLE_SCHOLAR_NEXT
 PROXIES = config.PROXIES
-cookies = {
-    'cookies_are':
-    "APISID=NeZFvwIlSf_VFLLJ/AOXrafdbi6JV4sc64; SAPISID=5qcC8Xkb7UO3GcNM/AIrZPXgugYcCDpquH; SID=uwV2PDOC2LmzKo50QvpQ19IU0QLQfVaJGDyRRa9--0zos_5rj0RdrxHiphOvMjAlJ_fT2A.; GSP=LM=1517809417:S=VxTG0tj3nNKGSTw4; 1P_JAR=2018-5-10-9; SIDCC=AEfoLeb5HkWQrTD0hOirs5Oa23UgF7h2AIJw5CY1s6_9Nm1SDxutibR0KXB0Eyk1RSvrZZN0J3Ng6_JMBPko"
-}
+COOKIES = config.COOKIES
 if sys.version_info[0] > 2:
     from urllib.parse import quote_plus, urlparse, parse_qs
 else:
@@ -72,13 +69,16 @@ class Scholar():
             return domain
 
     def counts_result(self, bsObj):
-        breif_counts = bsObj.find_all('div', id='gs_ab_md')[0].text
-        print(breif_counts)
-        text1 = breif_counts.replace(r',', "")
-        #        print text1
-        pattern = re.compile(u'\d+')
-        result_count = re.findall(pattern, text1)[0]
-        print(result_count)
+        """count the total results number from scholar searching"""
+
+        try:
+            breif_counts = bsObj.find_all('div', id='gs_ab_md')[0].text
+            text1 = breif_counts.replace(r',', "")
+            pattern = re.compile(u'\d+')
+            result_count = re.findall(pattern, text1)[0]
+            # print(result_count)
+        except IndexError:
+            result_count = 0
 
         return result_count
 
@@ -86,7 +86,11 @@ class Scholar():
         global download_link
         global abstarct
         infomation = []
-        for iid in bsObj.find_all('div', class_={'gs_r', 'gs_or', 'gs_scl'}):
+        try:
+            outputs = bsObj.find_all('div', class_={'gs_r', 'gs_or', 'gs_scl'})
+        except AttributeError:
+            return None
+        for iid in outputs:
             Link = iid.find('a').attrs['href']
             # print(Link)
             Title = iid.find('h3', class_='gs_rt').text
@@ -112,7 +116,6 @@ class Scholar():
                 else:
                     public = items[0]
                     # print(public)
-
 
 #                    print '*'*30
 
@@ -185,18 +188,24 @@ class Scholar():
                 url=url,
                 proxies=self.proxies,
                 headers=headers,
-                cookies=cookies,
+                cookies=COOKIES,
                 allow_redirects=False,
                 verify=False,
                 timeout=30)
-            LOGGER.info(url)
+            logging.info(url)
             content = r.content
             charset = cchardet.detect(content)
             text = content.decode(charset['encoding'])
             bsObj = BeautifulSoup(text, "lxml")
             return bsObj
-        except Exception as e:
-            LOGGER.exception(e)
+        except requests.exceptions.SSLError as e:
+            logging.exception(e)
+            return None
+
+
+#        else: Exception as e:
+        else:
+            logging.exception('request error')
             return None
 
     def get_random_user_agent(self):
@@ -218,7 +227,7 @@ class Scholar():
         except IndexError:
             return []
 
-    def gain_data(self, query, language=None, nums=None, pause=2):
+    def gain_data(self, query, language=None, nums=None, pause=5):
         start = 0
         url = self.req_url(query, language, start, pause=2)
         bsObj = self.Cold_boot(url)
@@ -230,10 +239,10 @@ class Scholar():
         while page < pages:
             # print(page)
             start = page * 10
-            url = self.req_url(query, start, pause=2)
+            url = self.req_url(query, start, pause=pause)
             # print(url)
             bsObj = self.Cold_boot(url)
-            info = self.content(bsObj, pause=2)
+            info = self.content(bsObj, pause=pause)
             all_info = all_info + info
             page = page + 1
         infos = {
@@ -267,5 +276,49 @@ if __name__ == '__main__':
     scholar = Scholar()
     data = scholar.gain_data('china', nums=10, pause=5)
 
-scholar = Scholar()
-data = scholar.gain_data('nlp', language='en', nums=10, pause=5)
+# scholar = Scholar()
+# data = scholar.gain_data('nlp python', language='en', nums=10, pause=5)
+import networkx as nx
+import copy
+import random
+depth = 2
+pause = random.randint(5, 30)
+graph = nx.DiGraph()
+base_nodes = []
+end_nodes = []
+i = 0
+new_kw = 'crawler reinforcement learning'
+gs = Scholar()
+data = gs.gain_data(new_kw, language='en', nums=10, pause=5)
+
+base_nodes = data['related_keywords']
+logging.debug('base nodes %s' % base_nodes)
+
+#related_keywords = data['RelatedKeywords']
+for kw in base_nodes:
+    # base_nodes.append(kw)
+    graph.add_edge(new_kw, kw)
+# logging.debug(base_nodes)
+
+while i < depth:
+    for index, b in enumerate(base_nodes):
+        # if b not in graph:
+        if len(graph.out_edges(b)) == 0:
+            logging.info('crawling %s' % b)
+            data = gs.gain_data(query=b, language='en', nums=10, pause=pause)
+            nodes = data['related_keywords']
+            if not nodes:
+                continue
+            # logging.debug('%s is already in graph' % b)
+        else:
+            nodes = []
+        logging.debug("new nodes %s" % nodes)
+        end_nodes.extend(nodes)
+        if len(nodes) > 0:
+            for n in nodes:
+                graph.add_edge(b, n)
+    base_nodes = copy.copy(end_nodes)
+    logging.info('level %s nodes: %s' % (i, end_nodes))
+    end_nodes = []
+    i += 1
+nx.write_gexf(graph, new_kw + ".gexf")

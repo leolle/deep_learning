@@ -4,8 +4,6 @@ Wed May 16 09:45:38 CST 2018
 generate webcrawl graph with searching words and related words.
 """
 import networkx as nx
-# import random
-# import uuid
 import copy
 import logging
 from tqdm import tqdm
@@ -21,12 +19,12 @@ graph = nx.DiGraph()
 base_nodes = []
 end_nodes = []
 i = 0
-new_kw = 'python'
+new_kw = 'nlp crawler'
 
-gs = GoogleSearch()
-data = gs.gain_data(query=new_kw, language='en', nums=10, pause=1)
-# gs = Scholar()
-# data = gs.gain_data('nlp', language='en', nums=10, pause=2)
+# gs = GoogleSearch()
+# data = gs.gain_data(query=new_kw, language='en', nums=10, pause=1)
+scholar = Scholar()
+data = scholar.gain_data('nlp', language='en', nums=10, pause=5)
 
 base_nodes = data['related_keywords']
 logging.debug('base nodes %s' % base_nodes)
@@ -59,42 +57,8 @@ while i < depth:
     i += 1
 
 ls_nodes = list(graph.nodes)
-counter = 0
 total_nodes_num = len(graph.nodes)
-rm_counter = 0
 
-# while True:
-#     logging.debug('rm cycles loops number %s' % counter)
-
-#     for node in tqdm(ls_nodes):
-#         removed_counter = 0
-#         # ylog.debug('rm cycles of node %s' % node)
-
-#         while True:
-#             try:
-#                 ls_loop = nx.find_cycle(graph, node)
-#                 removed_counter += 1
-#                 # remove direct edge:
-#                 #                    ylog.debug(ls_loop)
-#                 if len(ls_loop) == 2:
-#                     if ls_loop[0][0] == ls_loop[1][1] and ls_loop[0][1] == ls_loop[1][0]:
-#                         graph.remove_edge(ls_loop[0][0], ls_loop[0][1])
-#                 # remove big loop:
-#                 elif len(ls_loop) == 1:
-#                     break
-#                 elif len(ls_loop) > 2:
-
-#                     graph.remove_edge(ls_loop[-1][0], ls_loop[-1][1])
-#                     # remove all edges in the loop, then next create edge first in.
-#                     # for i in range(len(ls_loop) - 1):
-#                     #     graph.remove_edge(ls_loop[i + 1][0],
-#                     #                       ls_loop[i + 1][1])
-#                 # counter = 0
-#             except nx.NetworkXNoCycle:
-#                 counter += 1
-#                 if removed_counter != 0:
-#                     logging.debug('rm cycles number %s' % removed_counter)
-#                 break
 # import matplotlib.pyplot as plt
 # pos = nx.spring_layout(graph)
 # nx.draw(

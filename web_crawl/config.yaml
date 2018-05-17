@@ -5,7 +5,7 @@ BLACK_DOMAIN:
   - 'www.google.gf'
   - 'www.google.io'
   - 'www.google.com.lc'
-
+  - 'scholar.google.cn'
 PROXIES:
   http:
         'http://192.168.1.126:1080'
@@ -24,4 +24,4 @@ URL_GOOGLE_SEARCH:
   "https://{domain}/search?hl={language}&q={query}&btnG=Search&gbv=1&num=20&start={start}"
 COOKIES:
   'cookies_are':
-    "APISID=NeZFvwIlSf_VFLLJ/AOXrafdbi6JV4sc64; SAPISID=5qcC8Xkb7UO3GcNM/AIrZPXgugYcCDpquH; SID=uwV2PDOC2LmzKo50QvpQ19IU0QLQfVaJGDyRRa9--0zos_5rj0RdrxHiphOvMjAlJ_fT2A.; GSP=LM=1517809417:S=VxTG0tj3nNKGSTw4; 1P_JAR=2018-5-10-9; SIDCC=AEfoLeb5HkWQrTD0hOirs5Oa23UgF7h2AIJw5CY1s6_9Nm1SDxutibR0KXB0Eyk1RSvrZZN0J3Ng6_JMBPko"
+    "APISID=NeZFvwIlSf_VFLLJ/AOXrafdbi6JV4sc64; SAPISID=5qcC8Xkb7UO3GcNM/AIrZPXgugYcCDpquH; SID=uwV2PDOC2LmzKo50QvpQ19IU0QLQfVaJGDyRRa9--0zos_5rj0RdrxHiphOvMjAlJ_fT2A.; GSP=IN=7e6cc990821af63:LD=zh-CN:CF=4:LM=1526451723:S=L63dTv7IZUmsfik0; 1P_JAR=2018-5-16-8; SIDCC=AEfoLeaD3P2TSefx6nJwwtNUJqHsJ4-tQfiEzmuKwrxHZcO6GJQXGYUFlyjxb2iE2u-xwNIRbzm2siRvgBC2"
