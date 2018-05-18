@@ -79,7 +79,8 @@ class Scholar():
             # print(result_count)
         except IndexError:
             result_count = 0
-
+        except AttributeError:
+            result_count = 0
         return result_count
 
     def content(self, bsObj, pause=2):
@@ -89,7 +90,7 @@ class Scholar():
         try:
             outputs = bsObj.find_all('div', class_={'gs_r', 'gs_or', 'gs_scl'})
         except AttributeError:
-            return None
+            return []
         for iid in outputs:
             Link = iid.find('a').attrs['href']
             # print(Link)
@@ -226,6 +227,8 @@ class Scholar():
             return [gs_li.get_text() for gs_li in a]
         except IndexError:
             return []
+        except AttributeError:
+            return []
 
     def gain_data(self, query, language=None, nums=None, pause=5):
         start = 0
@@ -240,7 +243,7 @@ class Scholar():
             # print(page)
             start = page * 10
             url = self.req_url(query, start, pause=pause)
-            # print(url)
+            print(url)
             bsObj = self.Cold_boot(url)
             info = self.content(bsObj, pause=pause)
             all_info = all_info + info
@@ -281,13 +284,13 @@ if __name__ == '__main__':
 import networkx as nx
 import copy
 import random
-depth = 2
-pause = random.randint(5, 30)
+depth = 3
+# pause = random.randint(5, 30)
 graph = nx.DiGraph()
 base_nodes = []
 end_nodes = []
 i = 0
-new_kw = 'crawler reinforcement learning'
+new_kw = 'entity linking'
 gs = Scholar()
 data = gs.gain_data(new_kw, language='en', nums=10, pause=5)
 
@@ -304,15 +307,16 @@ while i < depth:
     for index, b in enumerate(base_nodes):
         # if b not in graph:
         if len(graph.out_edges(b)) == 0:
-            logging.info('crawling %s' % b)
-            data = gs.gain_data(query=b, language='en', nums=10, pause=pause)
+            logging.info('crawling: %s' % b)
+            data = gs.gain_data(
+                query=b, language='en', nums=10, pause=random.randint(15, 30))
             nodes = data['related_keywords']
             if not nodes:
                 continue
             # logging.debug('%s is already in graph' % b)
         else:
             nodes = []
-        logging.debug("new nodes %s" % nodes)
+        logging.debug("new nodes: %s" % nodes)
         end_nodes.extend(nodes)
         if len(nodes) > 0:
             for n in nodes:
