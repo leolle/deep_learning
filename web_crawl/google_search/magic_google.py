@@ -158,7 +158,7 @@ class MagicGoogle():
         related_ls_re = re.compile("(:\[|,)(\"[A-Za-z\s\u4e00-\u9fa5]*\")")
         ls_related = related_ls_re.findall(related_str_rfs)
         RelatedKw = [x[1][1:-1] for x in ls_related]
-        ylog.debug("related keywords %s" % RelatedKw)
+        ylog.debug("related keywords: %s" % RelatedKw)
         # if pq_content is not None:
         #     for item in pq_content('p._Bmc').items():
         #         href = item('a').attr('href')

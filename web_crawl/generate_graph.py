@@ -14,17 +14,17 @@ import time
 logging.basicConfig(
     format='%(asctime)s : %(levelname)s : %(message)s', level=logging.DEBUG)
 
-depth = 2
+depth = 5
 graph = nx.DiGraph()
 base_nodes = []
 end_nodes = []
 i = 0
-new_kw = 'nlp crawler'
+new_kw = 'entity linking'
 
-# gs = GoogleSearch()
-# data = gs.gain_data(query=new_kw, language='en', nums=10, pause=1)
-scholar = Scholar()
-data = scholar.gain_data('nlp', language='en', nums=10, pause=5)
+gs = GoogleSearch()
+data = gs.gain_data(query=new_kw, language='en', nums=10, pause=1)
+# scholar = Scholar()
+# data = scholar.gain_data('nlp', language='en', nums=10, pause=5)
 
 base_nodes = data['related_keywords']
 logging.debug('base nodes %s' % base_nodes)
@@ -38,7 +38,7 @@ while i < depth:
     for index, b in enumerate(base_nodes):
         # if b not in graph:
         if len(graph.out_edges(b)) == 0:
-            logging.info('crawling %s' % b)
+            logging.info('crawling: %s' % b)
             data = gs.gain_data(query=b, language='en', nums=10, pause=2)
             nodes = data['related_keywords']
             if not nodes:
@@ -46,7 +46,7 @@ while i < depth:
             # logging.debug('%s is already in graph' % b)
         else:
             nodes = []
-        logging.debug("new nodes %s" % nodes)
+        logging.debug("new nodes: %s" % nodes)
         end_nodes.extend(nodes)
         if len(nodes) > 0:
             for n in nodes:
