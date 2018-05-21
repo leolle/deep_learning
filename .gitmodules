@@ -28,3 +28,6 @@
 [submodule "web_crawl/Web-crawler-and-data-analysis"]
 	path = web_crawl/Web-crawler-and-data-analysis
 	url = git@github.com:xUFduO/Web-crawler-and-data-analysis.git
+[submodule "knowledge_graph/deeptype"]
+	path = knowledge_graph/deeptype
+	url = git@github.com:openai/deeptype.git
