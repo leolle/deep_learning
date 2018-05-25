@@ -8,12 +8,14 @@ TEXT = 'The man saw a Jaguar speed on the highway'
 TEXT = 'The prey saw the jaguar cross the jungle.'
 TEXT = 'Consumer protection legislation typically labels vehicles as "lemons" if the same problem recurs despite multiple repair attempts.'
 TEXT = 'Democrats not invited to DOJ briefing on FBI informant'
+TEXT = 'Zuckerberg avoided tough questions thanks to short EU testimony format'
 text_annotations = tagme.annotate(TEXT)
 
 # Print annotations with a score higher than 0.1
 for ann in text_annotations.get_annotations(0.1):
     print(ann)
     print(wikipedia.summary(ann.entity_title)[:250] + '...')
+
 # tomatoes_mentions = tagme.mentions(
 #     "I definitely like ice cream better than tomatoes.")
 
