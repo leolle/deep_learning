@@ -7,12 +7,6 @@
 [submodule "basic/DeepLearningTutorials"]
 	path = basic/DeepLearningTutorials
 	url = https://github.com/lisa-lab/DeepLearningTutorials.git
-[submodule "word_embedding/word2gm"]
-	path = word_embedding/word2gm
-	url = git@github.com:benathi/word2gm.git
-[submodule "word_embedding/word2vec-explorer"]
-	path = word_embedding/word2vec-explorer
-	url = git@github.com:dominiek/word2vec-explorer.git
 [submodule "entity_relation_extraction/Chinese-Annotator"]
 	path = entity_relation_extraction/Chinese-Annotator
 	url = git@github.com:crownpku/Chinese-Annotator.git
