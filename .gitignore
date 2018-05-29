@@ -24,3 +24,4 @@ entity_relation_extraction/Information-Extraction-Chinese/RE_BGRU_2ATT/__pycache
 entity_relation_extraction/Information-Extraction-Chinese/NER_IDCNN_CRF/ckpt_IDCNN/
 entity_relation_extraction/Information-Extraction-Chinese/NER_IDCNN_CRF/ckpt_biLSTM/
 knowledge_graph/CNdeepdive
+web_crawl/config.yaml
