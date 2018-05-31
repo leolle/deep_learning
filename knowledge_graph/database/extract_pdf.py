@@ -12,6 +12,7 @@ from difflib import SequenceMatcher
 ylog.set_level(logging.DEBUG)
 ylog.console_on()
 ylog.filelog_on("app")
+
 # def get_info(path):
 #     with open(path, 'rb') as f:
 #         pdf = PdfFileReader(f)
@@ -26,19 +27,21 @@ ylog.filelog_on("app")
 #     subject = info.subject
 #     title = info.title
 
-# def text_extractor(path):
-#     with open(path, 'rb') as f:
-#         pdf = PdfFileReader(f)
 
-#         # get the first page
-#         page = pdf.getPage(1)
-#         print(page)
-#         print('Page type: {}'.format(str(type(page))))
+def text_extractor(path):
+    with open(path, 'rb') as f:
+        pdf = PdfFileReader(f)
 
-#         text = page.extractText()
-#         print(text)
+        # get the first page
+        page = pdf.getPage(1)
+        print(page)
+        print('Page type: {}'.format(str(type(page))))
 
-# get_info(path)
+        text = page.extractText()
+        print(text)
+
+
+get_info(path)
 
 path = '/home/weiwu/share/deep_learning/docs/word_embedding/Distributed Representations of Words and Phrases.pdf'
 path = '/home/weiwu/share/deep_learning/docs/knowledge_graph/15. Entity Linking for Biomedical Literature.pdf'
@@ -50,13 +53,12 @@ with open(path, 'rb') as f:
     print(doc.info)
 
 works = Works()
-print(works.doi('10.1021/ma035065b'))
+# print(works.doi('10.1021/ma035065b'))
 
 # w1 = works.query(
 #     title='zika', author='johannes', publisher_name='Wiley-Blackwell')
 title = """Neural Architectures for Named Entity Recognition"""
-w1 = works.query(title).sort('relevance').order('desc').filter(
-    has_abstract='true')
+w1 = works.query(title).sort('relevance').order('desc')
 i = 0
 items = None
 for item in w1:
@@ -68,32 +70,22 @@ for item in w1:
     if SequenceMatcher(a=title, b=t).quick_ratio() > 0.9:
         items = item
         # items.append(item)
+from scihub2pdf import download as dl
+dl.download_from_doi(items['DOI'])
+# from crossref.restful import Works, Etiquette
 
-from crossref.restful import Works, Etiquette
+# my_etiquette = Etiquette('My Project Name', 'My Project version',
+#                          'My Project URL', 'My contact email')
 
-my_etiquette = Etiquette('My Project Name', 'My Project version',
-                         'My Project URL', 'My contact email')
+# str(my_etiquette)
 
-str(my_etiquette)
+# my_etiquette = Etiquette('My Project Name', '0.2alpha',
+#                          'https://myalphaproject.com',
+#                          'anonymous@myalphaproject.com')
 
-my_etiquette = Etiquette('My Project Name', '0.2alpha',
-                         'https://myalphaproject.com',
-                         'anonymous@myalphaproject.com')
+# str(my_etiquette)
 
-str(my_etiquette)
+# works = Works(etiquette=my_etiquette)
 
-works = Works(etiquette=my_etiquette)
-
-for i in works.sample(5).select('DOI'):
-    print(i)
-# doi_re = re.compile("10.(\d)+/([^(\s\>\"\<)])+")
-
-# with open(path, 'rb') as f:
-#       pdf = PdfFileReader(f)
-#       text = pdf.getPage(1).extractText()
-#       m = doi_re.search(text)
-#       print(m.group(0))
-
-# from refextract import extract_references_from_file
-# references = extract_references_from_file(path)
-# print(references[0])
+# for i in works.sample(5).select('DOI'):
+#     print(i)
