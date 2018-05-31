@@ -22,7 +22,7 @@ import subprocess
 import sys
 import unidecode
 
-from pyPdf import PdfFileReader
+from PyPDF2 import PdfFileReader
 from pdfminer.pdfdocument import PDFDocument
 from pdfminer.pdfpage import PDFPage
 from pdfminer.pdfparser import PDFParser
