@@ -16,20 +16,32 @@ ylog.filelog_on("app")
 
 works = Works()
 
-title = """Adaptive: Focused Crawling"""
+title = """Named Entity Recognition with Bidirectional LSTM-CNNs"""
 w1 = works.query(title).sort('relevance').order('desc')
 i = 0
-items = None
+target_doi = '10.1.1.107.9226'
+items_result = None
 for item in w1:
     i = i + 1
-    t = item['title'][0]
-    ylog.debug(item['title'])
-    if SequenceMatcher(a=title, b=t).quick_ratio() > 0.9:
-        items = item
-    if i > 20:
+    try:
+        t = item.get('title')[0]
+    except:
+        continue
+    if SequenceMatcher(a=title, b=t).ratio() > 0.8:
+        found_doi = item['DOI']
+        ylog.debug("target doi: %s" % target_doi)
+        ylog.debug("found  doi: %s" % found_doi)
+        if target_doi[:10] == found_doi[:10] or SequenceMatcher(
+                a=target_doi, b=found_doi).ratio() > 0.9:
+            print('found')
+            break
+    if i > 0:
+        ylog.debug('[x]%s' % title)
+        # ylog.debug(item['title'])
         break
-        # items.append(item)
-dl.download_from_doi(items['DOI'])
+
+dl.download_from_doi(items_result['DOI'])
+
 with open('/home/weiwu/share/deep_learning/data/My Collection.bib'
          ) as bibtex_file:
     bib_database = bibtexparser.load(bibtex_file)
@@ -49,15 +61,45 @@ for article in bib_database.entries:
                     t = item.get('title')[0]
                 except:
                     continue
-                if SequenceMatcher(a=title, b=t).quick_ratio() > 0.8:
+                if SequenceMatcher(a=title, b=t).ratio() > 0.9:
                     result['result'] = item['title']
-                    # ylog.debug(t)
-                    break
+                    target_doi = article.get('doi').lower()
+                    found_doi = item['DOI'].lower()
+                    ylog.debug("target doi: %s" % target_doi)
+                    ylog.debug("found  doi: %s" % found_doi)
+                    if target_doi in found_doi or SequenceMatcher(
+                            a=target_doi, b=found_doi).ratio() > 0.9:
+                        break
                 if i > 18:
                     ylog.debug('[x]%s' % title)
                     # ylog.debug(item['title'])
                     break
             items.append(result)
+
+
+def find_meta(title, doi):
+    """ find metadata with title or doi
+    Keyword Arguments:
+    title --
+    doi   --
+    """
+    ylog.info(title)
+    works = Works()
+    w1 = works.query(title).sort('relevance').order('desc')
+    i = 0
+    for item in w1:
+        i = i + 1
+        try:
+            t = item.get('title')[0]
+        except:
+            continue
+        if SequenceMatcher(a=title, b=t).ratio() > 0.9:
+            return item
+        if i > 18:
+            ylog.debug('[x]%s' % title)
+            # ylog.debug(item['title'])
+            return None
+
 
 counter = 0
 ylog.debug('items not found:')
@@ -68,10 +110,6 @@ for i in items:
         ylog.debug(i.get('target'))
 ylog.debug('#items found: %s' % counter)
 
-for article in bib_database.entries:
-    if article['ENTRYTYPE'] == 'article':
-        if article.get('doi') is not None:
-            i = i + 1
 # from crossref.restful import Works, Etiquette
 
 # my_etiquette = Etiquette('My Project Name', 'My Project version',
