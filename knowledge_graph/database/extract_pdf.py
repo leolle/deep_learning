@@ -16,7 +16,7 @@ ylog.filelog_on("app")
 
 works = Works()
 
-title = """Adaptive Focused Crawling"""
+title = """Adaptive: Focused Crawling"""
 w1 = works.query(title).sort('relevance').order('desc')
 i = 0
 items = None
@@ -26,7 +26,7 @@ for item in w1:
     ylog.debug(item['title'])
     if SequenceMatcher(a=title, b=t).quick_ratio() > 0.9:
         items = item
-    if i > 10:
+    if i > 20:
         break
         # items.append(item)
 dl.download_from_doi(items['DOI'])
@@ -38,6 +38,7 @@ for article in bib_database.entries:
     if article['ENTRYTYPE'] == 'article':
         if article.get('doi') is not None:
             title = article['title'][1:-1]
+            # title = ' '.join(['+' + x for x in title.split()])
             ylog.info(title)
             result = {'target': title}
             w1 = works.query(title).sort('relevance').order('desc')
@@ -52,7 +53,7 @@ for article in bib_database.entries:
                     result['result'] = item['title']
                     # ylog.debug(t)
                     break
-                if i > 20:
+                if i > 18:
                     ylog.debug('[x]%s' % title)
                     # ylog.debug(item['title'])
                     break
