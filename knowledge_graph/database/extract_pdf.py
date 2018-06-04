@@ -16,10 +16,10 @@ ylog.filelog_on("app")
 
 works = Works()
 
-title = """Named Entity Recognition with Bidirectional LSTM-CNNs"""
+title = """Improving Traffic Locality in BitTorrent via Biased Neighbor Selection"""
 w1 = works.query(title).sort('relevance').order('desc')
 i = 0
-target_doi = '10.1.1.107.9226'
+target_doi = '10.1109/icdcs.2006.48'
 items_result = None
 for item in w1:
     i = i + 1
@@ -40,7 +40,7 @@ for item in w1:
         # ylog.debug(item['title'])
         break
 
-dl.download_from_doi(items_result['DOI'])
+dl.download_from_doi('10.1145/2449396.2449413')
 
 with open('/home/weiwu/share/deep_learning/data/My Collection.bib'
          ) as bibtex_file:
@@ -91,9 +91,12 @@ def find_meta(title, doi):
         i = i + 1
         try:
             t = item.get('title')[0]
+            sub_title = item.get('subtitle')[0]
         except:
             continue
-        if SequenceMatcher(a=title, b=t).ratio() > 0.9:
+        if SequenceMatcher(
+                a=title, b=t).ratio() > 0.9 or SequenceMatcher(
+                    a=title, b=sub_title).ratio > 0.9:
             return item
         if i > 18:
             ylog.debug('[x]%s' % title)

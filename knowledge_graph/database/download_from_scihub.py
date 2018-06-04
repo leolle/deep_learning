@@ -48,7 +48,7 @@ pdf.write(r.content)
 pdf.close()
 
 dl.download_from_doi('10.1145/2449396.2449413')
-
+url = 'https://dl.acm.org/citation.cfm?id=2387707'
 # def download_from_scihub(doi, pdf_file):
 #     found, r = ScrapSci.navigate_to(doi, pdf_file)
 #     if not found:
@@ -66,7 +66,7 @@ dl.download_from_doi('10.1145/2449396.2449413')
 
 #     found = has_iframe
 #     return has_iframe, r
-download_link = driver.find_element_by_id('download_link')
+download_link = driver.find_element_by_id(sci_url)
 session = requests.Session()
 cookies = driver.get_cookies()
 

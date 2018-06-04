@@ -9,13 +9,31 @@ import argparse
 import hashlib
 import logging
 import os
-
+import random
 import requests
 from bs4 import BeautifulSoup
 from retrying import retry
+from crossref.restful import Works
+import re
+from ylib import ylog
+from difflib import SequenceMatcher
+from ylib.yaml_config import Configuraion
+
+config = Configuraion()
+
+config.load('/home/weiwu/projects/deep_learning/web_crawl/config.yaml')
+USER_AGENT = config.USER_AGENT
+DOMAIN = config.DOMAIN
+BLACK_DOMAIN = config.BLACK_DOMAIN
+URL_SEARCH = config.URL_GOOGLE_SEARCH
+PROXIES = config.PROXIES
+
+ylog.set_level(logging.DEBUG)
+ylog.console_on()
+ylog.filelog_on("app")
 
 # log config
-logging.basicConfig()
+logging.basicConfig(format='%(asctime)s : %(levelname)s : %(message)s')
 logger = logging.getLogger('Sci-Hub')
 logger.setLevel(logging.DEBUG)
 
@@ -43,10 +61,37 @@ class SciHub(object):
     """
 
     def __init__(self):
+        requests.packages.urllib3.disable_warnings(
+            requests.packages.urllib3.exceptions.InsecureRequestWarning)
         self.sess = requests.Session()
-        self.sess.headers = HEADERS
+        self.sess.headers = {'user-agent': self.get_random_user_agent()}
+
         self.available_base_url_list = AVAILABLE_SCIHUB_BASE_URL
         self.base_url = 'http://' + self.available_base_url_list[0] + '/'
+        self.works = Works()
+        self.sess.proxies = PROXIES
+
+    def get_random_user_agent(self):
+        return random.choice(self.read_file('user_agents.txt', USER_AGENT))
+
+    def get_random_domain(self):
+        domain = random.choice(self.read_file('all_domain.txt', DOMAIN))
+        if domain in BLACK_DOMAIN:
+            self.get_random_domain()
+        else:
+            return domain
+
+    def read_file(self, filename, default=''):
+        # root_folder = os.path.dirname(__file__)
+        root_folder = os.getcwd()
+        user_agents_file = os.path.join(
+            os.path.join(root_folder, 'data'), filename)
+        try:
+            with open(user_agents_file) as fp:
+                data = [_.strip() for _ in fp.readlines()]
+        except:
+            data = [default]
+        return data
 
     def set_proxy(self, proxy):
         '''
@@ -54,11 +99,39 @@ class SciHub(object):
         :param proxy_dict:
         :return:
         '''
-        if proxy:
-            self.sess.proxies = {
-                "http": proxy,
-                "https": proxy,
-            }
+        # if proxy:
+        #     self.sess.proxies = {
+        #         "http": proxy,
+        #         "https": proxy,
+        #     }
+        self.sess.proxies = PROXIES
+
+    def find_meta(self, identifier):
+        """ find metadata with title or DOI
+        Keyword Arguments:
+        identifier --
+        """
+        ylog.info(identifier)
+        w1 = self.works.query(identifier).sort('relevance').order('desc')
+        i = 0
+        for item in w1:
+            i = i + 1
+            try:
+                t = item.get('title')[0]
+                if item.get('subtitle') is not None:
+                    sub_title = item.get('subtitle')[0]
+                    if SequenceMatcher(a=identifier, b=sub_title).ratio() > 0.9:
+                        return item
+            except:
+                continue
+            ylog.debug(t)
+            # if SequenceMatcher(a=identifier, b=t).ratio() > 0.9:
+            if SequenceMatcher(a=identifier, b=t).ratio() > 0.9:
+                return item
+            if i > 18:
+                ylog.debug('[x]%s' % identifier)
+                # ylog.debug(item['title'])
+                return None
 
     def _change_base_url(self):
         del self.available_base_url_list[0]
@@ -78,8 +151,10 @@ class SciHub(object):
         while True:
             try:
                 res = self.sess.get(
-                    SCHOLARS_BASE_URL, params={'q': query,
-                                               'start': start})
+                    SCHOLARS_BASE_URL,
+                    allow_redirects=False,
+                    params={'q': query,
+                            'start': start})
             except requests.exceptions.RequestException as e:
                 results[
                     'err'] = 'Failed to complete search with query %s (connection error)' % query
@@ -352,7 +427,27 @@ if __name__ == '__main__':
     main()
 
 sh = SciHub()
+title = """Improving Traffic Locality in BitTorrent via Biased Neighbor Selection"""
+meta = sh.find_meta(title)
+result = sh.download(
+    meta.get('link')[0].get('URL'), path='./data/pdf/' + title + '.pdf')
 
-# exactly the same thing as fetch except downloads the articles to disk
-# if no path given, a unique name will be used as the file name
-result = sh.download('10.1145/2449396.2449413', path='paper.pdf')
+# # exactly the same thing as fetch except downloads the articles to disk
+# # if no path given, a unique name will be used as the file name
+result = sh.download(
+    'http://ieeexplore.ieee.org/abstract/document/1648853/', path='paper.pdf')
+# # result = sh.download('10.1145/2449396.2449413', path='paper.pdf')
+
+# # w1 = works.query(title).sort('relevance').order('desc')
+# # i = 0
+# target_doi = '10.1.1.107.9226'
+# # items_result = None
+# result = sh.download(meta.get('DOI'), path=title + '.pdf')
+
+# sh = SciHub()
+# # retrieve 5 articles on Google Scholars related to 'bittorrent'
+# results = sh.search('bittorrent', 5)
+
+# # download the papers; will use sci-hub.io if it must
+# for paper in results['papers']:
+#     sh.download(paper['url'])
