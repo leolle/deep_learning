@@ -18,6 +18,7 @@ import re
 from ylib import ylog
 from difflib import SequenceMatcher
 from ylib.yaml_config import Configuraion
+from urllib.parse import quote_plus, urlparse, parse_qs
 
 config = Configuraion()
 
@@ -27,6 +28,8 @@ DOMAIN = config.DOMAIN
 BLACK_DOMAIN = config.BLACK_DOMAIN
 URL_SEARCH = config.URL_GOOGLE_SEARCH
 PROXIES = config.PROXIES
+URL_SEARCH = config.URL_GOOGLE_SCHOLAR
+URL_NEXT = config.URL_GOOGLE_SCHOLAR_NEXT
 
 ylog.set_level(logging.DEBUG)
 ylog.console_on()
@@ -139,6 +142,20 @@ class SciHub(object):
         logger.info(
             "I'm changing to {}".format(self.available_base_url_list[0]))
 
+    def req_url(self, query, language=None, start=0, pause=2):
+        #        domain = ''
+        domain = self.get_random_domain()
+        if start > 0:
+            url = URL_NEXT
+            url = url.format(
+                domain=domain, query=quote_plus(query), start=start)
+        else:
+
+            url = URL_SEARCH
+            url = url.format(
+                domain=domain, query=quote_plus(query), language=language)
+        return url
+
     def search(self, query, limit=10, download=False):
         """
         Performs a query on scholar.google.com, and returns a dictionary
@@ -153,8 +170,12 @@ class SciHub(object):
                 res = self.sess.get(
                     SCHOLARS_BASE_URL,
                     allow_redirects=False,
-                    params={'q': query,
-                            'start': start})
+                    params={
+                        'q': query,
+                        'hl': 'en',
+                        'start': start,
+                        'as_sdt': '0,5'
+                    })
             except requests.exceptions.RequestException as e:
                 results[
                     'err'] = 'Failed to complete search with query %s (connection error)' % query
@@ -426,28 +447,25 @@ def main():
 if __name__ == '__main__':
     main()
 
-sh = SciHub()
-title = """Improving Traffic Locality in BitTorrent via Biased Neighbor Selection"""
-meta = sh.find_meta(title)
-result = sh.download(
-    meta.get('link')[0].get('URL'), path='./data/pdf/' + title + '.pdf')
+# sh = SciHub()
+# title = """Improving Traffic Locality in BitTorrent via Biased Neighbor Selection"""
+# meta = sh.find_meta(title)
+# result = sh.download(
+#     meta.get('link')[0].get('URL'), path='./data/pdf/' + title + '.pdf')
 
 # # exactly the same thing as fetch except downloads the articles to disk
 # # if no path given, a unique name will be used as the file name
-result = sh.download(
-    'http://ieeexplore.ieee.org/abstract/document/1648853/', path='paper.pdf')
+# result = sh.download(
+#     'http://ieeexplore.ieee.org/abstract/document/1648853/', path='paper.pdf')
 # # result = sh.download('10.1145/2449396.2449413', path='paper.pdf')
-
-# # w1 = works.query(title).sort('relevance').order('desc')
-# # i = 0
-# target_doi = '10.1.1.107.9226'
-# # items_result = None
 # result = sh.download(meta.get('DOI'), path=title + '.pdf')
 
-# sh = SciHub()
-# # retrieve 5 articles on Google Scholars related to 'bittorrent'
-# results = sh.search('bittorrent', 5)
+sh = SciHub()
+# retrieve 5 articles on Google Scholars related to 'bittorrent'
+results = sh.search(
+    'Absence of HER4 expression predicts recurrence of ductal carcinoma in situ of the breast',
+    1)
 
-# # download the papers; will use sci-hub.io if it must
-# for paper in results['papers']:
-#     sh.download(paper['url'])
+# download the papers; will use sci-hub.io if it must
+for paper in results['papers']:
+    sh.download(paper['url'], path='./data/')
