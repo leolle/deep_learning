@@ -169,13 +169,14 @@ class SciHub(object):
             try:
                 res = self.sess.get(
                     SCHOLARS_BASE_URL,
-                    allow_redirects=False,
+                    allow_redirects=True,
                     params={
                         'q': query,
                         'hl': 'en',
                         'start': start,
                         'as_sdt': '0,5'
                     })
+                ylog.debug(res.url)
             except requests.exceptions.RequestException as e:
                 results[
                     'err'] = 'Failed to complete search with query %s (connection error)' % query
@@ -195,6 +196,12 @@ class SciHub(object):
                     source = None
                     pdf = paper.find('div', class_='gs_ggs gs_fl')
                     link = paper.find('h3', class_='gs_rt')
+                    # find link type,
+                    try:
+                        url_type = paper.find(
+                            'span', class_='gs_ctg2').get_text()[1:-1]
+                    except:
+                        url_type = None
 
                     if pdf:
                         source = pdf.find('a')['href']
@@ -202,8 +209,11 @@ class SciHub(object):
                         source = link.find('a')['href']
                     else:
                         continue
-
-                    results['papers'].append({'name': link.text, 'url': source})
+                    results['papers'].append({
+                        'name': link.text,
+                        'url': source,
+                        'type': url_type
+                    })
 
                     if len(results['papers']) >= limit:
                         return results
@@ -233,7 +243,10 @@ class SciHub(object):
         If the indentifier is a DOI, PMID, or URL pay-wall, then use Sci-Hub
         to access and download paper. Otherwise, just download paper directly.
         """
-        url = self._get_direct_url(identifier)
+        if identifier['type'] == 'PDF':
+            url = identifier['url']
+        else:
+            url = self._get_direct_url(identifier['url'])
 
         try:
             # verify=False is dangerous but sci-hub.io
@@ -460,12 +473,30 @@ if __name__ == '__main__':
 # # result = sh.download('10.1145/2449396.2449413', path='paper.pdf')
 # result = sh.download(meta.get('DOI'), path=title + '.pdf')
 
+# search and download
 sh = SciHub()
 # retrieve 5 articles on Google Scholars related to 'bittorrent'
-results = sh.search(
-    'Absence of HER4 expression predicts recurrence of ductal carcinoma in situ of the breast',
-    1)
+results = sh.search('nlp', 5)
 
 # download the papers; will use sci-hub.io if it must
 for paper in results['papers']:
-    sh.download(paper['url'], path='./data/')
+    sh.download(paper)
+#    sh.download(paper, path='./data/')
+
+# # test request redirects
+# url = 'https://arxiv.org/pdf/1706.05075'
+# requests.packages.urllib3.disable_warnings(
+#     requests.packages.urllib3.exceptions.InsecureRequestWarning)
+# sess = requests.Session()
+# sess.headers = HEADERS
+
+# available_base_url_list = AVAILABLE_SCIHUB_BASE_URL
+# base_url = 'http://' + available_base_url_list[0] + '/'
+# sess.proxies = PROXIES
+# res = sess.get(
+#     url=url,
+#     proxies=PROXIES,
+#     headers=HEADERS,
+#     allow_redirects=True,
+#     verify=False,
+#     timeout=30)
