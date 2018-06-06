@@ -16,7 +16,7 @@ ylog.filelog_on("app")
 
 works = Works()
 
-title = """Improving Traffic Locality in BitTorrent via Biased Neighbor Selection"""
+title = """Heterogeneous resistance to vancomycin in Staphylococcus epidermidis, Staphylococcus haemolyticus and Staphylococcus warneri clinical strains: characterisation"""
 w1 = works.query(title).sort('relevance').order('desc')
 i = 0
 target_doi = '10.1109/icdcs.2006.48'
@@ -25,7 +25,12 @@ for item in w1:
     i = i + 1
     try:
         t = item.get('title')[0]
+        sub_title = item.get('subtitle')[0]
+        ylog.debug('crossref item title ')
+        ylog.debug(t)
+        ylog.debug(sub_title)
     except:
+        ylog.debug(item)
         continue
     if SequenceMatcher(a=title, b=t).ratio() > 0.8:
         found_doi = item['DOI']

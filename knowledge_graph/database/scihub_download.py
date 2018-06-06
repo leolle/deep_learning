@@ -19,7 +19,7 @@ from ylib import ylog
 from difflib import SequenceMatcher
 from ylib.yaml_config import Configuraion
 from urllib.parse import quote_plus, urlparse, parse_qs
-
+import pandas as pd
 config = Configuraion()
 
 config.load('/home/weiwu/projects/deep_learning/web_crawl/config.yaml')
@@ -48,7 +48,7 @@ HEADERS = {
     'Mozilla/5.0 (X11; Linux x86_64; rv:27.0) Gecko/20100101 Firefox/27.0'
 }
 AVAILABLE_SCIHUB_BASE_URL = [
-    'sci-hub.hk', 'sci-hub.tw', 'sci-hub.la', 'sci-hub.mn', 'sci-hub.name',
+    'sci-hub.tw', 'sci-hub.hk', 'sci-hub.la', 'sci-hub.mn', 'sci-hub.name',
     'sci-hub.is', 'sci-hub.tv'
     'sci-hub.ws'
     'www.sci-hub.cn'
@@ -73,6 +73,9 @@ class SciHub(object):
         self.base_url = 'http://' + self.available_base_url_list[0] + '/'
         self.works = Works()
         self.sess.proxies = PROXIES
+        self.results = pd.DataFrame(
+            columns=['title', 'DOI', 'status_code', 'location'])
+        self.re_bracket = re.compile("\[(.*?)\]\s")
 
     def get_random_user_agent(self):
         return random.choice(self.read_file('user_agents.txt', USER_AGENT))
@@ -109,14 +112,13 @@ class SciHub(object):
         #     }
         self.sess.proxies = PROXIES
 
-    # @retry(
-    #     wait_random_min=100, wait_random_max=1000, stop_max_attempt_number=10)
+    @retry(
+        wait_random_min=200, wait_random_max=2000, stop_max_attempt_number=10)
     def find_meta(self, identifier):
         """ find metadata with title or DOI
         Keyword Arguments:
         identifier --
         """
-        # url = 'http://sci-hub.tw/' + 'https://link.springer.com/chapter/10.1007/978-94-017-2388-6_2'
         try:
             # verify=False is dangerous but sci-hub.io
             # requires intermediate certificates to verify
@@ -124,50 +126,66 @@ class SciHub(object):
             # as a hacky fix, you can add them to your store
             # and verifying would work. will fix this later.
             url = self.base_url + identifier['article_link']
-            # self.sess.headers = {'user-agent': self.get_random_user_agent()}
-            res = self.sess.get(url, verify=False)
-            title = identifier['name']
-            ylog.debug(title)
+            self.sess.headers = {'user-agent': self.get_random_user_agent()}
+            res = self.sess.get(url, verify=False, allow_redirects=False)
+            re_bracket = re.compile("\[(.*?)\]\s")
+            title = re.sub(re_bracket, "", identifier['name'])
+            ylog.debug('*' * 80)
+            ylog.debug("title: %s" % title)
             ylog.debug(res.status_code)
+            out.ix[title]['status_code'] = res.status_code
             ylog.debug("headers: %s" % res.headers['Content-Type'])
             ylog.debug('location: %s' % res.headers.get("Location"))
+            search_title = True
             if not res.headers.get("Location"):
                 content = res.content
-                if len(content) != 0:
+                if len(content) > 2:
                     import cchardet
                     charset = cchardet.detect(content)
                     text = content.decode(charset['encoding'])
                     soup = BeautifulSoup(text, "lxml")
                     script = soup.script.get_text()
                     doi_regexp = '10[.][0-9]{4,}(?:[.][0-9]+)*/(?:(?!["&\'<>])\S)+'
-                    doi_match = re.compile(doi_regexp).findall(script)[0]
-                    ylog.info(doi_match)
+                    try:
+                        doi_match = re.compile(doi_regexp).findall(script)[0]
+                        ylog.info("DOI: %s" % doi_match)
+                        search_title = False
+                    except IndexError:
+                        ylog.debug('failed to find regexp')
                     # use crossref API to get metadata
-                    # works = Works()
-                    # w1 = works.query(doi_match).sort('relevance').order('desc')
-                    # i = 0
-                    # for item in w1:
-                    #     # TODO: verify title
-                    #     return {'meta': item, 'url': url}
-            # else:
-            #     works = Works()
-            #     w1 = works.query(title).sort('relevance').order('desc')
-            #     i = 0
-            #     for item in w1:
-            #         i = i + 1
-            #         try:
-            #             t = item.get('title')[0]
-            #             sub_title = item.get('subtitle')[0]
-            #         except:
-            #             continue
-            #         if SequenceMatcher(
-            #                 a=title, b=t).ratio() > 0.9 or SequenceMatcher(
-            #                     a=title, b=sub_title).ratio > 0.9:
-            #             return {'meta': item, 'url': url}
-            #         if i > 18:
-            #             ylog.debug('[x]%s' % title)
-            #             # ylog.debug(item['title'])
-            #             return None
+                    works = Works()
+                    w1 = works.query(doi_match).sort('relevance').order('desc')
+                    i = 0
+                    for item in w1:
+                        # TODO: verify title
+                        out.ix[title]['DOI'] = item['DOI']
+                        return {'meta': item['DOI'], 'url': url}
+            elif search_title:
+                works = Works()
+                w1 = works.query(title).sort('relevance').order('desc')
+                i = 0
+                for item in w1:
+                    i = i + 1
+                    try:
+                        # ylog.debug('crossref item title ')
+                        t = item.get('title')[0]
+                        # ylog.debug(t)
+                        sub_title = item.get('subtitle')[0]
+                        # ylog.debug(sub_title)
+                        # ylog.debug("ratio: %s" %
+                        #            (SequenceMatcher(a=title, b=t).ratio()))
+                    except TypeError:
+                        sub_title = ''
+                    if SequenceMatcher(
+                            a=title, b=t).ratio() > 0.9 or SequenceMatcher(
+                                a=title, b=sub_title).ratio(
+                                ) > 0.9 or t.startswith(title):
+                        ylog.debug("DOI %s" % item['DOI'])
+                        return {'meta': item['DOI'], 'url': url}
+                    if i > 18:
+                        # ylog.debug('[x]%s' % title)
+                        # ylog.debug(item['title'])
+                        return None
 
         except requests.exceptions.ConnectionError:
             logger.info('{} cannot acess,changing'.format(
@@ -258,10 +276,15 @@ class SciHub(object):
                         continue
                     article_link = link.find('a')['href']
                     results['papers'].append({
-                        'name': link.text,
-                        'url': source,
-                        'article_link': article_link,
-                        'type': url_type
+                        'name':
+                        re.sub(self.re_bracket, "",
+                               link.text.replace("\xa0…", "")),
+                        'url':
+                        source,
+                        'article_link':
+                        article_link,
+                        'type':
+                        url_type
                     })
 
                     if len(results['papers']) >= limit:
@@ -527,8 +550,13 @@ if __name__ == '__main__':
 # search and download
 sh = SciHub()
 # retrieve 5 articles on Google Scholars related to 'bittorrent'
-results = sh.search('nlp', 20)
-
+results = sh.search('nlp', 50)
+out = pd.DataFrame(
+    results['papers'],
+    columns=[
+        'name', 'article_link', 'type', 'url', 'DOI', 'status_code', 'location'
+    ])
+out.set_index('name', inplace=True)
 # # download the papers; will use sci-hub.io if it must
 # for paper in results['papers']:
 #     sh.download(paper)
@@ -537,6 +565,9 @@ results = sh.search('nlp', 20)
 url = 'https://link.springer.com/chapter/10.1007/978-94-017-2388-6_2'
 url = 'http://sci-hub.tw/https://arxiv.org/abs/1706.05075'
 url = 'http://sci-hub.tw/http://clincancerres.aacrjournals.org/content/11/6/2163.short'
+url = 'http://sci-hub.hk/http://journals.plos.org/plosone/article?id=10.1371/journal.pone.0040740'
+url = 'http://sci-hub.tw/http://www.aclweb.org/anthology/P/P02/P02-1022.pdf'
+url = 'http://sci-hub.tw/http://sci-hub.tw/https://arxiv.org/abs/1307.1662'
 requests.packages.urllib3.disable_warnings(
     requests.packages.urllib3.exceptions.InsecureRequestWarning)
 sess = requests.Session()
@@ -553,7 +584,7 @@ res = sess.get(
     verify=False,
     timeout=30)
 content = res.content
-if len(content) != 0:
+if len(content) > 2:
     # Works.query()
     import cchardet
     charset = cchardet.detect(content)
@@ -561,8 +592,10 @@ if len(content) != 0:
     soup = BeautifulSoup(text, "lxml")
     script = soup.script.get_text()
     doi_regexp = '10[.][0-9]{4,}(?:[.][0-9]+)*/(?:(?!["&\'<>])\S)+'
-    doi_match = re.compile(doi_regexp).findall(script)[0]
-
+    try:
+        doi_match = re.compile(doi_regexp).findall(script)[0]
+    except IndexError:
+        doi_match = None
 identifier = {
     'article_link':
     'https://www.sciencedirect.com/science/article/pii/S0098135406001281',
