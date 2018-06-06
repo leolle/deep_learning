@@ -63,7 +63,7 @@ class SciHub(object):
     and fetch/download papers from sci-hub.io
     """
 
-    def __init__(self, out):
+    def __init__(self):
         requests.packages.urllib3.disable_warnings(
             requests.packages.urllib3.exceptions.InsecureRequestWarning)
         self.sess = requests.Session()
@@ -73,7 +73,6 @@ class SciHub(object):
         self.base_url = 'http://' + self.available_base_url_list[0] + '/'
         self.works = Works()
         self.sess.proxies = PROXIES
-        self.out = out
         self.re_bracket = re.compile("\[(.*?)\]\s")
 
     def get_random_user_agent(self):
@@ -550,68 +549,14 @@ if __name__ == '__main__':
 # result = sh.download(meta.get('DOI'), path=title + '.pdf')
 
 # search and download
-sh = SciHub(None)
+sh = SciHub()
 # retrieve 5 articles on Google Scholars related to 'bittorrent'
-results = sh.search('nlp', 50)
-out = pd.DataFrame(
-    results['papers'],
-    columns=[
-        'name', 'article_link', 'type', 'url', 'DOI', 'status_code', 'location'
-    ])
-out.set_index('name', inplace=True)
-# # download the papers; will use sci-hub.io if it must
-# for paper in results['papers']:
-#     sh.download(paper)
-
-# test request redirects
-url = 'https://link.springer.com/chapter/10.1007/978-94-017-2388-6_2'
-url = 'http://sci-hub.tw/https://arxiv.org/abs/1706.05075'
-url = 'http://sci-hub.tw/http://clincancerres.aacrjournals.org/content/11/6/2163.short'
-url = 'http://sci-hub.tw/http://www.aclweb.org/anthology/P/P02/P02-1022.pdf'
-url = 'http://sci-hub.tw/http://sci-hub.tw/https://arxiv.org/abs/1307.1662'
-url = 'http://sci-hub.hk/http://journals.plos.org/plosone/article?id=10.1371/journal.pone.0040740'
-requests.packages.urllib3.disable_warnings(
-    requests.packages.urllib3.exceptions.InsecureRequestWarning)
-sess = requests.Session()
-sess.headers = HEADERS
-
-available_base_url_list = AVAILABLE_SCIHUB_BASE_URL
-base_url = 'http://' + available_base_url_list[0] + '/'
-sess.proxies = PROXIES
-res = sess.get(
-    url=url,
-    proxies=PROXIES,
-    headers=HEADERS,
-    allow_redirects=False,
-    verify=False,
-    timeout=30)
-content = res.content
-if len(content) > 2:
-    # Works.query()
-    import cchardet
-    charset = cchardet.detect(content)
-    text = content.decode(charset['encoding'])
-    soup = BeautifulSoup(text, "lxml")
-    script = soup.script.get_text()
-    doi_regexp = '10[.][0-9]{4,}(?:[.][0-9]+)*/(?:(?!["&\'<>])\S)+'
-    try:
-        doi_match = re.compile(doi_regexp).findall(script)[0]
-    except IndexError:
-        doi_match = None
-identifier = {
-    'article_link':
-    'https://www.sciencedirect.com/science/article/pii/S0098135406001281',
-    'name':
-    'An improved PSO algorithm for solving non-convex NLP/MINLP problems with equality constraints',
-    'type':
-    None,
-    'url':
-    'https://www.sciencedirect.com/science/article/pii/S0098135406001281'
-}
-import time
-meta = {}
-sh = SciHub(out)
+results = sh.search('nlp', 5)
+# download the papers; will use sci-hub.io if it must
 for paper in results['papers']:
-    # time.sleep(2)
-    meta[paper['name']] = sh.find_meta(paper)
-#     ylog.debug(paper)
+    sh.download(paper, './data')
+
+# meta = {}
+# sh = SciHub()
+# for paper in results['papers']:
+#     meta[paper['name']] = sh.find_meta(paper)
