@@ -63,7 +63,7 @@ class SciHub(object):
     and fetch/download papers from sci-hub.io
     """
 
-    def __init__(self):
+    def __init__(self, out):
         requests.packages.urllib3.disable_warnings(
             requests.packages.urllib3.exceptions.InsecureRequestWarning)
         self.sess = requests.Session()
@@ -73,8 +73,7 @@ class SciHub(object):
         self.base_url = 'http://' + self.available_base_url_list[0] + '/'
         self.works = Works()
         self.sess.proxies = PROXIES
-        self.results = pd.DataFrame(
-            columns=['title', 'DOI', 'status_code', 'location'])
+        self.out = out
         self.re_bracket = re.compile("\[(.*?)\]\s")
 
     def get_random_user_agent(self):
@@ -133,9 +132,10 @@ class SciHub(object):
             ylog.debug('*' * 80)
             ylog.debug("title: %s" % title)
             ylog.debug(res.status_code)
-            out.ix[title]['status_code'] = res.status_code
+            # self.out.ix[title]['status_code'] = res.status_code
             ylog.debug("headers: %s" % res.headers['Content-Type'])
             ylog.debug('location: %s' % res.headers.get("Location"))
+            # self.out.ix[title]['location'] = res.headers.get("Location")
             search_title = True
             if not res.headers.get("Location"):
                 content = res.content
@@ -150,16 +150,17 @@ class SciHub(object):
                         doi_match = re.compile(doi_regexp).findall(script)[0]
                         ylog.info("DOI: %s" % doi_match)
                         search_title = False
+                        # use crossref API to get metadata
+                        works = Works()
+                        w1 = works.query(doi_match).sort('relevance').order(
+                            'desc')
+                        i = 0
+                        for item in w1:
+                            # TODO: verify title
+                            # self.out.ix[title]['DOI'] = item['DOI']
+                            return {'meta': item['DOI'], 'url': url}
                     except IndexError:
                         ylog.debug('failed to find regexp')
-                    # use crossref API to get metadata
-                    works = Works()
-                    w1 = works.query(doi_match).sort('relevance').order('desc')
-                    i = 0
-                    for item in w1:
-                        # TODO: verify title
-                        out.ix[title]['DOI'] = item['DOI']
-                        return {'meta': item['DOI'], 'url': url}
             elif search_title:
                 works = Works()
                 w1 = works.query(title).sort('relevance').order('desc')
@@ -181,6 +182,7 @@ class SciHub(object):
                                 a=title, b=sub_title).ratio(
                                 ) > 0.9 or t.startswith(title):
                         ylog.debug("DOI %s" % item['DOI'])
+                        # self.out.ix[title]['DOI'] = item['DOI']
                         return {'meta': item['DOI'], 'url': url}
                     if i > 18:
                         # ylog.debug('[x]%s' % title)
@@ -548,7 +550,7 @@ if __name__ == '__main__':
 # result = sh.download(meta.get('DOI'), path=title + '.pdf')
 
 # search and download
-sh = SciHub()
+sh = SciHub(None)
 # retrieve 5 articles on Google Scholars related to 'bittorrent'
 results = sh.search('nlp', 50)
 out = pd.DataFrame(
@@ -565,9 +567,9 @@ out.set_index('name', inplace=True)
 url = 'https://link.springer.com/chapter/10.1007/978-94-017-2388-6_2'
 url = 'http://sci-hub.tw/https://arxiv.org/abs/1706.05075'
 url = 'http://sci-hub.tw/http://clincancerres.aacrjournals.org/content/11/6/2163.short'
-url = 'http://sci-hub.hk/http://journals.plos.org/plosone/article?id=10.1371/journal.pone.0040740'
 url = 'http://sci-hub.tw/http://www.aclweb.org/anthology/P/P02/P02-1022.pdf'
 url = 'http://sci-hub.tw/http://sci-hub.tw/https://arxiv.org/abs/1307.1662'
+url = 'http://sci-hub.hk/http://journals.plos.org/plosone/article?id=10.1371/journal.pone.0040740'
 requests.packages.urllib3.disable_warnings(
     requests.packages.urllib3.exceptions.InsecureRequestWarning)
 sess = requests.Session()
@@ -608,7 +610,7 @@ identifier = {
 }
 import time
 meta = {}
-sh = SciHub()
+sh = SciHub(out)
 for paper in results['papers']:
     # time.sleep(2)
     meta[paper['name']] = sh.find_meta(paper)
