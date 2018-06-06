@@ -109,32 +109,78 @@ class SciHub(object):
         #     }
         self.sess.proxies = PROXIES
 
+    # @retry(
+    #     wait_random_min=100, wait_random_max=1000, stop_max_attempt_number=10)
     def find_meta(self, identifier):
         """ find metadata with title or DOI
         Keyword Arguments:
         identifier --
         """
-        ylog.info(identifier)
-        w1 = self.works.query(identifier).sort('relevance').order('desc')
-        i = 0
-        for item in w1:
-            i = i + 1
-            try:
-                t = item.get('title')[0]
-                if item.get('subtitle') is not None:
-                    sub_title = item.get('subtitle')[0]
-                    if SequenceMatcher(a=identifier, b=sub_title).ratio() > 0.9:
-                        return item
-            except:
-                continue
-            ylog.debug(t)
-            # if SequenceMatcher(a=identifier, b=t).ratio() > 0.9:
-            if SequenceMatcher(a=identifier, b=t).ratio() > 0.9:
-                return item
-            if i > 18:
-                ylog.debug('[x]%s' % identifier)
-                # ylog.debug(item['title'])
-                return None
+        # url = 'http://sci-hub.tw/' + 'https://link.springer.com/chapter/10.1007/978-94-017-2388-6_2'
+        try:
+            # verify=False is dangerous but sci-hub.io
+            # requires intermediate certificates to verify
+            # and requests doesn't know how to download them.
+            # as a hacky fix, you can add them to your store
+            # and verifying would work. will fix this later.
+            url = self.base_url + identifier['article_link']
+            # self.sess.headers = {'user-agent': self.get_random_user_agent()}
+            res = self.sess.get(url, verify=False)
+            title = identifier['name']
+            ylog.debug(title)
+            ylog.debug(res.status_code)
+            ylog.debug("headers: %s" % res.headers['Content-Type'])
+            ylog.debug('location: %s' % res.headers.get("Location"))
+            if not res.headers.get("Location"):
+                content = res.content
+                if len(content) != 0:
+                    import cchardet
+                    charset = cchardet.detect(content)
+                    text = content.decode(charset['encoding'])
+                    soup = BeautifulSoup(text, "lxml")
+                    script = soup.script.get_text()
+                    doi_regexp = '10[.][0-9]{4,}(?:[.][0-9]+)*/(?:(?!["&\'<>])\S)+'
+                    doi_match = re.compile(doi_regexp).findall(script)[0]
+                    ylog.info(doi_match)
+                    # use crossref API to get metadata
+                    # works = Works()
+                    # w1 = works.query(doi_match).sort('relevance').order('desc')
+                    # i = 0
+                    # for item in w1:
+                    #     # TODO: verify title
+                    #     return {'meta': item, 'url': url}
+            # else:
+            #     works = Works()
+            #     w1 = works.query(title).sort('relevance').order('desc')
+            #     i = 0
+            #     for item in w1:
+            #         i = i + 1
+            #         try:
+            #             t = item.get('title')[0]
+            #             sub_title = item.get('subtitle')[0]
+            #         except:
+            #             continue
+            #         if SequenceMatcher(
+            #                 a=title, b=t).ratio() > 0.9 or SequenceMatcher(
+            #                     a=title, b=sub_title).ratio > 0.9:
+            #             return {'meta': item, 'url': url}
+            #         if i > 18:
+            #             ylog.debug('[x]%s' % title)
+            #             # ylog.debug(item['title'])
+            #             return None
+
+        except requests.exceptions.ConnectionError:
+            logger.info('{} cannot acess,changing'.format(
+                self.available_base_url_list[0]))
+            self._change_base_url()
+
+        except requests.exceptions.RequestException as e:
+
+            return {
+                'err':
+                'Failed to fetch pdf with identifier %s (resolved url %s) due to request exception.'
+                % (identifier, url)
+            }
 
     def _change_base_url(self):
         del self.available_base_url_list[0]
@@ -167,6 +213,7 @@ class SciHub(object):
 
         while True:
             try:
+                self.sess.headers = {'user-agent': self.get_random_user_agent()}
                 res = self.sess.get(
                     SCHOLARS_BASE_URL,
                     allow_redirects=True,
@@ -209,9 +256,11 @@ class SciHub(object):
                         source = link.find('a')['href']
                     else:
                         continue
+                    article_link = link.find('a')['href']
                     results['papers'].append({
                         'name': link.text,
                         'url': source,
+                        'article_link': article_link,
                         'type': url_type
                     })
 
@@ -254,6 +303,7 @@ class SciHub(object):
             # and requests doesn't know how to download them.
             # as a hacky fix, you can add them to your store
             # and verifying would work. will fix this later.
+            self.sess.headers = {'user-agent': self.get_random_user_agent()}
             res = self.sess.get(url, verify=False)
 
             if res.headers['Content-Type'] != 'application/pdf':
@@ -299,6 +349,7 @@ class SciHub(object):
         Sci-Hub embeds papers in an iframe. This function finds the actual
         source url which looks something like https://moscow.sci-hub.io/.../....pdf.
         """
+        self.sess.headers = {'user-agent': self.get_random_user_agent()}
         res = self.sess.get(self.base_url + identifier, verify=False)
         s = self._get_soup(res.content)
         iframe = s.find('iframe')
@@ -476,27 +527,56 @@ if __name__ == '__main__':
 # search and download
 sh = SciHub()
 # retrieve 5 articles on Google Scholars related to 'bittorrent'
-results = sh.search('nlp', 5)
+results = sh.search('nlp', 20)
 
-# download the papers; will use sci-hub.io if it must
+# # download the papers; will use sci-hub.io if it must
+# for paper in results['papers']:
+#     sh.download(paper)
+
+# test request redirects
+url = 'https://link.springer.com/chapter/10.1007/978-94-017-2388-6_2'
+url = 'http://sci-hub.tw/https://arxiv.org/abs/1706.05075'
+url = 'http://sci-hub.tw/http://clincancerres.aacrjournals.org/content/11/6/2163.short'
+requests.packages.urllib3.disable_warnings(
+    requests.packages.urllib3.exceptions.InsecureRequestWarning)
+sess = requests.Session()
+sess.headers = HEADERS
+
+available_base_url_list = AVAILABLE_SCIHUB_BASE_URL
+base_url = 'http://' + available_base_url_list[0] + '/'
+sess.proxies = PROXIES
+res = sess.get(
+    url=url,
+    proxies=PROXIES,
+    headers=HEADERS,
+    allow_redirects=False,
+    verify=False,
+    timeout=30)
+content = res.content
+if len(content) != 0:
+    # Works.query()
+    import cchardet
+    charset = cchardet.detect(content)
+    text = content.decode(charset['encoding'])
+    soup = BeautifulSoup(text, "lxml")
+    script = soup.script.get_text()
+    doi_regexp = '10[.][0-9]{4,}(?:[.][0-9]+)*/(?:(?!["&\'<>])\S)+'
+    doi_match = re.compile(doi_regexp).findall(script)[0]
+
+identifier = {
+    'article_link':
+    'https://www.sciencedirect.com/science/article/pii/S0098135406001281',
+    'name':
+    'An improved PSO algorithm for solving non-convex NLP/MINLP problems with equality constraints',
+    'type':
+    None,
+    'url':
+    'https://www.sciencedirect.com/science/article/pii/S0098135406001281'
+}
+import time
+meta = {}
+sh = SciHub()
 for paper in results['papers']:
-    sh.download(paper)
-#    sh.download(paper, path='./data/')
-
-# # test request redirects
-# url = 'https://arxiv.org/pdf/1706.05075'
-# requests.packages.urllib3.disable_warnings(
-#     requests.packages.urllib3.exceptions.InsecureRequestWarning)
-# sess = requests.Session()
-# sess.headers = HEADERS
-
-# available_base_url_list = AVAILABLE_SCIHUB_BASE_URL
-# base_url = 'http://' + available_base_url_list[0] + '/'
-# sess.proxies = PROXIES
-# res = sess.get(
-#     url=url,
-#     proxies=PROXIES,
-#     headers=HEADERS,
-#     allow_redirects=True,
-#     verify=False,
-#     timeout=30)
+    # time.sleep(2)
+    meta[paper['name']] = sh.find_meta(paper)
+#     ylog.debug(paper)
