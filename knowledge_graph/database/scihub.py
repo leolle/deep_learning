@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 """
 Sci-API Unofficial API
-[Search|Download] research papers from [scholar.google.com|sci-hub.io].
-find metadata of an article.
+- [Search|Download] research papers from [scholar.google.com|sci-hub.io].
+- find metadata of an article.
 @author Wei Wu
 """
 
@@ -20,6 +20,7 @@ from ylib import ylog
 from difflib import SequenceMatcher
 from ylib.yaml_config import Configuraion
 from urllib.parse import quote_plus
+from ylib.preprocessing import strip_punctuation
 config = Configuraion()
 
 config.load('/home/weiwu/projects/deep_learning/web_crawl/config.yaml')
@@ -68,7 +69,6 @@ class SciHub(object):
             requests.packages.urllib3.exceptions.InsecureRequestWarning)
         self.sess = requests.Session()
         self.sess.headers = {'user-agent': self.get_random_user_agent()}
-
         self.available_base_url_list = AVAILABLE_SCIHUB_BASE_URL
         self.base_url = 'http://' + self.available_base_url_list[0] + '/'
         self.works = Works()
@@ -276,16 +276,14 @@ class SciHub(object):
                     else:
                         continue
                     article_link = link.find('a')['href']
+                    title = link.text.replace("\xa0…", "")
+                    title = re.sub(self.re_bracket, "", title)
+                    title = strip_punctuation(title)
                     results['papers'].append({
-                        'name':
-                        re.sub(self.re_bracket, "",
-                               link.text.replace("\xa0…", "")),
-                        'url':
-                        source,
-                        'article_link':
-                        article_link,
-                        'type':
-                        url_type
+                        'name': title,
+                        'url': source,
+                        'article_link': article_link,
+                        'type': url_type
                     })
 
                     if len(results['papers']) >= limit:
@@ -343,7 +341,8 @@ class SciHub(object):
                 return {
                     'pdf': res.content,
                     'url': url,
-                    'name': self._generate_name(res)
+                    'name': identifier['name'] + '.pdf'
+                    #                    'name': self._generate_name(res)
                 }
 
         except requests.exceptions.ConnectionError:
@@ -541,21 +540,22 @@ if __name__ == '__main__':
 # result = sh.download(
 #     meta.get('link')[0].get('URL'), path='./data/pdf/' + title + '.pdf')
 
-# # exactly the same thing as fetch except downloads the articles to disk
-# # if no path given, a unique name will be used as the file name
-# result = sh.download(
-#     'http://ieeexplore.ieee.org/abstract/document/1648853/', path='paper.pdf')
-# # result = sh.download('10.1145/2449396.2449413', path='paper.pdf')
-# result = sh.download(meta.get('DOI'), path=title + '.pdf')
-
 # search and download
 sh = SciHub()
 # retrieve 5 articles on Google Scholars related to 'bittorrent'
 results = sh.search('nlp', 5)
 # download the papers; will use sci-hub.io if it must
 for paper in results['papers']:
+    logger.debug(paper)
     sh.download(paper, './data')
 
+# # exactly the same thing as fetch except downloads the articles to disk
+# # if no path given, a unique name will be used as the file name
+# result = sh.download(
+#     'http://ieeexplore.ieee.org/abstract/document/1648853/', path='paper.pdf')
+
+# # result = sh.download('10.1145/2449396.2449413', path='paper.pdf')
+# result = sh.download(meta.get('DOI'), path=title + '.pdf')
 # meta = {}
 # sh = SciHub()
 # for paper in results['papers']:
