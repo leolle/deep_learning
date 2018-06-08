@@ -157,7 +157,8 @@ class SciHub(object):
                         for item in w1:
                             # TODO: verify title
                             # self.out.ix[title]['DOI'] = item['DOI']
-                            return {'meta': item['DOI'], 'url': url}
+                            return item
+#                            return {'meta': item['DOI'], 'url': url}
                     except IndexError:
                         ylog.debug('failed to find regexp')
             elif search_title:
@@ -182,7 +183,10 @@ class SciHub(object):
                                 ) > 0.9 or t.startswith(title):
                         ylog.debug("DOI %s" % item['DOI'])
                         # self.out.ix[title]['DOI'] = item['DOI']
-                        return {'meta': item['DOI'], 'url': url}
+                        return item
+
+
+#                        return {'meta': item['DOI'], 'url': url}
                     if i > 18:
                         # ylog.debug('[x]%s' % title)
                         # ylog.debug(item['title'])
@@ -302,9 +306,11 @@ class SciHub(object):
         data = self.fetch(identifier)
 
         if not 'err' in data:
-            self._save(data['pdf'],
-                       os.path.join(destination, path
-                                    if path else data['name']))
+            self._save(
+                data['pdf'],
+                os.path.join(
+                    destination, path if path else
+                    data['name'].encode('utf-8').decode('utf-8').strip()))
 
         return data
 
@@ -547,6 +553,8 @@ results = sh.search('nlp', 5)
 # download the papers; will use sci-hub.io if it must
 for paper in results['papers']:
     logger.debug(paper)
+    #     paper['meta'] = None
+    paper['doi'] = sh.find_meta(paper)
     sh.download(paper, './data')
 
 # # exactly the same thing as fetch except downloads the articles to disk
@@ -555,8 +563,8 @@ for paper in results['papers']:
 #     'http://ieeexplore.ieee.org/abstract/document/1648853/', path='paper.pdf')
 
 # # result = sh.download('10.1145/2449396.2449413', path='paper.pdf')
-# result = sh.download(meta.get('DOI'), path=title + '.pdf')
+# # result = sh.download(meta.get('DOI'), path=title + '.pdf')
 # meta = {}
-# sh = SciHub()
+# # sh = SciHub()
 # for paper in results['papers']:
-#     meta[paper['name']] = sh.find_meta(paper)
+#     paper['doi'] = sh.find_meta(paper)
