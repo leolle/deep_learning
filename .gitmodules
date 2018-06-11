@@ -22,3 +22,9 @@
 [submodule "web_crawl/Web-crawler-and-data-analysis"]
 	path = web_crawl/Web-crawler-and-data-analysis
 	url = git@github.com:xUFduO/Web-crawler-and-data-analysis.git
+[submodule "word_embedding/deep-siamese-text-similarity"]
+	path = word_embedding/deep-siamese-text-similarity
+	url = git@github.com:dhwajraj/deep-siamese-text-similarity.git
+[submodule "word_embedding/sentenceSimilarity"]
+	path = word_embedding/sentenceSimilarity
+	url = git@github.com:WenDesi/sentenceSimilarity.git
