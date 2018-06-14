@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from snownlp import SnowNLP
 
-# s = SnowNLP(u'这个东西真心很赞')
+s = SnowNLP(u'这个东西一般')
 
 # print('tokenization', s.words)  # [u'这个', u'东西', u'真心',
 # #  u'很', u'赞']
@@ -10,7 +10,7 @@ from snownlp import SnowNLP
 # #  (u'真心', u'd'), (u'很', u'd'),
 # #  (u'赞', u'Vg')]
 
-# print('sentiment', s.sentiments)  # 0.9769663402895832 positive的概率
+print('sentiment', s.sentiments)  # 0.9769663402895832 positive的概率
 
 # print("pinyin", s.pinyin)  # [u'zhe', u'ge', u'dong', u'xi',
 # #  u'zhen', u'xin', u'hen', u'zan']
