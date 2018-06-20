@@ -1,8 +1,22 @@
 # -*- coding: utf-8 -*-
-from snownlp import SnowNLP
-
+# from snownlp import SnowNLP
+# from snownlp.sentiment import Sentiment
+from snownlp.sentiment import train, save
+# sentiment = Sentiment()
+# sentiment.load(
+#     '/home/weiwu/.virtualenvs/graph/lib/python3.6/site-packages/snownlp/sentiment/sentiment.marshal'
+# )
+sent = u'这个东西一般'
+# print(sentiment.classify(sent))
+pos_docs = '/home/weiwu/.virtualenvs/graph/lib/python3.6/site-packages/snownlp/sentiment/pos.txt'
+neg_docs = '/home/weiwu/.virtualenvs/graph/lib/python3.6/site-packages/snownlp/sentiment/neg.txt'
+sentiment_model_path = './data/model/sentiment.marshal'
+# sentiment.train(pos_docs=pos_docs, neg_docs=neg_docs)
+# sentiment.save(sentiment_model_path)
+train(neg_docs, pos_docs)
+save(sentiment_model_path)
+# next
 s = SnowNLP(u'这个东西一般')
-
 # print('tokenization', s.words)  # [u'这个', u'东西', u'真心',
 # #  u'很', u'赞']
 
