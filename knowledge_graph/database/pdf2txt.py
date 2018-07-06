@@ -1,4 +1,7 @@
 # -*- coding: utf-8 -*-
+"""
+convert pdf to text
+"""
 import sys
 import os
 import re

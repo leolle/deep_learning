@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+'''extract doi from pdf, fetch metadata from crossref.org'''
 # from PyPDF2 import PdfFileReader
 from scihub2pdf import download as dl
 from pdfminer.pdfparser import PDFParser
@@ -161,3 +162,28 @@ ylog.debug('#items found: %s' % counter)
 #         colorprint(FAIL, "Error downloading '%s' (%s)" % (url, e.reason))
 #     except Exception as e:
 #         colorprint(FAIL, "Error downloading '%s' (%s)" % (url, str(e)))
+title = """Heterogeneous resistance to vancomycin in Staphylococcus epidermidis, Staphylococcus haemolyticus and Staphylococcus warneri clinical strains: characterisation"""
+w1 = works.query(title).sort('relevance').order('desc')
+i = 0
+target_doi = '10.1109/icdcs.2006.48'
+items_result = None
+for item in w1:
+    i = i + 1
+    t = item.get('title')[0]
+    sub_title = item.get('subtitle')[0]
+    ylog.debug('crossref item title ')
+    ylog.debug(t)
+    ylog.debug(sub_title)
+    ylog.debug(item)
+    if SequenceMatcher(a=title, b=t).ratio() > 0.8:
+        found_doi = item['DOI']
+        ylog.debug("target doi: %s" % target_doi)
+        ylog.debug("found  doi: %s" % found_doi)
+        if target_doi[:10] == found_doi[:10] or SequenceMatcher(
+                a=target_doi, b=found_doi).ratio() > 0.9:
+            print('found')
+            break
+    if i > 0:
+        ylog.debug('[x]%s' % title)
+        # ylog.debug(item['title'])
+        break
