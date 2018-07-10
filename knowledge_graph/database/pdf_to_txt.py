@@ -277,7 +277,8 @@ for (root, dirs,
         with open(fout, 'w') as f:
             f.write(text)
 
-re_github = re.compile('https?://github.com/[A-Za-z0-9/_-]+[\s\u000C.0-9]')
+re_github = re.compile(
+    'https?://[www.]?github.com/[A-Za-z0-9_-]+/[A-Za-z_-]+[\s\u000C.0-9]')
 github_list = '/home/weiwu/share/deep_learning/docs/github/github_list.txt'
 fout = open(github_list, 'a')
 for (root, dirs,
