@@ -187,3 +187,52 @@ for item in w1:
         ylog.debug('[x]%s' % title)
         # ylog.debug(item['title'])
         break
+
+import subprocess
+import os
+
+
+def grobid(pdf_folder, grobid_home=None, grobid_jar=None):
+    """
+    Run `Grobid <https://github.com/kermitt2/grobid>`_ on a given folder to \
+            extract references.
+    .. note::
+        Before using this function, you have to download and build Grobid on \
+                your system. See \
+                `<https://grobid.readthedocs.org/en/latest/Install-Grobid/>`_ \
+                for more infos on this. You need Java to be in your ``$PATH``.
+    :param pdf_folder: Folder containing the PDF files to handle.
+    :param grobid_home: Path to the grobid-home directory.
+    :param grobid_jar: Path to the built Grobid JAR file.
+    :returns: ``True``, or ``False`` if an error occurred.
+    """
+    # TODO: Should be using https://github.com/kermitt2/grobid-example and
+    # BibTeX backend.
+    if grobid_home is None or grobid_jar is None:
+        # User should pass the correct paths
+        return False
+
+    try:
+        subprocess.call([
+            "java",
+            "-jar",
+            grobid_jar,
+            # Avoid OutOfMemoryException
+            "-Xmx1024m",
+            "-gH",
+            grobid_home,
+            "-gP",
+            os.path.join(grobid_home, "config/grobid.properties"),
+            "-dIn",
+            pdf_folder,
+            "-exe",
+            "processReferences"
+        ])
+        return True
+    except subprocess.CalledProcessError:
+        return False
+
+
+curl_string = """
+curl -v --form input=@/home/weiwu/share/deep_learning/docs/github/zhang2016.pdf --form teiCoordinates=persName --form teiCoordinates=figure --form teiCoordinates=ref --form teiCoordinates=biblStruct --form teiCoordinates=formula localhost:8070/api/processFulltextDocument
+"""
