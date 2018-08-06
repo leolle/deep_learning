@@ -28,3 +28,6 @@
 [submodule "word_embedding/sentenceSimilarity"]
 	path = word_embedding/sentenceSimilarity
 	url = git@github.com:WenDesi/sentenceSimilarity.git
+[submodule "entity_relation_extraction/jointEE-NN"]
+	path = entity_relation_extraction/jointEE-NN
+	url = git@github.com:anoperson/jointEE-NN.git
