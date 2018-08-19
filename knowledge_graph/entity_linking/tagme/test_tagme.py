@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import tagme
 import wikipedia
+import re
 # Set the authorization token for subsequent calls.
 tagme.GCUBE_TOKEN = "1e1a9d3f-47ab-4df1-a063-45301072978f-843339462"
 
@@ -68,13 +69,26 @@ No. Column name Chinese name Type Empty No Remarks
 
 
 """
+# TEXT = "Non-current assets"
+rex = r'([0-9]+\s)([a-zA-z]+\s)(.+)'
+rex_property = re.compile(rex)
+dict_property = {}
 text_annotations = tagme.annotate(TEXT)
+ls_property = rex_property.findall(TEXT)
+for prop in ls_property:
+    print(prop[2])
+    dict_property[prop[1]] = {'prop': prop[2]}
+    text_annotations = tagme.annotate(prop[2])
+    dict_property[prop[1]] = {'uri': text_annotations.annotations[0].uri}
+    dict_property[prop[1]] = {
+        'mention': text_annotations.annotations[0].entity_title
+    }
 
-# Print annotations with a score higher than 0.1
-for ann in text_annotations.get_annotations(0.001):
-    print(ann)
-    print(ann.uri())
-    # print(wikipedia.summary(ann.entity_title)[:250] + '...')
+# # Print annotations with a score higher than 0.1
+# for ann in text_annotations.get_annotations(0.001):
+#     print(ann)
+#     print(ann.uri())
+# print(wikipedia.summary(ann.entity_title)[:250] + '...')
 
 # tomatoes_mentions = tagme.mentions(
 #     "I definitely like ice cream better than tomatoes.")
