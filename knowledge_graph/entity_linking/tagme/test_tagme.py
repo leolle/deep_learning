@@ -2,6 +2,7 @@
 import tagme
 import wikipedia
 import re
+import subprocess
 # Set the authorization token for subsequent calls.
 tagme.GCUBE_TOKEN = "1e1a9d3f-47ab-4df1-a063-45301072978f-843339462"
 
@@ -66,9 +67,8 @@ No. Column name Chinese name Type Empty No Remarks
 46 EffectOfFERChanges Foreign Currency Exchange Rate Conversion (RMB) money √
 47 CashEquivalentEndPer Cash and cash equivalents (yuan) money √
 48 XGRQ modification date datetime
-
-
 """
+
 # TEXT = "Non-current assets"
 rex = r'([0-9]+\s)([a-zA-z]+\s)(.+)'
 rex_property = re.compile(rex)
@@ -95,3 +95,12 @@ for prop in ls_property:
 
 # for mention in tomatoes_mentions.mentions:
 #     print(mention)
+# def main():
+#     print('into main')
+
+# if __name__ == "__main__":
+#     print('into ifm')
+#     # main()
+
+# proc = ["python", "test_main.py", "--test_file", 'a']
+# subprocess.call(proc)

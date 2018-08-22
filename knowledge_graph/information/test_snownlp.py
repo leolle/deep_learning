@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# from snownlp import SnowNLP
+from snownlp import SnowNLP
 # from snownlp.sentiment import Sentiment
 from snownlp.sentiment import train, save
 # sentiment = Sentiment()
@@ -13,8 +13,8 @@ neg_docs = '/home/weiwu/.virtualenvs/graph/lib/python3.6/site-packages/snownlp/s
 sentiment_model_path = './data/model/sentiment.marshal'
 # sentiment.train(pos_docs=pos_docs, neg_docs=neg_docs)
 # sentiment.save(sentiment_model_path)
-train(neg_docs, pos_docs)
-save(sentiment_model_path)
+# train(neg_docs, pos_docs)
+# save(sentiment_model_path)
 # next
 s = SnowNLP(u'这个东西一般')
 # print('tokenization', s.words)  # [u'这个', u'东西', u'真心',
@@ -65,14 +65,14 @@ text = u'''1、公司深度报告：寻价格涨跌之因、需求之形，论�
 29、我们预计公司2018-2020年营业总收入分别为801.75/973.17/1151.52亿元，同比增长31.3%/21.4%/18.3%；
 30、净利润分别为373.61/461.58/550.10亿元，同比增长37.97%/23.55%/19.18%，对应EPS分别为29.74/36.74/43.79元。
 31、风险提示：打压三公消费力度继续加大、高端酒动销不及预期、食品安全事件。'''
-with open('./data/maotai.txt') as f:
+with open('./data/test.article.txt') as f:
     article = f.read()
 
 s = SnowNLP(article)
 
 print('keywords', s.keywords(100))  # [u'语言', u'自然', u'计算机']
 
-# print('summary', s.summary(10))  # [u'因而它是计算机科学的一部分',
+print('summary', s.summary(5))  # [u'因而它是计算机科学的一部分',
 #  u'自然语言处理是一门融语言学、计算机科学、
 #	 数学于一体的科学',
 #  u'自然语言处理是计算机科学领域与人工智能
