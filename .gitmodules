@@ -31,3 +31,6 @@
 [submodule "entity_relation_extraction/jointEE-NN"]
 	path = entity_relation_extraction/jointEE-NN
 	url = git@github.com:anoperson/jointEE-NN.git
+[submodule "knowledge_graph/information/EventTriplesExtraction"]
+	path = knowledge_graph/information/EventTriplesExtraction
+	url = https://github.com/liuhuanyong/EventTriplesExtraction.git
