@@ -97,3 +97,24 @@ print(sims)
 
 # # to find vector of doc in training data using tags or in other words, printing the vector of document at index 1 in training data
 # print(model.docvecs['1'])
+"""doc tfidf"""
+input_text = """中国政府高层显然也希望避免中美冲突恶化, 中美贸易战开打, 但中美贸易战开打之后, 强调中国在贸易战中有"五大优势", 他强调："我们要特别防止中美之间的贸易冲突扩散到意识形态领域"""
+test_model = [[word for word in jieba.cut(words)]
+              for words in input_text.split()]
+dictionary = corpora.Dictionary(test_model, prune_at=2000000)
+# for key in dictionary.iterkeys():
+#     print key,dictionary.get(key),dictionary.dfs[key]
+corpus_model = [dictionary.doc2bow(test) for test in test_model]
+print(corpus_model)
+# [[(0, 1), (1, 3), (2, 1), (3, 1), (4, 1)], [(0, 1), (1, 2), (3, 1), (4, 1), (5, 1)], [(0, 1), (5, 1), (6, 1)]]
+
+# 目前只是生成了一个模型,并不是将对应的corpus转化后的结果,里面存储有各个单词的词频，文频等信息
+tfidf_model = models.TfidfModel(corpus_model)
+# 对语料生成tfidf
+corpus_tfidf = tfidf_model[corpus_model]
+d = {dictionary.get(id): value for doc in corpus_tfidf for id, value in doc}
+# 对tfidf排序
+from operator import itemgetter
+order = sorted(d.items(), key=itemgetter(1), reverse=True)
+"""tfidf english sentences"""
+input_text_translations = """The Chinese government’s top management obviously also hopes to avoid the deterioration of the Sino-US conflict. The Sino-US trade war has started. After the Sino-US trade war began, it emphasized that China has "five advantages" in the trade war. He stressed: "We must especially prevent Sino-US cooperation. Trade conflict spreads to the ideological field"""
