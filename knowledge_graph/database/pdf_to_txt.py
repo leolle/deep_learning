@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+"""convert pdf to text in python file without running command line"""
 import sys
 import six
 import re
@@ -12,9 +13,9 @@ from os.path import join, getsize
 
 pdfminer.settings.STRICT = False
 
-fp = '/home/weiwu/share/deep_learning/data/docs/raw/20170122-长江证券-长江证券金融工程：基于网络的动量选股策略.pdf'
 fp = '/home/weiwu/share/deep_learning/docs/word_embedding/Learning Composition Models for Phrase Embedding.pdf'
 fp = '/home/weiwu/share/deep_learning/docs/word_embedding/1803.06581.pdf'
+fp = '/home/weiwu/share/deep_learning/data/docs/raw/20170122-长江证券-长江证券金融工程：基于网络的动量选股策略.pdf'
 fout = './data/research.txt'
 f_parsed = './data/research_converted.txt'
 max_page_num = '90'
@@ -231,26 +232,6 @@ def convert_pdf2txt(args=None):
     return 0
 
 
-# convert_pdf2txt(args=[fp, '--outfile', fout, '--maxpages', str(max_page_num)])
-convert_pdf2txt(args=[fp, '--outfile', fout])
-with open(fout, 'r') as fp:
-    text = fp.read()
-    s = utils.to_unicode(text)
-    text = s.replace('\n\n', '')
-    # # remove nonsense character from formula
-    # text = re.sub(
-    #     "[^!#$%&'()*+,-./:;<=>?@[\]^_`{|}~\u4e00-\u9fa5a-zA-Z0-9\u3002\uff1b\uff0c\uff1a\u201c\u201d\uff08\uff09\u3001\uff1f\u300a\u300b\n\s]+",
-    #     '', text)
-    # # remove ^L
-    # text = re.sub("\u000C", "", text)
-    # # remove ( )
-    # text = re.sub("[\uFF08(][^\s]+[\uFF09)]", "", text)
-    # # remove following pattern 888888777777id
-    # text = re.sub("[!#$%&'()*+,-./:;<=>?@[\]^_`{|}~a-zA-Z0-9]{10,}", '', text)
-with open(f_parsed, 'w') as f:
-    f.write(text)
-
-
 def convert(args):
     pass
 
@@ -263,36 +244,66 @@ def convert_from(args):
     pass
 
 
-for (root, dirs,
-     files) in os.walk('/home/weiwu/share/deep_learning/docs/github'):
-    for filename in files:
-        file_path = join(root, filename)
-        print(file_path)
-        fout = file_path[:-3] + 'txt'
-        convert_pdf2txt(args=[file_path, '--outfile', fout])
-        with open(fout, 'r') as fp:
-            text = fp.read()
-            s = utils.to_unicode(text)
-            text = s.replace('\n\n', '')
-        with open(fout, 'w') as f:
-            f.write(text)
+# convert_pdf2txt(args=[fp, '--outfile', fout, '--maxpages', str(max_page_num)])
+def p2t(input_file_path, output_file_path, filter):
+    convert_pdf2txt(args=[input_file_path, '--outfile', output_file_path])
+    with open(output_file_path, 'r') as fp:
+        text = fp.read()
+        s = utils.to_unicode(text)
+        text = s.replace('\n\n', '')
+        # remove nonsense character from formula
+        text = re.sub(
+            "[^!#$%&'()*+,-./:;<=>?@[\]^_`{|}~\u4e00-\u9fa5a-zA-Z0-9\u3002\uff1b\uff0c\uff1a\u201c\u201d\uff08\uff09\u3001\uff1f\u300a\u300b\n\s]+",
+            '', text)
+        # remove ^L
+        text = re.sub("\u000C", "", text)
+        # remove ( )
+        text = re.sub("[\uFF08(][^\s]+[\uFF09)]", "", text)
+        # remove following pattern 888888777777id
+        text = re.sub("[!#$%&'()*+,-./:;<=>?@[\]^_`{|}~a-zA-Z0-9]{10,}", '',
+                      text)
+        text = re.sub('\n', '', text)
+    with open(output_file_path, 'w') as f:
+        f.write(text)
+    # print('finished')
 
-re_github = re.compile(
-    'https?://[www.]?github.com/[A-Za-z0-9_-]+/[A-Za-z_-]+[\s\u000C.0-9]')
-github_list = '/home/weiwu/share/deep_learning/docs/github/github_list.txt'
-fout = open(github_list, 'a')
-for (root, dirs,
-     files) in os.walk('/home/weiwu/share/deep_learning/docs/github'):
-    for filename in files:
-        if filename.endswith('.txt'):
+
+def main():
+    # find github url in pdfs
+    for (root, dirs,
+         files) in os.walk('/home/weiwu/share/deep_learning/docs/github'):
+        for filename in files:
             file_path = join(root, filename)
             print(file_path)
-            with open(file_path, 'r') as f:
-                try:
-                    out = re_github.search(f.read()).group()[:-1]
-                    print(out)
-                except AttributeError:
-                    continue
-            #with open(github_list, 'a') as fout:
-            fout.write(out + os.linesep)
-fout.close()
+            fout = file_path[:-3] + 'txt'
+            convert_pdf2txt(args=[file_path, '--outfile', fout])
+            with open(fout, 'r') as fp:
+                text = fp.read()
+                s = utils.to_unicode(text)
+                text = s.replace('\n\n', '')
+            with open(fout, 'w') as f:
+                f.write(text)
+
+    re_github = re.compile(
+        'https?://[www.]?github.com/[A-Za-z0-9_-]+/[A-Za-z_-]+[\s\u000C.0-9]')
+    github_list = '/home/weiwu/share/deep_learning/docs/github/github_list.txt'
+    fout = open(github_list, 'a')
+    for (root, dirs,
+         files) in os.walk('/home/weiwu/share/deep_learning/docs/github'):
+        for filename in files:
+            if filename.endswith('.txt'):
+                file_path = join(root, filename)
+                print(file_path)
+                with open(file_path, 'r') as f:
+                    try:
+                        out = re_github.search(f.read()).group()[:-1]
+                        print(out)
+                    except AttributeError:
+                        continue
+                #with open(github_list, 'a') as fout:
+                fout.write(out + os.linesep)
+    fout.close()
+
+
+if __name__ == '__main__':
+    main()
