@@ -32,8 +32,6 @@ BLACK_DOMAIN = config.BLACK_DOMAIN
 URL_SEARCH = config.URL_GOOGLE_SEARCH
 PROXIES = config.PROXIES
 
-# LOGGER = config.LOGGER
-
 
 class MagicGoogle():
     """
@@ -152,7 +150,7 @@ class MagicGoogle():
         try:
             related_str_rfs = related_str_re.search(related_str).group()
         except AttributeError:
-            LOGGER.debug(related_str)
+            ylog.debug(related_str)
             return None
         # ylog.debug(related_str_rfs)
         related_ls_re = re.compile("(:\[|,)(\"[A-Za-z\s\u4e00-\u9fa5]*\")")
@@ -206,7 +204,7 @@ class MagicGoogle():
                 verify=False,
                 timeout=30)
             time.sleep(pause)
-            LOGGER.info(url)
+            ylog.info(url)
             content = r.content
             charset = cchardet.detect(content)
             bsObj = content.decode(charset['encoding'])
@@ -229,7 +227,7 @@ class MagicGoogle():
                 if o.netloc:
                     return link
         except Exception as e:
-            LOGGER.exception(e)
+            ylog.exception(e)
             return None
 
     def pq_html(self, bsObj):
@@ -237,7 +235,7 @@ class MagicGoogle():
             init_content = pq(bsObj)
             return init_content
         except ValueError:
-            LOGGER.exception(ValueError)
+            ylog.exception(ValueError)
             return None
 
     def get_random_user_agent(self):

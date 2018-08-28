@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+"""test snownlp methods, including training, sentiment classification, keywords, summarization"""
 from snownlp import SnowNLP
 # from snownlp.sentiment import Sentiment
 from snownlp.sentiment import train, save
@@ -11,28 +12,37 @@ sent = u'这个东西一般'
 pos_docs = '/home/weiwu/.virtualenvs/graph/lib/python3.6/site-packages/snownlp/sentiment/pos.txt'
 neg_docs = '/home/weiwu/.virtualenvs/graph/lib/python3.6/site-packages/snownlp/sentiment/neg.txt'
 sentiment_model_path = './data/model/sentiment.marshal'
+
 # sentiment.train(pos_docs=pos_docs, neg_docs=neg_docs)
 # sentiment.save(sentiment_model_path)
 # train(neg_docs, pos_docs)
 # save(sentiment_model_path)
 # next
-s = SnowNLP(u'这个东西一般')
 # print('tokenization', s.words)  # [u'这个', u'东西', u'真心',
 # #  u'很', u'赞']
+
 
 # print('targs', s.tags)  # [(u'这个', u'r'), (u'东西', u'n'),
 # #  (u'真心', u'd'), (u'很', u'd'),
 # #  (u'赞', u'Vg')]
+def sentiment_classification(text=u'这个东西一般'):
+    s = SnowNLP(text)
+    print('sentiment', s.sentiments)  # 0.9769663402895832 positive的概率
 
-print('sentiment', s.sentiments)  # 0.9769663402895832 positive的概率
 
-# print("pinyin", s.pinyin)  # [u'zhe', u'ge', u'dong', u'xi',
-# #  u'zhen', u'xin', u'hen', u'zan']
+def pingying(text):
+    s = SnowNLP(text)
+    return s.pinyin  # [u'zhe', u'ge', u'dong', u'xi',
+    #  u'zhen', u'xin', u'hen', u'zan']
 
-# s = SnowNLP(u'「繁體字」「繁體中文」的叫法在臺灣亦很常見。')
 
-# s.han  # u'「繁体字」「繁体中文」的叫法
-# # 在台湾亦很常见。'
+def zht_to_zhs(zht=u'「繁體字」「繁體中文」的叫法在臺灣亦很常見。'):
+
+    s = SnowNLP(zht)
+
+    return s.han  # u'「繁体字」「繁体中文」的叫法
+    # 在台湾亦很常见。'
+
 
 text = u'''1、公司深度报告：寻价格涨跌之因、需求之形，论茅台的成长
 2、核心观点：茅台价格作为白酒板块的风向标，受到消费需求、投资需求以及公司量价政策的共同影响。
@@ -65,7 +75,7 @@ text = u'''1、公司深度报告：寻价格涨跌之因、需求之形，论�
 29、我们预计公司2018-2020年营业总收入分别为801.75/973.17/1151.52亿元，同比增长31.3%/21.4%/18.3%；
 30、净利润分别为373.61/461.58/550.10亿元，同比增长37.97%/23.55%/19.18%，对应EPS分别为29.74/36.74/43.79元。
 31、风险提示：打压三公消费力度继续加大、高端酒动销不及预期、食品安全事件。'''
-with open('./data/test.article.txt') as f:
+with open('./data/test.china_tax.txt') as f:
     article = f.read()
 
 s = SnowNLP(article)
