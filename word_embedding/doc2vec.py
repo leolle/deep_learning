@@ -118,3 +118,21 @@ from operator import itemgetter
 order = sorted(d.items(), key=itemgetter(1), reverse=True)
 """tfidf english sentences"""
 input_text_translations = """The Chinese government’s top management obviously also hopes to avoid the deterioration of the Sino-US conflict. The Sino-US trade war has started. After the Sino-US trade war began, it emphasized that China has "five advantages" in the trade war. He stressed: "We must especially prevent Sino-US cooperation. Trade conflict spreads to the ideological field"""
+from gensim import corpora, models, similarities
+from nltk.tokenize import word_tokenize, sent_tokenize
+
+test_model = word_tokenize(input_text_translations.lower())
+wordstest_model = sent_tokenize(input_text_translations)
+test_model = [word_tokenize(_d.lower()) for _d in docs]
+# test_model = [[word for word in jieba.cut(words)] for words in wordstest_model]
+dictionary = corpora.Dictionary(test_model, prune_at=2000000)
+# for key in dictionary.iterkeys():
+#     print key,dictionary.get(key),dictionary.dfs[key]
+corpus_model = [dictionary.doc2bow(test) for test in test_model]
+tfidf_model = models.TfidfModel(corpus_model)
+# 对语料生成tfidf
+corpus_tfidf = tfidf_model[corpus_model]
+d = {}
+d = {dictionary.get(id): value for doc in corpus_tfidf for id, value in doc}
+from operator import itemgetter
+sorted(d.items(), key=itemgetter(1), reverse=True)

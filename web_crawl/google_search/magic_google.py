@@ -104,7 +104,7 @@ class MagicGoogle():
         TotalCount = self.counts_result(bsObj, start)
         RelatedKeywords = self.search_relation(bsObj, pause)
         # every page has 10 articles
-        pages = int(ceil(nums / 20))
+        pages = int(ceil(nums / 10))
         page = 0
         Allinformations = []
         while page < pages:
