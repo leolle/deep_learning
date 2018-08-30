@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """
+convert a skill to a protobuf graph from GID
 """
 import logging
 from ylib import ylog
