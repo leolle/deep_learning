@@ -7,7 +7,7 @@ import cchardet
 import requests
 from math import ceil
 from pyquery import PyQuery as pq
-from .config import USER_AGENT, DOMAIN, BLACK_DOMAIN, URL_SEARCH, LOGGER
+from config import USER_AGENT, DOMAIN, BLACK_DOMAIN, URL_SEARCH, LOGGER
 from urllib.parse import quote_plus, urlparse, parse_qs
 
 
@@ -91,12 +91,12 @@ class MagicGoogle_News():
         init_url = self.req_url(query, language, start, pause=2)
         bsObj = self.Cold_boot(init_url)
         TotalCount = self.counts_result(bsObj, start)
-        pages = int(ceil(nums / 20))
+        pages = int(ceil(nums / 10))
         page = 0
         Allinformations = []
         while page <= pages:
             print(page)
-            start = page * 20
+            start = page * 10
             url = self.req_url(query, language, start, pause=2)
             print(url)
             bsObj = self.Cold_boot(url)
@@ -218,7 +218,8 @@ class MagicGoogle_News():
             return domain
 
     def get_data(self, filename, default=''):
-        root_folder = os.path.dirname(__file__)
+        # root_folder = os.path.dirname(__file__)
+        root_folder = os.getcwd()
         user_agents_file = os.path.join(
             os.path.join(root_folder, 'data'), filename)
         try:
@@ -227,3 +228,7 @@ class MagicGoogle_News():
         except:
             data = [default]
         return data
+
+
+news = MagicGoogle_News()
+data = news.gain_data('债券 预期收益')
