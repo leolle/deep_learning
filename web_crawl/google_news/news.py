@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import pandas as pd
 import os
 import random
 import time
@@ -7,16 +8,26 @@ import cchardet
 import requests
 from math import ceil
 from pyquery import PyQuery as pq
-from config import USER_AGENT, DOMAIN, BLACK_DOMAIN, URL_SEARCH, LOGGER
+# from config import USER_AGENT, DOMAIN, BLACK_DOMAIN, URL_SEARCH, LOGGER
 from urllib.parse import quote_plus, urlparse, parse_qs
 from bs4 import BeautifulSoup
 from bs4.element import Tag
 from ylib import ylog
+from ylib.yaml_config import Configuraion
 import logging
 
 ylog.set_level(logging.DEBUG)
 ylog.console_on()
 ylog.filelog_on("app")
+
+config = Configuraion()
+
+config.load('../config.yaml')
+USER_AGENT = config.USER_AGENT
+DOMAIN = config.DOMAIN
+BLACK_DOMAIN = config.BLACK_DOMAIN
+URL_SEARCH = config.URL_GOOGLE_NEWS_RANGE
+PROXIES = config.PROXIES
 
 
 class MagicGoogle_News():
@@ -48,11 +59,11 @@ class MagicGoogle_News():
             result_count = int(''.join(re.findall(pattern, m)[1:]))
             return result_count
 
-    def content(self, bsObj):
-        pq_content = BeautifulSoup(bsObj, "lxml")
+    def content(self, text):
+        soup = BeautifulSoup(text, "lxml")
         result = []
         # ylog.debug(pq_content)
-        papers = pq_content.find_all('div', class_='g')
+        papers = soup.find_all('div', class_='g')
         for item in papers:
             information = {
                 'Title': None,
@@ -66,29 +77,9 @@ class MagicGoogle_News():
             pub_info = item.find('div', class_='slp').find_all('span')
             pub, hyphen, datetime = list(map(Tag.get_text, pub_info))
             Title = BeautifulSoup(str(item.find('h3')), "lxml").get_text()
-            PageURL = item.find('a')['href']
+            PageURL = item.find('a')['href'].replace('/url?q=', '')
             MatchedAbstract = item.find('div', class_='st').get_text()
-            ylog.debug(Title)
-            # if href:
-            #     PageURL = self.filter_link(href)
-            #     # print PageURL
-
-            # MatchedAbstract = item('div.st')[0].text
-            # # print MatchedAbstract
-            # source = item('span.f')[0].text.split('-')
-            # if len(source) > 2:
-            #     PageSourceWebsite = ''.join(source[:-1])
-            #     # print PageSourceWebsite
-            #     a = source[-1]
-            #     CreatedTime = self.clear_time(a)
-            #     # print CreatedTime
-
-            # else:
-            #     PageSourceWebsite = ''.join(source[0])
-            #     # print PageSourceWebsite
-            #     a = source[-1]
-            #     CreatedTime = self.clear_time(a)
-            #     # print CreatedTime
+            # ylog.debug(Title)
 
             information = {
                 'Title': Title,
@@ -100,10 +91,48 @@ class MagicGoogle_News():
             result.append(information)
         return result
 
+    def extract(self, text):
+        soup = BeautifulSoup(text, "lxml")
+        papers = soup.find_all('div', class_='g')
+        result = []
+        for item in papers:
+            information = {
+                'Title': None,
+                'PageURL': None,
+                'text': None,
+                'source': None,
+                'time': None
+            }
+            try:
+                pub, created_datetime = item.find(
+                    'div', class_='slp').find('span').get_text().split('-')
+                created_datetime = self.clear_time(created_datetime.strip())
+            except ValueError as e:
+                ylog.info(item.find('div', class_='slp').find_all('span'))
+                pub = item.find('div', class_='slp').find('span').get_text()
+                created_datetime = None
+            except:
+                continue
+            Title = BeautifulSoup(str(item.find('h3')), "lxml").get_text()
+            PageURL = item.find('a')['href']
+            MatchedAbstract = item.find('div', class_='st').get_text()
+            information = {
+                'Title': Title,
+                'PageURL': PageURL,
+                'Publication': pub.replace('\u200e ', ''),
+                'MatchedAbstract': MatchedAbstract,
+                'CreatedTime': created_datetime
+            }
+
+            result.append(information)
+
+            # ylog.debug(Title)
+        return result
+
     def gain_data(self, query, language=None, start=0, nums=0, pause=2):
         """first get articles count, then loop pages"""
         init_url = self.req_url(query, language, start, pause=2)
-        bsObj = self.Cold_boot(init_url)
+        # bsObj = self.Cold_boot(init_url)
         # TotalCount = self.counts_result(bsObj, start)
         pages = int(ceil(nums / 10))
         page = 0
@@ -112,10 +141,11 @@ class MagicGoogle_News():
             print(page)
             start = page * 10
             url = self.req_url(query, language, start, pause=2)
-            print(url)
+            ylog.debug(url)
             bsObj = self.Cold_boot(url)
-            print(type(bsObj))
-            info = self.content(bsObj)
+            info = self.extract(bsObj)
+            # print(type(bsObj))
+            #info = self.content(bsObj)
             if len(info) == 0:
                 break
             Allinformations = Allinformations + info
@@ -160,11 +190,11 @@ class MagicGoogle_News():
                 timeclean = time.mktime(time1)
                 # print  timeclean
 
-            else:
-                print('ok')
+            # else:
+            #     print('ok')
         else:
             timeclean = time.mktime(time.strptime(m.strip(' '), "%b %d %Y"))
-        return timeclean
+        return time.strftime("%Y%m%d", time.localtime(timeclean))
 
     def req_url(self, query, language=None, start=0, pause=2):
         time.sleep(pause)
@@ -180,30 +210,28 @@ class MagicGoogle_News():
         return url
 
     def Cold_boot(self, url, pause=3):
-
-        # time.sleep(pause)
-        headers = {'user-agent': self.get_random_user_agent()}
-        try:
-            requests.packages.urllib3.disable_warnings(
-                requests.packages.urllib3.exceptions.InsecureRequestWarning)
-            r = requests.get(
-                url=url,
-                proxies=self.proxies,
-                headers=headers,
-                allow_redirects=False,
-                verify=False,
-                timeout=30)
-            LOGGER.info(url)
-            time.sleep(pause)
-            content = r.content
-            charset = cchardet.detect(content)
-            bsObj = content.decode(charset['encoding'])
-            return bsObj
-        except (ValueError, Exception) as e:
-            print(e.message)
-            print("Sleeping for %i" % self.error_delay)
-            time.sleep(self.error_delay)
-            return self.Cold_boot(url)
+        r = ''
+        while r == '':
+            try:
+                headers = {'user-agent': self.get_random_user_agent()}
+                requests.packages.urllib3.disable_warnings(
+                    requests.packages.urllib3.exceptions.InsecureRequestWarning)
+                r = requests.get(
+                    url=url,
+                    proxies=self.proxies,
+                    headers=headers,
+                    allow_redirects=False,
+                    verify=False,
+                    timeout=30)
+                time.sleep(pause)
+            except:
+                print('exception')
+                time.sleep(pause)
+                continue
+        content = r.content
+        charset = cchardet.detect(content)
+        text = content.decode(charset['encoding'])
+        return text
 
     def filter_link(self, link):
         try:
@@ -216,7 +244,7 @@ class MagicGoogle_News():
                 if o.netloc:
                     return link
         except Exception as e:
-            LOGGER.exception(e)
+            ylog.exception(e)
             return None
 
     def pq_html(self, content):
@@ -246,4 +274,9 @@ class MagicGoogle_News():
 
 
 news = MagicGoogle_News()
-data = news.gain_data('债券 预期收益')
+data = news.gain_data('债券 预期收益', nums=500, pause=5)
+df = pd.DataFrame(data['Allinformations'])
+df.set_index(pd.DatetimeIndex(df['CreatedTime']), inplace=True)
+df.sort_index(inplace=True)
+df.loc[:, ['Title', 'Publication', 'MatchedAbstract', 'PageURL']].to_csv(
+    'bond_forecast.csv')
