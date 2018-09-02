@@ -9,6 +9,14 @@ from math import ceil
 from pyquery import PyQuery as pq
 from config import USER_AGENT, DOMAIN, BLACK_DOMAIN, URL_SEARCH, LOGGER
 from urllib.parse import quote_plus, urlparse, parse_qs
+from bs4 import BeautifulSoup
+from bs4.element import Tag
+from ylib import ylog
+import logging
+
+ylog.set_level(logging.DEBUG)
+ylog.console_on()
+ylog.filelog_on("app")
 
 
 class MagicGoogle_News():
@@ -41,9 +49,11 @@ class MagicGoogle_News():
             return result_count
 
     def content(self, bsObj):
-        pq_content = self.pq_html(bsObj)
-        result_new = []
-        for item in pq_content('div.g').items():
+        pq_content = BeautifulSoup(bsObj, "lxml")
+        result = []
+        # ylog.debug(pq_content)
+        papers = pq_content.find_all('div', class_='g')
+        for item in papers:
             information = {
                 'Title': None,
                 'PageURL': None,
@@ -51,46 +61,50 @@ class MagicGoogle_News():
                 'source': None,
                 'time': None
             }
+            # try:
+            #print('something')
+            pub_info = item.find('div', class_='slp').find_all('span')
+            pub, hyphen, datetime = list(map(Tag.get_text, pub_info))
+            Title = BeautifulSoup(str(item.find('h3')), "lxml").get_text()
+            PageURL = item.find('a')['href']
+            MatchedAbstract = item.find('div', class_='st').get_text()
+            ylog.debug(Title)
+            # if href:
+            #     PageURL = self.filter_link(href)
+            #     # print PageURL
 
-            href = item('h3.r>a').eq(0).attr('href')
-            Title = item('h3.r>a').eq(0).text()
-            print(Title)
-            if href:
-                PageURL = self.filter_link(href)
-                # print PageURL
+            # MatchedAbstract = item('div.st')[0].text
+            # # print MatchedAbstract
+            # source = item('span.f')[0].text.split('-')
+            # if len(source) > 2:
+            #     PageSourceWebsite = ''.join(source[:-1])
+            #     # print PageSourceWebsite
+            #     a = source[-1]
+            #     CreatedTime = self.clear_time(a)
+            #     # print CreatedTime
 
-            MatchedAbstract = item('div.st')[0].text
-            # print MatchedAbstract
-            source = item('span.f')[0].text.split('-')
-            if len(source) > 2:
-                PageSourceWebsite = ''.join(source[:-1])
-                # print PageSourceWebsite
-                a = source[-1]
-                CreatedTime = self.clear_time(a)
-                # print CreatedTime
-
-            else:
-                PageSourceWebsite = ''.join(source[0])
-                # print PageSourceWebsite
-                a = source[-1]
-                CreatedTime = self.clear_time(a)
-                # print CreatedTime
+            # else:
+            #     PageSourceWebsite = ''.join(source[0])
+            #     # print PageSourceWebsite
+            #     a = source[-1]
+            #     CreatedTime = self.clear_time(a)
+            #     # print CreatedTime
 
             information = {
                 'Title': Title,
                 'PageURL': PageURL,
                 'MatchedAbstract': MatchedAbstract,
-                'PageSourceWebsite': PageSourceWebsite,
-                'CreatedTime': CreatedTime
+                'CreatedTime': datetime
             }
 
-            result_new.append(information)
-        return result_new
+            result.append(information)
+        return result
 
     def gain_data(self, query, language=None, start=0, nums=0, pause=2):
+        """first get articles count, then loop pages"""
         init_url = self.req_url(query, language, start, pause=2)
         bsObj = self.Cold_boot(init_url)
-        TotalCount = self.counts_result(bsObj, start)
+        # TotalCount = self.counts_result(bsObj, start)
         pages = int(ceil(nums / 10))
         page = 0
         Allinformations = []
@@ -100,13 +114,14 @@ class MagicGoogle_News():
             url = self.req_url(query, language, start, pause=2)
             print(url)
             bsObj = self.Cold_boot(url)
+            print(type(bsObj))
             info = self.content(bsObj)
             if len(info) == 0:
                 break
             Allinformations = Allinformations + info
             page = page + 1
         infos = {
-            'TotalCount': TotalCount,
+            # 'TotalCount': TotalCount,
             'QueryURL': init_url,
             'Allinformations': Allinformations
         }
