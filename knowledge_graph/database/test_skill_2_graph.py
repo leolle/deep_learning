@@ -48,7 +48,7 @@ test_user_name = 'wuwei'
 test_pwd = 'gft'
 gs_call = gftIO.GSCall(prod_url, test_user_name, test_pwd)
 gftIO.test_skill_2_graph('932D3E7CF48B1481BCEEB25448A39DF7', gs_call)
-graph = gs_call.get_graph_from_neo4j('932D3E7CF48B1481BCEEB25448A39DF7')
+graph = gs_call.get_graph_from_neo4j('DEA833956765457EB76DAD1F01E183E2')
 # graph_message = graphUpload_pb2.Graph()
 # # edges = graph.graphs[0].graph
 # nodes = {}

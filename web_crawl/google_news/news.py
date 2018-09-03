@@ -15,6 +15,7 @@ from bs4.element import Tag
 from ylib import ylog
 from ylib.yaml_config import Configuraion
 import logging
+from datetime import datetime
 
 ylog.set_level(logging.DEBUG)
 ylog.console_on()
@@ -129,9 +130,16 @@ class MagicGoogle_News():
             # ylog.debug(Title)
         return result
 
-    def gain_data(self, query, language=None, start=0, nums=0, pause=2):
+    def gain_data(self,
+                  query,
+                  begin,
+                  end,
+                  language=None,
+                  start=0,
+                  nums=0,
+                  pause=2):
         """first get articles count, then loop pages"""
-        init_url = self.req_url(query, language, start, pause=2)
+        init_url = self.req_url(query, begin, end, language, start, pause=2)
         # bsObj = self.Cold_boot(init_url)
         # TotalCount = self.counts_result(bsObj, start)
         pages = int(ceil(nums / 10))
@@ -140,7 +148,7 @@ class MagicGoogle_News():
         while page <= pages:
             print(page)
             start = page * 10
-            url = self.req_url(query, language, start, pause=2)
+            url = self.req_url(query, begin, end, language, start, pause=pause)
             ylog.debug(url)
             bsObj = self.Cold_boot(url)
             info = self.extract(bsObj)
@@ -196,7 +204,7 @@ class MagicGoogle_News():
             timeclean = time.mktime(time.strptime(m.strip(' '), "%b %d %Y"))
         return time.strftime("%Y%m%d", time.localtime(timeclean))
 
-    def req_url(self, query, language=None, start=0, pause=2):
+    def req_url(self, query, begin, end, language=None, start=0, pause=2):
         time.sleep(pause)
         domain = self.get_random_domain()
         url = URL_SEARCH
@@ -204,7 +212,9 @@ class MagicGoogle_News():
             domain=domain,
             query=quote_plus(query),
             language=language,
-            start=start)
+            start=start,
+            begin=quote_plus(begin),
+            end=quote_plus(end))
         if language is None:
             url = url.replace('hl=None&', '')
         return url
@@ -274,7 +284,17 @@ class MagicGoogle_News():
 
 
 news = MagicGoogle_News()
-data = news.gain_data('债券 预期收益', nums=500, pause=5)
+date_range = pd.date_range(end=datetime.today(), periods=24, freq='M')
+data_date_range = {'Allinformations': [], 'QueryURL': []}
+for idx, month in enumerate(date_range):
+    try:
+        begin = month.date().strftime('%m/%d/%Y')
+        end = date_range[idx + 1].date().strftime('%m/%d/%Y')
+    except IndexError:
+        continue
+    # print(begin, end)
+    data = news.gain_data('债券 预期收益', nums=20, pause=5, begin=begin, end=end)
+    data_date_range['Allinformations'].extend(data['Allinformations'])
 df = pd.DataFrame(data['Allinformations'])
 df.set_index(pd.DatetimeIndex(df['CreatedTime']), inplace=True)
 df.sort_index(inplace=True)

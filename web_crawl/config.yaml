@@ -16,6 +16,8 @@ DOMAIN:
   'www.google.com'
 URL_GOOGLE_NEWS:
   "https://{domain}/search?hl={language}&q={query}&btnG=Search&gbv=2&num=20&start={start}&source=lnms&tbm=nws"
+URL_GOOGLE_NEWS_RANGE:
+  "https://{domain}/search?hl={language}&q={query}&btnG=Search&gbv=2&num=20&start={start}&source=lnms&tbm=nws&tbs=cdr%3A1%2Ccd_min%3A{begin}%2Ccd_max%3A{end}"
 URL_GOOGLE_SCHOLAR:
   "https://{domain}/scholar?&q={query}&hl={language}&as_sdt=0,5"
 URL_GOOGLE_SCHOLAR_NEXT:
