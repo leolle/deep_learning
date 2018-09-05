@@ -34,3 +34,6 @@
 [submodule "knowledge_graph/information/EventTriplesExtraction"]
 	path = knowledge_graph/information/EventTriplesExtraction
 	url = https://github.com/liuhuanyong/EventTriplesExtraction.git
+[submodule "web_crawl/deep-deep"]
+	path = web_crawl/deep-deep
+	url = https://github.com/TeamHG-Memex/deep-deep.git
