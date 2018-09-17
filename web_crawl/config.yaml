@@ -8,9 +8,9 @@ BLACK_DOMAIN:
   - 'scholar.google.cn'
 PROXIES:
   http:
-        'http://192.168.1.126:1080'
+        'http://192.168.11.172:1080'
   https:
-        'http://192.168.1.126:1080'
+        'http://192.168.11.172:1080'
 
 DOMAIN:
   'www.google.com'

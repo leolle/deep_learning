@@ -37,15 +37,10 @@ class MagicGoogle_News():
     """
 
     def __init__(self, rate_delay=2, error_delay=5):
-
-        PROXIES = [{
-            'http': 'http://192.168.1.126:1080',
-            'https': 'http://192.168.1.126:1080'
-        }]
-
+        self.PROXIES = [PROXIES]
         self.rate_delay = rate_delay
         self.error_delay = error_delay
-        self.proxies = random.choice(PROXIES)
+        self.proxies = random.choice(self.PROXIES)
 
     def counts_result(self, bsObj, start):
 
@@ -132,8 +127,8 @@ class MagicGoogle_News():
 
     def gain_data(self,
                   query,
-                  begin,
-                  end,
+                  begin=None,
+                  end=None,
                   language=None,
                   start=0,
                   nums=0,
@@ -284,7 +279,7 @@ class MagicGoogle_News():
 
 
 news = MagicGoogle_News()
-date_range = pd.date_range(end=datetime.today(), periods=24, freq='M')
+date_range = pd.date_range(end=datetime.today(), periods=2, freq='M')
 data_date_range = {'Allinformations': [], 'QueryURL': []}
 for idx, month in enumerate(date_range):
     try:
@@ -298,5 +293,5 @@ for idx, month in enumerate(date_range):
 df = pd.DataFrame(data['Allinformations'])
 df.set_index(pd.DatetimeIndex(df['CreatedTime']), inplace=True)
 df.sort_index(inplace=True)
-df.loc[:, ['Title', 'Publication', 'MatchedAbstract', 'PageURL']].to_csv(
-    'bond_forecast.csv')
+# df.loc[:, ['Title', 'Publication', 'MatchedAbstract', 'PageURL']].to_csv(
+#     'bond_forecast.csv')
