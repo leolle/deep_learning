@@ -54,7 +54,7 @@ PyQt5-sip==4.19.11
 python-dateutil==2.7.3
 python-magic==0.4.15
 pytz==2018.4
-PyYAML==3.12
+PyYAML==5.4
 refextract==0.2.12
 requests==2.5.1
 requests-oauthlib==0.4.2

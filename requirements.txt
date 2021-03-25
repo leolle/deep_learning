@@ -98,7 +98,7 @@ python-dateutil==2.6.1
 python-pptx==0.6.5
 python-twitter==3.4.1
 pytz==2017.3
-PyYAML==3.12
+PyYAML==5.4
 pyzmq==16.0.4
 queuelib==1.5.0
 rdflib==4.2.2

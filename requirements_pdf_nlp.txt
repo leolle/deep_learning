@@ -89,7 +89,7 @@ pyparsing==2.2.0
 python-dateutil==2.6.1
 python-pptx==0.6.5
 pytz==2017.3
-PyYAML==3.12
+PyYAML==5.4
 pyzmq==16.0.3
 regex==2017.4.5
 requests==2.18.4
