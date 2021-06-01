@@ -134,7 +134,7 @@ tqdm==4.19.5
 traitlets==4.3.2
 Twisted==17.9.0
 Unidecode==1.0.22
-urllib3==1.22
+urllib3==1.26.5
 w3lib==1.19.0
 Werkzeug==0.14.1
 wikipedia==1.4.0
