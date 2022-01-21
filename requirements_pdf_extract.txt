@@ -23,7 +23,7 @@ fuzzywuzzy==0.16.0
 gensim==3.4.0
 habanero==0.6.0
 idna==2.6
-ipython==4.2.1
+ipython==7.16.3
 ipython-genutils==0.2.0
 jieba==0.39
 jmespath==0.9.3

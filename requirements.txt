@@ -46,7 +46,7 @@ hyperlink==18.0.0
 idna==2.6
 incremental==17.5.0
 ipykernel==4.8.0
-ipython==4.2.1
+ipython==7.16.3
 ipython-genutils==0.2.0
 isodate==0.6.0
 jieba==0.39
