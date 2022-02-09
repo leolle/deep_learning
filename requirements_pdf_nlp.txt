@@ -109,7 +109,7 @@ SpeechRecognition==3.6.3
 sshtunnel==0.1.2
 subprocess32==3.2.7
 sympy==1.1.1
-tensorflow==1.4.0
+tensorflow==2.5.3
 tensorflow-tensorboard==0.4.0rc3
 termcolor==1.1.0
 textract==1.6.1
