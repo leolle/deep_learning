@@ -47,7 +47,7 @@ ptyprocess==0.5.2
 pycryptodome==3.6.1
 pyparsing==2.2.0
 pyPdf==1.13
-PyPDF2==1.26.0
+PyPDF2==1.27.5
 pypinyin==0.31.0
 PyQt5==5.11
 PyQt5-sip==4.19.11
