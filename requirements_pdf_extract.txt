@@ -30,7 +30,7 @@ jmespath==0.9.3
 lxml==4.2.1
 memoized-property==1.0.2
 mendeley==0.3.2
-numpy==1.14.3
+numpy==1.22.0
 oauthlib==0.7.2
 pandas==0.23.0
 papers==0.0.2+87.gbbfcaed
